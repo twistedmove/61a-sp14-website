@@ -1,0 +1,957 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><script src="/A2EB891D63C8/avg_ls_dom.js" type="text/javascript"></script>
+    <meta name="description" content ="CS61A Computer Science 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--
+    <link href="http://kernest.com/fonts/vegur-l.css" media="screen" rel="stylesheet" type="text/css" />
+    -->
+    <style type="text/css">@import url("style.css");</style>
+
+    <title>CS 61A Fall 2013: Structure and Interpretation of Computer Programs</title>
+
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-34495187-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <body>
+    <h1><a href="index.html"><span class="coursename">CS61A</span>Structure and Interpretation of Computer Programs</a>, Fall 2013</h1>
+    <ul class="courseinfo">
+      <li>Instructor: John DeNero</li>
+      <li>MWF 2-3 PM in 1 Pimentel or 5-6 PM in 4 LeConte</li>
+    </ul>
+    <br/>
+    <hr/>
+    <ul class="navigation">
+      <li><a href="index.html">Main</a></li>
+      <li><a href="about.html">Course Info</a></li>
+      <li><a href="staff.html">Staff</a></li>
+      <li><a href="index.html#schedule">Schedule</a></li>
+      <li><a href="index.html#resources">Resources</a></li>
+      <li><a href="http://www.piazza.com/class">Piazza</a></li>
+      <li><a href="https://inst.eecs.berkeley.edu/~cs61a/fa12/hw/solutions">Solutions</a></li>
+    </ul>
+
+    <hr/>
+    <a name="announcements"></a>
+    <h2>Announcements</h2>
+    <table class="announcements">
+
+      <!--
+     <tr>
+       <td class="date">10/8</td>
+       <td class="text">
+         <a href="projects/ants/ants.html">Project 3</a> is posted, due on
+         Wednesday 10/17, at 11:59pm. <em>Description and tests were updated on
+         Monday 10/8.</em>
+       </td>
+     </tr>
+     -->
+
+     <tr>
+       <td class="date">12/16</td>
+       <td class="text">
+         <a href="exams/61a-fa12-final-solutions.pdf">Solutions</a> to the <a
+         href="exams/61a-fa12-final-printed.pdf">final exam</a> are posted.
+       </td>
+     </tr>
+
+     <tr>
+       <td class="date">11/30</td>
+       <td class="date">12/12</td>
+       <td class="text">
+         Congratulations to the winners of the <a
+           href="projects/scheme_contest.html">Scheme Recursive Art
+           Contest</a>!
+       </td>
+     </tr>
+
+     <tr>
+       <td class="date">12/1</td>
+       <td class="text">Review for the <a href="exams/final.html">final
+           exam</a> will be held during special office hours next week.
+       </td>
+     </tr>
+
+    </table>
+    <br/>
+    <a name="calendar"></a>
+
+    <h2>Calendar</h2>
+
+<!-- BEGIN SCHEDULE -->
+<table class="calendar">
+  <thead>
+    <tr>
+      <th>Week</th>
+      <th>Date</th>
+      <th>Lecture Topic</th>
+      <th>Reading</th>
+      <th>Lab/Discussion</th>
+      <th>Homework</th>
+      <th>Project</th>
+    </tr>
+  </thead>
+  <tr>
+    <td rowspan=1 class=weeknum> 1 </td>
+    <td class=date> Fri Aug 24 </td>
+    <td> Functions (<a href="slides/01-Functions_1pp.pdf">1pp</a>) (<a href="slides/01-Functions_1pps.pdf">1pps</a>) (<a href="slides/01-Functions_6pp.pdf">6pp</a>) (<a href="slides/01.py">01.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#introduction">Chapter 1.1</a><br/></p><p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#the-elements-of-programming">Chapter 1.2</a><br/></p> </td>
+    <td> <p> <a href="labs/lab00/lab00.php">Lab 0: Intro to Unix/Emacs</a></p> </td>
+    <td> <a href="hw/hw1.html">hw1.html</a> <a href="hw/hw1.py">hw1.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 2 </td>
+    <td class=date> Mon Aug 27 </td>
+    <td> Names (<a href="slides/02-Names_1pp.pdf">1pp</a>) (<a href="slides/02-Names_1pps.pdf">1pps</a>) (<a href="slides/02-Names_6pp.pdf">6pp</a>) (<a href="slides/02.py">02.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#defining-new-functions">Chapter 1.3</a><br/></p><p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#practical-guidance-the-art-of-the-function">Chapter 1.4</a><br/></p> </td>
+    <td> <p> <a href="labs/lab01/lab01.php">Lab 1: Functions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Aug 29 </td>
+    <td> Control (<a href="slides/03-Control_1pp.pdf">1pp</a>) (<a href="slides/03-Control_1pps.pdf">1pps</a>) (<a href="slides/03-Control_6pp.pdf">6pp</a>) (<a href="slides/03.py">03.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#control">Chapter 1.5</a><br/></p> </td>
+    <td> <p> <a href="labs/lab02/lab02.php">Lab 2: Control</a></p> </td>
+    <td>  </td>
+    <td> <a href="projects/hog/hog.html">Hog project</a> (due Sep 12) </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Aug 31 </td>
+    <td> Higher-Order Functions (<a href="slides/04-HoF_1pp.pdf">1pp</a>) (<a href="slides/04-HoF_1pps.pdf">1pps</a>) (<a href="slides/04-HoF_6pp.pdf">6pp</a>) (<a href="slides/04.py">04.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#higher-order-functions">Chapter 1.6</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw2.html">hw2.html</a> <a href="hw/hw2.py">hw2.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 3 </td>
+    <td class=date> Mon Sep 03 </td>
+    <td> ***Academic Holiday***  </td>
+    <td>  </td>
+    <td> <p> <a href="disc/disc1.pdf">Discussion 1: Expressions, Statements, and Functions</a></p><p> <a href="disc/disc1_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Sep 05 </td>
+    <td> Environments (<a href="slides/05-Environments_1pp.pdf">1pp</a>) (<a href="slides/05-Environments_1pps.pdf">1pps</a>) (<a href="slides/05-Environments_6pp.pdf">6pp</a>) (<a href="slides/05.py">05.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#higher-order-functions">Chapter 1.6</a><br/></p> </td>
+    <td> <p> <a href="labs/lab03/lab03.php">Lab 3: Higher-Order Functions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Sep 07 </td>
+    <td> Newton's Method (<a href="slides/06-Newton_1pp.pdf">1pp</a>) (<a href="slides/06-Newton_1pps.pdf">1pps</a>) (<a href="slides/06-Newton_6pp.pdf">6pp</a>) (<a href="slides/06.py">06.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/functions.html#higher-order-functions">Chapter 1.6</a><br/></p> </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 4 </td>
+    <td class=date> Mon Sep 10 </td>
+    <td> Objects (<a href="slides/07-Objects_1pp.pdf">1pp</a>) (<a href="slides/07-Objects_1pps.pdf">1pps</a>) (<a href="slides/07-Objects_6pp.pdf">6pp</a>) (<a href="slides/07.py">07.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#introduction">Chapter 2.1</a><br/></p> </td>
+    <td> <p> <a href="disc/disc2.pdf">Discussion 2: Higher-Order Functions</a></p><p> <a href="disc/disc2_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Sep 12 </td>
+    <td> Data Abstraction (<a href="slides/08-Data_1pp.pdf">1pp</a>) (<a href="slides/08-Data_1pps.pdf">1pps</a>) (<a href="slides/08-Data_6pp.pdf">6pp</a>) (<a href="slides/08.py">08.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#data-abstraction">Chapter 2.2</a><br/></p> </td>
+    <td> <p> <a href="labs/lab04/lab04.html">Lab 4: Data Abstraction</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Sep 14 </td>
+    <td> Sequences (<a href="slides/09-Sequences_1pp.pdf">1pp</a>) (<a href="slides/09-Sequences_1pps.pdf">1pps</a>) (<a href="slides/09-Sequences_6pp.pdf">6pp</a>) (<a href="slides/09.py">09.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#sequences">Chapter 2.3</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw3.html">hw3.html</a> <a href="hw/hw3.py">hw3.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 5 </td>
+    <td class=date> Mon Sep 17 </td>
+    <td> Strings (<a href="slides/10-Strings_1pp.pdf">1pp</a>) (<a href="slides/10-Strings_1pps.pdf">1pps</a>) (<a href="slides/10-Strings_6pp.pdf">6pp</a>) (<a href="slides/10.py">10.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#sequences">Chapter 2.3</a><br/></p> </td>
+    <td> <p> <a href="disc/disc3.pdf">Discussion 3: Newton's Method and Sequences</a></p><p> <a href="disc/disc3_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Sep 19 </td>
+    <td> ***No Lecture; Midterm is Tuesday 09/18 @ 7pm***  </td>
+    <td>  </td>
+    <td> <p> <a href="labs/lab05/lab5.html">Lab 5: Guitar Heroine</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Sep 21 </td>
+    <td> Lists and Dictionaries (<a href="slides/11-Lists_1pp.pdf">1pp</a>) (<a href="slides/11-Lists_1pps.pdf">1pps</a>) (<a href="slides/11-Lists_6pp.pdf">6pp</a>) (<a href="slides/11.py">11.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#mutable-data">Chapter 2.4</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw4.html">hw4.html</a> <a href="hw/hw4.py">hw4.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 6 </td>
+    <td class=date> Mon Sep 24 </td>
+    <td> Midterm Review (<a href="slides/12-Review_1pp.pdf">1pp</a>) (<a href="slides/12-Review_1pps.pdf">1pps</a>) (<a href="slides/12-Review_6pp.pdf">6pp</a>) (<a href="slides/12.py">12.py</a>) </td>
+    <td>  </td>
+    <td> <p> <a href="disc/disc4.pdf">Discussion 4: Mutable Lists and Dictionaries</a></p><p> <a href="disc/disc4_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td> <a href="projects/trends/trends.html">Trends project</a> (due Oct 03) </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Sep 26 </td>
+    <td> Mutable Data (<a href="slides/13-Mutation_1pp.pdf">1pp</a>) (<a href="slides/13-Mutation_1pps.pdf">1pps</a>) (<a href="slides/13-Mutation_6pp.pdf">6pp</a>) (<a href="slides/13.py">13.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#mutable-data">Chapter 2.4</a><br/></p> </td>
+    <td> <p> <a href="labs/lab06/lab06.php">Lab 6: Shakespeare</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Sep 28 </td>
+    <td> Mutable Data Types (<a href="slides/14-Implementation_1pp.pdf">1pp</a>) (<a href="slides/14-Implementation_1pps.pdf">1pps</a>) (<a href="slides/14-Implementation_6pp.pdf">6pp</a>) (<a href="slides/14.py">14.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#mutable-data">Chapter 2.4</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw5.html">hw5.html</a> <a href="hw/hw5.py">hw5.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 7 </td>
+    <td class=date> Mon Oct 01 </td>
+    <td> Object-Oriented Programming (<a href="slides/15-Objects_1pp.pdf">1pp</a>) (<a href="slides/15-Objects_1pps.pdf">1pps</a>) (<a href="slides/15-Objects_6pp.pdf">6pp</a>) (<a href="slides/15.py">15.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#object-oriented-programming">Chapter 2.5</a><br/></p> </td>
+    <td> <p> <a href="disc/disc5.pdf">Discussion 5: Mutation and Nonlocal Statements</a></p><p> <a href="disc/disc5_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Oct 03 </td>
+    <td> Inheritance (<a href="slides/16-Inheritance_1pp.pdf">1pp</a>) (<a href="slides/16-Inheritance_1pps.pdf">1pps</a>) (<a href="slides/16-Inheritance_6pp.pdf">6pp</a>) (<a href="slides/16.py">16.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#object-oriented-programming">Chapter 2.5</a><br/></p> </td>
+    <td> <p> <a href="labs/lab07/lab7.html">Lab 7: Object-Oriented Programming</a></p> </td>
+    <td>  </td>
+    <td> <a href="projects/ants/ants.html">Ants project</a> (due Oct 17) </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Oct 05 </td>
+    <td> Implementing Objects (<a href="slides/17-OOP_1pp.pdf">1pp</a>) (<a href="slides/17-OOP_1pps.pdf">1pps</a>) (<a href="slides/17-OOP_6pp.pdf">6pp</a>) (<a href="slides/17.py">17.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#implementing-classes-and-objects">Chapter 2.6</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw6.html">hw6.html</a> <a href="hw/hw6.py">hw6.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 8 </td>
+    <td class=date> Mon Oct 08 </td>
+    <td> Multiple Representations (<a href="slides/18-Interfaces_1pp.pdf">1pp</a>) (<a href="slides/18-Interfaces_1pps.pdf">1pps</a>) (<a href="slides/18-Interfaces_6pp.pdf">6pp</a>) (<a href="slides/18.py">18.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#generic-operations">Chapter 2.7</a><br/></p> </td>
+    <td> <p> <a href="disc/disc6.pdf">Discussion 6: Object-Oriented Programming</a></p><p> <a href="disc/disc6_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Oct 10 </td>
+    <td> Generic Functions (<a href="slides/19-Generics_1pp.pdf">1pp</a>) (<a href="slides/19-Generics_1pps.pdf">1pps</a>) (<a href="slides/19-Generics_6pp.pdf">6pp</a>) (<a href="slides/19.py">19.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/objects.html#generic-operations">Chapter 2.7</a><br/></p> </td>
+    <td> <p> <a href="labs/lab08/lab08.php">Lab 8: OOP Below the Line</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Oct 12 </td>
+    <td> Recursion (<a href="slides/20-Recursion_1pp.pdf">1pp</a>) (<a href="slides/20-Recursion_1pps.pdf">1pps</a>) (<a href="slides/20-Recursion_6pp.pdf">6pp</a>) (<a href="slides/20.py">20.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#functions-and-the-processes-they-generate">Chapter 3.2</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw7.html">hw7.html</a> <a href="hw/hw7.py">hw7.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 9 </td>
+    <td class=date> Mon Oct 15 </td>
+    <td> Tree Recursion (<a href="slides/21-Tree_1pp.pdf">1pp</a>) (<a href="slides/21-Tree_1pps.pdf">1pps</a>) (<a href="slides/21-Tree_6pp.pdf">6pp</a>) (<a href="slides/21.py">21.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#functions-and-the-processes-they-generate">Chapter 3.2</a><br/></p> </td>
+    <td> <p> <a href="disc/disc7.pdf">Discussion 7: Recursive Functions</a></p><p> <a href="disc/disc7_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Oct 17 </td>
+    <td> Recursive Data (<a href="slides/22-Structure_1pp.pdf">1pp</a>) (<a href="slides/22-Structure_1pps.pdf">1pps</a>) (<a href="slides/22-Structure_6pp.pdf">6pp</a>) (<a href="slides/22.py">22.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#recursive-data-structures">Chapter 3.3</a><br/></p> </td>
+    <td> <p> <a href="labs/lab09/lab09.php">Lab 9: Recursive Data</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Oct 19 </td>
+    <td> Orders of growth (<a href="slides/23-Growth_1pp.pdf">1pp</a>) (<a href="slides/23-Growth_1pps.pdf">1pps</a>) (<a href="slides/23-Growth_6pp.pdf">6pp</a>) (<a href="slides/23.py">23.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#functions-and-the-processes-they-generate">Chapter 3.2</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw8.html">hw8.html</a> <a href="hw/hw8.py">hw8.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 10 </td>
+    <td class=date> Mon Oct 22 </td>
+    <td> Sets (<a href="slides/24-Sets_1pp.pdf">1pp</a>) (<a href="slides/24-Sets_1pps.pdf">1pps</a>) (<a href="slides/24-Sets_6pp.pdf">6pp</a>) (<a href="slides/24.py">24.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#recursive-data-structures">Chapter 3.3</a><br/></p> </td>
+    <td> <p> <a href="disc/disc8.pdf">Discussion 8: Rlists, Trees, and Orders of Growth</a></p><p> <a href="disc/disc8_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Oct 24 </td>
+    <td> ***No Lecture; Midterm is Tuesday 10/23 @ 7pm***  </td>
+    <td>  </td>
+    <td> <p> <a href="labs/lab10/lab10.php">Lab 10: Sets</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Oct 26 </td>
+    <td> Functional Programming (<a href="slides/25-Scheme_1pp.pdf">1pp</a>) (<a href="slides/25-Scheme_1pps.pdf">1pps</a>) (<a href="slides/25-Scheme_6pp.pdf">6pp</a>) (<a href="slides/25.scm">25.scm</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#functional-programming">Chapter 3.5</a><br/></p> </td>
+    <td>  </td>
+    <td> <a href="hw/hw9.html">hw9.html</a> <a href="hw/hw9.scm">hw9.scm</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 11 </td>
+    <td class=date> Mon Oct 29 </td>
+    <td> Exceptions (<a href="slides/26-Exceptions_1pp.pdf">1pp</a>) (<a href="slides/26-Exceptions_1pps.pdf">1pps</a>) (<a href="slides/26-Exceptions_6pp.pdf">6pp</a>) (<a href="slides/26.py">26.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#exceptions">Chapter 3.4</a><br/></p> </td>
+    <td> <p> <a href="disc/disc9.pdf">Discussion 9: Scheme</a></p><p> <a href="disc/disc9_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Oct 31 </td>
+    <td> Calculator (<a href="slides/27-Calculator_1pp.pdf">1pp</a>) (<a href="slides/27-Calculator_1pps.pdf">1pps</a>) (<a href="slides/27-Calculator_6pp.pdf">6pp</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#interpreters-for-languages-with-combination">Chapter 3.6</a><br/></p> </td>
+    <td> <p> <a href="labs/lab11/lab11.html">Lab 11: Scheme</a></p> </td>
+    <td>  </td>
+    <td> Hog revisions project (due Nov 07) </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Nov 02 </td>
+    <td> The Halting Problem (<a href="slides/28-Halting_1pp.pdf">1pp</a>) (<a href="slides/28-Halting_4pp.pdf">4pp</a>) </td>
+    <td>  </td>
+    <td>  </td>
+    <td> <a href="hw/hw10.html">hw10.html</a> <a href="hw/hw10.py">hw10.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 12 </td>
+    <td class=date> Mon Nov 05 </td>
+    <td> Interpreters (<a href="slides/29-Interpreters_1pp.pdf">1pp</a>) (<a href="slides/29-Interpreters_1pps.pdf">1pps</a>) (<a href="slides/29-Interpreters_6pp.pdf">6pp</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#interpreters-for-languages-with-abstraction">Chapter 3.7</a><br/></p> </td>
+    <td> <p> <a href="disc/disc10.pdf">Discussion 10: Exceptions and Calculator</a></p><p> <a href="disc/disc10_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Nov 07 </td>
+    <td> Tail Calls (<a href="slides/30-Tail_1pp.pdf">1pp</a>) (<a href="slides/30-Tail_1pps.pdf">1pps</a>) (<a href="slides/30-Tail_6pp.pdf">6pp</a>) (<a href="slides/30.py">30.py</a>) (<a href="slides/30.scm">30.scm</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/interpretation.html#interpreters-for-languages-with-abstraction">Chapter 3.7</a><br/></p> </td>
+    <td> <p> <a href="labs/lab12/lab12.php">Lab 12: Regular Expressions and Calculator</a></p> </td>
+    <td>  </td>
+    <td> <a href="projects/scheme/scheme.html">Scheme project</a> (due Nov 20) </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Nov 09 </td>
+    <td> User Interfaces  </td>
+    <td>  </td>
+    <td>  </td>
+    <td> <a href="hw/hw11.html">hw11.html</a> <a href="hw/hw11.py">hw11.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 13 </td>
+    <td class=date> Mon Nov 12 </td>
+    <td> ***Academic Holiday***  </td>
+    <td>  </td>
+    <td> <p> <a href="disc/disc11.pdf">Discussion 11: Tail Recursion and Dynamic Scope</a></p><p> <a href="disc/disc11_sol.pdf">Solutions</a></p>
+    <p> <a href="disc/disc11_env_sol.pdf">Env Solutions</a> </p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Nov 14 </td>
+    <td> Iterators and Streams (<a href="slides/32-Iterators_1pp.pdf">1pp</a>) (<a href="slides/32-Iterators_1pps.pdf">1pps</a>) (<a href="slides/32-Iterators_6pp.pdf">6pp</a>) (<a href="slides/32.py">32.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/streams.html#implicit-sequences">Chapter 4.2</a><br/></p> </td>
+    <td> <p> <a href="labs/lab13/lab13.php">Lab 13: User Interfaces</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Nov 16 </td>
+    <td> Declarative Programming (<a href="slides/33-Logic_1pp.pdf">1pp</a>) (<a href="slides/33-Logic_1pps.pdf">1pps</a>) (<a href="slides/33-Logic_6pp.pdf">6pp</a>) (<a href="slides/33.logic">33.logic</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/streams.html#declarative-programming">Chapter 4.3</a><br/></p> </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 14 </td>
+    <td class=date> Mon Nov 19 </td>
+    <td> Unification (<a href="slides/34-Unification_1pp.pdf">1pp</a>) (<a href="slides/34-Unification_1pps.pdf">1pps</a>) (<a href="slides/34-Unification_6pp.pdf">6pp</a>) (<a href="slides/34.logic">34.logic</a>) (<a href="slides/34.py">34.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/streams.html#unification">Chapter 4.4</a><br/></p> </td>
+    <td> <p> <a href="disc/disc12.pdf">Discussion 12: Iterators, Generators, and Streams</a></p><p> <a href="disc/disc12_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Nov 21 </td>
+    <td> ***No Lecture; Thanksgiving***  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Nov 23 </td>
+    <td> ***Academic Holiday***  </td>
+    <td>  </td>
+    <td>  </td>
+    <td> <a href="hw/hw12.html">hw12.html</a> <a href="hw/hw12.py">hw12.py</a>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td rowspan=3 class=weeknum> 15 </td>
+    <td class=date> Mon Nov 26 </td>
+    <td> Distributed Computing (<a href="slides/35-Distributed_1pp.pdf">1pp</a>) (<a href="slides/35-Distributed_1pps.pdf">1pps</a>) (<a href="slides/35-Distributed_6pp.pdf">6pp</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/streams.html#distributed-computing">Chapter 4.5</a><br/></p> </td>
+    <td> <p> <a href="disc/disc13.pdf">Discussion 13: Logic Programming</a></p><p> <a href="disc/disc13_sol.pdf">Solutions</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Wed Nov 28 </td>
+    <td> MapReduce (<a href="slides/36-MapReduce_1pp.pdf">1pp</a>) (<a href="slides/36-MapReduce_1pps.pdf">1pps</a>) (<a href="slides/36-MapReduce_6pp.pdf">6pp</a>) (<a href="slides/36.py">36.py</a>) </td>
+    <td> <p> <a href="http://inst.eecs.berkeley.edu/~cs61A-tz/book/chapters/streams.html#distributed-data-processing">Chapter 4.6</a><br/></p> </td>
+    <td> <p> <a href="labs/lab14/lab14.php">Lab 14: MapReduce</a></p> </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td class=date> Fri Nov 30 </td>
+    <td> Conclusion (<a href="slides/37-Conclusion_1pp.pdf">1pp</a>) (<a href="slides/37-Conclusion_1pps.pdf">1pps</a>) (<a href="slides/37-Conclusion_6pp.pdf">6pp</a>) (<a href="slides/37.py">37.py</a>) (<a href="slides/37.zip">37.zip</a>) </td>
+    <td>  </td>
+    <td>  </td>
+    <td> <a href="hw/hw13.py">hw13.py</a>  </td>
+    <td>  </td>
+  </tr>
+</table>
+<!-- END SCHEDULE -->
+
+    <br/>
+
+    <a name="schedule"></a>
+    <h2>Weekly Schedule</h2>
+
+    <table class="schedule">
+      <tr>
+        <th></th>
+        <th colspan="2">Monday</th>
+        <th colspan="2">Tuesday</th>
+        <th colspan="2">Wednesday</th>
+        <th colspan="2">Thursday</th>
+        <th colspan="2">Friday</th>
+      </tr>
+
+      <tr>
+        <td class="time">8:00</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 122 <br/>
+          405 Soda <br/>
+          Andrew Nguyen<br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 113 <br/>
+          2 Evans <br/>
+          Keegan Mann <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 013 <br/>
+          271 Soda <br/>
+          Keegan Mann <br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 022 <br/>
+          271 Soda <br/>
+          Andrew Nguyen<br/>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="time">8:30</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">9:00</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">9:30</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 123 <br/>
+          405 Soda <br/>
+          Joy Jeng <br/>
+        </td>
+
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 114 <br/>
+          71 Evans <br/>
+          Andrew Nguyen <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 201 <br/>
+          405 Soda <br/>
+          Varun Pai <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 014 <br/>
+          271 Soda <br/>
+          Andrew Nguyen <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 201 <br/>
+          273 Soda <br/>
+          Varun Pai<br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 023 <br/>
+          271 Soda <br/>
+          Joy Jeng <br/>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="time">10:00</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">10:30</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">11:00</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 124 <br/>
+          405 Soda <br/>
+          Phillip Carpenter <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 115 <br/>
+          71 Evans <br/>
+          Varun Pai <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 202 <br/>
+          285 Cory <br/>
+          Stephen Martinis <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 015 <br/>
+          271 Soda <br/>
+          Varun Pai <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 202 <br/>
+          273 Soda <br/>
+          Stephen Martinis <br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 024 <br/>
+          271 Soda <br/>
+          Phillip Carpenter <br/>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="time">11:30</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">12:00</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">12:30</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 125 <br/>
+          405 Soda <br/>
+          Joy Jeng <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 116 <br/>
+          87 Evans <br/>
+          Albert Wu<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 203 <br/>
+          310 Soda <br/>
+          Allen Nguyen<br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 016 <br/>
+          271 Soda <br/>
+          Albert Wu<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 203 <br/>
+          273 Soda <br/>
+          Allen Nguyen<br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 025 <br/>
+          271 Soda <br/>
+          Joy Jeng <br/>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="time">1:00</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">1:30</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">2:00</td>
+        <td rowspan="2" colspan="2" class="slot lecture">
+          Lecture<br/>
+          1 Pimentel<br/>
+        </td>
+
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 117 <br/>
+          87 Evans <br/>
+          Julia Oh <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 128 <br/>
+          310 Soda <br/>
+          Allen Nguyen <br/>
+        </td>
+
+        <td rowspan="2" colspan="2" class="slot lecture">
+          Lecture<br/>
+          1 Pimentel<br/>
+        </td>
+
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 017 <br/>
+          271 Soda <br/>
+          Julia Oh <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 028 <br/>
+          273 Soda <br/>
+          Allen Nguyen <br/>
+        </td>
+
+        <td rowspan="2" colspan="2" class="slot lecture">
+          Lecture<br/>
+          1 Pimentel<br/>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="time">2:30</td>
+      </tr>
+
+      <tr>
+        <td class="time">3:00</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 111 <br/>
+          310 Soda <br/>
+          Julia Oh <br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 011 <br/>
+          271 Soda <br/>
+          Julia Oh <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">3:30</td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 118 <br/>
+          B56 Hildebrand <br/>
+          Hamilton Nguyen<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 127 <br/>
+          B51 Hildebrand <br/>
+          Phillip Carpenter <br/>
+        </td>
+
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 018 <br/>
+          271 Soda <br/>
+          Hamilton Nguyen<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 027 <br/>
+          273 Soda <br/>
+          Phillip Carpenter <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">4:00</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">4:30</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 112 <br/>
+          310 Soda <br/>
+          Hamilton Nguyen <br/>
+        </td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 012 <br/>
+          271 Soda <br/>
+          Hamilton Nguyen <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">5:00</td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 119 <br/>
+          B56 Hildebrand <br/>
+          Stephen Martinis<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 126 <br/>
+          B51 Hildebrand<br/>
+          Shu Zhong<br/>
+        </td>
+
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 019 <br/>
+          271 Soda <br/>
+          Stephen Martinis <br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 026 <br/>
+          273 Soda <br/>
+          Shu Zhong <br/>
+        </td>
+
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">5:30</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">6:00</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">6:30</td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 120 <br/>
+          405 Soda <br/>
+          Shu Zhong<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot dis split">
+          Disc 204 <br/>
+          3113 Etcheverry<br/>
+          Albert Wu<br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 020 <br/>
+          271 Soda <br/>
+          Shu Zhong<br/>
+        </td>
+        <td rowspan="3" colspan="1" class="slot lab split">
+          Lab 204 <br/>
+          273 Soda<br/>
+          Albert Wu <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">7:00</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">7:30</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">8:00</td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="2" class="slot dis">
+          Disc 121 <br/>
+          405 Soda <br/>
+          Steven Tang <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+        <td rowspan="3" colspan="2" class="slot lab">
+          Lab 021 <br/>
+          271 Soda <br/>
+          Steven Tang <br/>
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">8:30</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td class="time">9:00</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+
+    </table>
+
+    <br/>
+
+    <a name="resources"></a>
+
+    <h2>Resources</h2>
+    <ul>
+      <li>The <a
+        href="http://inst.eecs.berkeley.edu/~cs61a-tz/book/examples/scalc/scalc.html">Scheme-Syntax
+        Calculator example</a> used in Chapter 3.
+      <li>The <a
+        href="http://inst.eecs.berkeley.edu/~cs61a-tz/book/examples/logic/logic.py.html">logic
+        programming module</a> used in Chapter 4.
+      <li>The <a
+        href="http://inst.eecs.berkeley.edu/~cs61a-tz/book/examples/mapreduce/mapreduce.py">MapReduce
+        module</a> used in Chapter 4.
+      <li><a href="pdfs/environment-diagrams.pdf">Handout on Drawing Environment Diagrams</a></li>
+      <li><a href="https://inst.eecs.berkeley.edu/~cs61a/complain">Grading Complaint Form</a></li>
+      <li>Webcasts of all <a
+           href="http://www.youtube.com/playlist?list=PL87898FD0A141069E&amp;feature=view_all">
+           61A lectures</a>
+         are on YouTube, usually posted within a day of recording.
+      <li>The <a
+        href="http://inst.eecs.berkeley.edu/~cs61A-tz/OnlinePythonTutor/v3/tutor.html">Online
+        Python Tutor</a> draws environment diagrams automatically.
+      <li><a href="pdfs/debugging.pdf">Introduction to Debugging</a></li>
+      <li>Exam information</li>
+      <ul>
+        <li><a href="exams/midterm1.html">Midterm 1</a>
+        <li><a href="exams/midterm2.html">Midterm 2</a>
+        <li><a href="exams/final.html">Final Exam</a>
+      </ul>
+      <li>Tutorials</li>
+      <ul>
+          <li><!--a href="pdfs/hw-faq.pdf"--><a href="submit_tutorial_codereview.html">Submitting Homework</a></li>
+          <li><a href="http://www.ee.surrey.ac.uk/Teaching/Unix/">Another UNIX Tutorial</a></li>
+      </ul>
+
+      <li>Video Tutorials</li>
+      <ul>
+          <li> Windows </li>
+          <ul>
+            <li><a href="http://www.youtube.com/watch?v=54-wuFsPi0w">Setting Up and Using Python</a></li>
+            <li><a href="http://www.youtube.com/watch?v=gDDaz6Sb8jo">Connecting From Home</a></li>
+          </ul>
+
+          <li> Mac OSX </li>
+          <ul>
+             <li><a href="http://www.youtube.com/watch?v=smHuBHxJdK8">Part 1: Setting up Python</a></li>
+             <li><a href="http://www.youtube.com/watch?v=6tQx-J4nBSY">Part 2: Setting up Emacs</a></li>
+             <li><a href="http://www.youtube.com/watch?v=irwlU7esODA">Part 3: SSH and the Terminal</a></li>
+          </ul>
+      </ul>
+
+      <li>Connecting to the Computing Labs from Home (Also covered by video tutorials)</li>
+      <ul>
+          <li>
+            <a href="pdfs/connect-windows.pdf">Windows Instructions</a>
+          </li>
+          <li>
+            <a href="pdfs/connect-mac.pdf">OS X Instructions</a>
+          </li>
+      </ul>
+
+      <!--
+      <li>Miscellaneous Links</li>
+      <ul>
+        <li>
+       		<a href="http://csillustrated.berkeley.edu/">Computer Science Illustrated</a>
+        </li>
+      </ul>
+      -->
+    </ul>
+    <br/>
+    <br/>
+
+    <br/>
+    <hr/>
+    <div class="footer">
+      <a href="http://kernest.com">Fonts by Kernest</a>
+    </div>
+  </body>
+</html>
