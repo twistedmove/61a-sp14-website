@@ -6,10 +6,8 @@
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
     <meta name="author" content ="John DeNero" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <!--
-    <link href="http://kernest.com/fonts/vegur-l.css" media="screen" rel="stylesheet" type="text/css" />
-    -->
-    <style type="text/css">@import url("style.css");</style>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 
     <title>CS 61A Fall 2013: Structure and Interpretation of Computer Programs</title>
 
@@ -32,7 +30,7 @@
     <h1><a href="index.html"><span class="coursename">CS61A</span>Structure and Interpretation of Computer Programs</a>, Fall 2013</h1>
     <ul class="courseinfo">
       <li>Instructor: John DeNero</li>
-      <li>MWF 2-3 PM in 1 Pimentel or 5-6 PM in 4 LeConte</li>
+      <li>MWF 12-1 PM in Wheeler Auditorium</li>
     </ul>
     <br/>
     <hr/>
@@ -42,59 +40,27 @@
       <li><a href="staff.html">Staff</a></li>
       <li><a href="index.html#schedule">Schedule</a></li>
       <li><a href="index.html#resources">Resources</a></li>
-      <li><a href="http://www.piazza.com/class">Piazza</a></li>
-      <li><a href="https://inst.eecs.berkeley.edu/~cs61a/fa12/hw/solutions">Solutions</a></li>
+      <li><a href="https://piazza.com/berkeley/fall2013/cs61a">Piazza</a></li>
+      <li><a href="hw/solutions">Solutions</a></li>
     </ul>
 
     <hr/>
     <a name="announcements"></a>
     <h2>Announcements</h2>
     <table class="announcements">
-
-      <!--
-     <tr>
-       <td class="date">10/8</td>
-       <td class="text">
-         <a href="projects/ants/ants.html">Project 3</a> is posted, due on
-         Wednesday 10/17, at 11:59pm. <em>Description and tests were updated on
-         Monday 10/8.</em>
-       </td>
-     </tr>
-     -->
-
-     <tr>
-       <td class="date">12/16</td>
-       <td class="text">
-         <a href="exams/61a-fa12-final-solutions.pdf">Solutions</a> to the <a
-         href="exams/61a-fa12-final-printed.pdf">final exam</a> are posted.
-       </td>
-     </tr>
-
-     <tr>
-       <td class="date">11/30</td>
-       <td class="date">12/12</td>
-       <td class="text">
-         Congratulations to the winners of the <a
-           href="projects/scheme_contest.html">Scheme Recursive Art
-           Contest</a>!
-       </td>
-     </tr>
-
-     <tr>
-       <td class="date">12/1</td>
-       <td class="text">Review for the <a href="exams/final.html">final
-           exam</a> will be held during special office hours next week.
-       </td>
-     </tr>
-
+      <tr>
+        <td class="date">8/20</td>
+        <td class="text">
+          Welcome to CS 61A!
+        </td>
+      </tr>
     </table>
-    <br/>
-    <a name="calendar"></a>
 
+    <a name="calendar"></a>
     <h2>Calendar</h2>
 
 <!-- BEGIN SCHEDULE -->
-<table class="calendar">
+<table id="calendar">
   <thead>
     <tr>
       <th>Week</th>
@@ -107,8 +73,8 @@
     </tr>
   </thead>
   <tr>
-    <td class=weeknum rowspan=1> 1 </td>
-    <td class=date> Fri Aug 30 </td>
+    <td rowspan="1" class="weeknum">1</td>
+    <td class="date">Fri Aug 30</td>
     <td> Functions  </td>
     <td> <p> <a href="http://composingprograms.com/pages/11-getting-started.html">Section 1.1</a><br/></p><p> <a href="http://composingprograms.com/pages/12-elements-of-programming.html">Section 1.2</a><br/></p> </td>
     <td>  </td>
@@ -116,8 +82,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 2 </td>
-    <td class=date> Mon Sep 02 </td>
+    <td rowspan="3" class="weeknum">2</td>
+    <td class="date">Mon Sep 02</td>
     <td> ***Academic Holiday***  </td>
     <td>  </td>
     <td>  </td>
@@ -125,7 +91,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Sep 04 </td>
+    <td class="date">Wed Sep 04</td>
     <td> Names  </td>
     <td> <p> <a href="http://composingprograms.com/pages/13-defining-new-functions.html">Section 1.3</a><br/></p><p> <a href="http://composingprograms.com/pages/14-designing-functions.html">Section 1.4</a><br/></p> </td>
     <td>  </td>
@@ -133,16 +99,16 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Sep 06 </td>
+    <td class="date">Fri Sep 06</td>
     <td> Control  </td>
     <td> <p> <a href="http://composingprograms.com/pages/15-control.html">Section 1.5</a><br/></p> </td>
     <td>  </td>
     <td>  </td>
-    <td>  </td>
+    <td> Hog project (due Sep 19) </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 3 </td>
-    <td class=date> Mon Sep 09 </td>
+    <td rowspan="3" class="weeknum">3</td>
+    <td class="date">Mon Sep 09</td>
     <td> Higher-Order Functions  </td>
     <td> <p> <a href="http://composingprograms.com/pages/16-higher-order-functions.html">Section 1.6</a><br/></p> </td>
     <td>  </td>
@@ -150,7 +116,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Sep 11 </td>
+    <td class="date">Wed Sep 11</td>
     <td> Environments  </td>
     <td> <p> <a href="http://composingprograms.com/pages/16-higher-order-functions.html">Section 1.6</a><br/></p> </td>
     <td>  </td>
@@ -158,7 +124,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Sep 13 </td>
+    <td class="date">Fri Sep 13</td>
     <td> Newton's Method  </td>
     <td> <p> <a href="http://composingprograms.com/pages/16-higher-order-functions.html">Section 1.6</a><br/></p> </td>
     <td>  </td>
@@ -166,8 +132,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 4 </td>
-    <td class=date> Mon Sep 16 </td>
+    <td rowspan="3" class="weeknum">4</td>
+    <td class="date">Mon Sep 16</td>
     <td> Recursion  </td>
     <td> <p> <a href="http://composingprograms.com/pages/17-recursive-functions.html">Section 1.7</a><br/></p> </td>
     <td>  </td>
@@ -175,7 +141,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Sep 18 </td>
+    <td class="date">Wed Sep 18</td>
     <td> Tree Recursion  </td>
     <td> <p> <a href="http://composingprograms.com/pages/17-recursive-functions.html">Section 1.7</a><br/></p> </td>
     <td>  </td>
@@ -183,7 +149,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Sep 20 </td>
+    <td class="date">Fri Sep 20</td>
     <td> Function Examples  </td>
     <td>  </td>
     <td>  </td>
@@ -191,8 +157,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 5 </td>
-    <td class=date> Mon Sep 23 </td>
+    <td rowspan="3" class="weeknum">5</td>
+    <td class="date">Mon Sep 23</td>
     <td> ***No Lecture; Midterm is Monday 09/23 @ 7pm***  </td>
     <td>  </td>
     <td>  </td>
@@ -200,15 +166,15 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Sep 25 </td>
+    <td class="date">Wed Sep 25</td>
     <td> Data Abstraction  </td>
     <td> <p> <a href="http://composingprograms.com/pages/21-introduction.html">Section 2.1</a><br/></p><p> <a href="http://composingprograms.com/pages/22-data-abstraction.html">Section 2.2</a><br/></p> </td>
     <td>  </td>
     <td>  </td>
-    <td>  </td>
+    <td> Recursive art project (due Oct 03) </td>
   </tr>
   <tr>
-    <td class=date> Fri Sep 27 </td>
+    <td class="date">Fri Sep 27</td>
     <td> Sequences  </td>
     <td> <p> <a href="http://composingprograms.com/pages/23-sequences.html">Section 2.3</a><br/></p> </td>
     <td>  </td>
@@ -216,16 +182,16 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 6 </td>
-    <td class=date> Mon Sep 30 </td>
+    <td rowspan="3" class="weeknum">6</td>
+    <td class="date">Mon Sep 30</td>
     <td> Lists and Dictionaries  </td>
     <td> <p> <a href="http://composingprograms.com/pages/23-sequences.html">Section 2.3</a><br/></p> </td>
     <td>  </td>
     <td>  </td>
-    <td>  </td>
+    <td> Trends project (due Oct 10) </td>
   </tr>
   <tr>
-    <td class=date> Wed Oct 02 </td>
+    <td class="date">Wed Oct 02</td>
     <td> Strings and Numbers  </td>
     <td> <p> <a href="http://composingprograms.com/pages/21-introduction.html">Section 2.1</a><br/></p><p> <a href="http://composingprograms.com/pages/23-sequences.html">Section 2.3</a><br/></p> </td>
     <td>  </td>
@@ -233,7 +199,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Oct 04 </td>
+    <td class="date">Fri Oct 04</td>
     <td> Mutable Data  </td>
     <td> <p> <a href="http://composingprograms.com/pages/24-mutable-data.html">Section 2.4</a><br/></p> </td>
     <td>  </td>
@@ -241,8 +207,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 7 </td>
-    <td class=date> Mon Oct 07 </td>
+    <td rowspan="3" class="weeknum">7</td>
+    <td class="date">Mon Oct 07</td>
     <td> Mutable Data Types  </td>
     <td> <p> <a href="http://composingprograms.com/pages/24-mutable-data.html">Section 2.4</a><br/></p> </td>
     <td>  </td>
@@ -250,7 +216,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Oct 09 </td>
+    <td class="date">Wed Oct 09</td>
     <td> Object-Oriented Programming  </td>
     <td> <p> <a href="http://composingprograms.com/pages/25-object-oriented-programming.html">Section 2.5</a><br/></p> </td>
     <td>  </td>
@@ -258,16 +224,16 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Oct 11 </td>
+    <td class="date">Fri Oct 11</td>
     <td> Inheritance  </td>
     <td> <p> <a href="http://composingprograms.com/pages/25-object-oriented-programming.html">Section 2.5</a><br/></p> </td>
     <td>  </td>
     <td>  </td>
-    <td>  </td>
+    <td> Ants project (due Oct 24) </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 8 </td>
-    <td class=date> Mon Oct 14 </td>
+    <td rowspan="3" class="weeknum">8</td>
+    <td class="date">Mon Oct 14</td>
     <td> Recursive Objects  </td>
     <td> <p> <a href="http://composingprograms.com/pages/27-generic-operations.html">Section 2.7</a><br/></p> </td>
     <td>  </td>
@@ -275,7 +241,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Oct 16 </td>
+    <td class="date">Wed Oct 16</td>
     <td> Orders of growth  </td>
     <td> <p> <a href="http://composingprograms.com/pages/27-generic-operations.html">Section 2.7</a><br/></p> </td>
     <td>  </td>
@@ -283,7 +249,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Oct 18 </td>
+    <td class="date">Fri Oct 18</td>
     <td> Sets  </td>
     <td> <p> <a href="http://composingprograms.com/pages/27-generic-operations.html">Section 2.7</a><br/></p> </td>
     <td>  </td>
@@ -291,8 +257,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 9 </td>
-    <td class=date> Mon Oct 21 </td>
+    <td rowspan="3" class="weeknum">9</td>
+    <td class="date">Mon Oct 21</td>
     <td> Multiple Representations  </td>
     <td> <p> Section 2.8<br/></p> </td>
     <td>  </td>
@@ -300,7 +266,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Oct 23 </td>
+    <td class="date">Wed Oct 23</td>
     <td> Generic Functions  </td>
     <td> <p> Section 2.8<br/></p> </td>
     <td>  </td>
@@ -308,7 +274,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Oct 25 </td>
+    <td class="date">Fri Oct 25</td>
     <td> Object Examples  </td>
     <td>  </td>
     <td>  </td>
@@ -316,8 +282,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 10 </td>
-    <td class=date> Mon Oct 28 </td>
+    <td rowspan="3" class="weeknum">10</td>
+    <td class="date">Mon Oct 28</td>
     <td> ***No Lecture; Midterm is Monday 10/28 @ 7pm***  </td>
     <td>  </td>
     <td>  </td>
@@ -325,15 +291,15 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Oct 30 </td>
+    <td class="date">Wed Oct 30</td>
     <td> Functional Programming  </td>
     <td>  </td>
     <td>  </td>
     <td>  </td>
-    <td>  </td>
+    <td> Hog revisions project (due Nov 07) </td>
   </tr>
   <tr>
-    <td class=date> Fri Nov 01 </td>
+    <td class="date">Fri Nov 01</td>
     <td> Exceptions  </td>
     <td>  </td>
     <td>  </td>
@@ -341,8 +307,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 11 </td>
-    <td class=date> Mon Nov 04 </td>
+    <td rowspan="3" class="weeknum">11</td>
+    <td class="date">Mon Nov 04</td>
     <td> Calculator  </td>
     <td>  </td>
     <td>  </td>
@@ -350,15 +316,15 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Nov 06 </td>
+    <td class="date">Wed Nov 06</td>
     <td> Interpreters  </td>
     <td>  </td>
     <td>  </td>
     <td>  </td>
-    <td>  </td>
+    <td> Scheme project (due Nov 21) </td>
   </tr>
   <tr>
-    <td class=date> Fri Nov 08 </td>
+    <td class="date">Fri Nov 08</td>
     <td> Tail Calls  </td>
     <td>  </td>
     <td>  </td>
@@ -366,8 +332,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 12 </td>
-    <td class=date> Mon Nov 11 </td>
+    <td rowspan="3" class="weeknum">12</td>
+    <td class="date">Mon Nov 11</td>
     <td> ***Academic Holiday***  </td>
     <td>  </td>
     <td>  </td>
@@ -375,7 +341,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Nov 13 </td>
+    <td class="date">Wed Nov 13</td>
     <td> User Interfaces  </td>
     <td>  </td>
     <td>  </td>
@@ -383,7 +349,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Nov 15 </td>
+    <td class="date">Fri Nov 15</td>
     <td> Iterators  </td>
     <td>  </td>
     <td>  </td>
@@ -391,8 +357,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 13 </td>
-    <td class=date> Mon Nov 18 </td>
+    <td rowspan="3" class="weeknum">13</td>
+    <td class="date">Mon Nov 18</td>
     <td> Streams  </td>
     <td>  </td>
     <td>  </td>
@@ -400,7 +366,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Nov 20 </td>
+    <td class="date">Wed Nov 20</td>
     <td> Declarative Programming  </td>
     <td>  </td>
     <td>  </td>
@@ -408,7 +374,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Nov 22 </td>
+    <td class="date">Fri Nov 22</td>
     <td> Unification  </td>
     <td>  </td>
     <td>  </td>
@@ -416,8 +382,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 14 </td>
-    <td class=date> Mon Nov 25 </td>
+    <td rowspan="3" class="weeknum">14</td>
+    <td class="date">Mon Nov 25</td>
     <td> Distributed Computing  </td>
     <td>  </td>
     <td>  </td>
@@ -425,7 +391,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Nov 27 </td>
+    <td class="date">Wed Nov 27</td>
     <td> ***No Lecture; Thanksgiving***  </td>
     <td>  </td>
     <td>  </td>
@@ -433,7 +399,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Nov 29 </td>
+    <td class="date">Fri Nov 29</td>
     <td> ***Academic Holiday***  </td>
     <td>  </td>
     <td>  </td>
@@ -441,8 +407,8 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=weeknum rowspan=3> 15 </td>
-    <td class=date> Mon Dec 02 </td>
+    <td rowspan="3" class="weeknum">15</td>
+    <td class="date">Mon Dec 02</td>
     <td> MapReduce  </td>
     <td>  </td>
     <td>  </td>
@@ -450,7 +416,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Wed Dec 04 </td>
+    <td class="date">Wed Dec 04</td>
     <td> Natural Language Processing  </td>
     <td>  </td>
     <td>  </td>
@@ -458,7 +424,7 @@
     <td>  </td>
   </tr>
   <tr>
-    <td class=date> Fri Dec 06 </td>
+    <td class="date">Fri Dec 06</td>
     <td> Conclusion  </td>
     <td>  </td>
     <td>  </td>
@@ -468,7 +434,7 @@
 </table>
 <a name="schedule"></a>
 <h2>Weekly Schedule</h2>
-<table class="schedule">
+<table id="schedule">
   <tr>
     <th></th>
     <th colspan="3">Monday</th>
@@ -508,9 +474,17 @@
   <tr>
     <td class="time">9:30</td>
     <td colspan="3">&nbsp;</td>
+    <td rowspan="3" colspan="3" class="slot lab">
+      Lab 011<br/>
+      271 Soda<br/>
+      TBD<br/>
+    </td>
     <td colspan="3">&nbsp;</td>
-    <td colspan="3">&nbsp;</td>
-    <td colspan="3">&nbsp;</td>
+    <td rowspan="3" colspan="3" class="slot dis">
+      Dis 011<br/>
+      B5 Hearst Annex<br/>
+      TBD<br/>
+    </td>
     <td colspan="3">&nbsp;</td>
   </tr>
 
@@ -519,14 +493,10 @@
     <td colspan="3">&nbsp;</td>
     <td colspan="3">&nbsp;</td>
     <td colspan="3">&nbsp;</td>
-    <td colspan="3">&nbsp;</td>
-    <td colspan="3">&nbsp;</td>
   </tr>
 
   <tr>
     <td class="time">10:30</td>
-    <td colspan="3">&nbsp;</td>
-    <td colspan="3">&nbsp;</td>
     <td colspan="3">&nbsp;</td>
     <td colspan="3">&nbsp;</td>
     <td colspan="3">&nbsp;</td>
@@ -759,31 +729,36 @@
 
     <h2>Resources</h2>
     <ul>
+      <!--
+      <li>The <a href="http://inst.eecs.berkeley.edu/~scheme">UCB version of
+      STk</a>, an interpreter for Scheme.
       <li>The <a
-        href="http://inst.eecs.berkeley.edu/~cs61a-tz/book/examples/scalc/scalc.html">Scheme-Syntax
+        href="http://inst.eecs.berkeley.edu/~cs61a/book/examples/scalc/scalc.html">Scheme-Syntax
         Calculator example</a> used in Chapter 3.
       <li>The <a
-        href="http://inst.eecs.berkeley.edu/~cs61a-tz/book/examples/logic/logic.py.html">logic
+        href="http://inst.eecs.berkeley.edu/~cs61a/book/examples/logic/logic.py.html">logic
         programming module</a> used in Chapter 4.
       <li>The <a
-        href="http://inst.eecs.berkeley.edu/~cs61a-tz/book/examples/mapreduce/mapreduce.py">MapReduce
+        href="http://inst.eecs.berkeley.edu/~cs61a/book/examples/mapreduce/mapreduce.py">MapReduce
         module</a> used in Chapter 4.
       <li><a href="pdfs/environment-diagrams.pdf">Handout on Drawing Environment Diagrams</a></li>
       <li><a href="https://inst.eecs.berkeley.edu/~cs61a/complain">Grading Complaint Form</a></li>
-      <li>Webcasts of all <a
-           href="http://www.youtube.com/playlist?list=PL87898FD0A141069E&amp;feature=view_all">
+      <li>Webcasts of old <a
+           href="http://www.youtube.com/playlist?list=PL-XXv-cvA_iClNatU-2wXzkfR2TtFlmqv">
            61A lectures</a>
-         are on YouTube, usually posted within a day of recording.
-      <li>The <a
-        href="http://inst.eecs.berkeley.edu/~cs61A-tz/OnlinePythonTutor/v3/tutor.html">Online
-        Python Tutor</a> draws environment diagrams automatically.
-      <li><a href="pdfs/debugging.pdf">Introduction to Debugging</a></li>
+         are on YouTube. Lectures may vary slightly from those in this iteration of the course!
+        -->
+      <li>The <a href="http://tutor.composingprograms.com/visualize.html#code=%23+CS+61A+Fall+2013">Online
+      Python Tutor</a> draws environment diagrams automatically.
+      <!-- <li><a href="pdfs/debugging.pdf">Introduction to Debugging</a></li> -->
+      <!--
       <li>Exam information</li>
       <ul>
         <li><a href="exams/midterm1.html">Midterm 1</a>
         <li><a href="exams/midterm2.html">Midterm 2</a>
         <li><a href="exams/final.html">Final Exam</a>
       </ul>
+        -->
       <li>Tutorials</li>
       <ul>
           <li><!--a href="pdfs/hw-faq.pdf"--><a href="submit_tutorial_codereview.html">Submitting Homework</a></li>
@@ -830,8 +805,5 @@
 
     <br/>
     <hr/>
-    <div class="footer">
-      <a href="http://kernest.com">Fonts by Kernest</a>
-    </div>
   </body>
 </html>
