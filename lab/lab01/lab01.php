@@ -66,7 +66,7 @@
           <ul class="with_bullets">
             <li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
             <li><a href="">Gedit</a></li>
-            <li>Vim comes preinstalled on most Linux systems (including Ubuntu). vim-gnome, an alternative on Ubuntu (which has a graphical interface) can be installed using 'sudo apt-get install vim-gnome'</li>
+            <li>Vim - to install vim on Ubuntu, you can type 'sudo apt-get install vim'. vim-gnome, an alternative on Ubuntu (which has a graphical interface) can be installed using 'sudo apt-get install vim-gnome'</li>
             <li>Emacs - the easiest way to install this on Ubuntu is to open a terminal prompt and type 'sudo apt-get install emacs'</li>
           </ul>
         </li>
@@ -160,7 +160,7 @@
 
     <p>
       The next thing we're going to do is find our downloaded file. If you didn't move
-      the file at all, it's probably in <code>~/Downloads</code> on Mac/Linux or <code>WINDOWS DOWNLOAD PATH</code> on Windows. If your downlaods all go to your Dekstop, on Mac/Linux, that would
+      the file at all, it's probably in <code>~/Downloads</code> on Mac/Linux or <code>WINDOWS DOWNLOAD PATH</code> on Windows. If your downloads all go to your Dekstop, on Mac/Linux, that would
       be <code>~/Desktop</code> and on Windows, that would be <code>WINDOWS DESKTOP PATH</code>. Let's <code>cd</code> into that directory.
     </p>
 
@@ -397,7 +397,20 @@
 
     <h2 class="section_title">The Autograder</h2>
     <p>
-      
+      The autograder is a program that runs on our servers over your projects after you submit them. Once you submit your project, it will be added to the line of projects that we
+      will then run the autograder over. When the autograded finishes running over your project, you'll receive an email with an automated response that let's you know
+      how your project is doing (in terms of which tests you're passing and which ones you're failing). The autograder is a subset of the tests that we will run on your project
+      to determine your grade meaning that it might catch some, but not all of your errors; however, it is a good indicator of how well you're doing on the projct so far.
+    </p>
+
+    <p>
+      To get you used to how the autograder works, we're going to be running a sample autograder over your hw0 submission and you should receive an email within 30 minutes.
+      This email will be similar to the one that you will receive for a project. If you don't get this email within an hour or so, make sure that you have a valid email address
+      entered under your account info. To check, run <code>check-register</code> to see which email you have registered with and <code>re-register</code> to change it.
+    </p>
+
+    <p>
+      Once you have received the autograder email from us and it says that you have passed all of the tests, you're good to go! <strong>Congrats</strong>, you just submitted your first CS61A assignment!
     </p>
   </body>
 </html>
