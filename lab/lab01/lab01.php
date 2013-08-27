@@ -49,6 +49,7 @@
           <ul class="with_bullets">
             <li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
             <li><a href="http://notepad-plus-plus.org/download/v6.4.5.html">Notepad++</a></li>
+            <li><a href="https://projects.gnome.org/gedit/">Gedit</a></li>
           </ul>
         </li>
         <li>
@@ -57,24 +58,28 @@
             <li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
             <li><a href="http://macromates.com/download">TextMate 2</a></li>
             <li><a href="http://ash.barebones.com/TextWrangler_4.5.3.dmg">TextWrangler</a></li>
-            <li>Vim comes preinstalled on Mac OS X. Another great alternative is Macvim which can be found <a herf="https://code.google.com/p/macvim/downloads/list">here.</a></li>
+            <li>Vim comes preinstalled on Mac OS X. Another great alternative is Macvim which can be found <a href="https://code.google.com/p/macvim/downloads/list">here.</a></li>
             <li><a href="http://aquamacs.org/">AquaMacs</a></li>
+            <li><a href="https://projects.gnome.org/gedit/">Gedit</a></li>
           </ul>
         </li>
         <li>
           For Linux users:
           <ul class="with_bullets">
             <li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
-            <li><a href="">Gedit</a></li>
+            <li><a href="https://projects.gnome.org/gedit/">Gedit</a></li>
             <li>Vim - to install vim on Ubuntu, you can type 'sudo apt-get install vim'. vim-gnome, an alternative on Ubuntu (which has a graphical interface) can be installed using 'sudo apt-get install vim-gnome'</li>
             <li>Emacs - the easiest way to install this on Ubuntu is to open a terminal prompt and type 'sudo apt-get install emacs'</li>
           </ul>
         </li>
       </ul>
-      One thing to note: even though a standard download of Python will come with a text editor called Idle, we <strong>do not</strong>
-      recommend it at all. The reason is that you won't gain as much experience using the command line to run your Python programs. This
-      will hurt you a lot once you start working on the projects for this class so we highly recommend that you use the command line to run
-      your files from day 1!
+
+      <div class="announcement">
+        One thing to note: even though a standard download of Python will come with a text editor called Idle, we <strong>do not</strong>
+        recommend it at all. The reason is that you won't gain as much experience using the command line to run your Python programs. This
+        will hurt you a lot once you start working on the projects for this class so we highly recommend that you use the command line to run
+        your files from day 1!
+      </div>
     </p>
 
     <h2 class="section_title">Downloading and manipulating files</h2>
@@ -91,7 +96,7 @@
 
     <p>
       You should now have a file called <strong>hw0.py</strong> somewhere on your computer. For the screenshots that you'll see below,
-      we're using Sublime Text 2 on Mac OS X; however, Sublime Text 2 runs the same on any computer that you have so it should function 
+      we're using Sublime Text 2 on Mac OS X; however, Sublime Text 2 runs the same on any computer that you have so it should function
       the same as ours. Open that file up in your shiny new text editor and you should see the following text:
     </p>
 
@@ -99,7 +104,9 @@
 
     <p>
       Next, we're going to edit our file to include the four required values, one in each of the functions. The first thing that you should
-      notice is the green text that is wrapped within three quotation marks <code>"""</code>. That's called a docstring which is a description of what
+      notice is the green text (Note: the colors on your text editor will most likely be different. For the curious, this screenshot is of the
+      Solarized color scheme which you can find for your text editor if you are interested.) that is wrapped within three quotation marks
+      <code>"""</code>. That's called a docstring which is a description of what
       the function is intended to do. Docstrings are very useful because that means other programmers can read your docstrings and have a nice
       description of what the function is supposed to do, without having to read any of your code. Within the docstring, you might notice some
       other funky characters such as <code>>>></code>. That's the start of what we call <em>doctests</em>. Doctests are a good way to also describe our function
