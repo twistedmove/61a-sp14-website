@@ -301,7 +301,7 @@
     <h4 class="section_title">Mac / Linux</h4>
     <p>
       On Mac Os X and Linux, all you need is your terminal window that you were using before. Navigate to wherever you put your finished homework. If you were following the tutorial from above,
-      you'll want to type something like <code>cs ~/cs61a/hw/hw0</code> to get to your homework 0 folder. Then you'll want to type the following command:
+      you'll want to type something like <code>cd ~/cs61a/hw/hw0</code> to get to your homework 0 folder. Then you'll want to type the following command:
     </p>
 
     <p class="codemargin">
@@ -313,7 +313,8 @@
       that you want to copy to the server. If you wanted, you could specify the whole path to the file such as <code>~/cs61a/hw/hw0/hw0.py</code> instead of just the filename. The reason why we can just specify the filename
       is because we're already in the folder that contains it. The last part of the command is the destination. For this, we're logging into the server using your login (the cs61a-??) part (make sure you change the question marks)
       and the server that we're logging into will be <code>nova</code>. A complete list of servers can be found <a href="http://inst.eecs.berkeley.edu/cgi-bin/clients.cgi?choice=servers">here.</a> We generally use <code>star</code> and <code>nova</code>.
-      The text that comes after the server is important. We're specifiying where on the server we want the file to go. In this case, we're placing it in our home directory which is represented by the <code>~</code> symbol.
+      The text that comes after the server is important. We're specifiying where on the server we want the file to go. In this case, we're placing it in our home directory which is represented by the <code>~</code> symbol. If we already had our
+      homework folders created on the server, we could specify the whole path. Something like <code>scp hw0.py cs61a-??@nova.cs.berkeley.edu:~/hw/hw0</code>
     </p>
 
     <p>
