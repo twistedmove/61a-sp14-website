@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Style Guide</title>
+    <link
+    href="http://www-inst.eecs.berkeley.edu/~cs61a/su13/projects/ants/css/assignments.css" rel="stylesheet" type="text/css">
+    <style>
+      span.non-ess {
+        color:#b78727;
+        font-weight:bold;
+      }
+      span.python {
+        color:#0043c5;
+        font-weight:bold;
+      }
+    </style>
+    
+
+
+  </head>
+  <body>
+    
+<div id='header'>
+  <div id ='logo'>
+    <h1>Style Guide</h1>
+  </div>
+</div>
+<ul><li><a href="#names-and-variables">Names and variables</a></li><li><a href="#spacing-and-indentation">Spacing and Indentation</a></li><li><a href="#repetition">Repetition</a></li><li><a href="#comments">Comments</a></li><li><a href="#control-structures">Control Structures</a></li><li><a href="#miscellaneous">Miscellaneous</a></li></ul>
+
+<p>In 61A, each project has a composition score, worth 3 points, that is
+graded on the <em>style</em> of your code. This document provides some
+guidelines.</p>
+
+<p>After your code works, you should strive to do two things:</p>
+
+<ol>
+<li>Make your code <strong>easier to read</strong></li>
+<li>Make your code <strong>concise</strong></li>
+<li>Make your code <strong>efficient</strong> (optional for this class)</li>
+</ol>
+
+<p>Sometimes these goals conflict with each other, and <strong>sometimes there
+are exceptions to the rules</strong>. Whatever you do, you should always try
+to make your code easy to read -- use your judgement.</p>
+
+<p>Some of these guidelines will have one or more of the following marks:</p>
+
+<ul>
+<li><span class="non-ess">N</span>: a "non-essential" guideline; these
+guidelines are not necessary for this class, but are generally good
+practice</li>
+<li><span class="python">P</span>: a Python-specific guideline; these
+are "Pythonic" style conventions that don't necessarily apply to
+other languages</li>
+</ul>
+
+<p>Finally, here is a link to to
+<a href="http://www.python.org/dev/peps/pep-0008/">PEP-8</a>, the official Python
+style guide.</p>
+
+<h2 id="names-and-variables">Names and variables</h2>
+
+<ol>
+<li><strong>Meaningful names</strong>: variable and function names should be
+<em>self-descriptive</em>:</p>
+
+<pre class="prettyprint"># bad -- don't do this!
+a, b, m = 100, 0, 0
+thing = 'hello world'
+stuff = lambda x: x % 2
+
+# good
+goal, score, opp_score = 100, 0, 0
+greeting = 'hello world'
+is_even = lambda x: x % 2
+</pre></li>
+<li><strong>Indices and mathematical symbols</strong>: using one-letter names and
+abbreviations is okay for indices, mathematical symbols, or if it
+is obvious what the variables are referring to.</p>
+
+<pre class="prettyprint">i = 0         # a counter for a loop
+x, y = 0, 0   # x and y coordinates
+p, q = 5, 17  # mathematical names in the context of the question
+</pre>
+
+<p>In general, <code>i</code>, <code>j</code>, and <code>k</code> are the most common indices used.</li>
+<li><strong>Avoid letters 'o' and 'l'</strong>: do not use them by themselves as
+names:</p>
+
+<pre class="prettyprint"># bad!
+o = O + 4     # letter 'O' or number 0?
+l = l + 5     # letter 'l' or number 1?
+</pre></li>
+<li><strong>Don't create unnecessary variables</strong>: for example,</p>
+
+<pre class="prettyprint"># bad!
+result = answer(argument)
+return result
+
+# good!
+return answer(argument)
+</pre>
+
+<p>However, if it is unclear what your code is referring to, or if the
+expression is too long, you <strong>should</strong> create a variable:</p>
+
+<pre class="prettyprint"># bad!
+do_something(lambda x: x % 49 == 0, (total + 1) // 7)
+
+# good!
+divisible_49 = lambda x: x % 49 == 0
+score = (total + 1) // 7
+do_somethig(divisible_49, result)
+</pre></li>
+<li><strong>Avoid profanity</strong>: don't leave it in your code. Even if you're
+really frustrated.</p>
+
+<pre class="prettyprint"># bad!
+eff_this_class = 666
+</pre></li>
+<li><span class="non-ess">N</span><span class="python">P</span>: Use <code>lower_case_and_underscores</code> for variables and
+functions:</p>
+
+<pre class="prettyprint"># bad!
+TotalScore = 0
+finalScore = 1
+
+def Mean_Strategy(score, opp):
+    ...
+
+# good!
+total_score = 0
+final_score = 1
+
+def mean_strategy(score, opp):
+    ...
+</pre></li>
+<li><span class="non-ess">N</span><span class="python">P</span>: Use <code>CamelCase</code> for classes:</p>
+
+<pre class="prettyprint"># bad!
+class example_class:
+    ...
+
+# good!
+class ExampleClass:
+    ...
+</pre></li>
+</ol>
+
+<h2 id="spacing-and-indentation">Spacing and Indentation</h2>
+
+<p>Whitespace style might seem superfluous, but using whitespace in
+certain places (and omitting it in others) will often make it easier
+to read code.  In addition, since Python code depends on whitespace
+(e.g.  indentation), it requires some extra attention. For that
+reason, this section has quite a few guidelines that you should
+consider.</p>
+
+<ol>
+<li><strong>Use spaces, not tabs for indentation</strong>: our starter code always
+uses 4 spaces instead of tabs. If you use both spaces and tabs,
+Python will raise an <code>IndentationError</code>.</li>
+<li><span class="python">P</span>: <strong>Use 4 spaces per indentation level</strong>: technically, Python
+allows you to use any number of spaces as long as you are
+consistent across an indentation level. The conventional style is
+to use 4 spaces.</li>
+<li><strong>Keep lines under 80 characters long</strong>: other conventions use 70
+or 72 characters, but 80 is usually the upper limit.</li>
+<li><strong>Don't double-space code</strong>: that is, do <em>not</em> insert a blank line
+in between lines of code. Personally, I find that harder to read.</li>
+<li><span class="non-ess">N</span>: <strong>Use spaces between primitive operators</strong>: always use spaces
+between <code>+</code> and <code>-</code>. Depending on how illegible expressions get,
+you can use your own judgement for <code>*</code>, <code>/</code>, and <code>**</code> (as long as
+it's easy to read at a glance, it's fine).</p>
+
+<pre class="prettyprint"># bad!
+x=a+b*c*(a**2)/c-4
+
+# good!
+x = a + b*c*(a**2) / c - 4
+</pre></li>
+<li><span class="non-ess">N</span>: <strong>Spacing lists</strong>: When using tuples, lists, or function
+operands, leave one space after each comma <code>,</code>:</p>
+
+<pre class="prettyprint"># bad!
+tup = (x,x/2,x/3,x/4)
+
+# good!
+tup = (x, x/2, x/3, x/4)
+</pre></li>
+<li><span class="non-ess">N</span><span class="python">P</span>: If a line gets two long, you have two options. If you are
+using parentheses or braces with multiple elements, you can
+continue them onto the next line:</p>
+
+<pre class="prettyprint">def func(a, b, c, d, e, f,
+         g, h, i):
+    # body
+
+tup = (1, 2, 3, 4, 5,
+       6, 7, 8)
+names = ('alice',
+         'bob',
+         'eve')
+</pre>
+
+<p>Notice that the subsequent lines line up with the <em>start</em> of the
+sequence. If the above rule does not apply, you can use Python's <code>\</code>
+operator:</p>
+
+<pre class="prettyprint">total = this_is(a, very, lengthy) + line + of_code \
+            + so_it - should(be, separated) \
+            + onto(multiple, lines)
+</pre>
+
+<p><em>Where</em> you put the <code>\</code> in relation to binary operators (e.g.
+<code>hi \ + bye</code>  versus <code>hi + \ bye</code>) will vary from person to person
+-- for our class, it doesn't matter.</li>
+<li><span class="non-ess">N</span><span class="python">P</span>: Leave a blank line between the end of a function or class and the
+next line:</p>
+
+<pre class="prettyprint">def example():
+    return 'stuff'
+
+x = example() # notice the space above
+</pre></li>
+<li><span class="non-ess">N</span>: Don't leave whitespace at the end of a line.</li>
+</ol>
+
+<h2 id="repetition">Repetition</h2>
+
+<p>In general, <strong>don't repeat yourself</strong> (DRY). It wastes space and can
+be computationally inefficient.</p>
+
+<ol>
+<li><strong>DON'T</strong> repeat complex expressions:</p>
+
+<pre class="prettyprint">if a + b - 3 * h / 2 % 47 == 4:
+    total += a + b - 3 * h / 2 % 47
+    return total
+</pre>
+
+<p><strong>Instead</strong>, store the expression in a variable:</p>
+
+<pre class="prettyprint">turn_score = a + b - 3 * h / 2 % 47
+if turn_score == 4:
+    total += turn_score
+    return total
+</pre>
+
+<p>This will also make your code more readable.</li>
+<li><strong>Don't repeat computationally-heavy function calls</strong>:</p>
+
+<pre class="prettyprint">if takes_one_minute_to_run(x) != ():
+    first = takes_one_minute_to_run(x)[0]
+    second = takes_one_minute_to_run(x)[1]
+    third = takes_one_minute_to_run(x)[2]
+</pre>
+
+<p><strong>Instead</strong>, store the expression in a variable:</p>
+
+<pre class="prettyprint">result = takes_one_minute_to_run(x)
+if result != ():
+    first = result[0]
+    second = result[0]
+    third = result[0]
+</pre></li>
+<li><strong>DON'T</strong> have the same code in both the <code>if</code> and the <code>else</code> clause
+of a conditional:</p>
+
+<pre class="prettyprint">if pred:            # bad!
+    print('stuff')
+    x += 1
+    return x
+else:
+    x += 1
+    return x
+</pre>
+
+<p><strong>Instead</strong>, pull the line(s) out of the conditional:</p>
+
+<pre class="prettyprint">if pred:            # good!
+    print('stuff')
+x += 1
+return x
+</pre></li>
+</ol>
+
+<h2 id="comments">Comments</h2>
+
+<p>Recall that Python comments begin with the <code>#</code> sign. Keep in mind that
+the triple-quotes are technically strings, not comments. Comments can
+be helpful for explaining ambiguous code, but there are some
+guidelines for when to use them.</p>
+
+<ol>
+<li><span class="python">P</span>: <strong>Put docstrings only at the top of functions</strong>: docstrings are
+denoted by triple-quotes at the beginning of a function or class:</p>
+
+<pre class="prettyprint">def average(fn, samples):
+    """Calls a 0-argument function SAMPLES times, and takes
+    the average of the outcome."""
+</pre>
+
+<p>You should <strong>not</strong> put docstrings in the middle of the function --
+only put them at the beginning.</li>
+<li><strong>Remove commented-out code from final version</strong>: you can comment
+lines out when you are debugging. When you are turning in your
+project, take all commented lines out (including <code>TODO</code>s) -- this
+makes it easier for readers to read your code.</li>
+<li><strong>Don't write unnecessary comments</strong>: for example, the
+following is bad:</p>
+
+<pre class="prettyprint">def example(y):
+    x += 1            # increments x by 1
+    return square(x)  # returns the square of x
+</pre>
+
+<p>Your actual code should be <em>self-documenting</em> -- try to make it as
+obvious as possible what you are doing without resorting to
+comments. Only use comments if something is not obvious or needs to
+be explicitly emphasized</li>
+</ol>
+
+<h2 id="control-structures">Control Structures</h2>
+
+<ol>
+<li><strong>DON'T</strong> compare a boolean variable to <code>True</code> or <code>False</code>:</p>
+
+<pre class="prettyprint">if pred == True:   # bad!
+    ...
+if pred == False:  # bad!
+    ...
+</pre>
+
+<p><strong>Instead</strong>, do this:</p>
+
+<pre class="prettyprint">if pred:           # good!
+    ...
+if not pred:       # good!
+    ...
+</pre></li>
+<li><strong>DON'T</strong> do this:</p>
+
+<pre class="prettyprint">if pred:            # bad!
+    return True
+else:
+    return False
+</pre>
+
+<p><strong>Instead</strong>, do this:</p>
+
+<pre class="prettyprint">return pred         # good!
+</pre></li>
+<li>(related to the previous:) <strong>DON'T</strong> do this:</p>
+
+<pre class="prettyprint">if num != 49:
+    total += example(4, 5, True)
+else:
+    total += example(4, 5, False)
+</pre>
+
+<p>In the example above, the only thing that changes between the
+conditionals is the boolean at the end. <strong>Instead</strong>, do this:</p>
+
+<pre class="prettyprint">total += example(4, 5, num != 49)
+</pre></li>
+<li><strong>DON'T</strong> use a <code>while</code> loop when you should use an <code>if</code>:</p>
+
+<pre class="prettyprint">while pred:
+    x += 1
+    return x
+</pre>
+
+<p><strong>Instead</strong>, use an <code>if</code></p>
+
+<pre class="prettyprint">if pred:
+    x += 1
+    return x
+</pre></li>
+<li><span class="python">P</span>: <strong>DON'T</strong> use parentheses with conditional statements:</p>
+
+<pre class="prettyprint">if (x == 4):
+    ...
+elif (x == 5):
+    ...
+while (x &lt; 10):
+    ...
+</pre>
+
+<p>Parentheses are not necessary in Python conditionals (they are in
+other languages though).</li>
+</ol>
+
+<h2 id="miscellaneous">Miscellaneous</h2>
+
+<ol>
+<li><span class="python">P</span>: <strong>Do not use semicolons</strong>. This is not C/C++/Java/etc.</li>
+<li><span class="python">P</span>: Use <code>is</code> and <code>is not</code> for <code>None</code>, not <code>==</code> and <code>!=</code>.</li>
+<li><span class="python">P</span>: <strong>Use the "implicit" <code>False</code> value when possible</strong>. Examples
+include empty containers like <code>[]</code>, <code>()</code>, <code>{}</code>, <code>set()</code>.</p>
+
+<pre class="prettyprint">if lst:       # if lst is not empty
+    ...
+if not tup:   # if tup is empty
+    ...
+</pre></li>
+<li><span class="python">P</span>: <strong>Generator expressions are okay for simple expressions</strong>:
+this includes list comprehensions, dictionary comprehensions, set
+comprehensions, etc. Generator expressions are neat ways to
+concisely create lists. Simple ones are fine and even encouraged:</p>
+
+<pre class="prettyprint">ex = [x*x for x in range(10)]
+L = [pair[0] + pair[1] for pair in pairs if len(pair) == 2]
+</pre>
+
+<p>However, complex generator expressions are very hard to read, even
+illegible. As such, do not use generator expressions for complex
+expressions.</p>
+
+<pre class="prettyprint">L = [x + y + z for x in nums if x &gt; 10 for y in nums2 for z in nums3 if y &gt; z]
+</pre>
+
+<p>Use your best judgement.</li>
+</ol>
+
+  </body>
+
+  
+</html>
