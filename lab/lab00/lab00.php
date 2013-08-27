@@ -647,6 +647,11 @@
   text files. And no, Microsoft Word is not installed on these
   machines. But we have something better! </p>
 
+  <div class="announcement">
+    If you plan to use your own computer for most of your work in this course, there are many editors to choose from depending on your operating system.
+    Instead of reading this section on Emacs, start reading <a href="../lab01/lab01.php">Lab 1</a> on selecting an editor.
+  </div>
+
   <h2 class="section_title"> <a name="5"> 5. Our Text Editor: Emacs </a> </h2>
 
   <p> Emacs is a very popular free text editor, with quite a bit of

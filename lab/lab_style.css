@@ -125,3 +125,11 @@ hr {
 .with_bullets {
   list-style: disc;
 }
+
+.announcement {
+  padding: 20px;
+  background-color: #f2dede;
+  border-radius: 10px;
+  border-color: #eed3d7;
+  text-align: center;
+}
