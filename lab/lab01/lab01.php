@@ -112,7 +112,7 @@
       other funky characters such as <code>>>></code>. That's the start of what we call <em>doctests</em>. Doctests are a good way to also describe our function
       because they provide controlled input and expected output for our functions. What that means is that we call our function having some expected
       value (which we write out explicitly) and expect that it does have that value. An example might make a lot more sense here so let's take a look
-      specifically at the <code>my_name()</code> function.
+      specifically at the <code>my_last_name()</code> function.
     </p>
 
     <img alt="my_name function" src="./imgs/my_name.png" width="50%"></img>
@@ -239,24 +239,24 @@
     <img src="./imgs/doctest_output.png" width="50%"></img>
 
     <p>
-      Oh man, we had 4 failures! :( Let's fix those up so that we have 0 failures. Before we can do that, we should analyze this output. In particular,
-      let's look at the <code>my_name</code> test that we failed, highlighed here:
+      Oh man, we had 6 failures! :( Let's fix those up so that we have 0 failures. Before we can do that, we should analyze this output. In particular,
+      let's look at the <code>my_last_name</code> test that we failed, highlighed here:
     </p>
 
     <img src="./imgs/my_name_test_failure.png" width="50%"></img>
 
     <p>
       The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide located <a href="">here.</a>
-      Looking at this particular test. It's saying that we had an error in our <code>hw0.py</code> file on line 9 in the function <code>my_name</code>. That's
+      Looking at this particular test. It's saying that we had an error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's
       pretty useful because we know exactly where to look for it. This is why line numbers are a must for our text editors. After we find the correct line,
-      let's try to understand what the test is saying. It's saing that the function <code>my_name</code>, when called with zero inputs, should return <strong>not</strong>
+      let's try to understand what the test is saying. It's saing that the function <code>my_last_name</code>, when called with zero inputs, should return <strong>not</strong>
       return the string <code>'PUT YOUR FULL NAME HERE'</code>. Except, ours is returning that string! Let's change that to your full name. Make sure you enter this information in
       carefully because this is how we will associate all homework, projects, and exams with you and your account.
     </p>
 
     <p>
-      Once you have changed the return value of the function <code>my_name</code> (make sure that you're still returning a string (you can tell this by whether or not it has quotes around it)),
-      you should be able to run the doctests again and your test for <code>my_name</code> should pass! Now you only have 3 failures to fix up!
+      Once you have changed the return value of the function <code>my_last_name</code> (make sure that you're still returning a string (you can tell this by whether or not it has quotes around it)),
+      you should be able to run the doctests again and your test for <code>my_last_name</code> should pass! Now you only have 5 failures to fix up!
     </p>
 
     <p>
@@ -268,6 +268,11 @@
 
     <p class="codemargin">
       python3 -m doctest -v hw0.py
+    </p>
+
+    <p>
+      For the section number, <strong>please put down your lab section number</strong>. This number will be between 11 and 43. You can find a complete list of all the sections on the class
+      calendar which is located <a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/#schedule">here.</a>
     </p>
 
     <p>
@@ -408,7 +413,9 @@
       The autograder is a program that runs on our servers over your projects after you submit them. Once you submit your project, it will be added to the line of projects that we
       will then run the autograder over. When the autograded finishes running over your project, you'll receive an email with an automated response that let's you know
       how your project is doing (in terms of which tests you're passing and which ones you're failing). The autograder is a subset of the tests that we will run on your project
-      to determine your grade meaning that it might catch some, but not all of your errors; however, it is a good indicator of how well you're doing on the projct so far.
+      to determine your grade meaning that it might catch some, but not all of your errors; however, it is a good indicator of how well you're doing on the projct so far. This does
+      mean that you should always write your own tests for your projects. We'll get into exactly what "good testing" is later on in this course, but the thing to realize right now
+      is that the Autograder should not be used to determine the correctness of your project and that you should be using other methods to test your code!
     </p>
 
     <p>
