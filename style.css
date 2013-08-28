@@ -19,7 +19,7 @@ h1 {
     font-weight: normal;
     color: #59a3d7;
     position: relative;
-    margin-left: 7em;
+    margin-left: 7em
 }
 
 h1 .coursename {
@@ -33,7 +33,7 @@ h1 .coursename {
 
 h1 a {
     color: #59a3d7;
-}
+}s
 
 h1 a:hover {
     text-decoration: none;
@@ -142,7 +142,7 @@ table#schedule td {
 }
 
 table#schedule td.split {
-    width: 9.5%;
+    width: auto;
 }
 
 table#schedule td.time {
