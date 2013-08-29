@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>The Game of Hog</title>
+    <link rel="stylesheet" href="hog.css" />
+    <script type="text/javascript" src="jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="hog.min.js"></script>
+  </head>
+  <body>
+    <h3>The Game of Hog</h3>
+    <div id="content">
+      <div id="scoreboard"> Current score:
+        <span class="points" id="score">0</span> to
+        <span class="points" id="opp">0</span>
+      </div>
+      <div id="actions"></div>
+      <div id="dice"></div>
+      <div id="rules">
+        <p>
+          In Hog, two players alternate turns trying to reach 100 points first.
+          On each turn, the current player chooses some number of dice to roll,
+          up to 10. Her turn score is the sum of the dice outcomes, unless any
+          of the dice come up a 1 (<span class="rule" id="out">Pig out</span>),
+          in which case the score for her turn is only 1 point.
+        </p>
+
+        <p>
+          To spice up the game, we will play with some special rules:
+        </p>
+
+        <ol>
+          <li>
+            <b><span class="rule" id="wild">Hog Wild</span></b>. If the sum of
+            both players' total scores is a multiple of 7 (e.g., 14, 21, 35),
+            then the current player rolls 4-sided dice instead of the usual
+            6-sided dice.
+          </li>
+          <li>
+            <b><span class="rule" id="bacon">Free Bacon</span></b>. If a player
+            chooses to roll zero dice, she scores one more than the sum of the
+            digits of her opponent's score. E.g., if player 1 has 42 points,
+            player 0 can earn 4 + 2 + 1 = 7 points by rolling zero dice.
+          </li>
+          <li>
+            <b><span class="rule" id="ham">Holiday Ham</span></b>. If a player's
+            score for the turn is a prime number, then instead she scores 5
+            times the number of dice rolled. (Note: 1 is not prime, but 2 is.)
+            This modification does not apply to points earned from Free Bacon.
+          </li>
+        </ol>
+      </div>
+    </div>
+  </body>
+</html>

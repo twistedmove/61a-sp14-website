@@ -1,0 +1,44 @@
+body {
+  margin: 20px 0px;
+  padding: 0px;
+  text-align: center;
+
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+}
+
+#content {
+  max-width: 900px;
+  margin: 0px auto;
+  text-align: left;
+  padding: 0px 20px;
+  border: 2px solid #444;
+  background-color: #eee;
+}
+
+#scoreboard {
+  margin: 10px 100px;
+  text-align: center;
+  color: #000;
+  background-color: #ccc;
+  border: 4px solid #fff;
+}
+
+.points {
+  font-family: monospace;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.em {
+  font-weight: bold;
+  color: #c22;
+}
+
+#dice {
+  margin-top: 20px;
+  min-height: 64px;
+}
