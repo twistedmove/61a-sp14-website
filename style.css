@@ -33,7 +33,7 @@ h1 .coursename {
 
 h1 a {
     color: #59a3d7;
-}s
+}
 
 h1 a:hover {
     text-decoration: none;
@@ -41,6 +41,7 @@ h1 a:hover {
 
 h2 {
     color: #0072c1;
+    clear: both;
 }
 
 h3 {
