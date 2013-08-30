@@ -247,7 +247,7 @@
     <img src="./imgs/my_name_test_failure.png" width="50%"></img>
 
     <p>
-      The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide located <a href="">here.</a>
+      The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide located <a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/debugging.html">here.</a>
       Looking at this particular test. It's saying that we had an error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's
       pretty useful because we know exactly where to look for it. This is why line numbers are a must for our text editors. After we find the correct line,
       let's try to understand what the test is saying. It's saing that the function <code>my_last_name</code>, when called with zero inputs, should return <strong>not</strong>

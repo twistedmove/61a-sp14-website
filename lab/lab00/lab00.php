@@ -37,7 +37,7 @@
         </ul>
         <li> <a href="#2.2"> 2.2. Files </a> </li>
         <ul>
-          <li> <a href="#2.2.1"> 2.2.1. Making a File – redirecting output </a> </li>
+          <li> <a href="#2.2.1"> 2.2.1. Making a File </a> </li>
           <li> <a href="#2.2.2"> 2.2.2. Copying Files </a> </li>
           <li> <a href="#2.2.3"> 2.2.3. Moving a File </a> </li>
           <li> <a href="#2.2.4"> 2.2.4. Renaming a File </a> </li>
@@ -337,18 +337,18 @@
   <p class="figure_caption"> Figure 4: Visualization of input/output
   of the echo command </p>
 
-  <h3 class="section_title"> <a name="2.2.1"> 2.2.1. Making a file
-  - redirecting output </a> </h3>
+  <h3 class="section_title"> <a name="2.2.1"> 2.2.1. Making a file </a> </h3>
 
-  <p> UNIX has a very nice way to redirect output - with the
-  <span class="tt">></span> symbol.
-  Let's say we want to redirect the output of
-  <span class="tt">echo</span> into a new file called my_file . We
-  can do this by doing: </p>
+  <p>
+    UNIX has a very nice way of creating files using the command <span class="tt">touch</span>.
+    Let's say we want to create a file called 'my_file', we can do this by doing:
+  </p>
 
-  <p class="codemargin"> star [139] ~ # echo This semester will be awesome! > my_file <br/>
-                   star [140] ~ # ls <br/>
-                   lab0 my_file <br/> </p>
+  <p class="codemargin">
+    star [139] ~ # touch my_file <br>
+    star [140] ~ # ls <br>
+    lab0 my_file
+  </p>
 
   <p> That was easy! We created a new file - to get a glimpse into
   what's inside, we can use another command, called
@@ -356,8 +356,15 @@
   <span class="tt">cat</span> is a command that displays the contents
   of a given file: </p>
 
-  <p class="codemargin"> star [141] ~ # cat my_file <br/>
-                   This semester will be awesome! </p>
+  <p class="codemargin">
+    star [141] ~ # cat my_file <br>
+    star [142] ~ #
+  </p>
+
+  <p>
+    The reason why we didn't see anything happen is because <span class="tt">touch</span>
+    creates an empty file!
+  </p>
 
   <p> To remove files, we use the <span class="tt">rm</span> command
   - this time without the <span class="tt">-r</span> option.
@@ -385,19 +392,9 @@
   <p> Let’s go ahead and make a new file, because we have removed the
   one we made in the previous section. </p>
 
-  <p class="codemargin"> star [139] ~ # echo This semester will be awesome! > my_file <br/>
+  <p class="codemargin"> star [139] ~ # touch my_file <br/>
                    star [140] ~ # ls <br/>
                    lab0 my_file <br/> </p>
-
-  <h4 class="section_title">Touch</h4>
-  <p>
-    Another way you can create a simple blank file is by using the touch command. Say I wanted to
-    create a file called 'my_other_file', I could simply type:
-  </p>
-
-  <p class="codemargin">
-    star [150] ~ # touch my_other_file
-  </p>
 
   <h3 class="section_title"> <a name="2.2.2"> 2.2.2. Copying a file </a> </h3>
 
@@ -592,35 +589,7 @@
 
   <p> Firefox is a free web browser (like Internet Explorer, Safari,
   Google Chrome, etc.). <strong>To open it, you can simply click on the icon on the left
-  hand side of your screen.</strong> Another way of starting the program is to type the
-  name at the terminal and hit enter: </p>
-
-  <p class="codemargin"> star [145] ~ # firefox </p>
-
-  <p> After a few moments, Firefox will open up in its own window.
-  Don't worry if it takes awhile - during the first week of school,
-  the servers are usually very busy, so programs like Firefox may be
-  slow at first. </p>
-
-  <p> One unfortunate side-effect of opening up Firefox like this is
-  that our terminal is now unresponsive to new commands: </p>
-
-  <p class="codemargin"> star [145] ~ # firefox <br/>
-                   ls <br/>
-                   cd <br/>
-                   helloooo <br/>
-                   you're not working anymore :( <br/> </p>
-
-  <p> The terminal will only be responsive once you exit Firefox. To
-  avoid this situation, if you add an ampersand
-  '<span class="tt">&</span>' after <span class="tt">firefox</span>,
-  the terminal will still be responsive (adding a & runs the program in the background): </p>
-
-  <p class="codemargin"> star [145] ~ # firefox & <br/>
-                   star [146] ~ # ls <br/>
-                   lab0 <br/>
-                   star [147] ~ # echo "Hooray, you're listening to me! " <br/>
-                   Hooray, you're listening to me! <br/> </p>
+  hand side of your screen.</strong>
 
   <h2 class="section_title"> <a name="4"> 4. A Recap </a> </h2>
 
