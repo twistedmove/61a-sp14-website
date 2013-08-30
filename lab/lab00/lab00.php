@@ -3,7 +3,7 @@
   <head><script src="/A2EB891D63C8/avg_ls_dom.js" type="text/javascript"></script>
     <meta name="description" content ="CS61A Computer Science 61A: Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
+    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
                                   Richard Hwang, Joy Jeng, Keegan Mann, Stephen Martinis, Mark Miyashita, Allen Nguyen,
                                   Julia Oh, Vaishaal Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan, Richie Zeng" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
