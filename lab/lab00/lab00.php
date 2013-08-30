@@ -3,12 +3,10 @@
   <head><script src="/A2EB891D63C8/avg_ls_dom.js" type="text/javascript"></script>
     <meta name="description" content ="CS61A Computer Science 61A: Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
+    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
                                   Richard Hwang, Joy Jeng, Keegan Mann, Stephen Martinis, Mark Miyashita, Allen Nguyen,
                                   Julia Oh, Vaishaal Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan, Richie Zeng" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="http://kernest.com/fonts/vegur-l.css" media="screen" rel="stylesheet" type="text/css" /><!--//
-                                                                                                            //-->
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
@@ -629,7 +627,7 @@
         <span class="tt"> firefox<!-- & --></span></li>
       </ul>
     </li>
-    <li> If you every forget what a command does
+    <li> If you ever forget what a command does
       <ul>
         <li> <span class="tt">man</span> </li>
       </ul>
@@ -685,10 +683,10 @@
   But more on that later!  </p>
 
 <!--moved ampersand discussion from firefox-->
-<p>Let's try opening emacs with the following: </p>
+<p>Let's try opening Emacs with the following: </p>
   <p class="codemargin"> star [145] ~ # emacs</p>
 
-<p> One unfortunate side-effect of opening up emacs like this is
+<p> One unfortunate side-effect of opening up Emacs like this is
   that our terminal is now unresponsive to new commands: </p>
 
   <p class="codemargin"> star [145] ~ # emacs <br/>
@@ -697,9 +695,9 @@
                    helloooo <br/>
                    you're not working anymore :( <br/> </p>
 
-  <p> The terminal will only be responsive once you exit emacs. To
+  <p> The terminal will only be responsive once you exit Emacs. To
   avoid this situation, if you add an ampersand
-  '<span class="tt">&</span>' after <span class="tt">emacs</span>,
+  '<span class="tt">&</span>' after <span class="tt">Emacs</span>,
   the terminal will still be responsive: </p>
 
   <p class="codemargin"> star [145] ~ # emacs & <br/>
@@ -718,7 +716,7 @@
   <p> This is sort of the 'splash page' for Emacs - later, if you're
   interested, you can check out the Emacs Tutorial, but let's not do
   that right now. (It is a valuable resource for learning to use
-  Emacs, but it could take you years to complete! :p) </p>
+  Emacs, but it might take more time than you have during lab! :p) </p>
 
   <h3 class="section_title"> <a name="5.1"> 5.1. Creating a file in Emacs </a> </h3>
 
@@ -831,8 +829,8 @@
   <span class="tt">python</span> at the terminal: </p>
 
   <p class="codemargin"> star [153] ~ # python <br/>
-  Python 3.2.1 (v3.2.1:ac1f7e5c0510, Jul  9 2011, 01:03:53) <br/>
-  [GCC 4.4.6] on sunos5 <br/>
+  Python 3.2.3 (default, Apr 10 2013, 06:11:55) <br/>
+  [GCC 4.6.3] on linux2 <br/>
   Type "help", "copyright", "credits" or "license" for more information. <br/>
   >>> </p>
 
@@ -881,10 +879,10 @@
   <p> Let's start by creating a Python source file, so navigate to the lab0
   directory, either </p>
     <ul>
-      <li> i) from within the terminal, and running a new emacs
+      <li> i) from within the terminal, and running a new Emacs
       instance from within the lab0 folder.</li>
       <li>OR</li>
-      <li> ii) from within emacs by typing in “lab0/” before you write
+      <li> ii) from within Emacs by typing in “lab0/” before you write
       the filename </li>
     </ul>
 
@@ -911,8 +909,8 @@ def greet():
 
   <p> Now, your Emacs screen should look something like this: </p>
 
-  <img src="imgs/figure11.png" alt="greet.py" class="figure"/>
-  <p class="figure_caption"> Figure 11: Our simple greet.py program. </p>
+  <img src="imgs/greet.png" alt="greet.py" class="figure"/>
+  <p class="figure_caption"> Figure 10: Our simple greet.py program. </p>
 
   <p> Let's go back to the terminal and run our little program. </p>
 
@@ -1013,11 +1011,14 @@ def greet():
       <li> iii.) Finally, do <span class="tt">C-s</span> </li>
     </ul>
 
+  <p>To learn more about Emacs, go through the Emacs tutorial. You can access it
+  from the splash screen or by typing <span class="tt">C-h t</span>. (First,
+  do <span class="tt">C-h</span>, then just type <span class="tt">t</span>.)</p>
+
   <h3 class="section_title"> <a name="A.1"> A.1. The Meta key </a> </h3>
 
   <p> Some hotkeys involve the Meta key, such as this hotkey that
-  opens up a Scheme interpreter: <br/>
-  &nbsp&nbsp&nbsp&nbsp <span class="tt">M-s</span> </p>
+  opens up a Scheme interpreter: <span class="tt">M-s</span> </p>
 
   <p>
     The lab keyboards do not have a dedicated Meta key (and most laptops don't either).
