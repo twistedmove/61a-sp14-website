@@ -404,11 +404,16 @@
   </p>
 
   <p>
-    For those interested, the <span class="tt">></span> symbol means redirect
-    what is usually shown onto the screen into the file that you specified after the > symbol.
-    In this case, we're adding the text "This semester will be awesome!" to the file, <span class="tt">
-    my_file</span>. Be careful though, <span class="tt">></span> <em>overrides</em> whatever was originally
-    in the file (ours was originally blank). To add text to an existing file, use <span class="tt">>></span>
+    For those interested, the <span class="tt">&gt;</span> symbol means redirect
+    what is usually shown onto the screen into the file that you specified after
+    the &gt; symbol.  In this case, we're adding the text "This semester will be
+    awesome!" to the file <span class="tt">my_file</span>. Be careful
+    though, <span class="tt">&gt;</span> <em>overwrites</em> whatever was
+    originally in the file (ours was originally blank). To add text to the end
+    of an existing file, use <span class="tt">&gt;&gt;</span>. However, this
+    probably isn't how you'll make most of your edits-- that's what a text
+    editor is for!
+  </p>
 
   <h3 class="section_title"> <a name="2.2.2"> 2.2.2. Copying a file </a> </h3>
 
