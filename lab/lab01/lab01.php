@@ -91,11 +91,12 @@
     </p>
 
     <p>
-      Go ahead and download the template file <a href="./hw0.py">here</a>!
+      Go ahead and download the template file <a href="../../hw/hw0.py">here</a>!
     </p>
 
     <p>
-      You should now have a file called <strong>hw0.py</strong> somewhere on your computer. For the screenshots that you'll see below,
+      You should now have a file called <strong>hw0.py</strong> somewhere on your computer. For more specific instructions about homework 0,
+      check out the homework 0 page <a href="../../hw/hw0.html">here.</a> For the screenshots that you'll see below,
       we're using Sublime Text 2 on Mac OS X; however, Sublime Text 2 runs the same on any computer that you have so it should function
       the same as ours. Open that file up in your shiny new text editor and you should see the following text:
     </p>
@@ -130,8 +131,8 @@
       Open that up and you should be good to go. For Windows users, you have several options:
 
       <ol>
-        <li>You can download and install</li>
-        <li>Other options</li>
+        <li>We recommend that you download a program called <a href="https://openhatch.org/missions/windows-setup/install-git-bash">GitBash</a> which allows you to run a Unix like terminal on your Windows machine.</li>
+        <li>Another option is <a href="http://cygwin.com/install.html">Cygwin</a> which is a more advanced version of GitBash with an even more Unix-like environment.</li>
       </ol>
 
       Once you have your terminal window set up, we're going to have to use what we learned from lab 0...our handy Unix commands!
@@ -167,8 +168,8 @@
 
     <p>
       The next thing we're going to do is find our downloaded file. If you didn't move
-      the file at all, it's probably in <code>~/Downloads</code> on Mac/Linux or <code>WINDOWS DOWNLOAD PATH</code> on Windows. If your downloads all go to your Dekstop, on Mac/Linux, that would
-      be <code>~/Desktop</code> and on Windows, that would be <code>WINDOWS DESKTOP PATH</code>. Let's <code>cd</code> into that directory.
+      the file at all, it's probably in <code>~/Downloads</code> on Mac/Linux/Windows (GitBash or Cygwin) or <code>C:\Users\NAMEOFUSER\Downloads</code> if you're using the Windows Command Line (cmd.exe). If your downloads all go to your Dekstop, on Mac/Linux/Windows (GitBash or Cygwin), that would
+      be <code>~/Desktop</code> and on the Windows Command Prompt, that would be <code>C:\Users\NAMEOFUSER\Desktop</code>. Let's <code>cd</code> into that directory.
     </p>
 
     <img src="./imgs/cd_to_downloads.png" width="50%"></img>
@@ -250,7 +251,7 @@
       Looking at this particular test. It's saying that we had an error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's
       pretty useful because we know exactly where to look for it. This is why line numbers are a must for our text editors. After we find the correct line,
       let's try to understand what the test is saying. It's saing that the function <code>my_last_name</code>, when called with zero inputs, should return <strong>not</strong>
-      return the string <code>'PUT YOUR FULL NAME HERE'</code>. Except, ours is returning that string! Let's change that to your full name. Make sure you enter this information in
+      return the string <code>'PUT YOUR LAST NAME HERE'</code>. Except, ours is returning that string! Let's change that to your full name. Make sure you enter this information in
       carefully because this is how we will associate all homework, projects, and exams with you and your account.
     </p>
 
@@ -297,7 +298,7 @@
       After you've installed WinSCP, you'll have to configure it so that you can log in to the server. Here's a screenshot of a typical log in:
     </p>
 
-    <img src="./img/winscp_login.png" width="50%"></img>
+    <img src="./imgs/WinSCP.png" width="25%"></img>
 
     <p>
       Once you're logged in, all you have to do is navigate to your <code>cs61a/hw</code> folder on the left and drag your file over to the server on the right.

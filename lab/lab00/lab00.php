@@ -71,7 +71,7 @@
   <p>
     Hello! The first thing you might have noticed about these
     computers is that they don't have Windows or MacOS installed. And
-    you're right - they're running UNIX. But fear not! We'll get you
+    you're right - they're running UNIX (Ubuntu to be exact). But fear not! We'll get you
     familiar with this new system in no time - by the end of the
     semester, this stuff will feel like old hat.
   </p>
@@ -99,16 +99,26 @@
 
   <p>
     If you don't have access to a school computer for this lab, you can still
-    try it out: refer to the tutorials at the bottom of the 61A front page to
-    setup the tools needed to log in remotely (they're under the section entitled
-    'Connecting to the Computing Labs from Home').
+    try it out: refer to <a href="../lab01/lab01.php">Lab 1</a> for more details about
+    setting up your home computer.
   </p>
 
   <h2 class="section_title"><a name="1">1. Meet the Terminal</a></h2>
 
-  <p>Finally, you'll see a window that looks something like this:</p>
+  <p>
+    The first thing we're going to do is open the Terminal. To do this, click
+    on the launcher in the top left corner. Start typing in "Terminal" and it should autocomplete.
+    You should see something like this:
+  </p>
 
-  <img src="imgs/terminal_screen.png" alt="Terminal" class="figure"/>
+  <img src="imgs/pick_terminal.png" class="figure" width="50%"></img>
+  <p class="figure_caption">Figure 1: Opening the Terminal</p>
+
+  <p>
+    Press "Enter" or click on the Terminal icon and finally, you'll see a window that looks something like this:
+  </p>
+
+  <img src="imgs/terminal.png" alt="Terminal" class="figure"/>
   <p class="figure_caption">Figure 2: The terminal window.</p>
 
   <p>
@@ -128,15 +138,19 @@
 
   <h2 class="section_title"> <a name="2"> 2. Getting used to the Filesystem </a> </h2>
 
-  <p> The most important thing to learn first is how to use the
-  filesystem. Unlike in Windows/MacOS, there aren't folders you can
-  click/drag/double-click. There's not even a 'My Computer' icon in
-  sight! </p>
+  <p>
+    The most important thing to learn first is how to use the
+    filesystem. Unlike in Windows/MacOS, there aren't folders you can
+    click/drag/double-click. There's not even a 'My Computer' icon in
+    sight!
+  </p>
 
-  <p> That's okay - we're going to learn how to do everything via the
-  command line (the command line is the terminal). Everything you did
-  on a visual-based filesystem (i.e. like those found on a
-  Windows/MacOS system), you can also do via the terminal. </p>
+  <p>
+    That's okay - we're going to learn how to do everything via the
+    command line (the command line is the terminal). Everything you did
+    on a visual-based filesystem (i.e. like those found on a
+    Windows/MacOS system), you can also do via the terminal.
+  </p>
 
   <h3 class="section_title"> <a name="2.1"> 2.1. Directories </a> </h3>
 
@@ -375,6 +389,16 @@
                    star [140] ~ # ls <br/>
                    lab0 my_file <br/> </p>
 
+  <h4 class="section_title">Touch</h4>
+  <p>
+    Another way you can create a simple blank file is by using the touch command. Say I wanted to
+    create a file called 'my_other_file', I could simply type:
+  </p>
+
+  <p class="codemargin">
+    star [150] ~ # touch my_other_file
+  </p>
+
   <h3 class="section_title"> <a name="2.2.2"> 2.2.2. Copying a file </a> </h3>
 
   <p> Let’s say we wanted to make a copy of this file. Well we can use
@@ -563,11 +587,12 @@
   <h2 class="section_title"> <a name="3"> 3. Running programs: Firefox </a> </h2>
 
   <p> These machines come pre-installed with a variety of programs.
-  Two programs that you'll be frequently using over the semester are
-  Firefox and Emacs. </p>
+  If you continue to use the lab machines, two programs that you'll be
+  frequently using over the semester are Firefox and Emacs. </p>
 
   <p> Firefox is a free web browser (like Internet Explorer, Safari,
-  Google Chrome, etc.). To open it, you can simply enter the program
+  Google Chrome, etc.). <strong>To open it, you can simply click on the icon on the left
+  hand side of your screen.</strong> Another way of starting the program is to type the
   name at the terminal and hit enter: </p>
 
   <p class="codemargin"> star [145] ~ # firefox </p>
@@ -1025,22 +1050,15 @@ def greet():
   opens up a Scheme interpreter: <br/>
   &nbsp&nbsp&nbsp&nbsp <span class="tt">M-s</span> </p>
 
-  <p> On the keyboards in the Soda labs, the Meta key is the key with
-  the "diamond", usually next to the spacebar. </p>
-
-  <img src="imgs/meta_key.jpg" alt="Meta key" class="figure"/>
-  <p class="figure_caption"> Figure 15: The Meta key is the key next
-  to the space bar </p>
-
-  <p> So, when you're doing hotkeys involving the Meta key, use this
-  "diamond" key just like any other key. </p>
-
-  <p> However, most keyboards don't have the Meta key! In these cases,
-  the <span class="tt">Alt</span> key typically replaces the Meta
-  key. </p>
+  <p>
+    The lab keyboards do not have a dedicated Meta key (and most laptops don't either).
+    Instead, on most computers, you can use the <span class="tt">Alt</span> key.
+    Hold down the <span class="tt">Alt</span> key while pressing the next key
+    in the command.
+  </p>
 
   <p> You can
-  also use <span class="tt">Esc</span> as a "sort of" Meta key. The
+  use <span class="tt">Esc</span> as a "sort of" Meta key. The
   difference is, you first press the <span class="tt">Esc</span> key,
   then you hit the next key: for instance, to do
   <span class="tt">M-s</span>, you don't hold
