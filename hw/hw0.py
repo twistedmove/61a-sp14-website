@@ -1,7 +1,3 @@
-# Name:
-# Login:
-# TA:
-# Section:
 # Q1.
 
 def my_first_name():

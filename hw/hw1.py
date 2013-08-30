@@ -1,7 +1,3 @@
-# Name:
-# Login:
-# TA:
-# Section:
 # Q1.
 
 from operator import add, sub
