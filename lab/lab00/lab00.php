@@ -394,6 +394,22 @@
                    star [140] ~ # ls <br/>
                    lab0 my_file <br/> </p>
 
+  <p>
+    Let's add some text to our file. Using the <span class="tt">echo</span>
+    command from before, we can add text to our file!
+  </p>
+
+  <p class="codemargin">
+    star [141] ~ # echo "This semester will be awesome!" > my_file
+  </p>
+
+  <p>
+    For those interested, the <span class="tt">></span> symbol means redirect
+    what is usually shown onto the screen into the file that you specified after the > symbol.
+    In this case, we're adding the text "This semester will be awesome!" to the file, <span class="tt">
+    my_file</span>. Be careful though, <span class="tt">></span> <em>overrides</em> whatever was originally
+    in the file (ours was originally blank). To add text to an existing file, use <span class="tt">>></span>
+
   <h3 class="section_title"> <a name="2.2.2"> 2.2.2. Copying a file </a> </h3>
 
   <p> Let’s say we wanted to make a copy of this file. Well we can use
