@@ -940,7 +940,7 @@ def greet():
 
   <p> Now, your Emacs screen should look something like this: </p>
 
-  <img src="imgs/figure11.png" alt="greet.py" class="figure"/>
+  <img src="imgs/greet.png" alt="greet.py" class="figure"/>
   <p class="figure_caption"> Figure 10: Our simple greet.py program. </p>
 
   <p> Let's go back to the terminal and run our little program. </p>
