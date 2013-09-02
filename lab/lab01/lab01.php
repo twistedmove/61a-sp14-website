@@ -121,7 +121,7 @@
       The two tests in our docstring basically check two things:
 
       <ol>
-        <li>That you changed the return value from the default 'PUT YOUR FULL NAME HERE'.</li>
+        <li>That you changed the return value from the default 'PUT YOUR LAST NAME HERE'.</li>
         <li>That the return value is a string and not something else (like a number).</li>
       </ol>
 
@@ -254,7 +254,7 @@
       error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's pretty useful because we know exactly where to
       look for it. This is why line numbers are a must for our text editors. After we find the correct line, let's try to understand what the test is
       saying. It's saying that the function <code>my_last_name</code>, when called with zero inputs, should <strong>not</strong> return the
-      string <code>'PUT YOUR LAST NAME HERE'</code>. Except, ours is returning that string! Let's change that to your full name. Make sure you enter
+      string <code>'PUT YOUR LAST NAME HERE'</code>. Except, ours is returning that string! Let's change that to your last name. Make sure you enter
       this information in carefully because this is how we will associate all homework, projects, and exams with you and your account.
     </p>
 
