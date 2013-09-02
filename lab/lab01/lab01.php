@@ -3,22 +3,20 @@
   <head><script src="/A2EB891D63C8/avg_ls_dom.js" type="text/javascript"></script>
     <meta name="description" content ="CS61A Computer Science 61A: Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
+    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
                                   Richard Hwang, Joy Jeng, Keegan Mann, Stephen Martinis, Mark Miyashita, Allen Nguyen,
                                   Julia Oh, Vaishaal Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan, Richie Zeng" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="http://kernest.com/fonts/vegur-l.css" media="screen" rel="stylesheet" type="text/css" /><!--//
-                                                                                                            //-->
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS61A Fall 2013 - Creating a Productive Workflow on your own Machine</title>
+    <title>CS61A Fall 2013 - Creating a Productive Workflow on Your Own Machine</title>
 
   </head>
 
   <body style="font-family: Georgia,serif;">
     <h1><a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/">CS 61A</a>: Lab 1</h1>
-    <h3>Creating a Productive Workflow on your own Machine</h3>
+    <h3>Creating a Productive Workflow on Your Own Machine</h3>
 
     <p>
       Hopefully by now you're a little more comfortable using the command line on the lab machines in Soda. This lab is
@@ -26,7 +24,7 @@
       homeworks and projects!
     </p>
 
-    <h2 class="section_title">Finding a good Text Editor</h2>
+    <h2 class="section_title">Finding a Good Text Editor</h2>
     <p>
       For starters, we need to find a good text editor that we can rely on for the rest of the semester. In the first lab,
       we introduced you to Emacs, a popular text editor among Unix users. You're more than welcome to download and install Emacs
@@ -58,8 +56,9 @@
             <li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
             <li><a href="http://macromates.com/download">TextMate 2</a></li>
             <li><a href="http://ash.barebones.com/TextWrangler_4.5.3.dmg">TextWrangler</a></li>
-            <li>Vim comes preinstalled on Mac OS X. Another great alternative is Macvim which can be found <a href="https://code.google.com/p/macvim/downloads/list">here.</a></li>
-            <li><a href="http://aquamacs.org/">AquaMacs</a></li>
+            <li>Vim comes preinstalled on Mac OS X. Another great alternative is MacVim which can be
+            found <a href="https://code.google.com/p/macvim/downloads/list">here</a>.</li>
+            <li><a href="http://aquamacs.org/">AquaMacs</a>, a Mac adaptation of Emacs</li>
             <li><a href="https://projects.gnome.org/gedit/">Gedit</a></li>
           </ul>
         </li>
@@ -67,9 +66,10 @@
           For Linux users:
           <ul class="with_bullets">
             <li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
+            <li>Vim - to install vim on Ubuntu, you can type <code>sudo apt-get install vim</code> at your terminal prompt. vim-gnome, an alternative on
+            Ubuntu (which has a graphical interface) can be installed using <code>sudo apt-get install vim-gnome</code></li>
+            <li>Emacs - the easiest way to install this on Ubuntu is to open a terminal prompt and type <code>sudo apt-get install emacs</code></li>
             <li><a href="https://projects.gnome.org/gedit/">Gedit</a></li>
-            <li>Vim - to install vim on Ubuntu, you can type 'sudo apt-get install vim'. vim-gnome, an alternative on Ubuntu (which has a graphical interface) can be installed using 'sudo apt-get install vim-gnome'</li>
-            <li>Emacs - the easiest way to install this on Ubuntu is to open a terminal prompt and type 'sudo apt-get install emacs'</li>
           </ul>
         </li>
       </ul>
@@ -91,11 +91,12 @@
     </p>
 
     <p>
-      Go ahead and download the template file <a href="./hw0.py">here</a>!
+      Go ahead and download the template file <a href="http://inst.eecs.berkeley.edu/~cs61a/fa13/hw/hw0.py">here</a>!
     </p>
 
     <p>
-      You should now have a file called <strong>hw0.py</strong> somewhere on your computer. For the screenshots that you'll see below,
+      You should now have a file called <strong>hw0.py</strong> somewhere on your computer. For more specific instructions about homework 0,
+      check out the homework 0 page <a href="http://inst.eecs.berkeley.edu/~cs61a/fa13/hw/hw0.html">here</a>. For the screenshots that you'll see below,
       we're using Sublime Text 2 on Mac OS X; however, Sublime Text 2 runs the same on any computer that you have so it should function
       the same as ours. Open that file up in your shiny new text editor and you should see the following text:
     </p>
@@ -103,16 +104,15 @@
     <img alt="hw0.py in a text editor" src="./imgs/hw0.png" width="50%"></img>
 
     <p>
-      Next, we're going to edit our file to include the four required values, one in each of the functions. The first thing that you should
-      notice is the green text (Note: the colors on your text editor will most likely be different. For the curious, this screenshot is of the
-      Solarized color scheme which you can find for your text editor if you are interested.) that is wrapped within three quotation marks
-      <code>"""</code>. That's called a docstring which is a description of what
-      the function is intended to do. Docstrings are very useful because that means other programmers can read your docstrings and have a nice
-      description of what the function is supposed to do, without having to read any of your code. Within the docstring, you might notice some
-      other funky characters such as <code>>>></code>. That's the start of what we call <em>doctests</em>. Doctests are a good way to also describe our function
-      because they provide controlled input and expected output for our functions. What that means is that we call our function having some expected
-      value (which we write out explicitly) and expect that it does have that value. An example might make a lot more sense here so let's take a look
-      specifically at the <code>my_last_name()</code> function.
+      Next, we're going to edit our file to include the four required values, one in each of the functions. The first thing that you should notice is
+      the green text that is wrapped within three quotation marks <code>"""<!--"--></code>. (Note: the colors on your text editor will most likely be
+      different. For the curious, this screenshot is of the Solarized color scheme which you can find for your text editor if you are interested.)  That
+      text is called a docstring which is a description of what the function is intended to do. Docstrings are very useful because that means other
+      programmers can read your docstrings and have a nice description of what the function is supposed to do, without having to read any of your
+      code. Within the docstring, you might notice some other funky characters such as <code>>>></code>. That's the start of what we
+      call <em>doctests</em>. Doctests are a good way to also describe our function because they provide controlled input and expected output for our
+      functions. What that means is that we call our function having some expected value (which we write out explicitly) and expect that it does have
+      that value. An example might make a lot more sense here so let's take a look specifically at the <code>my_last_name()</code> function.
     </p>
 
     <img alt="my_name function" src="./imgs/my_name.png" width="50%"></img>
@@ -121,7 +121,7 @@
       The two tests in our docstring basically check two things:
 
       <ol>
-        <li>That you changed the return value from the default 'PUT YOUR FULL NAME HERE'.</li>
+        <li>That you changed the return value from the default 'PUT YOUR LAST NAME HERE'.</li>
         <li>That the return value is a string and not something else (like a number).</li>
       </ol>
 
@@ -130,8 +130,10 @@
       Open that up and you should be good to go. For Windows users, you have several options:
 
       <ol>
-        <li>You can download and install</li>
-        <li>Other options</li>
+        <li>We recommend that you download a program called <a href="https://openhatch.org/missions/windows-setup/install-git-bash">GitBash</a> which
+        allows you to run a Unix like terminal on your Windows machine.</li>
+        <li>Another option is <a href="http://cygwin.com/install.html">Cygwin</a> which is a more advanced version of GitBash with an even more
+        Unix-like environment.</li>
       </ol>
 
       Once you have your terminal window set up, we're going to have to use what we learned from lab 0...our handy Unix commands!
@@ -166,9 +168,10 @@
     <img src="./imgs/cs61a_directory.png" width="50%"></img>
 
     <p>
-      The next thing we're going to do is find our downloaded file. If you didn't move
-      the file at all, it's probably in <code>~/Downloads</code> on Mac/Linux or <code>WINDOWS DOWNLOAD PATH</code> on Windows. If your downloads all go to your Dekstop, on Mac/Linux, that would
-      be <code>~/Desktop</code> and on Windows, that would be <code>WINDOWS DESKTOP PATH</code>. Let's <code>cd</code> into that directory.
+      The next thing we're going to do is find our downloaded file. If you didn't move the file at all, it's probably in <code>~/Downloads</code> on
+      Mac/Linux/Windows (GitBash or Cygwin) or <code>C:\Users\NAMEOFUSER\Downloads</code> if you're using the Windows Command Line (cmd.exe). If your
+      downloads all go to your Desktop, on Mac/Linux/Windows (GitBash or Cygwin), that would be <code>~/Desktop</code> and on the Windows Command
+      Prompt, that would be <code>C:\Users\NAMEOFUSER\Desktop</code>. Let's <code>cd</code> into that directory.
     </p>
 
     <img src="./imgs/cd_to_downloads.png" width="50%"></img>
@@ -186,11 +189,11 @@
     </p>
 
     <p>
-      And then we should change back into our cs61a folder that we made earlier.
+      And then we should change back into our hw0 folder that we made earlier.
     </p>
 
     <p class="codemargin">
-      cd ~/cs61a
+      cd ~/cs61a/hw/hw0
     </p>
 
     <p>
@@ -220,7 +223,7 @@
     <h2 class="section_title">Doctests</h2>
     <p>
       So, let's get back to that doctest thing that we were talking about before. Again, doctests are a way for us to write simple tests for our code.
-      We're basically asking ourselves, "What is the expected output of this funtion if I put in this specific input?"
+      We're basically asking ourselves, "What is the expected output of this function if I put in this specific input?"
     </p>
 
     <p>
@@ -240,23 +243,25 @@
 
     <p>
       Oh man, we had 6 failures! :( Let's fix those up so that we have 0 failures. Before we can do that, we should analyze this output. In particular,
-      let's look at the <code>my_last_name</code> test that we failed, highlighed here:
+      let's look at the <code>my_last_name</code> test that we failed, highlighted here:
     </p>
 
     <img src="./imgs/my_name_test_failure.png" width="50%"></img>
 
     <p>
-      The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide located <a href="">here.</a>
-      Looking at this particular test. It's saying that we had an error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's
-      pretty useful because we know exactly where to look for it. This is why line numbers are a must for our text editors. After we find the correct line,
-      let's try to understand what the test is saying. It's saing that the function <code>my_last_name</code>, when called with zero inputs, should return <strong>not</strong>
-      return the string <code>'PUT YOUR FULL NAME HERE'</code>. Except, ours is returning that string! Let's change that to your full name. Make sure you enter this information in
-      carefully because this is how we will associate all homework, projects, and exams with you and your account.
+      The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide
+      located <a href="http://inst.eecs.berkeley.edu/~cs61a/fa13/debugging.html">here</a>.  Looking at this particular test. It's saying that we had an
+      error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's pretty useful because we know exactly where to
+      look for it. This is why line numbers are a must for our text editors. After we find the correct line, let's try to understand what the test is
+      saying. It's saying that the function <code>my_last_name</code>, when called with zero inputs, should <strong>not</strong> return the
+      string <code>'PUT YOUR LAST NAME HERE'</code>. Except, ours is returning that string! Let's change that to your last name. Make sure you enter
+      this information in carefully because this is how we will associate all homework, projects, and exams with you and your account.
     </p>
 
     <p>
-      Once you have changed the return value of the function <code>my_last_name</code> (make sure that you're still returning a string (you can tell this by whether or not it has quotes around it)),
-      you should be able to run the doctests again and your test for <code>my_last_name</code> should pass! Now you only have 5 failures to fix up!
+      Once you have changed the return value of the function <code>my_last_name</code> (make sure that you're returning a string, which has quotes
+      around it), you should be able to run the doctests again and your test for <code>my_last_name</code> should pass! Now you only have 5 failures to
+      fix up!
     </p>
 
     <p>
@@ -272,7 +277,7 @@
 
     <p>
       For the section number, <strong>please put down your lab section number</strong>. This number will be between 11 and 43. You can find a complete list of all the sections on the class
-      calendar which is located <a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/#schedule">here.</a>
+      calendar which is located <a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/#schedule">here</a>.
     </p>
 
     <p>
@@ -297,7 +302,7 @@
       After you've installed WinSCP, you'll have to configure it so that you can log in to the server. Here's a screenshot of a typical log in:
     </p>
 
-    <img src="./img/winscp_login.png" width="50%"></img>
+    <img src="./imgs/WinSCP.png" width="25%"></img>
 
     <p>
       Once you're logged in, all you have to do is navigate to your <code>cs61a/hw</code> folder on the left and drag your file over to the server on the right.
@@ -305,8 +310,9 @@
 
     <h4 class="section_title">Mac / Linux</h4>
     <p>
-      On Mac Os X and Linux, all you need is your terminal window that you were using before. Navigate to wherever you put your finished homework. If you were following the tutorial from above,
-      you'll want to type something like <code>cd ~/cs61a/hw/hw0</code> to get to your homework 0 folder. Then you'll want to type the following command:
+      On Mac OS X and Linux, all you need is your terminal window that you were using before. Navigate to wherever you put your finished homework. If
+      you were following the tutorial from above, you'll want to type something like <code>cd ~/cs61a/hw/hw0</code> to get to your homework 0
+      folder. Then you'll want to type the following command:
     </p>
 
     <p class="codemargin">
@@ -314,12 +320,15 @@
     </p>
 
     <p>
-      Let's break this command down into three parts. The first part, <code>scp</code> is just the name of the command. The second part, <code>hw0.py</code> is the path to the file(s)
-      that you want to copy to the server. If you wanted, you could specify the whole path to the file such as <code>~/cs61a/hw/hw0/hw0.py</code> instead of just the filename. The reason why we can just specify the filename
-      is because we're already in the folder that contains it. The last part of the command is the destination. For this, we're logging into the server using your login (the cs61a-??) part (make sure you change the question marks)
-      and the server that we're logging into will be <code>nova</code>. A complete list of servers can be found <a href="http://inst.eecs.berkeley.edu/cgi-bin/clients.cgi?choice=servers">here.</a> We generally use <code>star</code> and <code>nova</code>.
-      The text that comes after the server is important. We're specifiying where on the server we want the file to go. In this case, we're placing it in our home directory which is represented by the <code>~</code> symbol. If we already had our
-      homework folders created on the server, we could specify the whole path. Something like <code>scp hw0.py cs61a-??@nova.cs.berkeley.edu:~/hw/hw0</code>
+      Let's break this command down into three parts. The first part, <code>scp</code> is just the name of the command. The second
+      part, <code>hw0.py</code> is the path to the file(s) that you want to copy to the server. If you wanted, you could specify the whole path to the
+      file such as <code>~/cs61a/hw/hw0/hw0.py</code> instead of just the filename. The reason why we can just specify the filename is because we're
+      already in the folder that contains it. The last part of the command is the destination. For this, we're logging into the server using your login
+      (the cs61a-??) part (make sure you change the question marks) and the server that we're logging into will be <code>nova</code>. A complete list of
+      servers can be found <a href="http://inst.eecs.berkeley.edu/cgi-bin/clients.cgi?choice=servers">here</a>. We generally use <code>star</code>
+      and <code>nova</code>.  The text that comes after the server and colon is important. We're specifying where on the server we want the file to
+      go. In this case, we're placing it in our home directory which is represented by the <code>~</code> symbol. If we already had our homework folders
+      created on the server, we could specify the whole path (with something like <code>scp hw0.py cs61a-??@nova.cs.berkeley.edu:~/hw/hw0</code>).
     </p>
 
     <p>
@@ -339,7 +348,7 @@
         <li><a href="http://www.youtube.com/watch?v=irwlU7esODA">Mac / Linux</a></li>
       </ul>
 
-      To summarize, you'll be using a program called <a href="http://www.putty.org/">Putty</a> for Windows and using a command called <code>ssh</code> on Mac / Linux.
+      To summarize, you'll be using a program called <a href="http://www.putty.org/">PuTTY</a> for Windows and using a command called <code>ssh</code> on Mac / Linux.
       The full command for <code>ssh</code> is (don't forget to replace the ?? with your login):
     </p>
 
@@ -379,7 +388,7 @@
     </p>
 
     <p>
-      If you find errors, make sure that you fix them asap by running the command:
+      If you find errors, fix them immediately by running the command:
     </p>
 
     <p class="codemargin">
@@ -410,12 +419,14 @@
 
     <h2 class="section_title">The Autograder</h2>
     <p>
-      The autograder is a program that runs on our servers over your projects after you submit them. Once you submit your project, it will be added to the line of projects that we
-      will then run the autograder over. When the autograded finishes running over your project, you'll receive an email with an automated response that let's you know
-      how your project is doing (in terms of which tests you're passing and which ones you're failing). The autograder is a subset of the tests that we will run on your project
-      to determine your grade meaning that it might catch some, but not all of your errors; however, it is a good indicator of how well you're doing on the projct so far. This does
-      mean that you should always write your own tests for your projects. We'll get into exactly what "good testing" is later on in this course, but the thing to realize right now
-      is that the Autograder should not be used to determine the correctness of your project and that you should be using other methods to test your code!
+      The autograder is a program that runs on our servers over your projects after you submit them. Once you submit your project, it will be added to
+      the line of projects that we will then run the autograder over. When the autograder finishes running over your project, you'll receive an email
+      with an automated response that lets you know how your project is doing (in terms of which tests you're passing and which ones you're
+      failing). The autograder is a subset of the tests that we will run on your project to determine your grade meaning that it might catch some, but
+      not all of your errors; however, it is a good indicator of how well you're doing on the project so far. This does mean that you should always
+      write your own tests for your projects. We'll get into exactly what "good testing" is later on in this course, but the thing to realize right now
+      is that you shouldn't rely on the autograder to determine the correctness of your project and that you should be using other methods to test your
+      code!
     </p>
 
     <p>

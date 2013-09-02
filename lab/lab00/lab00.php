@@ -3,12 +3,10 @@
   <head><script src="/A2EB891D63C8/avg_ls_dom.js" type="text/javascript"></script>
     <meta name="description" content ="CS61A Computer Science 61A: Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
+    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang,
                                   Richard Hwang, Joy Jeng, Keegan Mann, Stephen Martinis, Mark Miyashita, Allen Nguyen,
                                   Julia Oh, Vaishaal Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan, Richie Zeng" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="http://kernest.com/fonts/vegur-l.css" media="screen" rel="stylesheet" type="text/css" /><!--//
-                                                                                                            //-->
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
@@ -37,7 +35,7 @@
         </ul>
         <li> <a href="#2.2"> 2.2. Files </a> </li>
         <ul>
-          <li> <a href="#2.2.1"> 2.2.1. Making a File – redirecting output </a> </li>
+          <li> <a href="#2.2.1"> 2.2.1. Making a File </a> </li>
           <li> <a href="#2.2.2"> 2.2.2. Copying Files </a> </li>
           <li> <a href="#2.2.3"> 2.2.3. Moving a File </a> </li>
           <li> <a href="#2.2.4"> 2.2.4. Renaming a File </a> </li>
@@ -71,7 +69,7 @@
   <p>
     Hello! The first thing you might have noticed about these
     computers is that they don't have Windows or MacOS installed. And
-    you're right - they're running UNIX. But fear not! We'll get you
+    you're right - they're running UNIX (Ubuntu to be exact). But fear not! We'll get you
     familiar with this new system in no time - by the end of the
     semester, this stuff will feel like old hat.
   </p>
@@ -99,16 +97,26 @@
 
   <p>
     If you don't have access to a school computer for this lab, you can still
-    try it out: refer to the tutorials at the bottom of the 61A front page to
-    setup the tools needed to log in remotely (they're under the section entitled
-    'Connecting to the Computing Labs from Home').
+    try it out: refer to <a href="../lab01/lab01.php">Lab 1</a> for more details about
+    setting up your home computer.
   </p>
 
   <h2 class="section_title"><a name="1">1. Meet the Terminal</a></h2>
 
-  <p>Finally, you'll see a window that looks something like this:</p>
+  <p>
+    The first thing we're going to do is open the Terminal. To do this, click
+    on the launcher in the top left corner. Start typing in "Terminal" and it should autocomplete.
+    You should see something like this:
+  </p>
 
-  <img src="imgs/terminal_screen.png" alt="Terminal" class="figure"/>
+  <img src="imgs/pick_terminal.png" class="figure" width="50%"></img>
+  <p class="figure_caption">Figure 1: Opening the Terminal</p>
+
+  <p>
+    Press "Enter" or click on the Terminal icon and finally, you'll see a window that looks something like this:
+  </p>
+
+  <img src="imgs/terminal.png" alt="Terminal" class="figure"/>
   <p class="figure_caption">Figure 2: The terminal window.</p>
 
   <p>
@@ -128,15 +136,19 @@
 
   <h2 class="section_title"> <a name="2"> 2. Getting used to the Filesystem </a> </h2>
 
-  <p> The most important thing to learn first is how to use the
-  filesystem. Unlike in Windows/MacOS, there aren't folders you can
-  click/drag/double-click. There's not even a 'My Computer' icon in
-  sight! </p>
+  <p>
+    The most important thing to learn first is how to use the
+    filesystem. Unlike in Windows/MacOS, there aren't folders you can
+    click/drag/double-click. There's not even a 'My Computer' icon in
+    sight!
+  </p>
 
-  <p> That's okay - we're going to learn how to do everything via the
-  command line (the command line is the terminal). Everything you did
-  on a visual-based filesystem (i.e. like those found on a
-  Windows/MacOS system), you can also do via the terminal. </p>
+  <p>
+    That's okay - we're going to learn how to do everything via the
+    command line (the command line is the terminal). Everything you did
+    on a visual-based filesystem (i.e. like those found on a
+    Windows/MacOS system), you can also do via the terminal.
+  </p>
 
   <h3 class="section_title"> <a name="2.1"> 2.1. Directories </a> </h3>
 
@@ -323,18 +335,18 @@
   <p class="figure_caption"> Figure 4: Visualization of input/output
   of the echo command </p>
 
-  <h3 class="section_title"> <a name="2.2.1"> 2.2.1. Making a file
-  - redirecting output </a> </h3>
+  <h3 class="section_title"> <a name="2.2.1"> 2.2.1. Making a file </a> </h3>
 
-  <p> UNIX has a very nice way to redirect output - with the
-  <span class="tt">></span> symbol.
-  Let's say we want to redirect the output of
-  <span class="tt">echo</span> into a new file called my_file . We
-  can do this by doing: </p>
+  <p>
+    UNIX has a very nice way of creating files using the command <span class="tt">touch</span>.
+    Let's say we want to create a file called 'my_file', we can do this by doing:
+  </p>
 
-  <p class="codemargin"> star [139] ~ # echo This semester will be awesome! > my_file <br/>
-                   star [140] ~ # ls <br/>
-                   lab0 my_file <br/> </p>
+  <p class="codemargin">
+    star [139] ~ # touch my_file <br>
+    star [140] ~ # ls <br>
+    lab0 my_file
+  </p>
 
   <p> That was easy! We created a new file - to get a glimpse into
   what's inside, we can use another command, called
@@ -342,8 +354,15 @@
   <span class="tt">cat</span> is a command that displays the contents
   of a given file: </p>
 
-  <p class="codemargin"> star [141] ~ # cat my_file <br/>
-                   This semester will be awesome! </p>
+  <p class="codemargin">
+    star [141] ~ # cat my_file <br>
+    star [142] ~ #
+  </p>
+
+  <p>
+    The reason why we didn't see anything happen is because <span class="tt">touch</span>
+    creates an empty file!
+  </p>
 
   <p> To remove files, we use the <span class="tt">rm</span> command
   - this time without the <span class="tt">-r</span> option.
@@ -371,9 +390,30 @@
   <p> Let’s go ahead and make a new file, because we have removed the
   one we made in the previous section. </p>
 
-  <p class="codemargin"> star [139] ~ # echo This semester will be awesome! > my_file <br/>
+  <p class="codemargin"> star [139] ~ # touch my_file <br/>
                    star [140] ~ # ls <br/>
                    lab0 my_file <br/> </p>
+
+  <p>
+    Let's add some text to our file. Using the <span class="tt">echo</span>
+    command from before, we can add text to our file!
+  </p>
+
+  <p class="codemargin">
+    star [141] ~ # echo "This semester will be awesome!" > my_file
+  </p>
+
+  <p>
+    For those interested, the <span class="tt">&gt;</span> symbol means redirect
+    what is usually shown onto the screen into the file that you specified after
+    the &gt; symbol.  In this case, we're adding the text "This semester will be
+    awesome!" to the file <span class="tt">my_file</span>. Be careful
+    though, <span class="tt">&gt;</span> <em>overwrites</em> whatever was
+    originally in the file (ours was originally blank). To add text to the end
+    of an existing file, use <span class="tt">&gt;&gt;</span>. However, this
+    probably isn't how you'll make most of your edits-- that's what a text
+    editor is for!
+  </p>
 
   <h3 class="section_title"> <a name="2.2.2"> 2.2.2. Copying a file </a> </h3>
 
@@ -563,39 +603,12 @@
   <h2 class="section_title"> <a name="3"> 3. Running programs: Firefox </a> </h2>
 
   <p> These machines come pre-installed with a variety of programs.
-  Two programs that you'll be frequently using over the semester are
-  Firefox and Emacs. </p>
+  If you continue to use the lab machines, two programs that you'll be
+  frequently using over the semester are Firefox and Emacs. </p>
 
   <p> Firefox is a free web browser (like Internet Explorer, Safari,
-  Google Chrome, etc.). To open it, you can simply enter the program
-  name at the terminal and hit enter: </p>
-
-  <p class="codemargin"> star [145] ~ # firefox </p>
-
-  <p> After a few moments, Firefox will open up in its own window.
-  Don't worry if it takes awhile - during the first week of school,
-  the servers are usually very busy, so programs like Firefox may be
-  slow at first. </p>
-
-  <p> One unfortunate side-effect of opening up Firefox like this is
-  that our terminal is now unresponsive to new commands: </p>
-
-  <p class="codemargin"> star [145] ~ # firefox <br/>
-                   ls <br/>
-                   cd <br/>
-                   helloooo <br/>
-                   you're not working anymore :( <br/> </p>
-
-  <p> The terminal will only be responsive once you exit Firefox. To
-  avoid this situation, if you add an ampersand
-  '<span class="tt">&</span>' after <span class="tt">firefox</span>,
-  the terminal will still be responsive (adding a & runs the program in the background): </p>
-
-  <p class="codemargin"> star [145] ~ # firefox & <br/>
-                   star [146] ~ # ls <br/>
-                   lab0 <br/>
-                   star [147] ~ # echo "Hooray, you're listening to me! " <br/>
-                   Hooray, you're listening to me! <br/> </p>
+  Google Chrome, etc.). <strong>To open it, you can simply click on the icon on the left
+  hand side of your screen.</strong>
 
   <h2 class="section_title"> <a name="4"> 4. A Recap </a> </h2>
 
@@ -635,7 +648,7 @@
         <span class="tt"> firefox<!-- & --></span></li>
       </ul>
     </li>
-    <li> If you every forget what a command does
+    <li> If you ever forget what a command does
       <ul>
         <li> <span class="tt">man</span> </li>
       </ul>
@@ -691,10 +704,10 @@
   But more on that later!  </p>
 
 <!--moved ampersand discussion from firefox-->
-<p>Let's try opening emacs with the following: </p>
+<p>Let's try opening Emacs with the following: </p>
   <p class="codemargin"> star [145] ~ # emacs</p>
 
-<p> One unfortunate side-effect of opening up emacs like this is
+<p> One unfortunate side-effect of opening up Emacs like this is
   that our terminal is now unresponsive to new commands: </p>
 
   <p class="codemargin"> star [145] ~ # emacs <br/>
@@ -703,9 +716,9 @@
                    helloooo <br/>
                    you're not working anymore :( <br/> </p>
 
-  <p> The terminal will only be responsive once you exit emacs. To
+  <p> The terminal will only be responsive once you exit Emacs. To
   avoid this situation, if you add an ampersand
-  '<span class="tt">&</span>' after <span class="tt">emacs</span>,
+  '<span class="tt">&</span>' after <span class="tt">Emacs</span>,
   the terminal will still be responsive: </p>
 
   <p class="codemargin"> star [145] ~ # emacs & <br/>
@@ -724,7 +737,7 @@
   <p> This is sort of the 'splash page' for Emacs - later, if you're
   interested, you can check out the Emacs Tutorial, but let's not do
   that right now. (It is a valuable resource for learning to use
-  Emacs, but it could take you years to complete! :p) </p>
+  Emacs, but it might take more time than you have during lab! :p) </p>
 
   <h3 class="section_title"> <a name="5.1"> 5.1. Creating a file in Emacs </a> </h3>
 
@@ -837,8 +850,8 @@
   <span class="tt">python</span> at the terminal: </p>
 
   <p class="codemargin"> star [153] ~ # python <br/>
-  Python 3.2.1 (v3.2.1:ac1f7e5c0510, Jul  9 2011, 01:03:53) <br/>
-  [GCC 4.4.6] on sunos5 <br/>
+  Python 3.2.3 (default, Apr 10 2013, 06:11:55) <br/>
+  [GCC 4.6.3] on linux2 <br/>
   Type "help", "copyright", "credits" or "license" for more information. <br/>
   >>> </p>
 
@@ -887,10 +900,10 @@
   <p> Let's start by creating a Python source file, so navigate to the lab0
   directory, either </p>
     <ul>
-      <li> i) from within the terminal, and running a new emacs
+      <li> i) from within the terminal, and running a new Emacs
       instance from within the lab0 folder.</li>
       <li>OR</li>
-      <li> ii) from within emacs by typing in “lab0/” before you write
+      <li> ii) from within Emacs by typing in “lab0/” before you write
       the filename </li>
     </ul>
 
@@ -917,8 +930,8 @@ def greet():
 
   <p> Now, your Emacs screen should look something like this: </p>
 
-  <img src="imgs/figure11.png" alt="greet.py" class="figure"/>
-  <p class="figure_caption"> Figure 11: Our simple greet.py program. </p>
+  <img src="imgs/greet.png" alt="greet.py" class="figure"/>
+  <p class="figure_caption"> Figure 10: Our simple greet.py program. </p>
 
   <p> Let's go back to the terminal and run our little program. </p>
 
@@ -1019,28 +1032,24 @@ def greet():
       <li> iii.) Finally, do <span class="tt">C-s</span> </li>
     </ul>
 
+  <p>To learn more about Emacs, go through the Emacs tutorial. You can access it
+  from the splash screen or by typing <span class="tt">C-h t</span>. (First,
+  do <span class="tt">C-h</span>, then just type <span class="tt">t</span>.)</p>
+
   <h3 class="section_title"> <a name="A.1"> A.1. The Meta key </a> </h3>
 
   <p> Some hotkeys involve the Meta key, such as this hotkey that
-  opens up a Scheme interpreter: <br/>
-  &nbsp&nbsp&nbsp&nbsp <span class="tt">M-s</span> </p>
+  opens up a Scheme interpreter: <span class="tt">M-s</span> </p>
 
-  <p> On the keyboards in the Soda labs, the Meta key is the key with
-  the "diamond", usually next to the spacebar. </p>
-
-  <img src="imgs/meta_key.jpg" alt="Meta key" class="figure"/>
-  <p class="figure_caption"> Figure 15: The Meta key is the key next
-  to the space bar </p>
-
-  <p> So, when you're doing hotkeys involving the Meta key, use this
-  "diamond" key just like any other key. </p>
-
-  <p> However, most keyboards don't have the Meta key! In these cases,
-  the <span class="tt">Alt</span> key typically replaces the Meta
-  key. </p>
+  <p>
+    The lab keyboards do not have a dedicated Meta key (and most laptops don't either).
+    Instead, on most computers, you can use the <span class="tt">Alt</span> key.
+    Hold down the <span class="tt">Alt</span> key while pressing the next key
+    in the command.
+  </p>
 
   <p> You can
-  also use <span class="tt">Esc</span> as a "sort of" Meta key. The
+  use <span class="tt">Esc</span> as a "sort of" Meta key. The
   difference is, you first press the <span class="tt">Esc</span> key,
   then you hit the next key: for instance, to do
   <span class="tt">M-s</span>, you don't hold
