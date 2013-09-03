@@ -101,7 +101,7 @@
       the same as ours. Open that file up in your shiny new text editor and you should see the following text:
     </p>
 
-    <img alt="hw0.py in a text editor" src="./imgs/hw0.png" width="50%"></img>
+    <img alt="hw0.py in a text editor" src="./imgs/hw0.png" class="screenshot"></img>
 
     <p>
       Next, we're going to edit our file to include the four required values, one in each of the functions. The first thing that you should notice is
@@ -115,7 +115,7 @@
       that value. An example might make a lot more sense here so let's take a look specifically at the <code>my_last_name()</code> function.
     </p>
 
-    <img alt="my_name function" src="./imgs/my_name.png" width="50%"></img>
+    <img alt="my_name function" src="./imgs/my_name.png" class="screenshot"></img>
 
     <p>
       The two tests in our docstring basically check two things:
@@ -139,7 +139,7 @@
       Once you have your terminal window set up, we're going to have to use what we learned from lab 0...our handy Unix commands!
     </p>
 
-    <img alt="starting the terminal" src="./imgs/terminal.png" width="50%"></img>
+    <img alt="starting the terminal" src="./imgs/terminal.png" class="screenshot"></img>
 
     <p>
       Right now, I'm in my home directory. Remember the home directory is represented by the <code>~</code> symbol (outlined in green above). Don't worry if your
@@ -165,7 +165,7 @@
       Now if we list the contents of the directory (using <code>ls</code>), we can see that we have two folders, <code>projects</code> and <code>hw</code>.
     </p>
 
-    <img src="./imgs/cs61a_directory.png" width="50%"></img>
+    <img src="./imgs/cs61a_directory.png" class="screenshot"></img>
 
     <p>
       The next thing we're going to do is find our downloaded file. If you didn't move the file at all, it's probably in <code>~/Downloads</code> on
@@ -174,7 +174,7 @@
       Prompt, that would be <code>C:\Users\NAMEOFUSER\Desktop</code>. Let's <code>cd</code> into that directory.
     </p>
 
-    <img src="./imgs/cd_to_downloads.png" width="50%"></img>
+    <img src="./imgs/cd_to_downloads.png" class="screenshot"></img>
 
     <p>
       If we were to type <code>ls</code>, we'd see our file sitting there in our downloads folder. Let's move that file to our new homework directory.
@@ -217,7 +217,7 @@
       Here's a screenshot of a typical workspace. We've got our text editor on the left, and our terminal on the right!
     </p>
 
-    <img src="./imgs/productive_workflow.png" width="50%"></img>
+    <img src="./imgs/productive_workflow.png" class="screenshot"></img>
 
 
     <h2 class="section_title">Doctests</h2>
@@ -239,14 +239,14 @@
       You should see something like this:
     </p>
 
-    <img src="./imgs/doctest_output.png" width="50%"></img>
+    <img src="./imgs/doctest_output.png" class="screenshot"></img>
 
     <p>
       Oh man, we had 6 failures! :( Let's fix those up so that we have 0 failures. Before we can do that, we should analyze this output. In particular,
       let's look at the <code>my_last_name</code> test that we failed, highlighted here:
     </p>
 
-    <img src="./imgs/my_name_test_failure.png" width="50%"></img>
+    <img src="./imgs/my_name_test_failure.png" class="screenshot"></img>
 
     <p>
       The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide
@@ -284,7 +284,7 @@
       Once you have successfully completed the homework and you have 0 tests failing, the verbose output of the doctests should look something like this:
     </p>
 
-    <img src="./imgs/successful_doctests.png" width="50%"></img>
+    <img src="./imgs/successful_doctests.png" class="screenshot"></img>
 
     <h2 class="section_title">Copying files to the server</h2>
     <p>
@@ -302,7 +302,7 @@
       After you've installed WinSCP, you'll have to configure it so that you can log in to the server. Here's a screenshot of a typical log in:
     </p>
 
-    <img src="./imgs/WinSCP.png" width="25%"></img>
+    <img src="./imgs/WinSCP.png" class="screenshot"></img>
 
     <p>
       Once you're logged in, all you have to do is navigate to your <code>cs61a/hw</code> folder on the left and drag your file over to the server on the right.
@@ -360,7 +360,7 @@
       Once logged in, you'll see something like this:
     </p>
 
-    <img src="./imgs/inst_login.png" width="50%"></img>
+    <img src="./imgs/inst_login.png" class="screenshot"></img>
 
     <p>
       If you copied your files over correctly, you should be able to type <code>ls</code> and see your hw0.py file. If not, try to figure out what happened in the above steps. If

@@ -133,3 +133,7 @@ hr {
   border-color: #eed3d7;
   text-align: center;
 }
+
+img.screenshot {
+  width: 800px;
+}
