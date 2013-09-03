@@ -251,7 +251,7 @@
     <p>
       The output gives us some pretty good debugging info. If you haven't already, take a look at Albert's debugging guide
       located <a href="http://inst.eecs.berkeley.edu/~cs61a/fa13/debugging.html">here</a>.  Looking at this particular test. It's saying that we had an
-      error in our <code>hw0.py</code> file on line 9 in the function <code>my_last_name</code>. That's pretty useful because we know exactly where to
+      error in our <code>hw0.py</code> file on line 12 in the function <code>my_last_name</code>. That's pretty useful because we know exactly where to
       look for it. This is why line numbers are a must for our text editors. After we find the correct line, let's try to understand what the test is
       saying. It's saying that the function <code>my_last_name</code>, when called with zero inputs, should <strong>not</strong> return the
       string <code>'PUT YOUR LAST NAME HERE'</code>. Except, ours is returning that string! Let's change that to your last name. Make sure you enter
@@ -276,7 +276,7 @@
     </p>
 
     <p>
-      For the section number, <strong>please put down your lab section number</strong>. This number will be between 11 and 43. You can find a complete list of all the sections on the class
+      For the section number, <strong>please put down your lab section number</strong>. This number will be between 11 and 44. You can find a complete list of all the sections on the class
       calendar which is located <a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/#schedule">here</a>.
     </p>
 
