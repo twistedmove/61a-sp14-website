@@ -400,7 +400,7 @@
   </p>
 
   <p class="codemargin">
-    star [141] ~ # echo "This semester will be awesome!" > my_file
+    star [141] ~ # echo 'This semester will be awesome!' > my_file
   </p>
 
   <p>
