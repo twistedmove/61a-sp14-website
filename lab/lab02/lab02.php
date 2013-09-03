@@ -51,6 +51,24 @@ $q_num = 0; // Used to make unique ids for all solutions and buttons
 <h1>CS61A Lab 2: Control Flow</h1>
 <h3>Week 3, Fall 2013</h3>
 
+<h3 class="section_title">Python flags</h3>
+Sometimes, you can append certain "flags" on the command line to inspect your code further. Here are a few useful
+ones that'll come in handy this semester.
+
+<p><b>-i</b>: The <i>-i</i> option runs your Python script, and throws you into an interpreter. 
+If you omit the -i option, Python will only run your script.<br>
+USAGE: <span class="code">python3 -i FILE_NAME<span class="code"></p>
+
+<p><b>-m doctest</b>: Using <i>-m doctest</i> option will be useful on your homeworks and projects to help you test your code
+by showing you whether your code is working as you intend it to. Doctests are marked by triple quotations (""") and are
+usually located within the function.
+USAGE: <span class="code">python3 -m doctest FILE_NAME<span class="code"></p>
+
+
+<p><b>-v</b>: The <i>-v</i> option signifies a verbose option. You can append this flag to the <i>-m doctest</i> flag to
+show both passing and failing tests. With the <i>-v</i> flag, you will be notified only of failing tests.
+USAGE: <span class="code">python3 -m doctest -v FILE_NAME<span class="code"></p>
+
 <h3 class="section_title">Warm Up: What would Python print?</h3>
 <p>Predict what Python will print in response to each of these expressions.  
 Then try it and make sure your answer was correct, or if not, that you understand why! If 
@@ -532,7 +550,7 @@ def factors(n):
 </div>
 <?php } ?>
 
-<h3 class="section_title"><span class="code">Error messages</span></h3>
+<h3 class="section_title">Error messages</h3>
 
 <p>By now, you've probably seen a couple of error messages. Even though they might
 look intimidating, error messages are actually very helpful in debugging code. The
@@ -552,25 +570,6 @@ trying to add a function and an int)
 went wrong with your code. <b>If you run into error messages, try to identify the problem
 before asking for help.</b> You can often Google unknown error messages to see what similar mistakes
 others have made to help you debug your own code.
-
-<h3 class="section_title"><span class="code">Python flags</h3>
-Sometimes, you can append certain "flags" on the command line to inspect your code further. Here are a few useful
-ones that'll come in handy this semester.
-
-<p><b>-i</b>: The <i>-i</i> option runs your Python script, and throws you into an interpreter. 
-If you omit the -i option, Python will only run your script.<br>
-USAGE: <span class="code">python3 -i FILE_NAME<span class="code"></p>
-
-<p><b>-m doctest</b>: Using <i>-m doctest</i> option will be useful on your homeworks and projects to help you test your code
-by showing you whether your code is working as you intend it to. Doctests are marked by triple quotations (""") and are
-usually located within the function.
-USAGE: <span class="code">python3 -m doctest FILE_NAME<span class="code"></p>
-
-
-<p><b>-v</b>: The <i>-v</i> option signifies a verbose option. You can append this flag to the <i>-m doctest</i> flag to
-show both passing and failing tests. With the <i>-v</i> flag, you will be notified only of failing tests.
-USAGE: <span class="code">python3 -m doctest -v FILE_NAME<span class="code"></p>
-
 
 <h3 class="section_title">Higher Order Functions</h3>
 
