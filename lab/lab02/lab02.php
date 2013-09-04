@@ -53,7 +53,8 @@ $q_num = 0; // Used to make unique ids for all solutions and buttons
 
 <h3 class="section_title">Python flags</h3>
 Sometimes, you can append certain "flags" on the command line to inspect your code further. Here are a few useful
-ones that'll come in handy this semester.
+ones that'll come in handy this semester. If you want to learn more about other python flags, you can type 
+<span class="code"> man python</span>
 
 <p><b>-i</b>: The <i>-i</i> option runs your Python script, and throws you into an interpreter. 
 If you omit the -i option, Python will only run your script.<br>
