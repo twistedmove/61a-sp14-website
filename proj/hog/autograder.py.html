@@ -1,0 +1,132 @@
+<html>
+<head>
+<title>autograder.py</title>
+<link href="css/assignments.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>autograder.py (<a href="autograder.py">plain text</a>)</h3>
+<hr>
+<pre>
+<span style="color: darkred">"""Common utility functions for automatic grading."""
+
+</span><span style="color: blue; font-weight: bold">import </span>sys<span style="font-weight: bold">, </span>os<span style="font-weight: bold">, </span>io<span style="font-weight: bold">, </span>traceback
+<span style="color: blue; font-weight: bold">import </span>signal
+<span style="color: blue; font-weight: bold">import </span>time
+<span style="color: blue; font-weight: bold">from </span>doctest <span style="color: blue; font-weight: bold">import </span>DocTestFinder<span style="font-weight: bold">, </span>DocTestRunner
+<span style="color: blue; font-weight: bold">from </span>collections <span style="color: blue; font-weight: bold">import </span>namedtuple<span style="font-weight: bold">, </span>defaultdict
+
+Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight: bold">(</span><span style="color: red">'Test'</span><span style="font-weight: bold">, [</span><span style="color: red">'name'</span><span style="font-weight: bold">, </span><span style="color: red">'fn'</span><span style="font-weight: bold">])
+</span>TESTS <span style="font-weight: bold">= []
+
+</span><span style="color: green; font-style: italic"># set path for autograder to test current working directory
+</span>sys<span style="font-weight: bold">.</span>path<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">:</span><span style="color: red">0</span><span style="font-weight: bold">] = [ </span>os<span style="font-weight: bold">.</span>getcwd<span style="font-weight: bold">() ]
+
+
+</span><span style="color: blue; font-weight: bold">def </span>test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Decorator to register a test. A test returns a true value on failure."""
+    </span>TESTS<span style="font-weight: bold">.</span>append<span style="font-weight: bold">(</span>Test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">, </span>fn<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">return </span>fn
+
+
+<span style="color: blue; font-weight: bold">def </span>test_all<span style="font-weight: bold">(</span>project_name<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">=</span>TESTS<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Run all TESTS. Exits with a useful code: 0 for ok, 1 for problems."""
+    </span><span style="color: blue; font-weight: bold">for </span>test <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
+        </span>underline<span style="font-weight: bold">(</span><span style="color: red">'Test {0}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>test<span style="font-weight: bold">.</span>name<span style="font-weight: bold">))
+        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+            </span>failure <span style="font-weight: bold">= </span>test<span style="font-weight: bold">.</span>fn<span style="font-weight: bold">()
+        </span><span style="color: blue; font-weight: bold">except </span>Exception as inst<span style="font-weight: bold">:
+            </span>traceback<span style="font-weight: bold">.</span>print_exc<span style="font-weight: bold">()
+            </span>failure <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
+        if </span>failure<span style="font-weight: bold">:
+            </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+    </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
+
+
+</span><span style="color: blue; font-weight: bold">class </span>Timeout<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">pass
+
+def </span>handler<span style="font-weight: bold">(</span>signum<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">raise </span>Timeout
+
+TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">100
+</span><span style="color: blue; font-weight: bold">def </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">if </span>timeout <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span>timeout <span style="font-weight: bold">= </span>TIMEOUT
+    <span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>inputs<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is not </span>tuple<span style="font-weight: bold">:
+        </span>inputs <span style="font-weight: bold">= (</span>inputs<span style="font-weight: bold">,)
+    </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+        </span>signal<span style="font-weight: bold">.</span>signal<span style="font-weight: bold">(</span>signal<span style="font-weight: bold">.</span>SIGALRM<span style="font-weight: bold">, </span>handler<span style="font-weight: bold">)
+        </span>signal<span style="font-weight: bold">.</span>alarm<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
+        </span>r <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>inputs<span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return </span>r
+    <span style="color: blue; font-weight: bold">finally</span><span style="font-weight: bold">:
+        </span>signal<span style="font-weight: bold">.</span>signal<span style="font-weight: bold">(</span>signal<span style="font-weight: bold">.</span>SIGALRM<span style="font-weight: bold">, </span>signal<span style="font-weight: bold">.</span>SIG_IGN<span style="font-weight: bold">)
+
+
+</span><span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
+               </span>comp <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">: </span>x <span style="font-weight: bold">== </span>y<span style="font-weight: bold">,
+               </span>in_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">, </span>out_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test FUNC according to sequence TESTS.  Each item in TESTS consists of
+    (I, V, D=None), where I is a tuple of inputs to FUNC (if not a tuple,
+    (I,) is substituted) and V is the proper output according to comparison
+    COMP.  Prints erroneous cases.  In case of error, uses D as the test
+    description, or constructs a description from I and V otherwise.
+    Returns 0 for all correct, or the number of tests failed."""
+    </span>code <span style="font-weight: bold">= </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">for </span>input<span style="font-weight: bold">, </span>output<span style="font-weight: bold">, *</span>desc <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+            </span>val <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>input<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">except</span><span style="font-weight: bold">:
+            </span>fail_msg <span style="font-weight: bold">= </span><span style="color: red">"Function {0} failed"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>func<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">if </span>desc<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>fail_msg<span style="font-weight: bold">, </span>desc<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])
+            </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>fail_msg<span style="font-weight: bold">, </span><span style="color: red">"with input"</span><span style="font-weight: bold">, </span>in_print<span style="font-weight: bold">(</span>input<span style="font-weight: bold">))
+            </span>traceback<span style="font-weight: bold">.</span>print_exception<span style="font-weight: bold">(*</span>sys<span style="font-weight: bold">.</span>exc_info<span style="font-weight: bold">(), </span>limit<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
+            </span>code <span style="font-weight: bold">+= </span><span style="color: red">1
+            </span><span style="color: blue; font-weight: bold">continue
+        if not </span>comp<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>output<span style="font-weight: bold">):
+            </span>wrong_msg <span style="font-weight: bold">= </span><span style="color: red">"Wrong result from {0}:"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>func<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">if </span>desc<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>wrong_msg<span style="font-weight: bold">, </span>desc<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])
+            </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>wrong_msg<span style="font-weight: bold">, </span><span style="color: red">"input"</span><span style="font-weight: bold">, </span>in_print<span style="font-weight: bold">(</span>input<span style="font-weight: bold">))
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"   returned"</span><span style="font-weight: bold">, </span>val<span style="font-weight: bold">, </span><span style="color: red">"not"</span><span style="font-weight: bold">, </span>out_print<span style="font-weight: bold">(</span>output<span style="font-weight: bold">))
+            </span>code <span style="font-weight: bold">+= </span><span style="color: red">1
+    </span><span style="color: blue; font-weight: bold">return </span>code
+
+
+<span style="color: blue; font-weight: bold">def </span>check_doctest<span style="font-weight: bold">(</span>func_name<span style="font-weight: bold">, </span>module<span style="font-weight: bold">, </span>ref_module<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>run<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Check that MODULE.FUNC_NAME doctest matches REF_MODULE and passes."""
+    </span>func <span style="font-weight: bold">= </span>getattr<span style="font-weight: bold">(</span>module<span style="font-weight: bold">, </span>func_name<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>ref_module <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span>ref_func <span style="font-weight: bold">= </span>getattr<span style="font-weight: bold">(</span>ref_module<span style="font-weight: bold">, </span>func_name<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>func<span style="font-weight: bold">) == </span>type<span style="font-weight: bold">:          </span><span style="color: green; font-style: italic"># hacky way to get classes to work
+            </span>func <span style="font-weight: bold">= </span>object<span style="font-weight: bold">.</span>__new__<span style="font-weight: bold">(</span>func<span style="font-weight: bold">)
+            </span>func<span style="font-weight: bold">.</span>__name__ <span style="font-weight: bold">= </span>ref_func<span style="font-weight: bold">.</span>__name__
+        <span style="color: blue; font-weight: bold">if </span>func<span style="font-weight: bold">.</span>__doc__ <span style="font-weight: bold">!= </span>ref_func<span style="font-weight: bold">.</span>__doc__ <span style="color: blue; font-weight: bold">and </span>type<span style="font-weight: bold">(</span>func<span style="font-weight: bold">) != </span>type<span style="font-weight: bold">:
+            </span>func<span style="font-weight: bold">.</span>__doc__ <span style="font-weight: bold">= </span>ref_func<span style="font-weight: bold">.</span>__doc__
+    tests <span style="font-weight: bold">= </span>DocTestFinder<span style="font-weight: bold">().</span>find<span style="font-weight: bold">(</span>func<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if not </span>tests<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"No doctests found for " </span><span style="font-weight: bold">+ </span>func_name<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return True
+    if </span>run<span style="font-weight: bold">:
+        </span>fn <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda</span><span style="font-weight: bold">: </span>DocTestRunner<span style="font-weight: bold">().</span>run<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">], </span>out <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">: </span><span style="color: blue">None</span><span style="font-weight: bold">)
+        </span>result <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>tuple<span style="font-weight: bold">())
+        </span><span style="color: blue; font-weight: bold">if </span>result<span style="font-weight: bold">.</span>failed <span style="font-weight: bold">!= </span><span style="color: red">0</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"A doctest example failed for " </span><span style="font-weight: bold">+ </span>func_name <span style="font-weight: bold">+ </span><span style="color: red">"."</span><span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">return True
+    return False
+
+
+def </span>underline<span style="font-weight: bold">(</span>s<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Print string S, double underlined in ASCII."""
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>s<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'='</span><span style="font-weight: bold">*</span>len<span style="font-weight: bold">(</span>s<span style="font-weight: bold">))
+
+</span>
+</pre>
+</body>
+</html>
