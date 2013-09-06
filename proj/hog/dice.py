@@ -1,4 +1,4 @@
-"""Functions that simulate dice rolls
+"""Functions that simulate dice rolls.
 
 A dice function takes no arguments and returns a number from 1 to n
 (inclusive), where n is the number of sides on the dice.

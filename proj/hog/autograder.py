@@ -12,12 +12,10 @@ TESTS = []
 # set path for autograder to test current working directory
 sys.path[0:0] = [ os.getcwd() ]
 
-
 def test(fn):
     """Decorator to register a test. A test returns a true value on failure."""
     TESTS.append(Test(fn.__name__, fn))
     return fn
-
 
 def test_all(project_name, tests=TESTS):
     """Run all TESTS. Exits with a useful code: 0 for ok, 1 for problems."""
@@ -54,7 +52,6 @@ def test_eval(func, inputs, timeout=None, **varargs):
     finally:
         signal.signal(signal.SIGALRM, signal.SIG_IGN)
 
-
 def check_func(func, tests,
                comp = lambda x, y: x == y,
                in_print = repr, out_print = repr):
@@ -87,27 +84,18 @@ def check_func(func, tests,
             code += 1
     return code
 
-
-def check_doctest(func_name, module, ref_module=None, run=True):
-    """Check that MODULE.FUNC_NAME doctest matches REF_MODULE and passes."""
+def check_doctest(func_name, module, run=True):
+    """Check that MODULE.FUNC_NAME doctest passes."""
     func = getattr(module, func_name)
-    if ref_module is not None:
-        ref_func = getattr(ref_module, func_name)
-        if type(func) == type:          # hacky way to get classes to work
-            func = object.__new__(func)
-            func.__name__ = ref_func.__name__
-        if func.__doc__ != ref_func.__doc__ and type(func) != type:
-            func.__doc__ = ref_func.__doc__
     tests = DocTestFinder().find(func)
     if not tests:
         print("No doctests found for " + func_name)
         return True
-    if run:
-        fn = lambda: DocTestRunner().run(tests[0], out = lambda x: None)
-        result = test_eval(fn, tuple())
-        if result.failed != 0:
-            print("A doctest example failed for " + func_name + ".")
-            return True
+    fn = lambda: DocTestRunner().run(tests[0], out = lambda x: None)
+    result = test_eval(fn, tuple())
+    if result.failed != 0:
+        print("A doctest example failed for " + func_name + ".")
+        return True
     return False
 
 

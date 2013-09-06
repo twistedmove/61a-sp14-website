@@ -16,6 +16,8 @@ hog.py
 dice.py
 ucb.py
 autograder.py
+
+This file uses features of Python not yet covered in the course.
 """
 
 </span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1'
@@ -58,7 +60,6 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>hog<span style="font-weight: bold">.</span>roll_dice<span style="font-weight: bold">, </span>test_suite<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
-
 </span>@test
 <span style="color: blue; font-weight: bold">def </span>problem2<span style="font-weight: bold">():
     </span><span style="color: darkred">"""Test take_turn."""
@@ -77,12 +78,10 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>hog<span style="font-weight: bold">.</span>take_turn<span style="font-weight: bold">, </span>test_suite<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
-
 </span>@test
 <span style="color: blue; font-weight: bold">def </span>problem3<span style="font-weight: bold">():
     </span><span style="color: darkred">"""Test select_dice."""
     </span><span style="color: blue; font-weight: bold">return </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'select_dice'</span><span style="font-weight: bold">, </span>hog<span style="font-weight: bold">)
-
 
 </span>@test
 <span style="color: blue; font-weight: bold">def </span>problem4<span style="font-weight: bold">():
@@ -106,19 +105,20 @@ autograder.py
         </span>hog<span style="font-weight: bold">.</span>four_sided <span style="font-weight: bold">= </span>four_sided
         hog<span style="font-weight: bold">.</span>six_sided <span style="font-weight: bold">= </span>six_sided
 
-    <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Note: Not all tests have been released for problem4'</span><span style="font-weight: bold">,
+    <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Note: Not all tests have been released for problem4.'</span><span style="font-weight: bold">,
           </span><span style="color: red">'Submit your project to the actual autograder to get more results!'</span><span style="font-weight: bold">,
           </span>sep<span style="font-weight: bold">=</span><span style="color: red">'\n'</span><span style="font-weight: bold">, </span>end<span style="font-weight: bold">=</span><span style="color: red">'\n'</span><span style="font-weight: bold">)
 
     </span><span style="color: blue; font-weight: bold">return </span>failure
 
-
 @test
 <span style="color: blue; font-weight: bold">def </span>problem5<span style="font-weight: bold">():
     </span><span style="color: darkred">"""Test make_averaged."""
+    </span><span style="color: green; font-style: italic"># hundred_dice cycle from 1 to 99 repeatedly
     </span>hundred_range <span style="font-weight: bold">= </span>range<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">, </span><span style="color: red">100</span><span style="font-weight: bold">)
-    </span>hundred_dice <span style="font-weight: bold">= </span>make_test_dice<span style="font-weight: bold">(*</span>hundred_range<span style="font-weight: bold">) </span><span style="color: green; font-style: italic"># hundred_dice cycle from 1 to 99 repeatedly
-    </span>averaged_hundred_dice <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>hog<span style="font-weight: bold">.</span>make_averaged<span style="font-weight: bold">, (</span>hundred_dice<span style="font-weight: bold">, </span><span style="color: red">5 </span><span style="font-weight: bold">* </span>len<span style="font-weight: bold">(</span>hundred_range<span style="font-weight: bold">)))
+    </span>hundred_dice <span style="font-weight: bold">= </span>make_test_dice<span style="font-weight: bold">(*</span>hundred_range<span style="font-weight: bold">)
+    </span>averaged_hundred_dice <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>hog<span style="font-weight: bold">.</span>make_averaged<span style="font-weight: bold">,
+                                      (</span>hundred_dice<span style="font-weight: bold">, </span><span style="color: red">5 </span><span style="font-weight: bold">* </span>len<span style="font-weight: bold">(</span>hundred_range<span style="font-weight: bold">)))
     </span>correct_average <span style="font-weight: bold">= </span>sum<span style="font-weight: bold">(</span>range<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">, </span><span style="color: red">100</span><span style="font-weight: bold">)) / </span>len<span style="font-weight: bold">(</span>hundred_range<span style="font-weight: bold">)
 
     </span>test_suite <span style="font-weight: bold">= [((), </span>correct_average<span style="font-weight: bold">)] * </span><span style="color: red">2
@@ -128,12 +128,10 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>averaged_hundred_dice<span style="font-weight: bold">, </span>test_suite<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
-
 </span>@test
 <span style="color: blue; font-weight: bold">def </span>problem6<span style="font-weight: bold">():
     </span><span style="color: darkred">"""Test max_scoring_num_rolls."""
     </span><span style="color: blue; font-weight: bold">return </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'max_scoring_num_rolls'</span><span style="font-weight: bold">, </span>hog<span style="font-weight: bold">)
-
 
 </span>@test
 <span style="color: blue; font-weight: bold">def </span>problem7<span style="font-weight: bold">():
@@ -151,7 +149,6 @@ autograder.py
         </span>failed <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
     </span>hog<span style="font-weight: bold">.</span>BACON_MARGIN<span style="font-weight: bold">, </span>hog<span style="font-weight: bold">.</span>BASELINE_NUM_ROLLS <span style="font-weight: bold">= </span>old_bacon
     <span style="color: blue; font-weight: bold">return </span>failed
-
 
 @test
 <span style="color: blue; font-weight: bold">def </span>problem8<span style="font-weight: bold">():
@@ -198,7 +195,6 @@ autograder.py
         </span><span style="color: blue; font-weight: bold">pass
     print</span><span style="font-weight: bold">()
 
-
 </span>@main
 <span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">):
     </span>parser <span style="font-weight: bold">= </span>argparse<span style="font-weight: bold">.</span>ArgumentParser<span style="font-weight: bold">(
@@ -213,7 +209,7 @@ autograder.py
 
     </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>version<span style="font-weight: bold">:
         </span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>args<span style="font-weight: bold">.</span>question <span style="color: blue; font-weight: bold">and </span><span style="color: red">0 </span><span style="font-weight: bold">&lt; </span>args<span style="font-weight: bold">.</span>question <span style="font-weight: bold">&lt; </span>len<span style="font-weight: bold">(</span>TESTS<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">elif </span>args<span style="font-weight: bold">.</span>question <span style="color: blue; font-weight: bold">and </span><span style="color: red">0 </span><span style="font-weight: bold">&lt; </span>args<span style="font-weight: bold">.</span>question <span style="font-weight: bold">&lt;= </span>len<span style="font-weight: bold">(</span>TESTS<span style="font-weight: bold">):
         </span>tests <span style="font-weight: bold">= [</span>TESTS<span style="font-weight: bold">[</span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">-</span><span style="color: red">1</span><span style="font-weight: bold">]]
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
         </span>tests <span style="font-weight: bold">= </span>TESTS

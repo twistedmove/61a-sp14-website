@@ -6,6 +6,8 @@ hog.py
 dice.py
 ucb.py
 autograder.py
+
+This file uses features of Python not yet covered in the course.
 """
 
 __version__ = '1'
@@ -48,7 +50,6 @@ def problem1():
     if check_func(hog.roll_dice, test_suite):
         return True
 
-
 @test
 def problem2():
     """Test take_turn."""
@@ -67,12 +68,10 @@ def problem2():
     if check_func(hog.take_turn, test_suite):
         return True
 
-
 @test
 def problem3():
     """Test select_dice."""
     return check_doctest('select_dice', hog)
-
 
 @test
 def problem4():
@@ -96,19 +95,20 @@ def problem4():
         hog.four_sided = four_sided
         hog.six_sided = six_sided
 
-    print('Note: Not all tests have been released for problem4',
+    print('Note: Not all tests have been released for problem4.',
           'Submit your project to the actual autograder to get more results!',
           sep='\n', end='\n')
 
     return failure
 
-
 @test
 def problem5():
     """Test make_averaged."""
+    # hundred_dice cycle from 1 to 99 repeatedly
     hundred_range = range(1, 100)
-    hundred_dice = make_test_dice(*hundred_range) # hundred_dice cycle from 1 to 99 repeatedly
-    averaged_hundred_dice = test_eval(hog.make_averaged, (hundred_dice, 5 * len(hundred_range)))
+    hundred_dice = make_test_dice(*hundred_range)
+    averaged_hundred_dice = test_eval(hog.make_averaged,
+                                      (hundred_dice, 5 * len(hundred_range)))
     correct_average = sum(range(1, 100)) / len(hundred_range)
 
     test_suite = [((), correct_average)] * 2
@@ -118,12 +118,10 @@ def problem5():
     if check_func(averaged_hundred_dice, test_suite):
         return True
 
-
 @test
 def problem6():
     """Test max_scoring_num_rolls."""
     return check_doctest('max_scoring_num_rolls', hog)
-
 
 @test
 def problem7():
@@ -141,7 +139,6 @@ def problem7():
         failed = True
     hog.BACON_MARGIN, hog.BASELINE_NUM_ROLLS = old_bacon
     return failed
-
 
 @test
 def problem8():
@@ -188,7 +185,6 @@ def check_for_updates():
         pass
     print()
 
-
 @main
 def run(*args):
     parser = argparse.ArgumentParser(
@@ -203,7 +199,7 @@ def run(*args):
 
     if args.version:
         exit(0)
-    elif args.question and 0 < args.question < len(TESTS):
+    elif args.question and 0 < args.question <= len(TESTS):
         tests = [TESTS[args.question-1]]
     else:
         tests = TESTS
