@@ -35,11 +35,11 @@ import re
 def problem1():
     """Test roll_dice."""
     counted_dice = make_test_dice(4, 1, 2)
-    test_suite = [((2, make_test_dice(4, 6, 1)), 10),
-                  ((3, make_test_dice(4, 6, 1)),  1),
-                  ((3, make_test_dice(1, 2, 3)),  1),
-                  ((3, counted_dice),             1),
-                  ((1, counted_dice),             4),
+    test_suite = [((2, make_test_dice(4, 6, 1)),           10),
+                  ((3, make_test_dice(4, 6, 1)),            1),
+                  ((3, make_test_dice(1, 2, 3)),            1),
+                  ((3, counted_dice),                       1),
+                  ((1, counted_dice),                       4),
                   ((5, make_test_dice(4, 2, 3, 3, 4, 1)),  16),
                   ((2, make_test_dice(1)),                  1)]
 
@@ -53,14 +53,14 @@ def problem1():
 def problem2():
     """Test take_turn."""
     test_suite = [((2,  0, make_test_dice(4, 6, 1)), 10),
-                   ((3, 20, make_test_dice(4, 6, 1)),  1),
-                   ((2,  0, make_test_dice(6)),       12),
-                   ((0, 34),                           5), # Free bacon
-                   ((0, 71),                           8),
-                   ((0,  7),                           8),
-                   ((0, 99),                          10),
-                   ((0,  0),                           1),
-                   ((0,  50),                          6)]
+                  ((3, 20, make_test_dice(4, 6, 1)),  1),
+                  ((2,  0, make_test_dice(6)),       12),
+                  ((0, 34),                           5), # Free bacon
+                  ((0, 71),                           8),
+                  ((0,  7),                           8),
+                  ((0, 99),                          10),
+                  ((0,  0),                           1),
+                  ((0,  50),                          6)]
 
     if check_doctest('take_turn', hog):
         return True
@@ -82,10 +82,10 @@ def problem4():
     hog.six_sided = make_test_dice(3)
 
     test_suite = [((always(5),  always(5)), (92, 106)),
-                   ((always(2),  always(2)), (17, 102)),
-                   ((always(2), always(10)), (19, 120)),
-                   ((always(0),  always(0)), (91, 103)), # always roll 0
-                   ((always(0),  always(2)), (106, 56))]
+                  ((always(2),  always(2)), (17, 102)),
+                  ((always(2), always(10)), (19, 120)),
+                  ((always(0),  always(0)), (91, 103)), # always roll 0
+                  ((always(0),  always(2)), (106, 56))]
 
     try:
         failure = False
@@ -96,7 +96,7 @@ def problem4():
         hog.four_sided = four_sided
         hog.six_sided = six_sided
 
-    print('Note: Not all tests have been released for Q5.',
+    print('Note: Not all tests have been released for problem4',
           'Submit your project to the actual autograder to get more results!',
           sep='\n', end='\n')
 
@@ -106,18 +106,17 @@ def problem4():
 @test
 def problem5():
     """Test make_averaged."""
-    # TODO What does this do?  Can we document it?
     hundred_range = range(1, 100)
     hundred_dice = make_test_dice(*hundred_range) # hundred_dice cycle from 1 to 99 repeatedly
     averaged_hundred_dice = test_eval(hog.make_averaged, (hundred_dice, 5 * len(hundred_range)))
     correct_average = sum(range(1, 100)) / len(hundred_range)
 
-    test_suite = [( (), correct_average )] * 2
+    test_suite = [((), correct_average)] * 2
 
     if check_doctest('make_averaged', hog):
-      return True
+        return True
     if check_func(averaged_hundred_dice, test_suite):
-      return True
+        return True
 
 
 @test
@@ -147,8 +146,6 @@ def problem7():
 @test
 def problem8():
     """Test swap_strategy."""
-    return check_doctest('swap_strategy', hog)
-
     if check_doctest('swap_strategy', hog):
         return True
     old_bacon = hog.BACON_MARGIN, hog.BASELINE_NUM_ROLLS
@@ -166,7 +163,7 @@ def problem8():
 @test
 def problem9():
     """Test final_strategy."""
-    print('Note: Tests for Q9 are not included here.',
+    print('Note: Tests for problem9 are not included here.',
           'Submit your project to the actual autograder to get results!',
           sep='\n', end='\n')
 
