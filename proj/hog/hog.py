@@ -1,4 +1,4 @@
-"""The Game of Hog"""
+"""The Game of Hog."""
 
 from dice import four_sided, six_sided, make_test_dice
 from ucb import main, trace, log_current_line, interact
@@ -197,7 +197,7 @@ def bacon_strategy(score, opponent_score):
     0
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this call
+    return 5 # Replace this statement
 
 def swap_strategy(score, opponent_score):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
@@ -215,7 +215,7 @@ def swap_strategy(score, opponent_score):
     5
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this call
+    return 5 # Replace this statement
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
@@ -223,7 +223,7 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this call
+    return 5 # Replace this statement
 
 
 ##########################

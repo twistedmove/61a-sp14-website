@@ -8,7 +8,7 @@
 <h3>ucb.py (<a href="ucb.py">plain text</a>)</h3>
 <hr>
 <pre>
-<span style="color: darkred">"""The ucb module contains functions specific to 61A at UC Berkeley."""
+<span style="color: darkred">"""The UCB module contains functions specific to 61A projects at UC Berkeley."""
 
 </span><span style="color: blue; font-weight: bold">import </span>code
 <span style="color: blue; font-weight: bold">import </span>functools
@@ -17,16 +17,16 @@
 <span style="color: blue; font-weight: bold">import </span>signal
 <span style="color: blue; font-weight: bold">import </span>sys
 
-        
+
 <span style="color: blue; font-weight: bold">def </span>main<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Call fn with command line arguments.  Used as a decorator.
 
     The main decorator marks the function that starts a program. For example,
-    
+
     @main
     def my_run_function():
         # function body
-    
+
     Use this instead of the typical __name__ == "__main__" predicate.
     """
     </span><span style="color: blue; font-weight: bold">if </span>inspect<span style="font-weight: bold">.</span>stack<span style="font-weight: bold">()[</span><span style="color: red">1</span><span style="font-weight: bold">][</span><span style="color: red">0</span><span style="font-weight: bold">].</span>f_locals<span style="font-weight: bold">[</span><span style="color: red">'__name__'</span><span style="font-weight: bold">] == </span><span style="color: red">'__main__'</span><span style="font-weight: bold">:
@@ -46,7 +46,7 @@ _PREFIX <span style="font-weight: bold">= </span><span style="color: red">''
     </span>@functools<span style="font-weight: bold">.</span>wraps<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">def </span>wrapped<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kwds<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">global </span>_PREFIX
-        reprs <span style="font-weight: bold">= [</span>repr<span style="font-weight: bold">(</span>e<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>e <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">] 
+        reprs <span style="font-weight: bold">= [</span>repr<span style="font-weight: bold">(</span>e<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>e <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">]
         </span>reprs <span style="font-weight: bold">+= [</span>repr<span style="font-weight: bold">(</span>k<span style="font-weight: bold">) + </span><span style="color: red">'=' </span><span style="font-weight: bold">+ </span>repr<span style="font-weight: bold">(</span>v<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>k<span style="font-weight: bold">, </span>v <span style="color: blue; font-weight: bold">in </span>kwds<span style="font-weight: bold">.</span>items<span style="font-weight: bold">()]
         </span>log<span style="font-weight: bold">(</span><span style="color: red">'{0}({1})'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">, </span><span style="color: red">', '</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>reprs<span style="font-weight: bold">)) + </span><span style="color: red">':'</span><span style="font-weight: bold">)
         </span>_PREFIX <span style="font-weight: bold">+= </span><span style="color: red">'    '
@@ -94,7 +94,7 @@ _PREFIX <span style="font-weight: bold">= </span><span style="color: red">''
     <span style="color: green; font-style: italic"># evaluate commands in current namespace
     </span>namespace <span style="font-weight: bold">= </span>frame<span style="font-weight: bold">.</span>f_globals<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">()
     </span>namespace<span style="font-weight: bold">.</span>update<span style="font-weight: bold">(</span>frame<span style="font-weight: bold">.</span>f_locals<span style="font-weight: bold">)
-    
+
     </span><span style="color: green; font-style: italic"># exit on interrupt
     </span><span style="color: blue; font-weight: bold">def </span>handler<span style="font-weight: bold">(</span>signum<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
@@ -107,7 +107,7 @@ _PREFIX <span style="font-weight: bold">= </span><span style="color: red">''
         </span>msg <span style="font-weight: bold">+= </span><span style="color: red">'    Unix:    &lt;Control&gt;-D continues the program; \n'
         </span>msg <span style="font-weight: bold">+= </span><span style="color: red">'    Windows: &lt;Control&gt;-Z &lt;Enter&gt; continues the program; \n'
         </span>msg <span style="font-weight: bold">+= </span><span style="color: red">'    exit() or &lt;Control&gt;-C exits the program'
-        
+
     </span>code<span style="font-weight: bold">.</span>interact<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">, </span>namespace<span style="font-weight: bold">)
 </span>
 </pre>

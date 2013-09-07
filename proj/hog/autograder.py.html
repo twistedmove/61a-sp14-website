@@ -22,12 +22,10 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
 </span><span style="color: green; font-style: italic"># set path for autograder to test current working directory
 </span>sys<span style="font-weight: bold">.</span>path<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">:</span><span style="color: red">0</span><span style="font-weight: bold">] = [ </span>os<span style="font-weight: bold">.</span>getcwd<span style="font-weight: bold">() ]
 
-
 </span><span style="color: blue; font-weight: bold">def </span>test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Decorator to register a test. A test returns a true value on failure."""
     </span>TESTS<span style="font-weight: bold">.</span>append<span style="font-weight: bold">(</span>Test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">, </span>fn<span style="font-weight: bold">))
     </span><span style="color: blue; font-weight: bold">return </span>fn
-
 
 <span style="color: blue; font-weight: bold">def </span>test_all<span style="font-weight: bold">(</span>project_name<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">=</span>TESTS<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Run all TESTS. Exits with a useful code: 0 for ok, 1 for problems."""
@@ -64,7 +62,6 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">100
     <span style="color: blue; font-weight: bold">finally</span><span style="font-weight: bold">:
         </span>signal<span style="font-weight: bold">.</span>signal<span style="font-weight: bold">(</span>signal<span style="font-weight: bold">.</span>SIGALRM<span style="font-weight: bold">, </span>signal<span style="font-weight: bold">.</span>SIG_IGN<span style="font-weight: bold">)
 
-
 </span><span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
                </span>comp <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">: </span>x <span style="font-weight: bold">== </span>y<span style="font-weight: bold">,
                </span>in_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">, </span>out_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">):
@@ -97,27 +94,18 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">100
             </span>code <span style="font-weight: bold">+= </span><span style="color: red">1
     </span><span style="color: blue; font-weight: bold">return </span>code
 
-
-<span style="color: blue; font-weight: bold">def </span>check_doctest<span style="font-weight: bold">(</span>func_name<span style="font-weight: bold">, </span>module<span style="font-weight: bold">, </span>ref_module<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>run<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Check that MODULE.FUNC_NAME doctest matches REF_MODULE and passes."""
+<span style="color: blue; font-weight: bold">def </span>check_doctest<span style="font-weight: bold">(</span>func_name<span style="font-weight: bold">, </span>module<span style="font-weight: bold">, </span>run<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Check that MODULE.FUNC_NAME doctest passes."""
     </span>func <span style="font-weight: bold">= </span>getattr<span style="font-weight: bold">(</span>module<span style="font-weight: bold">, </span>func_name<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">if </span>ref_module <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
-        </span>ref_func <span style="font-weight: bold">= </span>getattr<span style="font-weight: bold">(</span>ref_module<span style="font-weight: bold">, </span>func_name<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>func<span style="font-weight: bold">) == </span>type<span style="font-weight: bold">:          </span><span style="color: green; font-style: italic"># hacky way to get classes to work
-            </span>func <span style="font-weight: bold">= </span>object<span style="font-weight: bold">.</span>__new__<span style="font-weight: bold">(</span>func<span style="font-weight: bold">)
-            </span>func<span style="font-weight: bold">.</span>__name__ <span style="font-weight: bold">= </span>ref_func<span style="font-weight: bold">.</span>__name__
-        <span style="color: blue; font-weight: bold">if </span>func<span style="font-weight: bold">.</span>__doc__ <span style="font-weight: bold">!= </span>ref_func<span style="font-weight: bold">.</span>__doc__ <span style="color: blue; font-weight: bold">and </span>type<span style="font-weight: bold">(</span>func<span style="font-weight: bold">) != </span>type<span style="font-weight: bold">:
-            </span>func<span style="font-weight: bold">.</span>__doc__ <span style="font-weight: bold">= </span>ref_func<span style="font-weight: bold">.</span>__doc__
-    tests <span style="font-weight: bold">= </span>DocTestFinder<span style="font-weight: bold">().</span>find<span style="font-weight: bold">(</span>func<span style="font-weight: bold">)
+    </span>tests <span style="font-weight: bold">= </span>DocTestFinder<span style="font-weight: bold">().</span>find<span style="font-weight: bold">(</span>func<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if not </span>tests<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"No doctests found for " </span><span style="font-weight: bold">+ </span>func_name<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">return True
-    if </span>run<span style="font-weight: bold">:
-        </span>fn <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda</span><span style="font-weight: bold">: </span>DocTestRunner<span style="font-weight: bold">().</span>run<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">], </span>out <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">: </span><span style="color: blue">None</span><span style="font-weight: bold">)
-        </span>result <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>tuple<span style="font-weight: bold">())
-        </span><span style="color: blue; font-weight: bold">if </span>result<span style="font-weight: bold">.</span>failed <span style="font-weight: bold">!= </span><span style="color: red">0</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"A doctest example failed for " </span><span style="font-weight: bold">+ </span>func_name <span style="font-weight: bold">+ </span><span style="color: red">"."</span><span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">return True
+    </span>fn <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda</span><span style="font-weight: bold">: </span>DocTestRunner<span style="font-weight: bold">().</span>run<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">], </span>out <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">: </span><span style="color: blue">None</span><span style="font-weight: bold">)
+    </span>result <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>tuple<span style="font-weight: bold">())
+    </span><span style="color: blue; font-weight: bold">if </span>result<span style="font-weight: bold">.</span>failed <span style="font-weight: bold">!= </span><span style="color: red">0</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"A doctest example failed for " </span><span style="font-weight: bold">+ </span>func_name <span style="font-weight: bold">+ </span><span style="color: red">"."</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return True
     return False
 
 

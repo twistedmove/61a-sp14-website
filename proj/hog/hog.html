@@ -9,7 +9,7 @@
 
 <blockquote style="text-align: center;">
   <div class="c1">
-    <img src="5.png">
+    <img src="images/die5.gif">
   </div>
 
   <p>
@@ -31,7 +31,7 @@ Programs</a> online text.</p>
 
 <p>In Hog, two players alternate turns trying to reach 100 points first. On each
 turn, the current player chooses some number of dice to roll, up to 10. Her turn
-score is the sum of the dice outcomes, unless any of the dice come up a 1 , in
+score is the sum of the dice outcomes, unless any of the dice come up a 1, in
 which case the score for her turn is only 1 point (the <b>Pig out</b> rule).</p>
 
 <p>To spice up the game, we will play with some special rules:</p>
@@ -52,7 +52,7 @@ which case the score for her turn is only 1 point (the <b>Pig out</b> rule).</p>
 
   <i>Example 1:</i> Player 0 has 20 points and Player 1 has 5; it is Player 1's
   turn. She scores 5 more, bringing her total to 10. The players swap scores:
-  Player 0 now has 10 points and Player 1 has 20.
+  Player 0 now has 10 points and Player 1 has 20. It is now Player 0's turn.
 
   <i>Example 2</i>: Player 0 has 90 points and Player 1 has 50; it is Player 0's
   turn.  She scores 10 more, bringing her total to 100.  The players swap
@@ -74,7 +74,7 @@ archive</a>.</p>
     <td><p>Functions for rolling dice.</p></td></tr>
 
   <tr><td><p><code><a href="ucb.py.html">ucb.py</a></code></p></td>
-    <td><p>Utility functions for CS61A.</p></td></tr>
+    <td><p>Utility functions for CS 61A.</p></td></tr>
 
   <tr><td><p><code><a href="hog_gui.py.html">hog_gui.py</a></code></p></td>
     <td><p>A graphical user interface for Hog.</p></td></tr>
@@ -200,7 +200,7 @@ outcome, which is helpful for catching cases that are not handled in
 
 <p><strong>Problem 2</strong> (1 pt). Implement the <code>take_turn</code>
 function, which returns the number of points scored for the turn.  You will need
-to implement the <i>Free Bacon</i> rule here.  You can assume that
+to implement the <i>Free bacon</i> rule here.  You can assume that
 <code>opponent_score</code> is less than 100. Your implementation should call
 <code>roll_dice</code>.</p>
 
@@ -241,7 +241,7 @@ second.</p>
 
 <ul>
   <li>Remember to enforce all the special rules! You should enforce
-  the <i>Hog Wild</i> special rule here (by using
+  the <i>Hog wild</i> special rule here (by using
   <code>select_dice</code>), as well as the <i>Swine swap</i> special
   rule here.</li>
 
@@ -254,7 +254,7 @@ second.</p>
 
   <li>A <em>strategy</em> is a function that determines how many dice a player
   wants to roll, depending on the scores of both players. A strategy function
-  (such as <code>strategy0</code> and <code>strategy1</code>) take two
+  (such as <code>strategy0</code> and <code>strategy1</code>) takes two
   arguments: scores for the current player and opposing player. A strategy
   function returns the number of dice that the current player wants to roll
   in the turn. Don't worry about details of implementing strategies yet. You
@@ -268,8 +268,9 @@ second.</p>
 </pre>
 
 <p>You can also run an interactive test, where you can choose how many dice to
-roll for both players. You will want to add print statements to show the result
-of playing the game, but remove them before moving on to Phase 2.
+roll for both players. You will want to add <code>print</code> statements to
+show the result of playing the game, but be sure to remove them before moving on
+to Phase 2.
 
 <pre>
       python3 hog.py -i play
