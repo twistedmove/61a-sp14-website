@@ -10,7 +10,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 from autograder import test, test_all, check_func, check_doctest, test_eval, TESTS
 
@@ -176,7 +176,8 @@ def check_for_updates():
         remote_hog_grader = urllib.request.urlopen(index + 'hog_grader.py').read().decode('utf-8')
         remote_autograder = urllib.request.urlopen(index + 'autograder.py').read().decode('utf-8')
     except urllib.error.URLError:
-        exit(1)
+        print("Couldn't check remote autograder")
+        return
     remote_version = re.search("__version__ = '(.*)'", remote_hog_grader)
     if remote_version and remote_version.group(1) != __version__:
         print('Version', remote_version.group(1), 'is available with new tests.')
