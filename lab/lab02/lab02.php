@@ -40,7 +40,7 @@ Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
 * - Tom Magrino (tmagrino@berkeley.edu)
 */
 $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-$RELEASE_DATE = new DateTime("09/10/2013", $BERKELEY_TZ);
+$RELEASE_DATE = new DateTime("09/12/2013", $BERKELEY_TZ);
 $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
 $q_num = 0; // Used to make unique ids for all solutions and buttons
 ?>
@@ -56,18 +56,21 @@ Sometimes, you can append certain "flags" on the command line to inspect your co
 ones that'll come in handy this semester. If you want to learn more about other python flags, you can type 
 <span class="code"> man python</span>
 
-<p><b>-i</b>: The <i>-i</i> option runs your Python script, and throws you into an interpreter. 
+<p><b>-i</b>: The <i>-i</i> option runs your Python script, and throws you into an interactive session. 
 If you omit the -i option, Python will only run your script.<br>
+You don't need the -i flag to open up an interpreter. Alternatively, you can just run <span class="code">python</span>
+and it will launch an interactive session. However, if you're using Cygwin, you <i>do</i> need the -i flag to
+open up an interactive session. <br>
 USAGE: <span class="code">python3 -i FILE_NAME<span class="code"></p>
 
 <p><b>-m doctest</b>: Using <i>-m doctest</i> option will be useful on your homeworks and projects to help you test your code
 by showing you whether your code is working as you intend it to. Doctests are marked by triple quotations (""") and are
-usually located within the function.
+usually located within the function. <br>
 USAGE: <span class="code">python3 -m doctest FILE_NAME<span class="code"></p>
 
 
 <p><b>-v</b>: The <i>-v</i> option signifies a verbose option. You can append this flag to the <i>-m doctest</i> flag to
-show both passing and failing tests. With the <i>-v</i> flag, you will be notified only of failing tests.
+show both passing and failing tests. With the <i>-v</i> flag, you will be notified of all results (both failing and passing tests). <br>
 USAGE: <span class="code">python3 -m doctest -v FILE_NAME<span class="code"></p>
 
 <h3 class="section_title">Warm Up: What would Python print?</h3>
@@ -427,6 +430,51 @@ statement.
 __________________
 >>> exp_decay(5)
 __________________
+
+>>> def funky(k):
+...     while k < 50:
+...         if k % 2 == 0:
+...             k += 13
+...         else:
+...             k += 1
+...         print(k)
+...     return k
+>>> funky(25)
+__________________
+
+>>> n, i = 7, 0
+>>> while i < n:
+...     i += 2
+...     print(i)
+__________________
+
+>>> n = 3
+>>> while n > 0:
+...     n -= 1
+...     print(n)
+__________________
+
+>>> n = 3
+>>> while n >= 0:
+...     n -= 1
+...     print(n)
+__________________
+
+>>> n = 4
+>>> while True:
+...     n -= 1
+...     print(n)
+__________________
+
+>>> n = 10
+>>> while n > 0:
+...     if n % 2 == 0:
+...         n -= 1
+...     elif n % 2 != 0:
+...         n -= 3
+...     print(n)
+__________________
+
 </pre>
 
 </br>
@@ -439,6 +487,7 @@ __________________
 1024
 512
 256
+
 128
 64
 32
@@ -449,11 +498,64 @@ __________________
 1
 
 Nothing shows up
+
+26
+39
+40
+53
+53
+
+2
+4
+6
+8
+
+2
+1
+0
+
+2
+1
+0
+-1
+
+3
+2
+1
+0
+-1
+-2
+...
+Goes on forever!
+
+9
+6
+5
+2
+1
+-2
 </pre>
 </div>
 <?php } ?>
 
-<p>3. Before we write our next function, let's look at the idea of floor division 
+<p>4. Write a function divide(num, divisor) without using the '/' or '//'. (Hint: use a while loop)</p>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
+
+<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
+<pre>
+def divide(num, divisor):
+    count = 0
+    while num > 0:
+        num -= divisor
+        count += 1
+    return count
+</pre>
+</div>
+<?php } ?>
+
+<p>Before we write our next function, let's look at the idea of floor division 
 (rounds down to the nearest integer) versus true division (decimal division).</p>
 
 <table border="0">
@@ -665,60 +767,67 @@ We recommend you try typing these statements into the interpreter.
 </div>
 <?php } ?>
 
-<h3 class="section_title">Returning Functions</h3>
+<h3 class="section_title">Environment Diagrams</h3>
 
-<p> In your Hog project, you will have to work with strategies and functions that
-make strategies. Let's start by defining what a strategy is: a function that
-takes two arguments (your score and the opponent's score) and returns the number
-of dice to roll. The following is a strategy function that always rolls
-<code>5</code> dice, and is the computer's default strategy:</p>
+If you haven't found this gem already, tutor.composingprograms.com has a great visualization tool
+for environment diagrams. Post in your python code and it will generate an environment diagram you can 
+walk through step-by-step! Use it to help you check your answers!
 
-<pre class="codemargin">
-def default_strategy(score, op_score):
-return 5
-</pre>
-
-<p> A strategy maker is a function that defines a strategy within its body, and
-returns the resulting strategy. We'll define a strategy maker that returns the
-default strategy:
-</p>
+<p>Try drawing environment diagrams for the following examples and predicting
+what Python will output: </p>
 
 <pre class="codemargin">
-def make_default_strategy():
-def default_strategy(score, op_score):
-return 5
-return default_strategy
-</pre>
+# Q1
+def square(x):
+    return x * x
 
-<p> Of course, a strategy that doesn't adapt to the situation is not a strategy at all!
-Implement a strategy maker called <span class="code">make_weird_strategy</span>
-that will take one argument called <span class="code">num_rolls</span>. The strategy it returns
-will return the higher of <span class="code">num_rolls</span> or the total number of points
-scored in the game thus far divided by <code>20</code>, throwing away any remainder.</p>
+def double(x):
+    return x + x
 
-<pre class="codemargin">
-def make_weird_strategy(num_rolls):
-"*** YOUR CODE HERE ***"
-</pre>
+a = square(double(4))
+
+
+# Q2
+x, y = 4, 3
+
+def reassign(arg1, arg2):
+    x = arg1
+    y = arg2
+
+reassign(5, 6)
+
+
+# Q3
+def f(x):
+  f(x)
+
+print, f = f, print
+a = f(4)
+b = print(4)
+
+# Q4
+def adder_maker(x):
+  def adder(y):
+    return x + y
+  return adder
+
+add3 = adder_maker(3)
+add3(4)
+sub5 = adder_maker(-5)
+sub5(6)
+sub5(10) == add3(2)
+
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
-<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
-<p>
-<pre class="codemargin">
-def make_weird_strategy(num_rolls):
-def weird_strategy(score, op_score):
-return max(num_rolls, (score+op_score)//20)
-return weird_strategy
-</pre>
-</p>
-</div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+  <?php for ($i = 0; $i < $q_num; $i++) { ?>
+    $("#toggleButton<?php echo $i; ?>").click(function () {
+      $("#toggleText<?php echo $i; ?>").toggle();
+  });
+  <?php } ?>
+</script>
 <?php } ?>
-
-<p> Obviously, this isn't a practical strategy, but exemplifies how a strategy maker
-is written. How can you write a better strategy maker? In your project, consider the
-rules of Hog as well as the situations in which it may be beneficial to roll more or
-less dice.</p>
 
 <h3 class="section_title">I Heard You Liked Functions So I Put Functions In Your Functions </h3>
 
@@ -798,62 +907,6 @@ def cycle(f1, f2, f3):
 </div>
 <?php } ?>
 
-<h3 class="section_title">Environment Diagrams</h3>
 
-<p>Try drawing environment diagrams for the following examples and predicting
-what Python will output: </p>
-
-<pre class="codemargin">
-# Q1
-def square(x):
-return x * x
-
-def double(x):
-return x + x
-
-a = square(double(4))
-
-
-# Q2
-x, y = 4, 3
-
-def reassign(arg1, arg2):
-x = arg1
-y = arg2
-
-reassign(5, 6)
-
-
-# Q3
-def f(x):
-  f(x)
-
-print, f = f, print
-a = f(4)
-b = print(4)
-
-# Q4
-def adder_maker(x):
-  def adder(y):
-    return x + y
-  return adder
-
-add3 = adder_maker(3)
-add3(4)
-sub5 = adder_maker(-5)
-sub5(6)
-sub5(10) == add3(2)
-
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script>
-  <?php for ($i = 0; $i < $q_num; $i++) { ?>
-    $("#toggleButton<?php echo $i; ?>").click(function () {
-      $("#toggleText<?php echo $i; ?>").toggle();
-  });
-  <?php } ?>
-</script>
-<?php } ?>
 </body>
 </html>
