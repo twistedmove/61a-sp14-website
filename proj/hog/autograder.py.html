@@ -42,27 +42,13 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
 
 
-</span><span style="color: blue; font-weight: bold">class </span>Timeout<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">pass
-
-def </span>handler<span style="font-weight: bold">(</span>signum<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">raise </span>Timeout
-
-TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">100
-</span><span style="color: blue; font-weight: bold">def </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">if </span>timeout <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
-        </span>timeout <span style="font-weight: bold">= </span>TIMEOUT
-    <span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>inputs<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is not </span>tuple<span style="font-weight: bold">:
+</span><span style="color: blue; font-weight: bold">def </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>inputs<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is not </span>tuple<span style="font-weight: bold">:
         </span>inputs <span style="font-weight: bold">= (</span>inputs<span style="font-weight: bold">,)
-    </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span>signal<span style="font-weight: bold">.</span>signal<span style="font-weight: bold">(</span>signal<span style="font-weight: bold">.</span>SIGALRM<span style="font-weight: bold">, </span>handler<span style="font-weight: bold">)
-        </span>signal<span style="font-weight: bold">.</span>alarm<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
-        </span>r <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>inputs<span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return </span>r
-    <span style="color: blue; font-weight: bold">finally</span><span style="font-weight: bold">:
-        </span>signal<span style="font-weight: bold">.</span>signal<span style="font-weight: bold">(</span>signal<span style="font-weight: bold">.</span>SIGALRM<span style="font-weight: bold">, </span>signal<span style="font-weight: bold">.</span>SIG_IGN<span style="font-weight: bold">)
+    </span>r <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>inputs<span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>r
 
-</span><span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
+<span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
                </span>comp <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">: </span>x <span style="font-weight: bold">== </span>y<span style="font-weight: bold">,
                </span>in_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">, </span>out_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Test FUNC according to sequence TESTS.  Each item in TESTS consists of

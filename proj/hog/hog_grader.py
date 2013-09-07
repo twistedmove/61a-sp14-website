@@ -10,7 +10,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1'
+__version__ = '1.3'
 
 from autograder import test, test_all, check_func, check_doctest, test_eval, TESTS
 
@@ -171,19 +171,30 @@ def problem9():
 
 def check_for_updates():
     print('You are running hog_grader.py version', __version__)
-    url = 'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/hog_grader.py'
+    index = 'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/'
     try:
-        latest = urllib.request.urlopen(url)
-        latest_grader = latest.read().decode('utf-8')
-        remote_version = re.search("__version__ = '(.*)'", latest_grader)
-        if remote_version and remote_version.group(1) != __version__:
-            print('Version', remote_version.group(1),
-                  'is available with new tests.')
-            print('You can download the new autograder here:')
-            print('\t' + url)
-    except (urllib.error.URLError, IOError):
-        pass
-    print()
+        remote_hog_grader = urllib.request.urlopen(index + 'hog_grader.py').read().decode('utf-8')
+        remote_autograder = urllib.request.urlopen(index + 'autograder.py').read().decode('utf-8')
+    except urllib.error.URLError:
+        print("Couldn't check remote autograder")
+        return
+    remote_version = re.search("__version__ = '(.*)'", remote_hog_grader)
+    if remote_version and remote_version.group(1) != __version__:
+        print('Version', remote_version.group(1), 'is available with new tests.')
+        prompt = input('Do you want to automatically download these files? [y/n]: ')
+        if 'y' in prompt.lower():
+            with open('hog_grader.py', 'w') as new:
+                new.write(remote_hog_grader)
+                print('hog_grader.py updated')
+            with open('autograder.py', 'w') as new:
+                new.write(remote_autograder)
+                print('autograder.py updated')
+            exit(0)
+        else:
+            print('You can download the new autograder from the following links (2 files):')
+            print('\t' + index + 'hog_grader.py')
+            print('\t' + index + 'autograder.py')
+            print()
 
 @main
 def run(*args):
