@@ -56,11 +56,13 @@ Sometimes, you can append certain "flags" on the command line to inspect your co
 ones that'll come in handy this semester. If you want to learn more about other python flags, you can type 
 <span class="code"> man python</span>
 
+<p><b>no flags:</b> Adding no flags will directly run your python script, meaning that python will
+run the code in the file you provide and return you to the command line. <br>
+USAGE: <span class="code">python3 FILE_NAME</span>
+
 <p><b>-i</b>: The <i>-i</i> option runs your Python script, and throws you into an interactive session. 
-If you omit the -i option, Python will only run your script.<br>
-You don't need the -i flag to open up an interpreter. Alternatively, you can just run <span class="code">python</span>
-and it will launch an interactive session. However, if you're using Cygwin, you <i>do</i> need the -i flag to
-open up an interactive session. <br>
+If you omit the -i option, Python will only run your script. See the next section regarding interactive sessions to learn more!<br>
+
 USAGE: <span class="code">python3 -i FILE_NAME<span class="code"></p>
 
 <p><b>-m doctest</b>: Using <i>-m doctest</i> option will be useful on your homeworks and projects to help you test your code
@@ -72,6 +74,19 @@ USAGE: <span class="code">python3 -m doctest FILE_NAME<span class="code"></p>
 <p><b>-v</b>: The <i>-v</i> option signifies a verbose option. You can append this flag to the <i>-m doctest</i> flag to
 show both passing and failing tests. With the <i>-v</i> flag, you will be notified of all results (both failing and passing tests). <br>
 USAGE: <span class="code">python3 -m doctest -v FILE_NAME<span class="code"></p>
+
+<h3 class="section_title">Interactive sessions:</h3>
+
+Sometimes, you just want to try some things out in the python interpreter. If you want to test out
+functions in a file, you'll need the <span class='code'>-i</span> flag as we specified above.
+
+However, if you just need to try something out in the interpreter, without any user defined functions
+this is how you start an interactive session:<br>
+USAGE: <span class="code">python3</span><br>
+On Cygwin:<br>
+USAGE: <span class="code">python3 -i</span><br>
+
+<br>
 
 <h3 class="section_title">Warm Up: What would Python print?</h3>
 <p>Predict what Python will print in response to each of these expressions.  
@@ -769,9 +784,9 @@ We recommend you try typing these statements into the interpreter.
 
 <h3 class="section_title">Environment Diagrams</h3>
 
-If you haven't found this gem already, tutor.composingprograms.com has a great visualization tool
+<p>If you haven't found this gem already, tutor.composingprograms.com has a great visualization tool
 for environment diagrams. Post in your python code and it will generate an environment diagram you can 
-walk through step-by-step! Use it to help you check your answers!
+walk through step-by-step! Use it to help you check your answers!</p>
 
 <p>Try drawing environment diagrams for the following examples and predicting
 what Python will output: </p>
