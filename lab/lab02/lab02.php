@@ -816,7 +816,7 @@ add3(4)
 sub5 = adder_maker(-5)
 sub5(6)
 sub5(10) == add3(2)
-
+</pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -830,7 +830,6 @@ sub5(10) == add3(2)
 <?php } ?>
 
 <h3 class="section_title">I Heard You Liked Functions So I Put Functions In Your Functions </h3>
-
 <p>Define a function <span class='code'>cycle</span> which takes in
 three functions as arguments: <span class='code'>f1</span>, <span
 class='code'>f2</span>, <span class='code'>f3</span>. <span
