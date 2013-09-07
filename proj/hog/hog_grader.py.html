@@ -20,7 +20,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1'
+</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.1'
 
 </span><span style="color: blue; font-weight: bold">from </span>autograder <span style="color: blue; font-weight: bold">import </span>test<span style="font-weight: bold">, </span>test_all<span style="font-weight: bold">, </span>check_func<span style="font-weight: bold">, </span>check_doctest<span style="font-weight: bold">, </span>test_eval<span style="font-weight: bold">, </span>TESTS
 
@@ -181,19 +181,29 @@ This file uses features of Python not yet covered in the course.
 
 </span><span style="color: blue; font-weight: bold">def </span>check_for_updates<span style="font-weight: bold">():
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You are running hog_grader.py version'</span><span style="font-weight: bold">, </span>__version__<span style="font-weight: bold">)
-    </span>url <span style="font-weight: bold">= </span><span style="color: red">'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/hog_grader.py'
+    </span>index <span style="font-weight: bold">= </span><span style="color: red">'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/'
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span>latest <span style="font-weight: bold">= </span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">(</span>url<span style="font-weight: bold">)
-        </span>latest_grader <span style="font-weight: bold">= </span>latest<span style="font-weight: bold">.</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
-        </span>remote_version <span style="font-weight: bold">= </span>re<span style="font-weight: bold">.</span>search<span style="font-weight: bold">(</span><span style="color: red">"__version__ = '(.*)'"</span><span style="font-weight: bold">, </span>latest_grader<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">if </span>remote_version <span style="color: blue; font-weight: bold">and </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">) != </span>__version__<span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Version'</span><span style="font-weight: bold">, </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">),
-                  </span><span style="color: red">'is available with new tests.'</span><span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You can download the new autograder here:'</span><span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\t' </span><span style="font-weight: bold">+ </span>url<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>URLError<span style="font-weight: bold">, </span>IOError<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">pass
-    print</span><span style="font-weight: bold">()
+        </span>remote_hog_grader <span style="font-weight: bold">= </span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">(</span>index <span style="font-weight: bold">+ </span><span style="color: red">'hog_grader.py'</span><span style="font-weight: bold">).</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
+        </span>remote_autograder <span style="font-weight: bold">= </span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">(</span>index <span style="font-weight: bold">+ </span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">).</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">except </span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>URLError<span style="font-weight: bold">:
+        </span>exit<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">)
+    </span>remote_version <span style="font-weight: bold">= </span>re<span style="font-weight: bold">.</span>search<span style="font-weight: bold">(</span><span style="color: red">"__version__ = '(.*)'"</span><span style="font-weight: bold">, </span>remote_hog_grader<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>remote_version <span style="color: blue; font-weight: bold">and </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">) != </span>__version__<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Version'</span><span style="font-weight: bold">, </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">), </span><span style="color: red">'is available with new tests.'</span><span style="font-weight: bold">)
+        </span>prompt <span style="font-weight: bold">= </span>input<span style="font-weight: bold">(</span><span style="color: red">'Do you want to automatically download these files? [y/n]: '</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'y' </span><span style="color: blue; font-weight: bold">in </span>prompt<span style="font-weight: bold">.</span>lower<span style="font-weight: bold">():
+            </span>with open<span style="font-weight: bold">(</span><span style="color: red">'hog_grader.py'</span><span style="font-weight: bold">, </span><span style="color: red">'w'</span><span style="font-weight: bold">) </span>as new<span style="font-weight: bold">:
+                </span>new<span style="font-weight: bold">.</span>write<span style="font-weight: bold">(</span>remote_hog_grader<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'hog_grader.py updated'</span><span style="font-weight: bold">)
+            </span>with open<span style="font-weight: bold">(</span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">, </span><span style="color: red">'w'</span><span style="font-weight: bold">) </span>as new<span style="font-weight: bold">:
+                </span>new<span style="font-weight: bold">.</span>write<span style="font-weight: bold">(</span>remote_autograder<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'autograder.py updated'</span><span style="font-weight: bold">)
+            </span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You can download the new autograder from the following links (2 files):'</span><span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\t' </span><span style="font-weight: bold">+ </span>index <span style="font-weight: bold">+ </span><span style="color: red">'hog_grader.py'</span><span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\t' </span><span style="font-weight: bold">+ </span>index <span style="font-weight: bold">+ </span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
 
 </span>@main
 <span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">):

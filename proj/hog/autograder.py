@@ -40,17 +40,21 @@ def handler(signum, frame):
 
 TIMEOUT = 100
 def test_eval(func, inputs, timeout=None, **varargs):
+    try:
+        alarm = signal.SIGALRM
+    except ValueError:
+        alarm = signal.SIGSEGV
     if timeout is None:
         timeout = TIMEOUT
     if type(inputs) is not tuple:
         inputs = (inputs,)
     try:
-        signal.signal(signal.SIGALRM, handler)
+        signal.signal(alarm, handler)
         signal.alarm(timeout)
         r = func(*inputs, **varargs)
         return r
     finally:
-        signal.signal(signal.SIGALRM, signal.SIG_IGN)
+        signal.signal(alarm, signal.SIG_IGN)
 
 def check_func(func, tests,
                comp = lambda x, y: x == y,
