@@ -32,29 +32,11 @@ def test_all(project_name, tests=TESTS):
     sys.exit(0)
 
 
-class Timeout(Exception):
-    pass
-
-def handler(signum, frame):
-    raise Timeout
-
-TIMEOUT = 100
-def test_eval(func, inputs, timeout=None, **varargs):
-    try:
-        alarm = signal.SIGALRM
-    except ValueError:
-        alarm = signal.SIGSEGV
-    if timeout is None:
-        timeout = TIMEOUT
+def test_eval(func, inputs, **varargs):
     if type(inputs) is not tuple:
         inputs = (inputs,)
-    try:
-        signal.signal(alarm, handler)
-        signal.alarm(timeout)
-        r = func(*inputs, **varargs)
-        return r
-    finally:
-        signal.signal(alarm, signal.SIG_IGN)
+    r = func(*inputs, **varargs)
+    return r
 
 def check_func(func, tests,
                comp = lambda x, y: x == y,
