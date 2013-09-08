@@ -552,23 +552,8 @@ Goes on forever!
 </pre>
 </div>
 <?php } ?>
-
-<p>4. Write a function divide(num, divisor) without using the '/' or '//'. (Hint: use a while loop)</p>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
-
-<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
-<pre>
-def divide(num, divisor):
-    count = 0
-    while num > 0:
-        num -= divisor
-        count += 1
-    return count
-</pre>
-</div>
-<?php } ?>
+<br>
+<h3 class="section_title">Division</h3>
 
 <p>Before we write our next function, let's look at the idea of floor division 
 (rounds down to the nearest integer) versus true division (decimal division).</p>
@@ -642,6 +627,23 @@ should result as follows (order doesn’t matter):</p>
 <p>
 Helpful Tip: You can use the % to find if something divides evenly into a number. % gives you a remainder, as follows:
 </p>
+
+<p>Next, write a function divide(num, divisor) without using the '/' or '//'. (Hint: use a while loop)</p>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
+
+<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
+<pre>
+def divide(num, divisor):
+    count = 0
+    while num > 0:
+        num -= divisor
+        count += 1
+    return count
+</pre>
+</div>
+<?php } ?>
 
 <pre class="codemargin">
 >>> 10 % 5
@@ -784,7 +786,7 @@ We recommend you try typing these statements into the interpreter.
 
 <h3 class="section_title">Environment Diagrams</h3>
 
-<p>If you haven't found this gem already, tutor.composingprograms.com has a great visualization tool
+<p>If you haven't found this gem already, <a href="tutor.composingprograms.com">tutor.composingprograms.com</a> has a great visualization tool
 for environment diagrams. Post in your python code and it will generate an environment diagram you can 
 walk through step-by-step! Use it to help you check your answers!</p>
 
@@ -867,32 +869,32 @@ class='code'>n</span> and do the following:
 
 <pre class="codemargin">
 def cycle(f1, f2, f3):
-""" Returns a function that is itself a higher order function
-&gt;&gt;&gt; def add1(x):
-...     return x + 1
-...
-&gt;&gt;&gt; def times2(x):
-...     return x * 2
-...
-&gt;&gt;&gt; def add3(x):
-...     return x + 3
-...
-&gt;&gt;&gt; my_cycle = cycle(add1, times2, add3)
-&gt;&gt;&gt; identity = my_cycle(0)
-&gt;&gt;&gt; identity(5)
-5
-&gt;&gt;&gt; add_one_then_double = my_cycle(2)
-&gt;&gt;&gt; add_one_then_double(1)
-4
-&gt;&gt;&gt; do_all_functions = my_cycle(3)
-&gt;&gt;&gt; do_all_functions(2)
-9
-&gt;&gt;&gt; do_more_than_a_cycle = my_cycle(4)
-&gt;&gt;&gt; do_more_than_a_cycle(2)
-10
-&gt;&gt;&gt; do_two_cycles = my_cycle(6)
-&gt;&gt;&gt; do_two_cycles(1)
-19
+    """ Returns a function that is itself a higher order function
+    &gt;&gt;&gt; def add1(x):
+    ...     return x + 1
+    ...
+    &gt;&gt;&gt; def times2(x):
+    ...     return x * 2
+    ...
+    &gt;&gt;&gt; def add3(x):
+    ...     return x + 3
+    ...
+    &gt;&gt;&gt; my_cycle = cycle(add1, times2, add3)
+    &gt;&gt;&gt; identity = my_cycle(0)
+    &gt;&gt;&gt; identity(5)
+    5
+    &gt;&gt;&gt; add_one_then_double = my_cycle(2)
+    &gt;&gt;&gt; add_one_then_double(1)
+    4
+    &gt;&gt;&gt; do_all_functions = my_cycle(3)
+    &gt;&gt;&gt; do_all_functions(2)
+    9
+    &gt;&gt;&gt; do_more_than_a_cycle = my_cycle(4)
+    &gt;&gt;&gt; do_more_than_a_cycle(2)
+    10
+    &gt;&gt;&gt; do_two_cycles = my_cycle(6)
+    &gt;&gt;&gt; do_two_cycles(1)
+    19
 """
 
 "*** YOUR CODE HERE ***"
