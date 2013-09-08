@@ -278,9 +278,9 @@ class HogGUI(Frame):
         else:
             self.s_labels[0].text = score
             self.s_labels[1].text = opponent_score
-            self.switch()
+            winner = 0 if score > opponent_score else 1
             self.status_label.text = 'Game over! {} wins!'.format(
-                                        name(self.who))
+                                        name(winner))
 
     def restart(self):
         """Kills the current game and begins another game."""

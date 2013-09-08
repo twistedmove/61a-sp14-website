@@ -31,12 +31,35 @@ def test_all(project_name, tests=TESTS):
         print()
     sys.exit(0)
 
+class TimeoutError(Exception):
+    pass
 
-def test_eval(func, inputs, **varargs):
+TIMEOUT = 20
+def test_eval(func, inputs, timeout=TIMEOUT, **kwargs):
     if type(inputs) is not tuple:
         inputs = (inputs,)
-    r = func(*inputs, **varargs)
-    return r
+    result = timed(func, timeout, inputs, kwargs)
+    return result
+
+def timed(func, timeout, args=(), kwargs={}):
+    """Calls FUNC with arguments ARGS and keyword arguments KWARGS. If it takes
+    longer than TIMEOUT seconds to finish executing, a TimeoutError will be
+    raised."""
+    from threading import Thread
+    class ReturningThread(Thread):
+        """Creates a daemon Thread with a result variable."""
+        def __init__(self):
+            Thread.__init__(self)
+            self.daemon = True
+            self.result = None
+        def run(self):
+            self.result = func(*args, **kwargs)
+    submission = ReturningThread()
+    submission.start()
+    submission.join(timeout)
+    if submission.is_alive():
+        raise TimeoutError("Evaluation timed out!")
+    return submission.result
 
 def check_func(func, tests,
                comp = lambda x, y: x == y,
