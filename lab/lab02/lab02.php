@@ -489,11 +489,7 @@ __________________
 ...         n -= 3
 ...     print(n)
 __________________
-
 </pre>
-
-</br>
-
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
 <button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
 
@@ -552,7 +548,7 @@ Goes on forever!
 </pre>
 </div>
 <?php } ?>
-<br>
+
 <h3 class="section_title">Division</h3>
 
 <p>Before we write our next function, let's look at the idea of floor division 
@@ -609,7 +605,6 @@ we can see that the following rule applies: </p>
 b * (a // b) + (a % b) = a
 </pre>
 
-
 <p>Now, define a function <span class="code">factors(n)</span> which takes in a number, 
 n, and prints out all of the numbers that divide n evenly. For example, a call with n=20 
 should result as follows (order doesn’t matter):</p>
@@ -627,23 +622,6 @@ should result as follows (order doesn’t matter):</p>
 <p>
 Helpful Tip: You can use the % to find if something divides evenly into a number. % gives you a remainder, as follows:
 </p>
-
-<p>Next, write a function divide(num, divisor) without using the '/' or '//'. (Hint: use a while loop)</p>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
-
-<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
-<pre>
-def divide(num, divisor):
-    count = 0
-    while num > 0:
-        num -= divisor
-        count += 1
-    return count
-</pre>
-</div>
-<?php } ?>
 
 <pre class="codemargin">
 >>> 10 % 5
@@ -670,6 +648,34 @@ def factors(n):
 </div>
 <?php } ?>
 
+<p>Next, write a function <span class="code">divide(num, divisor)</span> without using the '/' or '//'. </p>
+
+<pre class="codemargin">
+def divide(num, divisor):
+    """
+    >>> divide(8, 2)
+    4
+    """
+    "*** YOUR CODE HERE ***"
+</pre>
+
+<p>Hint: Use a while loop</p>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
+
+<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
+<pre>
+def divide(num, divisor):
+    count = 0
+    while num > 0:
+        num -= divisor
+        count += 1
+    return count
+</pre>
+</div>
+<?php } ?>
+
 <h3 class="section_title">Error messages</h3>
 
 <p>By now, you've probably seen a couple of error messages. Even though they might
@@ -690,6 +696,10 @@ trying to add a function and an int)
 went wrong with your code. <b>If you run into error messages, try to identify the problem
 before asking for help.</b> You can often Google unknown error messages to see what similar mistakes
 others have made to help you debug your own code.
+</p>
+<p>
+Here's a link to a helpful <a href="http://inst.eecs.berkeley.edu/~cs61a-te/notes/debugging.html">Debugging Guide</a> written by Albert Wu.
+</p>
 
 <h3 class="section_title">Higher Order Functions</h3>
 
@@ -895,9 +905,8 @@ def cycle(f1, f2, f3):
     &gt;&gt;&gt; do_two_cycles = my_cycle(6)
     &gt;&gt;&gt; do_two_cycles(1)
     19
-"""
-
-"*** YOUR CODE HERE ***"
+    """
+    "*** YOUR CODE HERE ***"
 </pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
