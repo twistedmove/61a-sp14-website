@@ -10,7 +10,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1.3'
+__version__ = '1.4'
 
 from autograder import test, test_all, check_func, check_doctest, test_eval, TESTS
 

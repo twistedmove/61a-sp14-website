@@ -288,9 +288,9 @@ class </span>HogGUI<span style="font-weight: bold">(</span>Frame<span style="fon
         else</span><span style="font-weight: bold">:
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>s_labels<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">].</span>text <span style="font-weight: bold">= </span>score
             <span style="color: blue">self</span><span style="font-weight: bold">.</span>s_labels<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">].</span>text <span style="font-weight: bold">= </span>opponent_score
-            <span style="color: blue">self</span><span style="font-weight: bold">.</span>switch<span style="font-weight: bold">()
+            winner <span style="font-weight: bold">= </span><span style="color: red">0 </span><span style="color: blue; font-weight: bold">if </span>score <span style="font-weight: bold">&gt; </span>opponent_score <span style="color: blue; font-weight: bold">else </span><span style="color: red">1
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>status_label<span style="font-weight: bold">.</span>text <span style="font-weight: bold">= </span><span style="color: red">'Game over! {} wins!'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(
-                                        </span>name<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>who<span style="font-weight: bold">))
+                                        </span>name<span style="font-weight: bold">(</span>winner<span style="font-weight: bold">))
 
     </span><span style="color: blue; font-weight: bold">def </span>restart<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span><span style="color: darkred">"""Kills the current game and begins another game."""

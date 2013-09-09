@@ -41,12 +41,35 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
     </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
 
+</span><span style="color: blue; font-weight: bold">class </span>TimeoutError<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">pass
 
-</span><span style="color: blue; font-weight: bold">def </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">):
+</span>TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">20
+</span><span style="color: blue; font-weight: bold">def </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">=</span>TIMEOUT<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>inputs<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is not </span>tuple<span style="font-weight: bold">:
         </span>inputs <span style="font-weight: bold">= (</span>inputs<span style="font-weight: bold">,)
-    </span>r <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>inputs<span style="font-weight: bold">, **</span>varargs<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>r
+    </span>result <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, </span>kwargs<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>result
+
+<span style="color: blue; font-weight: bold">def </span>timed<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kwargs<span style="font-weight: bold">={}):
+    </span><span style="color: darkred">"""Calls FUNC with arguments ARGS and keyword arguments KWARGS. If it takes
+    longer than TIMEOUT seconds to finish executing, a TimeoutError will be
+    raised."""
+    </span><span style="color: blue; font-weight: bold">from </span>threading <span style="color: blue; font-weight: bold">import </span>Thread
+    <span style="color: blue; font-weight: bold">class </span>ReturningThread<span style="font-weight: bold">(</span>Thread<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Creates a daemon Thread with a result variable."""
+        </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+            </span>Thread<span style="font-weight: bold">.</span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
+            </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>daemon <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
+            </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span><span style="color: blue">None
+        </span><span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+            </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">)
+    </span>submission <span style="font-weight: bold">= </span>ReturningThread<span style="font-weight: bold">()
+    </span>submission<span style="font-weight: bold">.</span>start<span style="font-weight: bold">()
+    </span>submission<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>is_alive<span style="font-weight: bold">():
+        </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span><span style="color: red">"Evaluation timed out!"</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
 
 <span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
                </span>comp <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">: </span>x <span style="font-weight: bold">== </span>y<span style="font-weight: bold">,
