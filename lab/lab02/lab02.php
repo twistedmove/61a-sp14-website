@@ -796,7 +796,7 @@ We recommend you try typing these statements into the interpreter.
 
 <h3 class="section_title">Environment Diagrams</h3>
 
-<p>If you haven't found this gem already, <a href="tutor.composingprograms.com">tutor.composingprograms.com</a> has a great visualization tool
+<p>If you haven't found this gem already, <a href="http://tutor.composingprograms.com">tutor.composingprograms.com</a> has a great visualization tool
 for environment diagrams. Post in your python code and it will generate an environment diagram you can 
 walk through step-by-step! Use it to help you check your answers!</p>
 
