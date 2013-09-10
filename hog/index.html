@@ -29,22 +29,32 @@
 
         <ol>
           <li>
-            <b><span class="rule" id="wild">Hog Wild</span></b>. If the sum of
-            both players' total scores is a multiple of 7 (e.g., 14, 21, 35),
-            then the current player rolls 4-sided dice instead of the usual
-            6-sided dice.
+            <b><span class="rule" id="bacon">Free bacon</span></b>. If a player
+            chooses to roll zero dice, she scores one more than the largest
+            digit in her opponent's score. For example, if Player 1 has 42
+            points, Player 0 gains 1 + max(4, 2) = 5 points by rolling zero
+            dice.  If Player 1 has 48 points, Player 0 gains 1 + max(4, 8) = 9
+            points.
           </li>
           <li>
-            <b><span class="rule" id="bacon">Free Bacon</span></b>. If a player
-            chooses to roll zero dice, she scores one more than the sum of the
-            digits of her opponent's score. E.g., if player 1 has 42 points,
-            player 0 can earn 4 + 2 + 1 = 7 points by rolling zero dice.
+            <b><span class="rule" id="wild">Hog wild</span></b>. If the sum of
+            both players' total scores is a multiple of seven (e.g., 14, 21,
+            35), then the current player rolls four-sided dice instead of the
+            usual six-sided dice.
           </li>
           <li>
-            <b><span class="rule" id="ham">Holiday Ham</span></b>. If a player's
-            score for the turn is a prime number, then instead she scores 5
-            times the number of dice rolled. (Note: 1 is not prime, but 2 is.)
-            This modification does not apply to points earned from Free Bacon.
+            <b><span class="rule" id="swine">Swine swap</span></b>. If at the
+            end of a turn one of the player's total score is exactly double the
+            other's, then the players swap total scores.
+
+            <i>Example 1:</i> Player 0 has 20 points and Player 1 has 5; it is
+            Player 1's turn. She scores 5 more, bringing her total to 10. The
+            players swap scores: Player 0 now has 10 points and Player 1 has
+            20. It is now Player 0's turn.
+
+            <i>Example 2</i>: Player 0 has 90 points and Player 1 has 50; it is
+            Player 0's turn.  She scores 10 more, bringing her total to 100.
+            The players swap scores, and Player 1 wins the game 100 to 50.
           </li>
         </ol>
       </div>
