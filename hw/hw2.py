@@ -20,7 +20,7 @@ def product(n, term):
 
 
 def factorial(n):
-    """Return n factorial by calling product.
+    """Return n factorial for n >= 0 by calling product.
 
     >>> factorial(4)
     24
