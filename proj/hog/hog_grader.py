@@ -10,9 +10,9 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1.4'
+__version__ = '2'
 
-from autograder import test, test_all, check_func, check_doctest, test_eval, TESTS
+from autograder import test, run_tests, check_func, check_doctest, test_eval, run_tests
 
 try:
     import hog      # Student submission
@@ -25,56 +25,53 @@ except (SyntaxError, IndentationError) as e:
 
 from dice import make_test_dice, four_sided, six_sided
 from ucb import main
-import argparse
-import urllib.request, urllib.error
-import re
 
 #########
 # TESTS #
 #########
 
 @test
-def problem1():
+def problem1(grades):
     """Test roll_dice."""
     counted_dice = make_test_dice(4, 1, 2)
-    test_suite = [((2, make_test_dice(4, 6, 1)),           10),
-                  ((3, make_test_dice(4, 6, 1)),            1),
-                  ((3, make_test_dice(1, 2, 3)),            1),
-                  ((3, counted_dice),                       1),
-                  ((1, counted_dice),                       4),
-                  ((5, make_test_dice(4, 2, 3, 3, 4, 1)),  16),
-                  ((2, make_test_dice(1)),                  1)]
+    test_suite1 = [((2, make_test_dice(4, 6, 1)),           10),
+                   ((3, make_test_dice(4, 6, 1)),            1),
+                   ((3, make_test_dice(1, 2, 3)),            1),
+                   ((3, counted_dice),                       1),
+                   ((1, counted_dice),                       4)]
+    test_suite2 = [((5, make_test_dice(4, 2, 3, 3, 4, 1)),  16),
+                   ((2, make_test_dice(1)),                  1)]
 
-    if check_doctest('roll_dice', hog):
+    if check_func(hog.roll_dice, test_suite1):
         return True
-    if check_func(hog.roll_dice, test_suite):
+    if check_func(hog.roll_dice, test_suite2):
         return True
 
 @test
-def problem2():
+def problem2(grades):
     """Test take_turn."""
-    test_suite = [((2,  0, make_test_dice(4, 6, 1)), 10),
-                  ((3, 20, make_test_dice(4, 6, 1)),  1),
-                  ((2,  0, make_test_dice(6)),       12),
-                  ((0, 34),                           5), # Free bacon
-                  ((0, 71),                           8),
-                  ((0,  7),                           8),
-                  ((0, 99),                          10),
-                  ((0,  0),                           1),
-                  ((0,  50),                          6)]
-
-    if check_doctest('take_turn', hog):
+    test_suite1 = [((2,  0, make_test_dice(4, 6, 1)), 10),
+                   ((3, 20, make_test_dice(4, 6, 1)),  1),
+                   ((2,  0, make_test_dice(6)),       12),
+                   ((0, 34),                           5),# Free bacon
+                   ((0, 71),                           8),
+                   ((0,  7),                           8)]
+    test_suite2 = [((0, 99),                          10),
+                   ((0,  0),                           1),
+                   ((0,  50),                          6)]
+    if check_func(hog.take_turn, test_suite1):
         return True
-    if check_func(hog.take_turn, test_suite):
+    if check_func(hog.take_turn, test_suite2):
         return True
 
 @test
-def problem3():
+def problem3(grades):
     """Test select_dice."""
     return check_doctest('select_dice', hog)
 
+
 @test
-def problem4():
+def problem4(grades):
     """Test play using fixed dice."""
     always = hog.always_roll
     hog.four_sided = make_test_dice(1)
@@ -94,15 +91,14 @@ def problem4():
         # Revert dice
         hog.four_sided = four_sided
         hog.six_sided = six_sided
-
     print('Note: Not all tests have been released for problem4.',
           'Submit your project to the actual autograder to get more results!',
           sep='\n', end='\n')
-
     return failure
 
+
 @test
-def problem5():
+def problem5(grades):
     """Test make_averaged."""
     # hundred_dice cycle from 1 to 99 repeatedly
     hundred_range = range(1, 100)
@@ -119,12 +115,12 @@ def problem5():
         return True
 
 @test
-def problem6():
+def problem6(grades):
     """Test max_scoring_num_rolls."""
     return check_doctest('max_scoring_num_rolls', hog)
 
 @test
-def problem7():
+def problem7(grades):
     """Test bacon_strategy."""
     if check_doctest('bacon_strategy', hog):
         return True
@@ -134,14 +130,12 @@ def problem7():
                   ((20, 23), 4),
                   ((20, 4),  0),
                   ((20, 99), 0)]
-    failed = False
-    if check_func(hog.bacon_strategy, test_suite):
-        failed = True
+    failed = check_func(hog.bacon_strategy, test_suite)
     hog.BACON_MARGIN, hog.BASELINE_NUM_ROLLS = old_bacon
     return failed
 
 @test
-def problem8():
+def problem8(grades):
     """Test swap_strategy."""
     if check_doctest('swap_strategy', hog):
         return True
@@ -151,14 +145,13 @@ def problem8():
                   ((8, 9),   4),    # harmful swap
                   ((32, 43), 0),    # lots of free bacon
                   ((20, 32), 4)]    # baseline
-    failed = False
-    if check_func(hog.swap_strategy, test_suite):
-        failed = True
+    failed = check_func(hog.swap_strategy, test_suite)
     hog.BACON_MARGIN, hog.BASELINE_NUM_ROLLS = old_bacon
     return failed
 
+
 @test
-def problem9():
+def problem9(grades):
     """Test final_strategy."""
     print('Note: Tests for problem9 are not included here.',
           'Submit your project to the actual autograder to get results!',
@@ -169,49 +162,16 @@ def problem9():
 # COMMAND LINE INTERFACE #
 ##########################
 
-def check_for_updates():
-    print('You are running hog_grader.py version', __version__)
-    index = 'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/'
-    try:
-        remote_hog_grader = urllib.request.urlopen(index + 'hog_grader.py').read().decode('utf-8')
-        remote_autograder = urllib.request.urlopen(index + 'autograder.py').read().decode('utf-8')
-    except urllib.error.URLError:
-        print("Couldn't check remote autograder")
-        return
-    remote_version = re.search("__version__ = '(.*)'", remote_hog_grader)
-    if remote_version and remote_version.group(1) != __version__:
-        print('Version', remote_version.group(1), 'is available with new tests.')
-        prompt = input('Do you want to automatically download these files? [y/n]: ')
-        if 'y' in prompt.lower():
-            with open('hog_grader.py', 'w') as new:
-                new.write(remote_hog_grader)
-                print('hog_grader.py updated')
-            with open('autograder.py', 'w') as new:
-                new.write(remote_autograder)
-                print('autograder.py updated')
-            exit(0)
-        else:
-            print('You can download the new autograder from the following links (2 files):')
-            print('\t' + index + 'hog_grader.py')
-            print('\t' + index + 'autograder.py')
-            print()
+project_info = {
+    'name': 'Project 1: Hog',
+    'remote_index': 'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/',
+    'autograder_files': [
+        'hog_grader.py',
+        'autograder.py',
+    ],
+    'version': __version__,
+}
 
 @main
 def run(*args):
-    parser = argparse.ArgumentParser(
-        description='A subset of the autograder tests for Hog.')
-    parser.add_argument('-q', '--question', type=int,
-                        help='Run tests for the specified question')
-    parser.add_argument('-v', '--version', action='store_true',
-                        help='Prints autograder version and exits')
-    args = parser.parse_args()
-
-    check_for_updates()
-
-    if args.version:
-        exit(0)
-    elif args.question and 0 < args.question <= len(TESTS):
-        tests = [TESTS[args.question-1]]
-    else:
-        tests = TESTS
-    test_all('Project 1: Hog', tests)
+    run_tests(**project_info)

@@ -1,10 +1,11 @@
 """Common utility functions for automatic grading."""
 
-import sys, os, io, traceback
-import signal
-import time
+import sys, os, traceback
 from doctest import DocTestFinder, DocTestRunner
 from collections import namedtuple, defaultdict
+import urllib.request, urllib.error
+import re
+import argparse
 
 Test = namedtuple('Test', ['name', 'fn'])
 TESTS = []
@@ -22,7 +23,7 @@ def test_all(project_name, tests=TESTS):
     for test in tests:
         underline('Test {0}'.format(test.name))
         try:
-            failure = test.fn()
+            failure = test.fn(None)
         except Exception as inst:
             traceback.print_exc()
             failure = True
@@ -100,7 +101,7 @@ def check_doctest(func_name, module, run=True):
     if not tests:
         print("No doctests found for " + func_name)
         return True
-    fn = lambda: DocTestRunner().run(tests[0], out = lambda x: None)
+    fn = lambda: DocTestRunner().run(tests[0])
     result = test_eval(fn, tuple())
     if result.failed != 0:
         print("A doctest example failed for " + func_name + ".")
@@ -113,3 +114,48 @@ def underline(s):
     print(s)
     print('='*len(s))
 
+def check_for_updates(index, filenames, version):
+    print('You are running version', version, 'of the autograder')
+    try:
+        remotes = {}
+        for file in filenames:
+            remotes[file] = urllib.request.urlopen(
+                    os.path.join(index, file)).read().decode('utf-8')
+    except urllib.error.URLError:
+        print("Couldn't check remote autograder")
+        return
+    remote_version = re.search("__version__ = '(.*)'",
+                               remotes[filenames[0]])
+    if remote_version and remote_version.group(1) != version:
+        print('Version', remote_version.group(1),
+              'is available with new tests.')
+        prompt = input('Do you want to automatically download these files? [y/n]: ')
+        if 'y' in prompt.lower():
+            for file in filenames:
+                with open(file, 'w') as new:
+                    new.write(remotes[file])
+                    print('\t', file, 'updated')
+            exit(0)
+        else:
+            print('You can download the new autograder from the following links:')
+            for file in filenames:
+                print('\t' + os.path.join(index, file))
+            print()
+
+def run_tests(name, remote_index, autograder_files, version, **kwargs):
+    parser = argparse.ArgumentParser(
+        description='A subset of the autograder tests for Hog.')
+    parser.add_argument('-q', '--question', type=int,
+                        help='Run tests for the specified question')
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='Prints autograder version and exits')
+    args = parser.parse_args()
+
+    check_for_updates(remote_index, autograder_files, version)
+    if args.version:
+        exit(0)
+    elif args.question and 0 < args.question <= len(TESTS):
+        tests = [TESTS[args.question-1]]
+    else:
+        tests = TESTS
+    test_all(name, tests)
