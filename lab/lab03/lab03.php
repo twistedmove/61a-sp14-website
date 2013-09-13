@@ -197,7 +197,6 @@ def repeated(f, n):
 </div>
 <?php } ?>
 
-
 <p>This concludes the recursion portion of this lab. As a parting thought,
 keep in mind that recursion follows the same rules of evaluation that we've
 seen throughout the class. Try taking one of the above exercises and 
@@ -289,7 +288,44 @@ def falling(n, k):
 </div>
 <?php } ?>
 
-<h3 class="section_title">Exercise 7: Butch Cassidy and the Environment Diagram</h3>
+<h3 class="section_title">Exercise 7: Calculus... approximately.</h3>
+
+<p>You hae seen continuous calculus in mathematics. However, there's another
+definition of the derivative. Call the discrete derivative of a function <tt>f</tt>
+the quantity: <tt> &Delta;f(n) = f(n+1) - f(n)</tt>. Write a higher order function 
+<tt>make_deriv</tt> that takes as input <tt> f</tt> and returns another function
+that calculates the discrete derivative.</p>
+
+<p> Now, this type of calculus actually mirrors what you already know. For example,
+the product rule actually holds as well in some form: <tt> &Delta;f(n)g(n) = 
+&Delta;f(n) g(n+1) + &Delta;g(n) f(n) </tt> Write another higher order function called
+<tt> make_product </tt> that takes two functions <tt>f</tt> and <tt>g</tt> and returns a
+ function that computes the discrete derivative of the product. You can use the 
+<tt> make_deriv </tt> function that you defined above.</p>
+
+<br>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+<button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
+def make_deriv(f):
+    def deriv(n):
+        return f(n+1) - f(n)
+    return deriv
+
+def make_product(f,g):
+    deriv_f = make_deriv(f)
+    deriv_g = make_deriv(g)
+    def product(n):
+        return deriv_f(n)*g(n+1) + deriv_g(n)*f(n)
+    return product
+
+<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
+<pre>
+</pre>
+</div>
+<?php } ?>
+
+<h3 class="section_title">Exercise 8: Butch Cassidy and the Environment Diagram</h3>
 
 <p>Draw the environment diagram for the following code:</p>
 
