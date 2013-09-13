@@ -307,6 +307,8 @@ the product rule actually holds as well in some form: <tt> &Delta;f(n)g(n) =
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
 <button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
+<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
+<pre>
 def make_deriv(f):
     def deriv(n):
         return f(n+1) - f(n)
@@ -318,9 +320,6 @@ def make_product(f,g):
     def product(n):
         return deriv_f(n)*g(n+1) + deriv_g(n)*f(n)
     return product
-
-<div id="toggleText<?php echo $q_num++; ?>" style="display: none">
-<pre>
 </pre>
 </div>
 <?php } ?>
