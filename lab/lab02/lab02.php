@@ -194,7 +194,6 @@ _______________
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
 <button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
-
 <div id="toggleText<?php echo $q_num++; ?>" style="display: none">
 <pre>
 Q1: False
@@ -845,17 +844,6 @@ sub5(6)
 sub5(10) == add3(2)
 </pre>
 
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script>
-  <?php for ($i = 0; $i < $q_num; $i++) { ?>
-    $("#toggleButton<?php echo $i; ?>").click(function () {
-      $("#toggleText<?php echo $i; ?>").toggle();
-  });
-  <?php } ?>
-</script>
-<?php } ?>
-
 <h3 class="section_title">I Heard You Liked Functions So I Put Functions In Your Functions </h3>
 <p>Define a function <span class='code'>cycle</span> which takes in
 three functions as arguments: <span class='code'>f1</span>, <span
@@ -912,7 +900,7 @@ def cycle(f1, f2, f3):
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
 <button id="toggleButton<?php echo $q_num; ?>">Toggle Solution</button>
 <div id="toggleText<?php echo $q_num++; ?>" style="display: none">
-<pre>
+<pre class="codemargin">
 def cycle(f1, f2, f3):
   def ret_fn(n):
     def ret(x):
@@ -932,6 +920,16 @@ def cycle(f1, f2, f3):
 </div>
 <?php } ?>
 
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+  <?php for ($i = 0; $i < $q_num; $i++) { ?>
+    $("#toggleButton<?php echo $i; ?>").click(function () {
+      $("#toggleText<?php echo $i; ?>").toggle();
+  });
+  <?php } ?>
+</script>
+<?php } ?>
 
 </body>
 </html>
