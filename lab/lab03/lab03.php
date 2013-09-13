@@ -335,5 +335,16 @@ def blondie(f):
 tuco = blondie(lambda x: x * x)
 angel_eyes = tuco(2)
 </pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+  <?php for ($i = 0; $i < $q_num; $i++) { ?>
+    $("#toggleButton<?php echo $i; ?>").click(function () {
+      $("#toggleText<?php echo $i; ?>").toggle();
+  });
+  <?php } ?>
+</script>
+<?php } ?>
   </body>
 </html>
