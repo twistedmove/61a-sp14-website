@@ -3,9 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
-    <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, Berkeley, EECS" /> 
-    <meta name="author" content ="Amir Kamil, Hamilton Nguyen, Joy Jeng, Keegan Mann, Stephen Martinis, Albert Wu,
-                                  Julia Oh, Robert Huang, Mark Miyashita, Sharad Vikram, Soumya Basu, Richard Hwang" /> 
+    <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
+                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
+                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("https://inst.eecs.berkeley.edu/~cs61a/su12/lab/lab_style.css");</style> 
 
@@ -38,7 +39,7 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("02/12/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("09/19/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
@@ -47,7 +48,7 @@
   <body style="font-family: Georgia,serif;"> 
 
 <h1>CS61A Lab 3: Recursion and Midterm Review</h1>
-<h3>Week 4, Spring 2013</h3>
+<h3>Week 4, Fall 2013</h3>
 
 <h3 class="section_title">Warm Up: Recursion Basics</h3>
 <p> A recursive function is a function that calls itself in its body, either
