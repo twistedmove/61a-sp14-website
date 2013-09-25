@@ -74,6 +74,16 @@ def pingpong(n):
     0
     >>> pingpong(30)
     6
+    >>> pingpong(68)
+    2
+    >>> pingpong(69)
+    1
+    >>> pingpong(70)
+    0
+    >>> pingpong(71)
+    1
+    >>> pingpong(72)
+    0
     >>> pingpong(100)
     2
     """
