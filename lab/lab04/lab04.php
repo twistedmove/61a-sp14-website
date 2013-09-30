@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">@import url("https://inst.eecs.berkeley.edu/~cs61a/su12/lab/lab_style.css");</style>
 
-    <title>CS 61A Spring 2013: Lab 6</title>
+    <title>CS 61A Spring 2013: Lab 4</title>
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to
@@ -51,7 +51,7 @@
 <p>We've provided a starter file with skeleton code for the exercises in the lab. You can get it by typing this into your terminal:</p>
 
 <pre class='codemargin'>
-cp ~cs61a/lib/lab/lab06/shakespeare.py .
+cp ~cs61a/lib/shakespeare.py .
 </pre>
 
 <p>Don't forget the dot at the end!</p>
