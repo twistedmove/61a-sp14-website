@@ -45,7 +45,7 @@
 
   <body style="font-family: Georgia,serif;">
 
-<h1>CS61A Lab 6: Lists, Dictionaries, and Nonlocal</h1>
+<h1>CS61A Lab 4: Lists, Dictionaries, and Nonlocal</h1>
 <h3>September 23-24, 2013</h3>
 
 <p>We've provided a starter file with skeleton code for the exercises in the lab. You can get it by typing this into your terminal:</p>
