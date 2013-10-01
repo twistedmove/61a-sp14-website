@@ -45,16 +45,18 @@
 
   <body style="font-family: Georgia,serif;">
 
-<h1>CS61A Lab 4: Lists, Dictionaries, and Nonlocal</h1>
+<h1>CS61A Lab 4: Lists and Dictionaries</h1>
 <h3>September 23-24, 2013</h3>
 
-<p>We've provided a starter file with skeleton code for the exercises in the lab. You can get it by typing this into your terminal:</p>
+<p>We've provided a starter file with skeleton code for the exercises in the lab. You can get it through the following link:</p>
 
+<a href="./shakespeare.py">shakespeare.py</a>
+<!--
 <pre class='codemargin'>
 cp ~cs61a/lib/shakespeare.py .
 </pre>
 
-<p>Don't forget the dot at the end!</p>
+<p>Don't forget the dot at the end!</p>-->
 
 <h3 class="section_title">List Comprehensions</h3>
 <p>
@@ -304,7 +306,7 @@ Let's make the following assignments: </p>
 ' Yes , why blame him , as is as I shall find a case , That plays at the public weal or the ghost .'
 </pre>
 
-<h3 class="section_title">Nonlocal</h3>
+<!--<h3 class="section_title">Nonlocal</h3>
 <p>Sometimes, we want to update a variable that is in a parent frame. However, that would normally create a new variable in our local frame, leaving the parent one untouched. Luckily, Python includes the nonlocal keyword, which tells Python that the designated variable exists in some parent frame and that we want to assign to that variable. Python will then use the previously bound variable in the closest parent frame that isn't the global frame. Predict the result of evaluating the following calls in the interpreter. Then try them out yourself!</p>
 
 <pre class="codemargin">
@@ -407,6 +409,8 @@ def make_fib():
       </p>
     </div>
     <?php } ?>
+
+  -->
 
 <!--
 

@@ -1,5 +1,5 @@
 """
-Code for CS61A lab 6, Fall 2013. 
+Code for CS61A lab 4, Fall 2013. 
 """
 
 def build_successors_table(tokens):
@@ -30,7 +30,7 @@ def construct_sent(word, table):
 
     return result + word
 
-def shakespeare_tokens(path = 'shakespeare.txt', url = 'http://inst.eecs.berkeley.edu/~cs61a/fa11/shakespeare.txt'):
+def shakespeare_tokens(path = 'shakespeare.txt', url = 'http://goo.gl/SztLfX'):
     """Return the words of Shakespeare's plays as a list"""
     import os
     from urllib.request import urlopen
