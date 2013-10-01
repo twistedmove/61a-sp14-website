@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 4</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-4">
+<h1 class="title">61A Homework 4</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 10/8</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw4.py">hw4.py</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> Sections <a class="reference external" href="http://composingprograms.com/pages/21-introduction.html">2.1</a>, <a class="reference external" href="http://composingprograms.com/pages/22-data-abstraction.html">2.2</a>, and <a class="reference external" href="http://composingprograms.com/pages/23-sequences.html">2.3</a> of the online textbook.</p>
+<p><strong>Acknowledgements.</strong> This interval arithmetic example is based on Structure
+and Interpretation of Computer Programs, <a class="reference external" href="http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-14.html#%_sec_2.1.4">Section 2.1.4</a>.</p>
+<p><strong>Introduction.</strong> Alyssa P. Hacker is designing a system to help people solve
+engineering problems. One feature she wants to provide in her system is the
+ability to manipulate inexact quantities (such as measured parameters of
+physical devices) with known precision, so that when computations are done with
+such approximate quantities the results will be numbers of known precision.</p>
+<p>Alyssa's idea is to implement interval arithmetic as a set of arithmetic
+operations for combining &quot;intervals&quot; (objects that represent the range of
+possible values of an inexact quantity). The result of adding, subracting,
+multiplying, or dividing two intervals is itself an interval, representing the
+range of the result.</p>
+<p>Alyssa postulates the existence of an abstract object called an &quot;interval&quot; that
+has two endpoints: a lower bound and an upper bound. She also presumes that,
+given the endpoints of an interval, she can construct the interval using the
+data constructor interval.   Using the constructor and selectors, she
+defines the following operations:</p>
+<pre class="literal-block">
+def str_interval(x):
+    &quot;&quot;&quot;Return a string representation of interval x.
+
+    &gt;&gt;&gt; str_interval(interval(-1, 2))
+    '-1 to 2'
+    &quot;&quot;&quot;
+    return '{0} to {1}'.format(lower_bound(x), upper_bound(x))
+
+def add_interval(x, y):
+    &quot;&quot;&quot;Return an interval that contains the sum of any value in interval x and
+    any value in interval y.
+
+    &gt;&gt;&gt; str_interval(add_interval(interval(-1, 2), interval(4, 8)))
+    '3 to 10'
+    &quot;&quot;&quot;
+    lower = lower_bound(x) + lower_bound(y)
+    upper = upper_bound(x) + upper_bound(y)
+    return interval(lower, upper)
+
+def mul_interval(x, y):
+    &quot;&quot;&quot;Return the interval that contains the product of any value in x and any
+    value in y.
+
+    &gt;&gt;&gt; str_interval(mul_interval(interval(-1, 2), interval(4, 8)))
+    '-8 to 16'
+    &quot;&quot;&quot;
+    p1 = lower_bound(x) * lower_bound(y)
+    p2 = lower_bound(x) * upper_bound(y)
+    p3 = upper_bound(x) * lower_bound(y)
+    p4 = upper_bound(x) * upper_bound(y)
+    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))
+</pre>
+<p><strong>Q1.</strong> Alyssa's program is incomplete because she has not specified the
+implementation of the interval abstraction. Define the constructor and
+selectors in terms of two-element tuples:</p>
+<pre class="literal-block">
+def interval(a, b):
+    &quot;&quot;&quot;Construct an interval from a to b.&quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+
+def lower_bound(x):
+    &quot;&quot;&quot;Return the lower bound of interval x.&quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+
+def upper_bound(x):
+    &quot;&quot;&quot;Return the upper bound of interval x.&quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q2.</strong> Alyssa implements division below, by multiplying by the reciprocal of
+<tt class="docutils literal">y</tt>. Ben Bitdiddle, an expert systems programmer, looks over Alyssa's
+shoulder and comments that it is not clear what it means to divide by an
+interval that spans zero. Add an assert statement to Alyssa's code to ensure
+that no such interval is used as a divisor:</p>
+<pre class="literal-block">
+def div_interval(x, y):
+    &quot;&quot;&quot;Return the interval that contains the quotient of any value in x divided
+    by any value in y.
+
+    Division is implemented as the multiplication of x by the reciprocal of y.
+
+    &gt;&gt;&gt; str_interval(div_interval(interval(-1, 2), interval(4, 8)))
+    '-0.25 to 0.5'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+    reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
+    return mul_interval(x, reciprocal_y)
+</pre>
+<p><strong>Q3.</strong> Using reasoning analogous to Alyssa's, define a subtraction function
+for intervals:</p>
+<pre class="literal-block">
+def sub_interval(x, y):
+    &quot;&quot;&quot;Return the interval that contains the difference between any value in x
+    and any value in y.
+
+    &gt;&gt;&gt; str_interval(sub_interval(interval(-1, 2), interval(4, 8)))
+    '-9 to -2'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q4.</strong> In passing, Ben also cryptically comments, &quot;By testing the signs of the
+endpoints of the intervals, it is possible to break <tt class="docutils literal">mul_interval</tt> into nine
+cases, only one of which requires more than two multiplications.&quot;  Write a fast
+multiplication function using Ben's suggestion:</p>
+<pre class="literal-block">
+def mul_interval_fast(x, y):
+    &quot;&quot;&quot;Return the interval that contains the product of any value in x and any
+    value in y, using as few multiplications as possible.
+
+    &gt;&gt;&gt; str_interval(mul_interval_fast(interval(-1, 2), interval(4, 8)))
+    '-8 to 16'
+    &gt;&gt;&gt; str_interval(mul_interval_fast(interval(-2, -1), interval(4, 8)))
+    '-16 to -4'
+    &gt;&gt;&gt; str_interval(mul_interval_fast(interval(-1, 3), interval(-4, 8)))
+    '-12 to 24'
+    &gt;&gt;&gt; str_interval(mul_interval_fast(interval(-1, 2), interval(-8, 4)))
+    '-16 to 8'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q5.</strong> After debugging her program, Alyssa shows it to a potential user, who
+complains that her program solves the wrong problem. He wants a program that can
+deal with numbers represented as a center value and an additive tolerance; for
+example, he wants to work with intervals such as <tt class="docutils literal">3.5 +/- 0.15</tt> rather than
+<tt class="docutils literal">3.35</tt> to <tt class="docutils literal">3.65</tt>. Alyssa returns to her desk and fixes this problem by
+supplying an alternate constructor and alternate selectors in terms of the
+existing ones:</p>
+<pre class="literal-block">
+def make_center_width(c, w):
+    &quot;&quot;&quot;Construct an interval from center and width.&quot;&quot;&quot;
+    return interval(c - w, c + w)
+
+def center(x):
+    &quot;&quot;&quot;Return the center of interval x.&quot;&quot;&quot;
+    return (upper_bound(x) + lower_bound(x)) / 2
+
+def width(x):
+    &quot;&quot;&quot;Return the width of interval x.&quot;&quot;&quot;
+    return (upper_bound(x) - lower_bound(x)) / 2
+</pre>
+<p>Unfortunately, most of Alyssa's users are engineers. Real engineering
+situations usually involve measurements with only a small uncertainty, measured
+as the ratio of the width of the interval to the midpoint of the interval.
+Engineers usually specify percentage tolerances on the parameters of devices.</p>
+<p>Define a constructor make_center_percent that takes a center and a percentage
+tolerance and produces the desired interval. You must also define a selector
+percent that produces the percentage tolerance for a given interval. The center
+selector is the same as the one shown above:</p>
+<pre class="literal-block">
+def make_center_percent(c, p):
+    &quot;&quot;&quot;Construct an interval from center and percentage tolerance.
+
+    &gt;&gt;&gt; str_interval(make_center_percent(2, 50))
+    '1.0 to 3.0'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+
+def percent(x):
+    &quot;&quot;&quot;Return the percentage tolerance of interval x.
+
+    &gt;&gt;&gt; percent(interval(1, 3))
+    50.0
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q6.</strong> After considerable work, Alyssa P. Hacker delivers her finished system.
+Several years later, after she has forgotten all about it, she gets a frenzied
+call from an irate user, Lem E. Tweakit. It seems that Lem has noticed that the
+formula for parallel resistors can be written in two algebraically equivalent
+ways:</p>
+<p><tt class="docutils literal">par1(r1, r2) = (r1 * r2) / (r1 + r2)</tt>, or</p>
+<p><tt class="docutils literal">par2(r1, r2) = 1 / (1/r1 + 1/r2)</tt></p>
+<p>He has written the following two programs, each of which computes the
+parallel_resistors formula differently:</p>
+<pre class="literal-block">
+def par1(r1, r2):
+    return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
+
+def par2(r1, r2):
+    one = interval(1, 1)
+    rep_r1 = div_interval(one, r1)
+    rep_r2 = div_interval(one, r2)
+    return div_interval(one, add_interval(rep_r1, rep_r2))
+</pre>
+<p>Lem complains that Alyssa's program gives different answers for the two ways
+of computing. This is a serious complaint.</p>
+<p>Demonstrate that Lem is right. Investigate the behavior of the system on a
+variety of arithmetic expressions. Make some intervals <tt class="docutils literal">a</tt> and <tt class="docutils literal">b</tt>, and
+show that <tt class="docutils literal">par1</tt> and <tt class="docutils literal">par2</tt> can give different results. You will get the
+most insight by using intervals whose width is a small percentage of the center
+value:</p>
+<pre class="literal-block">
+# These two intervals give different results for parallel resistors:
+&quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><em>Note</em>: No tests will be run on your solution to this problem.</p>
+<p><strong>Q7.</strong> Eva Lu Ator, another user, has also noticed the different intervals
+computed by different but algebraically equivalent expressions. She says that
+the problem is multiple references to the same interval.</p>
+<p>The Multiple References Problem: a formula to compute with intervals using
+Alyssa's system will produce tighter error bounds if it can be written in such a
+form that no variable that represents an uncertain number is repeated.</p>
+<p>Thus, she says, <tt class="docutils literal">par2</tt> is a better program for parallel resistances than
+<tt class="docutils literal">par1</tt>. Is she right? Why? Write a function that returns an explanation
+string:</p>
+<pre class="literal-block">
+def multiple_references_explanation():
+  return &quot;&quot;&quot;The mulitple reference problem...&quot;&quot;&quot;
+</pre>
+<p><em>Note</em>: No tests will be run on your solution to this problem.</p>
+<p><strong>Q8.</strong> Write a function <tt class="docutils literal">quadratic</tt> that returns the interval of all values
+<tt class="docutils literal">f(t)</tt> such that <tt class="docutils literal">t</tt> is in the argument interval <tt class="docutils literal">x</tt> and <tt class="docutils literal">f(t)</tt> is a
+<a class="reference external" href="http://en.wikipedia.org/wiki/Quadratic_function">quadratic function</a>:</p>
+<pre class="literal-block">
+``f(t) = a * t * t + b * t + c``
+</pre>
+<p>Make sure that your implementation returns the smallest such interval, one that
+does not suffer from the multiple references problem.</p>
+<p><em>Hint</em>: the derivative <tt class="docutils literal"><span class="pre">f'(t)</span> = 2 * a * t + b</tt>, and so the extreme point of
+the quadratic is <tt class="docutils literal"><span class="pre">-b/(2*a)</span></tt>:</p>
+<pre class="literal-block">
+def quadratic(x, a, b, c):
+    &quot;&quot;&quot;Return the interval that is the range of the quadratic defined by
+    coefficients a, b, and c, for domain interval x.
+
+    &gt;&gt;&gt; str_interval(quadratic(interval(0, 2), -2, 3, -1))
+    '-3 to 0.125'
+    &gt;&gt;&gt; str_interval(quadratic(interval(1, 3), 2, -3, 1))
+    '0 to 10'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q9.</strong> Write three similar functions, each of which takes as an argument a
+sequence of intervals and returns the sum of the square of each interval that
+does not contain <tt class="docutils literal">0</tt>.</p>
+<ol class="arabic simple">
+<li>Using a <tt class="docutils literal">for</tt> statement containing an <tt class="docutils literal">if</tt> statement.</li>
+<li>Using <tt class="docutils literal">map</tt> and <tt class="docutils literal">filter</tt> and <tt class="docutils literal">reduce</tt>.</li>
+<li>Using generator expression and <tt class="docutils literal">reduce</tt>.</li>
+</ol>
+<p><em>Hint</em>: Square is a special case of quadratic, but you can also use the simpler
+<tt class="docutils literal">square_interval</tt> function below for intervals that do not contain 0:</p>
+<pre class="literal-block">
+def non_zero(x):
+    &quot;&quot;&quot;Return whether x contains 0.&quot;&quot;&quot;
+    return lower_bound(x) &gt; 0 or upper_bound(x) &lt; 0
+
+def square_interval(x):
+    &quot;&quot;&quot;Return the interval that contains all squares of values in x, where x
+    does not contain 0.
+    &quot;&quot;&quot;
+    assert non_zero(x), 'square_interval is incorrect for x containing 0'
+    return mul_interval(x, x)
+
+# The first two of these intervals contain 0, but the third does not.
+seq = (interval(-1, 2), make_center_width(-1, 2), make_center_percent(-1, 50))
+
+zero = interval(0, 0)
+
+def sum_nonzero_with_for(seq):
+    &quot;&quot;&quot;Returns an interval that is the sum of the squares of the non-zero
+    intervals in seq, using a for statement.
+
+    &gt;&gt;&gt; str_interval(sum_nonzero_with_for(seq))
+    '0.25 to 2.25'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+
+from functools import reduce
+def sum_nonzero_with_map_filter_reduce(seq):
+    &quot;&quot;&quot;Returns an interval that is the sum of the squares of the non-zero
+    intervals in seq, using using map, filter, and reduce.
+
+    &gt;&gt;&gt; str_interval(sum_nonzero_with_map_filter_reduce(seq))
+    '0.25 to 2.25'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+
+def sum_nonzero_with_generator_reduce(seq):
+    &quot;&quot;&quot;Returns an interval that is the sum of the squares of the non-zero
+    intervals in seq, using using reduce and a generator expression.
+
+    &gt;&gt;&gt; str_interval(sum_nonzero_with_generator_reduce(seq))
+    '0.25 to 2.25'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q10.</strong> (Optional extra for experts) Write a function polynomial that takes an
+interval <tt class="docutils literal">x</tt> and a tuple of coefficients <tt class="docutils literal">c</tt>, and returns the interval
+containing all values of <tt class="docutils literal">f(t)</tt> for <tt class="docutils literal">t</tt> in interval <tt class="docutils literal">x</tt>, where:</p>
+<p><tt class="docutils literal">f(t) = <span class="pre">c[k-1]</span> * pow(t, <span class="pre">k-1)</span> + <span class="pre">c[k-2]</span> * pow(t, <span class="pre">k-2)</span> + ... + c[0] * 1</tt></p>
+<p>Like quadratic, your polynomial function should return the smallest such
+interval, one that does not suffer from the multiple references problem.</p>
+<p><em>Hint</em>: You can approximate this result. Try using Newton's method:</p>
+<pre class="literal-block">
+def polynomial(x, c):
+    &quot;&quot;&quot;Return the interval that is the range of the polynomial defined by
+    coefficients c, for domain interval x.
+
+    &gt;&gt;&gt; str_interval(polynomial(interval(0, 2), (-1, 3, -2)))
+    '-3 to 0.125'
+    &gt;&gt;&gt; str_interval(polynomial(interval(1, 3), (1, -3, 2)))
+    '0 to 10'
+    &gt;&gt;&gt; str_interval(polynomial(interval(0.5, 2.25), (10, 24, -6, -8, 3)))
+    '18.0 to 23.0'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+</div>
+</body>
+</html>
