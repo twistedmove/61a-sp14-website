@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">@import url("https://inst.eecs.berkeley.edu/~cs61a/su12/lab/lab_style.css");</style>
 
-    <title>CS 61A Spring 2013: Lab 4</title>
+    <title>CS 61A Fall 2013: Lab 4</title>
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to
@@ -45,8 +45,8 @@
 
   <body style="font-family: Georgia,serif;">
 
-<h1>CS61A Lab 4: Lists and Dictionaries</h1>
-<h3>September 23-24, 2013</h3>
+<h1>CS 61A Lab 4: Lists and Dictionaries</h1>
+<h3>September 30, 2013</h3>
 
 <p>We've provided a starter file with skeleton code for the exercises in the lab. You can get it through the following link:</p>
 
