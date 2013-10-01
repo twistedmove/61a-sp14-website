@@ -36,7 +36,7 @@ def make_tweet(text, time, lat, lon):
     return {'text': text, 'time': time, 'latitude': lat, 'longitude': lon}
 
 def tweet_text(tweet):
-    """Return a list of the words in the text of a tweet."""
+    """Return a string, the words in the text of a tweet."""
     "*** YOUR CODE HERE ***"
 
 def tweet_time(tweet):
@@ -64,7 +64,7 @@ def make_tweet_fn(text, time, lat, lon):
     # Please don't call make_tweet in your solution
 
 def tweet_text_fn(tweet):
-    """Return a list of the words in the text of a functional tweet."""
+    """Return a string, the words in the text of a functional tweet."""
     return tweet('text')
 
 def tweet_time_fn(tweet):
@@ -352,4 +352,3 @@ def run(*args):
     for name, execute in args.__dict__.items():
         if name != 'text' and execute:
             globals()[name](' '.join(args.text))
-

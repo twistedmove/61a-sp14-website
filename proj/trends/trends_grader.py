@@ -12,7 +12,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 from autograder import test, run_tests, check_func, check_doctest, test_eval
 
@@ -258,11 +258,13 @@ def problem7():
         if check_func(trends.group_tweets_by_state, tests, comp=comp_group):
             return True
 
-    test_groups()
+    if test_groups():
+        return True
     print("Testing abstraction barriers.")
     try:
         trends.swap_tweet_representation()
-        test_groups()
+        if test_groups():
+            return True
     finally:
         trends.swap_tweet_representation()
 

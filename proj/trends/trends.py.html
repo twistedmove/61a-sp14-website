@@ -46,7 +46,7 @@
     </span><span style="color: blue; font-weight: bold">return </span><span style="font-weight: bold">{</span><span style="color: red">'text'</span><span style="font-weight: bold">: </span>text<span style="font-weight: bold">, </span><span style="color: red">'time'</span><span style="font-weight: bold">: </span>time<span style="font-weight: bold">, </span><span style="color: red">'latitude'</span><span style="font-weight: bold">: </span>lat<span style="font-weight: bold">, </span><span style="color: red">'longitude'</span><span style="font-weight: bold">: </span>lon<span style="font-weight: bold">}
 
 </span><span style="color: blue; font-weight: bold">def </span>tweet_text<span style="font-weight: bold">(</span>tweet<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Return a list of the words in the text of a tweet."""
+    </span><span style="color: darkred">"""Return a string, the words in the text of a tweet."""
     </span><span style="color: red">"*** YOUR CODE HERE ***"
 
 </span><span style="color: blue; font-weight: bold">def </span>tweet_time<span style="font-weight: bold">(</span>tweet<span style="font-weight: bold">):
@@ -74,7 +74,7 @@
     </span><span style="color: green; font-style: italic"># Please don't call make_tweet in your solution
 
 </span><span style="color: blue; font-weight: bold">def </span>tweet_text_fn<span style="font-weight: bold">(</span>tweet<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Return a list of the words in the text of a functional tweet."""
+    </span><span style="color: darkred">"""Return a string, the words in the text of a functional tweet."""
     </span><span style="color: blue; font-weight: bold">return </span>tweet<span style="font-weight: bold">(</span><span style="color: red">'text'</span><span style="font-weight: bold">)
 
 </span><span style="color: blue; font-weight: bold">def </span>tweet_time_fn<span style="font-weight: bold">(</span>tweet<span style="font-weight: bold">):
@@ -362,7 +362,6 @@
     for </span>name<span style="font-weight: bold">, </span>execute <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">.</span>__dict__<span style="font-weight: bold">.</span>items<span style="font-weight: bold">():
         </span><span style="color: blue; font-weight: bold">if </span>name <span style="font-weight: bold">!= </span><span style="color: red">'text' </span><span style="color: blue; font-weight: bold">and </span>execute<span style="font-weight: bold">:
             </span>globals<span style="font-weight: bold">()[</span>name<span style="font-weight: bold">](</span><span style="color: red">' '</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>args<span style="font-weight: bold">.</span>text<span style="font-weight: bold">))
-
 </span>
 </pre>
 </body>
