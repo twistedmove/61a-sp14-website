@@ -252,7 +252,7 @@ def construct_sent(word, table):
 (warning: do not try to print the return result of this function):</p>
 
 <pre class="codemargin">
-def shakespeare_tokens(path = 'shakespeare.txt', url = 'http://inst.eecs.berkeley.edu/~cs61a/fa11/shakespeare.txt'):
+def shakespeare_tokens(path = 'shakespeare.txt', url = 'http://goo.gl/SztLfX'):
     """Return the words of Shakespeare's plays as a list"""
     import os
     from urllib.request import urlopen
