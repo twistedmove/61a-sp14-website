@@ -122,7 +122,7 @@ def check_for_updates(index, filenames, version):
             path = os.path.join(index, filename)
             data = timed(urllib.request.urlopen, 1, args=(path,))
             remotes[filename] = data.read().decode('utf-8')
-    except urllib.error.URLError:
+    except (urllib.error.URLError, urllib.error.HTTPError):
         print("Couldn't check remote autograder")
         return
     except TimeoutError:
