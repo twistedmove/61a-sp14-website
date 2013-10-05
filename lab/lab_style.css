@@ -1,4 +1,4 @@
-h1, h2, h3, h4 {
+h1, h2 {
   text-align: center;
 }
 
@@ -20,11 +20,11 @@ h4.section_title {
 }
 
 a:hover {
-    color: #59a3d7;
+  color: #59a3d7;
 }
 
 h1 a:link{
-    text-decoration: none;
+  text-decoration: none;
 }
 h1 a:visited{
     text-decoration: none;
@@ -38,19 +38,17 @@ h1 a:hover{
     color: #59a3d7;
 }
 
-ul {
-  list-style: none;
-}
-
 ul h3 {
   text-align: left;
 }
 
+pre code,
 .code,
 .codemargin {
   font-family: Courier;
 }
 
+pre,
 .codemargin {
   margin-left: 2em;
 }
