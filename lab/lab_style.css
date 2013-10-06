@@ -57,11 +57,13 @@ pre,
   margin-left: 2em;
 }
 
-img.figure {
+img {
   display: block;
   margin-left: auto;
   margin-right: auto;
   border: 2px solid black;
+  text-align:center;
+  max-width:50%;
 }
 
 p.figure_caption {
