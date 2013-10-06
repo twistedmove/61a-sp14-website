@@ -8,7 +8,8 @@
                                   Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
                                   Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
-    <style type="text/css">@import url("https://inst.eecs.berkeley.edu/~cs61a/fa13/lab/lab_style.css");</style> 
+    <style type="text/css">@import url("../lab_style.css");</style>
+    <style type="text/css">@import url("../61a_style.css");</style>
 
     <title>CS 61A Fall 2013: Lab 0</title> 
 
