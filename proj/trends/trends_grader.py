@@ -12,7 +12,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1.3'
+__version__ = '1.4'
 
 from autograder import test, run_tests, check_func, check_doctest, test_eval
 
@@ -105,6 +105,8 @@ def problem2():
 
 @test
 def problem3():
+    if check_doctest('make_sentiment', trends):
+        return True
     if check_doctest('get_word_sentiment', trends):
         return True
 
@@ -126,6 +128,9 @@ def problem3():
 
 @test
 def problem4():
+    if check_doctest('analyze_tweet_sentiment', trends):
+        return True
+
     # Change the representation of sentiments to validate abstraction barrier.
     original_make_sentiment = trends.make_sentiment
     original_sentiment_value = trends.sentiment_value
@@ -246,6 +251,9 @@ def problem6():
 
 @test
 def problem7():
+    if check_doctest('group_tweets_by_state', trends):
+        return True
+
     def test_groups():
         tweets = pirate_tweets(trends.make_tweet)
         expected = {
