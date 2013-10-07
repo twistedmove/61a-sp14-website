@@ -102,7 +102,7 @@ def extract_words(text):
     ['cat', 'on', 'my', 'keyboard']
     """
     "*** YOUR CODE HERE ***"
-    return text.split()  # Replace this line
+    return text.split()  # You may wish to change this line.
 
 def make_sentiment(value):
     """Return a sentiment, which represents a value that may not exist.
