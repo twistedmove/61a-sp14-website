@@ -23,7 +23,7 @@ def test_all(project_name, tests=TESTS):
     for test in tests:
         underline('Test {0}'.format(test.name))
         try:
-            failure = test.fn()
+            failure = test.fn(None)
         except Exception as inst:
             traceback.print_exc()
             failure = True
@@ -54,13 +54,19 @@ def timed(func, timeout, args=(), kwargs={}):
             Thread.__init__(self)
             self.daemon = True
             self.result = None
+            self.error = None
         def run(self):
-            self.result = func(*args, **kwargs)
+            try:
+                self.result = func(*args, **kwargs)
+            except Exception as e:
+                self.error = e
     submission = ReturningThread()
     submission.start()
     submission.join(timeout)
     if submission.is_alive():
         raise TimeoutError("Evaluation timed out!")
+    if submission.error is not None:
+        raise submission.error
     return submission.result
 
 def check_func(func, tests,
