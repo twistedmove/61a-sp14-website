@@ -33,7 +33,7 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span><span style="color: blue; font-weight: bold">for </span>test <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
         </span>underline<span style="font-weight: bold">(</span><span style="color: red">'Test {0}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>test<span style="font-weight: bold">.</span>name<span style="font-weight: bold">))
         </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-            </span>failure <span style="font-weight: bold">= </span>test<span style="font-weight: bold">.</span>fn<span style="font-weight: bold">()
+            </span>failure <span style="font-weight: bold">= </span>test<span style="font-weight: bold">.</span>fn<span style="font-weight: bold">(</span><span style="color: blue">None</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">except </span>Exception as inst<span style="font-weight: bold">:
             </span>traceback<span style="font-weight: bold">.</span>print_exc<span style="font-weight: bold">()
             </span>failure <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
@@ -64,14 +64,20 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
             </span>Thread<span style="font-weight: bold">.</span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>daemon <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span><span style="color: blue">None
+            self</span><span style="font-weight: bold">.</span>error <span style="font-weight: bold">= </span><span style="color: blue">None
         </span><span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-            </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">)
-    </span>submission <span style="font-weight: bold">= </span>ReturningThread<span style="font-weight: bold">()
+            </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
+                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>error <span style="font-weight: bold">= </span>e
+    submission <span style="font-weight: bold">= </span>ReturningThread<span style="font-weight: bold">()
     </span>submission<span style="font-weight: bold">.</span>start<span style="font-weight: bold">()
     </span>submission<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>is_alive<span style="font-weight: bold">():
         </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span><span style="color: red">"Evaluation timed out!"</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
+    </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>error <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">raise </span>submission<span style="font-weight: bold">.</span>error
+    <span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
 
 <span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
                </span>comp <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">: </span>x <span style="font-weight: bold">== </span>y<span style="font-weight: bold">,

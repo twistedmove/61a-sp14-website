@@ -185,6 +185,149 @@ world'.split() == ['hello', 'world']</code>.</p>
 
   </div>
 <?php } ?>
+<p><strong>Problem 3</strong>: Implement a function <code>deep_len</code> that takes in a
+(possibly) nested tuple and calculates its length. For example, the
+tuple <code>deep_len((1, (2, 3), 4))</code> would evaluate to 4, as opposed to 3
+(as the built-in <code>len</code> would report). The tuples can have an arbitrary
+amount of nesting.</p>
+
+<p><em>Hint</em>: the built-in <code>type</code> function can tell you the type of an
+object. For example,</p>
+
+<pre><code>&gt;&gt;&gt; x = (1, 2, 3)
+&gt;&gt;&gt; type(x) == tuple
+True
+</code></pre>
+
+<p>You can choose to use iteration or not, but either way, you will most
+likely use some sort of recursion.</p>
+
+<pre><code>def deep_len(tup):
+    """Calculates the length of a possibly nested tuple.
+
+    &gt;&gt;&gt; deep_len((1, 2, 3, 4))  # normal tuple
+    4
+    &gt;&gt;&gt; deep_len((1, (2, 3), 4))
+    4
+    &gt;&gt;&gt; deep_len((1, (2, (3, (4,)))))
+    4
+    &gt;&gt;&gt; deep_len((1, (), 2))  # empty nested tuples don't count
+    2
+    """
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton2">Toggle Solution</button>
+  <div id="toggleText2" style="display: none">
+    <pre><code># iterative solution
+def deep_len(tup):
+    result = 0
+    for item in tup:
+        if type(tup[0]) == tuple:
+            result += deep_len(tup[0])
+        else:
+            result += 1
+    return result
+
+# recursive solution
+def deep_len(tup):
+    if not tup:
+        return 0
+    elif type(tup[0]) == tuple:
+        return deep_len(tup[0]) + deep_len(tup[1:])
+    else:
+        return 1 + dep_len(tup[1:])
+</code></pre>
+
+  </div>
+<?php } ?>
+<p><strong>Problem 4</strong>: Implement a function <code>merge</code>, which takes two sorted
+tuples and returns a tuple that contains all elements in both tuples
+(including duplicates) in sorted order. The sequences do not have to
+have the same length.</p>
+
+<p><em>Hint</em>: Try doing this recursively.</p>
+
+<pre><code>def merge(seq1, seq2):
+    """Merges all elements (including duplicates) of seq1 and seq2
+    in sorted order.
+
+    &gt;&gt;&gt; merge((1, 3, 5), (2, 4))
+    (1, 2, 3, 4, 5)
+    &gt;&gt;&gt; merge((), (1, 2, 3))
+    (1, 2, 3)
+    """
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
+    <pre><code>def merge(seq1, seq2):
+    if not seq1 or not seq2:
+        return seq1 + seq2
+    elif seq1[0] &lt; seq2[0]:
+        return (seq1[0],) + merge(seq1[1:], seq2)
+    else:
+        return (seq2[0],) + merge(seq1, seq2[1:])
+</code></pre>
+
+  </div>
+<?php } ?>
+<p><strong>Problem 5</strong>: <a href="http://en.wikipedia.org/wiki/Merge_sort">Mergesort</a> is
+a type of sorting algorithm. It follows a naturally recursive
+procedure:</p>
+
+<ul>
+<li>Break the input tuple into equally-sized halves</li>
+<li>Recursively sort both halves</li>
+<li>Merge the sorted halves.</li>
+</ul>
+
+<p>Using your <code>merge</code> function from the previous question, implement
+<code>mergesort</code>.</p>
+
+<p><em>Challenge</em>: Implement <code>mergesort</code> iteratively, without using
+recursion.</p>
+
+<pre><code>def mergesort(seq):
+    """Mergesort algorithm.
+
+    &gt;&gt;&gt; mergesort((4, 2, 5, 2, 1))
+    (1, 2, 2, 4, 5)
+    &gt;&gt;&gt; mergesort(())   # sorting an empty list
+    ()
+    &gt;&gt;&gt; mergesort((1,))   # sorting a one-element list
+    (1,)
+    """
+    "*** YOUR CODE HERE***"
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
+    <pre><code># recursive solution
+def mergesort(seq):
+    if len(seq) &lt; 2:
+        return seq
+    else:
+        mid = len(seq) // 2
+        return merge(mergesort(seq[:mid]), mergesort(seq[mid:]))
+
+# iterative solution
+def mergesort(seq):
+    if not seq:
+      return ()
+    queue = [(elem,) for elem in seq]
+    while len(queue) &gt; 1:
+        first, second = queue.pop(0), queue.pop(0)
+        queue.append(merge(first, second))
+    return queue[0]
+</code></pre>
+
+  </div>
+<?php } ?>
 <h3>Map, filter, and reduce</h3>
 
 <p>Python has many powerful tools for sequence processing. Three of the
@@ -220,7 +363,7 @@ examples:</p>
 10
 </code></pre>
 
-<p><strong>Problem 3</strong>: as an exercise, implement three functions <code>map</code>,
+<p><strong>Problem 6</strong>: as an exercise, implement three functions <code>map</code>,
 <code>filter</code>, and <code>reduce</code> to behave like their built-in counterparts. For
 <code>map</code> and <code>filter</code>, you can return the results as Python lists.</p>
 
@@ -254,8 +397,8 @@ def reduce(combiner, seq):
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <pre><code>def map(fn, seq):
     result = []
     for elem in seq:
@@ -278,7 +421,7 @@ def reduce(combiner, seq):
 
   </div>
 <?php } ?>
-<p><strong>Problem 4</strong>: Fill in the blanks for the following lines so that each
+<p><strong>Problem 7</strong>: Fill in the blanks for the following lines so that each
 expression evaluates to the expected output:</p>
 
 <pre><code>&gt;&gt;&gt; list(map(_______, [1, 3, -1, -4, 2]))
@@ -292,8 +435,8 @@ expression evaluates to the expected output:</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <ul>
 <li><code>list(map(lambda x: x // abs(x), [1, 3, -1, -4, 2]))</code></li>
 <li><code>list(filter(lambda x: x // 7 % 2 == 0, [1, 7, 14, 21, 28, 35, 49]))</code></li>
@@ -359,7 +502,7 @@ example:</p>
 <p>Notice the <code>nonlocal count</code>. This declares the <code>count</code> variable as a
 nonlocal variable, so now we can update <code>count</code>.</p>
 
-<p><strong>Problem 5</strong>: Predict what Python will display when the following
+<p><strong>Problem 8</strong>: Predict what Python will display when the following
 lines are typed into the interpreter:</p>
 
 <pre><code>&gt;&gt;&gt; def make_funny_adder(n):
@@ -382,8 +525,8 @@ ______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton4">Toggle Solution</button>
-  <div id="toggleText4" style="display: none">
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
     <ol>
 <li>8</li>
 <li>12</li>
@@ -392,7 +535,7 @@ ______
 
   </div>
 <?php } ?>
-<p><strong>Problem 6</strong>: Write a function <code>make_fib</code> that returns a function
+<p><strong>Problem 9</strong>: Write a function <code>make_fib</code> that returns a function
 that reurns the next Fibonacci number each time it is called.</p>
 
 <pre><code>def make_fib():
@@ -415,8 +558,8 @@ that reurns the next Fibonacci number each time it is called.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
     <pre><code>def make_fib():
     cur, next = 0, 1
     def fib():
@@ -429,7 +572,7 @@ that reurns the next Fibonacci number each time it is called.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problems 7</strong>: Recall <code>make_test_dice</code> from the Hog project.
+<p><strong>Problem 10</strong>: Recall <code>make_test_dice</code> from the Hog project.
 <code>make_test_dice</code> takes in a sequence of numbers and returns a
 zero-argument function. This zero-argument function will cycle through
 the list, returning one element from the list every time. Implement
@@ -457,8 +600,8 @@ the list, returning one element from the list every time. Implement
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
     <pre><code>def make_test_dice(seq):
     count = 0
     def dice():
@@ -471,13 +614,64 @@ the list, returning one element from the list every time. Implement
 
   </div>
 <?php } ?>
+<p><strong>Problem 11</strong>: Recall the <code>make_withdraw</code> function from lecture:</p>
+
+<pre><code>def make_withdraw(balance):
+    """Return a withdraw function with a starting balance."""
+    def withdraw(amount):
+        nonlocal balance
+        if amount &gt; balance:
+            return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return withdraw
+</code></pre>
+
+<p>Write a new function <code>make_bank</code>, which should also return another
+function. This new function should be able to withdraw <em>and</em> deposit
+money. See the doctests for behavior:</p>
+
+<pre><code>def make_bank(balance):
+    """Returns a bank function with a starting balance. Supports
+    withdrawals and deposits.
+
+    &gt;&gt;&gt; bank = make_bank(100)
+    &gt;&gt;&gt; bank('withdraw', 40)    # 100 - 40
+    60
+    &gt;&gt;&gt; bank('deposit', 20)     # 60 + 20
+    80
+    &gt;&gt;&gt; bank('withdraw', 90)    # 80 - 90; not enough money
+    'Insufficient funds'
+    """
+    def bank(message, amount):
+        "*** YOUR CODE HERE ***"
+    return bank
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton10">Toggle Solution</button>
+  <div id="toggleText10" style="display: none">
+    <pre><code>def make_bank(balance):
+    def bank(message, amount):
+        nonlocal balance
+        if message == 'deposit':
+            amount = -amount
+        if amount &gt; balance:
+            return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return bank
+</code></pre>
+
+  </div>
+<?php } ?>
 <p></p>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 7; $i++) { ?>
+    <?php for ($i = 0; $i < 11; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
