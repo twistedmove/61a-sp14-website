@@ -8,7 +8,8 @@
                                   Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
                                   Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
-    <style type="text/css">@import url("https://inst.eecs.berkeley.edu/~cs61a/fa13/lab/lab_style.css");</style> 
+    <style type="text/css">@import url("../lab_style.css");</style>
+    <style type="text/css">@import url("../61a_style.css");</style>
 
     <title>CS 61A Fall 2013: Lab 5</title> 
 
@@ -39,7 +40,7 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("09/19/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("10/10/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
