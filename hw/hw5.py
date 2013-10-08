@@ -17,7 +17,6 @@ def reverse_list(s):
     """
     "*** YOUR CODE HERE ***"
 
-
 # Q2.
 
 def card(n):
