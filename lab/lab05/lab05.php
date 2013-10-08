@@ -501,9 +501,9 @@ def reduce(combiner, seq):
 each expression evaluates to the expected output:</p>
 
 <pre><code>&gt;&gt;&gt; list(map(_______, [1, 3, -1, -4, 2]))
-[1, 1, -1, -1, 2]
-&gt;&gt;&gt; list(filter(______, [1, 7, 14, 21, 28, 35, 49]))
-[1, 14, 28, 49]
+[1, 1, -1, -1, 1]
+&gt;&gt;&gt; list(filter(______, [1, 7, 14, 21, 28, 35, 42]))
+[1, 14, 28, 42]
 &gt;&gt;&gt; reduce(_______, 'hello')
 'olleh'
 &gt;&gt;&gt; reduce(______, map(______, 'nnnnn')) + ' batman!'
@@ -515,7 +515,7 @@ each expression evaluates to the expected output:</p>
   <div id="toggleText7" style="display: none">
     <ul>
 <li><code>list(map(lambda x: x // abs(x), [1, 3, -1, -4, 2]))</code></li>
-<li><code>list(filter(lambda x: x // 7 % 2 == 0, [1, 7, 14, 21, 28, 35, 49]))</code></li>
+<li><code>list(filter(lambda x: x // 7 % 2 == 0, [1, 7, 14, 21, 28, 35, 42]))</code></li>
 <li><code>reduce(lambda x, y: y + x, 'hello')</code></li>
 <li><code>reduce(lambda x, y: x + y, map(lambda s: s + 'a', 'nnnnn')) + ' batman!'</code></li>
 </ul>
