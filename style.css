@@ -215,7 +215,7 @@ td.hidden {
     visibility:hidden;
 }
 
-/**
+
 table.tally {
     width: 700;
     border-collapse: collapse;
@@ -235,4 +235,3 @@ table.tally td {
     padding: 0.2em;
     text-align:center
 }
-**/
