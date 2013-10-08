@@ -135,9 +135,7 @@ ol.upperroman {
 <div class="document" id="a-homework-3">
 <h1 class="title">61A Homework 3</h1>
 
-<p><em>Due by 11:59pm on Wednesday, 10/2</em></p>
-<p><strong>Due date extended.</strong> This homework was originally due Tuesday, 10/1.  Due to
-problems with the submission system, the deadline was extended a day.</p>
+<p><em>Due by 11:59pm on Tuesday, 10/1</em></p>
 <p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
 We have provided a <a class="reference external" href="hw3.py">hw3.py</a> starter file for the questions below.</p>
 <p><strong>Readings.</strong> Section <a class="reference external" href="http://composingprograms.com/pages/17-recursive-functions.html">1.7</a> of the online textbook.</p>
@@ -161,7 +159,9 @@ def g(n):
     &gt;&gt;&gt; g(5)
     22
     &quot;&quot;&quot;
-    &quot;*** YOUR CODE HERE ***&quot;
+    if n in (1, 2, 3):
+        return n
+    return g(n-1) + 2*g(n-2) + 3*g(n-3)
 
 def g_iter(n):
     &quot;&quot;&quot;Return the value of G(n), computed iteratively.
@@ -177,7 +177,13 @@ def g_iter(n):
     &gt;&gt;&gt; g_iter(5)
     22
     &quot;&quot;&quot;
-    &quot;*** YOUR CODE HERE ***&quot;
+    if n == 1 or n == 2 or n == 3:
+        return n
+    a, b, c = 1, 2, 3
+    while n &gt; 3:
+        a, b, c = b, c, c + 2*b + 3*a
+        n = n - 1
+    return c
 </pre>
 <p><strong>Q2.</strong> Write a function <tt class="docutils literal">has_seven</tt> that takes a positive integer <tt class="docutils literal">n</tt> and
 returns whether <tt class="docutils literal">n</tt> contains the digit 7.  <em>Do not use any assignment
@@ -198,7 +204,12 @@ def has_seven(k):
     &gt;&gt;&gt; has_seven(7777)
     True
     &quot;&quot;&quot;
-    &quot;*** YOUR CODE HERE ***&quot;
+    if k % 10 == 7:
+        return True
+    elif k &lt; 10:
+        return False
+    else:
+        return has_seven(k // 10)
 </pre>
 <p><strong>Q3.</strong> The ping-pong sequence counts up starting from 1 and is always either
 counting up or counting down.  At element k, the direction switches if k is a
@@ -243,7 +254,21 @@ def pingpong(n):
     &gt;&gt;&gt; pingpong(100)
     2
     &quot;&quot;&quot;
-    &quot;*** YOUR CODE HERE ***&quot;
+    def pingpong_next(k, p, up):
+        if k == n:
+            return p
+        if up:
+            return pingpong_switch(k+1, p+1, up)
+        else:
+            return pingpong_switch(k+1, p-1, up)
+
+    def pingpong_switch(k, p, up):
+        if k % 7 == 0 or has_seven(k):
+            return pingpong_next(k, p, not up)
+        else:
+            return pingpong_next(k, p, up)
+
+    return pingpong_next(1, 1, True)
 </pre>
 <p><strong>Q4.</strong> Write a function that takes a positive integer <tt class="docutils literal">n</tt> and returns the
 number of ten-pairs it contains.  A ten-pair is a pairs of digits within <tt class="docutils literal">n</tt>
@@ -262,7 +287,24 @@ def ten_pairs(n):
     &gt;&gt;&gt; ten_pairs(9641469)
     6
     &quot;&quot;&quot;
-    &quot;*** YOUR CODE HERE ***&quot;
+    if n &lt; 10:
+        return 0
+    else:
+        return ten_pairs(n//10) + count_digit(n//10, 10 - n%10)
+
+def count_digit(n, digit):
+    &quot;&quot;&quot;Return how many times digit appears in n.
+
+    &gt;&gt;&gt; count_digit(55055, 5)
+    4
+    &quot;&quot;&quot;
+    if n == 0:
+        return 0
+    else:
+        if n%10 == digit:
+            return count_digit(n//10, digit) + 1
+        else:
+            return count_digit(n//10, digit)
 </pre>
 <p><strong>Q5.</strong> Once the machines take over, the denomination of every coin will be a
 power of two: 1-cent, 2-cent, 4-cent, 8-cent, 16-cent, etc.  There will be
@@ -292,7 +334,19 @@ def count_change(amount):
     &gt;&gt;&gt; count_change(100)
     9828
     &quot;&quot;&quot;
-    &quot;*** YOUR CODE HERE ***&quot;
+    return count_using(1, amount)
+
+def count_using(min_coin, amount):
+    if amount &lt; 0:
+        return 0
+    elif amount == 0:
+        return 1
+    elif min_coin &gt; amount:
+        return 0
+    else:
+        with_min = count_using(min_coin, amount - min_coin)
+        without_min = count_using(2*min_coin, amount)
+        return with_min + without_min
 </pre>
 <p><strong>Q6.</strong> (Extra for experts) The recursive factorial function can be written as
 a single expression by using a <a class="reference external" href="http://docs.python.org/py3k/reference/expressions.html#conditional-expressions">conditional expression</a>.</p>
@@ -319,7 +373,7 @@ def make_anonymous_factorial():
     &gt;&gt;&gt; make_anonymous_factorial()(5)
     120
     &quot;&quot;&quot;
-    return YOUR_EXPRESSION_HERE
+    return (lambda f: lambda k: f(f, k))(lambda f, k: k if k == 1 else mul(k, f(f, sub(k, 1))))
 </pre>
 </div>
 </body>

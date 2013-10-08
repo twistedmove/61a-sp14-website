@@ -12,7 +12,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '1.1'
+__version__ = '2'
 
 from autograder import test, run_tests, check_func, check_doctest, test_eval
 
@@ -35,7 +35,8 @@ datetime = trends.datetime
 #########
 
 @test
-def problem1():
+def problem1(grades):
+    """Test tweet abstract data type."""
     if check_doctest('make_tweet', trends):
         return True
     if check_doctest('make_tweet_fn', trends):
@@ -80,7 +81,8 @@ def problem1():
         return True
 
 @test
-def problem2():
+def problem2(grades):
+    """Test extract_words."""
     if check_doctest('extract_words', trends):
         return True
 
@@ -104,7 +106,10 @@ def problem2():
         return True
 
 @test
-def problem3():
+def problem3(grades):
+    """Test sentiment abstract data type."""
+    if check_doctest('make_sentiment', trends):
+        return True
     if check_doctest('get_word_sentiment', trends):
         return True
 
@@ -125,7 +130,11 @@ def problem3():
         return True
 
 @test
-def problem4():
+def problem4(grades):
+    """Test analyze_tweet_sentiment."""
+    if check_doctest('analyze_tweet_sentiment', trends):
+        return True
+
     # Change the representation of sentiments to validate abstraction barrier.
     original_make_sentiment = trends.make_sentiment
     original_sentiment_value = trends.sentiment_value
@@ -145,17 +154,21 @@ def problem4():
     def analyze(tweet):
         return trends.sentiment_value(trends.analyze_tweet_sentiment(tweet))
 
-    if check_func(analyze, sentiment_tests, comp=comp_float):
-        return True
-    if check_func(analyze, no_sentiment_tests):
-        return True
+    try:
+        if check_func(analyze, sentiment_tests, comp=comp_float):
+            return True
+        if check_func(analyze, no_sentiment_tests):
+            return True
+    finally:
+        trends.make_sentiment = original_make_sentiment
+        trends.sentiment_value = original_sentiment_value
+        trends.has_sentiment = original_has_sentiment
 
-    trends.make_sentiment = original_make_sentiment
-    trends.sentiment_value = original_sentiment_value
-    trends.has_sentiment = original_has_sentiment
+
 
 @test
-def problem5():
+def problem5(grades):
+    """Test find_centroid."""
     if check_doctest('find_centroid', trends):
         return True
 
@@ -198,7 +211,8 @@ def problem5():
 
 
 @test
-def problem6():
+def problem6(grades):
+    """Test find_state_center."""
     if check_doctest('find_state_center', trends):
         return True
 
@@ -243,9 +257,12 @@ def problem6():
         geo.latitude      = trends.latitude      = original_geo[1]
         geo.longitude     = trends.longitude     = original_geo[2]
 
-
 @test
-def problem7():
+def problem7(grades):
+    """Test group_tweets_by_state."""
+    if check_doctest('group_tweets_by_state', trends):
+        return True
+
     def test_groups():
         tweets = pirate_tweets(trends.make_tweet)
         expected = {
@@ -260,6 +277,7 @@ def problem7():
 
     if test_groups():
         return True
+
     print("Testing abstraction barriers.")
     try:
         trends.swap_tweet_representation()
@@ -269,7 +287,8 @@ def problem7():
         trends.swap_tweet_representation()
 
 @test
-def problem8():
+def problem8(grades):
+    """Test average_sentiments."""
     def test_average():
         tweets = pirate_tweets(trends.make_tweet) + (
           trends.make_tweet('This tweet is without a sentiment', None, None, None),
@@ -294,13 +313,24 @@ def problem8():
 
     if test_average():
         return True
+
     print("Testing abstraction barriers.")
     try:
         trends.swap_tweet_representation()
+        original_make_sentiment = trends.make_sentiment
+        original_sentiment_value = trends.sentiment_value
+        original_has_sentiment = trends.has_sentiment
+        trends.make_sentiment = lambda s: lambda: s
+        trends.has_sentiment = lambda s: s() is not None
+        trends.sentiment_value = lambda s: s()
+
         if test_average():
             return True
     finally:
         trends.swap_tweet_representation()
+        trends.make_sentiment = original_make_sentiment
+        trends.sentiment_value = original_sentiment_value
+        trends.has_sentiment = original_has_sentiment
 
 #############
 # UTILITIES #

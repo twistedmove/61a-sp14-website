@@ -22,7 +22,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.1'
+</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'2'
 
 </span><span style="color: blue; font-weight: bold">from </span>autograder <span style="color: blue; font-weight: bold">import </span>test<span style="font-weight: bold">, </span>run_tests<span style="font-weight: bold">, </span>check_func<span style="font-weight: bold">, </span>check_doctest<span style="font-weight: bold">, </span>test_eval
 
@@ -45,7 +45,8 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
 #########
 
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem1<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem1<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test tweet abstract data type."""
     </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'make_tweet'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
     if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'make_tweet_fn'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
@@ -90,7 +91,8 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
         </span><span style="color: blue; font-weight: bold">return True
 
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem2<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem2<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test extract_words."""
     </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'extract_words'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
@@ -114,8 +116,11 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
         </span><span style="color: blue; font-weight: bold">return True
 
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem3<span style="font-weight: bold">():
-    </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'get_word_sentiment'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
+<span style="color: blue; font-weight: bold">def </span>problem3<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test sentiment abstract data type."""
+    </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'make_sentiment'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return True
+    if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'get_word_sentiment'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
     </span>has_sentiment_tests <span style="font-weight: bold">= (
@@ -135,7 +140,11 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
         </span><span style="color: blue; font-weight: bold">return True
 
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem4<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem4<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test analyze_tweet_sentiment."""
+    </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'analyze_tweet_sentiment'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return True
+
     </span><span style="color: green; font-style: italic"># Change the representation of sentiments to validate abstraction barrier.
     </span>original_make_sentiment <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>make_sentiment
     original_sentiment_value <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>sentiment_value
@@ -155,17 +164,21 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
     </span><span style="color: blue; font-weight: bold">def </span>analyze<span style="font-weight: bold">(</span>tweet<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return </span>trends<span style="font-weight: bold">.</span>sentiment_value<span style="font-weight: bold">(</span>trends<span style="font-weight: bold">.</span>analyze_tweet_sentiment<span style="font-weight: bold">(</span>tweet<span style="font-weight: bold">))
 
-    </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>analyze<span style="font-weight: bold">, </span>sentiment_tests<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>comp_float<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return True
-    if </span>check_func<span style="font-weight: bold">(</span>analyze<span style="font-weight: bold">, </span>no_sentiment_tests<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return True
+    </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>analyze<span style="font-weight: bold">, </span>sentiment_tests<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>comp_float<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return True
+        if </span>check_func<span style="font-weight: bold">(</span>analyze<span style="font-weight: bold">, </span>no_sentiment_tests<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return True
+    finally</span><span style="font-weight: bold">:
+        </span>trends<span style="font-weight: bold">.</span>make_sentiment <span style="font-weight: bold">= </span>original_make_sentiment
+        trends<span style="font-weight: bold">.</span>sentiment_value <span style="font-weight: bold">= </span>original_sentiment_value
+        trends<span style="font-weight: bold">.</span>has_sentiment <span style="font-weight: bold">= </span>original_has_sentiment
 
-    </span>trends<span style="font-weight: bold">.</span>make_sentiment <span style="font-weight: bold">= </span>original_make_sentiment
-    trends<span style="font-weight: bold">.</span>sentiment_value <span style="font-weight: bold">= </span>original_sentiment_value
-    trends<span style="font-weight: bold">.</span>has_sentiment <span style="font-weight: bold">= </span>original_has_sentiment
+
 
 @test
-<span style="color: blue; font-weight: bold">def </span>problem5<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem5<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test find_centroid."""
     </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'find_centroid'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
@@ -208,7 +221,8 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
 
 
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem6<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem6<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test find_state_center."""
     </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'find_state_center'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
@@ -253,10 +267,13 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
         </span>geo<span style="font-weight: bold">.</span>latitude      <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>latitude      <span style="font-weight: bold">= </span>original_geo<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">]
         </span>geo<span style="font-weight: bold">.</span>longitude     <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>longitude     <span style="font-weight: bold">= </span>original_geo<span style="font-weight: bold">[</span><span style="color: red">2</span><span style="font-weight: bold">]
 
-
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem7<span style="font-weight: bold">():
-    </span><span style="color: blue; font-weight: bold">def </span>test_groups<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem7<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test group_tweets_by_state."""
+    </span><span style="color: blue; font-weight: bold">if </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'group_tweets_by_state'</span><span style="font-weight: bold">, </span>trends<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return True
+
+    def </span>test_groups<span style="font-weight: bold">():
         </span>tweets <span style="font-weight: bold">= </span>pirate_tweets<span style="font-weight: bold">(</span>trends<span style="font-weight: bold">.</span>make_tweet<span style="font-weight: bold">)
         </span>expected <span style="font-weight: bold">= {
           </span><span style="color: red">'MI'</span><span style="font-weight: bold">: [</span>tweets<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">], </span>tweets<span style="font-weight: bold">[</span><span style="color: red">4</span><span style="font-weight: bold">]],
@@ -270,6 +287,7 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
 
     if </span>test_groups<span style="font-weight: bold">():
         </span><span style="color: blue; font-weight: bold">return True
+
     print</span><span style="font-weight: bold">(</span><span style="color: red">"Testing abstraction barriers."</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
         </span>trends<span style="font-weight: bold">.</span>swap_tweet_representation<span style="font-weight: bold">()
@@ -279,7 +297,8 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
         </span>trends<span style="font-weight: bold">.</span>swap_tweet_representation<span style="font-weight: bold">()
 
 </span>@test
-<span style="color: blue; font-weight: bold">def </span>problem8<span style="font-weight: bold">():
+<span style="color: blue; font-weight: bold">def </span>problem8<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Test average_sentiments."""
     </span><span style="color: blue; font-weight: bold">def </span>test_average<span style="font-weight: bold">():
         </span>tweets <span style="font-weight: bold">= </span>pirate_tweets<span style="font-weight: bold">(</span>trends<span style="font-weight: bold">.</span>make_tweet<span style="font-weight: bold">) + (
           </span>trends<span style="font-weight: bold">.</span>make_tweet<span style="font-weight: bold">(</span><span style="color: red">'This tweet is without a sentiment'</span><span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">),
@@ -304,15 +323,26 @@ datetime <span style="font-weight: bold">= </span>trends<span style="font-weight
 
     if </span>test_average<span style="font-weight: bold">():
         </span><span style="color: blue; font-weight: bold">return True
+
     print</span><span style="font-weight: bold">(</span><span style="color: red">"Testing abstraction barriers."</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
         </span>trends<span style="font-weight: bold">.</span>swap_tweet_representation<span style="font-weight: bold">()
+        </span>original_make_sentiment <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>make_sentiment
+        original_sentiment_value <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>sentiment_value
+        original_has_sentiment <span style="font-weight: bold">= </span>trends<span style="font-weight: bold">.</span>has_sentiment
+        trends<span style="font-weight: bold">.</span>make_sentiment <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>s<span style="font-weight: bold">: </span><span style="color: blue; font-weight: bold">lambda</span><span style="font-weight: bold">: </span>s
+        trends<span style="font-weight: bold">.</span>has_sentiment <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>s<span style="font-weight: bold">: </span>s<span style="font-weight: bold">() </span><span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None
+        </span>trends<span style="font-weight: bold">.</span>sentiment_value <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>s<span style="font-weight: bold">: </span>s<span style="font-weight: bold">()
+
         </span><span style="color: blue; font-weight: bold">if </span>test_average<span style="font-weight: bold">():
             </span><span style="color: blue; font-weight: bold">return True
     finally</span><span style="font-weight: bold">:
         </span>trends<span style="font-weight: bold">.</span>swap_tweet_representation<span style="font-weight: bold">()
+        </span>trends<span style="font-weight: bold">.</span>make_sentiment <span style="font-weight: bold">= </span>original_make_sentiment
+        trends<span style="font-weight: bold">.</span>sentiment_value <span style="font-weight: bold">= </span>original_sentiment_value
+        trends<span style="font-weight: bold">.</span>has_sentiment <span style="font-weight: bold">= </span>original_has_sentiment
 
-</span><span style="color: green; font-style: italic">#############
+<span style="color: green; font-style: italic">#############
 # UTILITIES #
 #############
 
