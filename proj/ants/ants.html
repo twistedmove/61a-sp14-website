@@ -173,7 +173,12 @@ run</p>
 
 <p>This command runs all of the unit tests along with any doctests in
 <code><a href="ants.py.html">ants.py</a></code>. The optional <code>-v</code> generates more verbose
-output.  If you would like to learn more about Python's built-in unit testing
+output.  You can also run tests for individual questions:</p>
+
+<pre>python3 -m unittest ants_grader.TestProblem2
+python3 -m unittest ants_grader.TestProblemA5</pre>
+
+<p>If you would like to learn more about Python's built-in unit testing
 framework, read the documentation of the <a
 href="http://docs.python.org/py3k/library/unittest.html">unittest module</a>.
 Most problems have associated tests.  Make sure that the tests for each problem
