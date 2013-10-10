@@ -60,12 +60,14 @@ def timed(func, timeout, args=(), kwargs={}):
                 self.result = func(*args, **kwargs)
             except Exception as e:
                 self.error = e
+                self.traceback = traceback.format_exc(limit=2)
     submission = ReturningThread()
     submission.start()
     submission.join(timeout)
     if submission.is_alive():
         raise TimeoutError("Evaluation timed out!")
     if submission.error is not None:
+        print(self.traceback)
         raise submission.error
     return submission.result
 
