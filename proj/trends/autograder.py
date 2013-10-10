@@ -67,7 +67,7 @@ def timed(func, timeout, args=(), kwargs={}):
     if submission.is_alive():
         raise TimeoutError("Evaluation timed out!")
     if submission.error is not None:
-        print(self.traceback)
+        print(submission.traceback)
         raise submission.error
     return submission.result
 

@@ -77,7 +77,7 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>is_alive<span style="font-weight: bold">():
         </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span><span style="color: red">"Evaluation timed out!"</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>error <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>traceback<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>submission<span style="font-weight: bold">.</span>traceback<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">raise </span>submission<span style="font-weight: bold">.</span>error
     <span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
 
