@@ -57,8 +57,6 @@ the lab. You can get it at the following link:</p>
 
 <h3>Recursive Lists</h3>
 
-<p>Recursive Lists</p>
-
 <p>In lecture, we introduced the OOP version of an <code>Rlist</code>:</p>
 
 <pre><code>class Rlist():
@@ -83,10 +81,13 @@ the lab. You can get it at the following link:</p>
 that, now, the <code>Rlists</code> are mutable.</p>
 
 <p>To check if an <code>Rlist</code> is empty, compare it against the class variable
-<code>Rlist.empty</code>:
-    if rlist is Rlist.empty:
-        return 'This rlist is empty!'
-Don't construct another <code>EmptyList</code>!</p>
+<code>Rlist.empty</code>:</p>
+
+<pre><code>if rlist is Rlist.empty:
+    return 'This rlist is empty!'
+</code></pre>
+
+<p>Don't construct another <code>EmptyList</code>!</p>
 
 <p>Also note that this definition of <code>Rlist</code> also has a <code>__repr__</code> function that
 returns a string representation of the list.</p>
@@ -369,7 +370,7 @@ one long chain.</p>
 <p>Take a moment to study our implementation of binary trees. The implementation of
 trees is in <code>lab6.py</code>.</p>
 
-<p><em>*Problem *8</em>: Define the function <code>size_of_tree</code> which takes in a tree as an
+<p><strong>Problem 8</strong>: Define the function <code>size_of_tree</code> which takes in a tree as an
 argument and returns the number of non-empty nodes in the tree.</p>
 
 <pre><code>def size_of_tree(tree):
@@ -393,7 +394,7 @@ argument and returns the number of non-empty nodes in the tree.</p>
 
   </div>
 <?php } ?>
-<p><em>*Problem *9</em>: Define the function <code>deep_tree_reverse</code>, which takes a tree and
+<p><strong>Problem 9</strong>: Define the function <code>deep_tree_reverse</code>, which takes a tree and
 reverses the given order.</p>
 
 <pre><code>def deep_tree_reverse(tree):
@@ -418,7 +419,7 @@ reverses the given order.</p>
 
   </div>
 <?php } ?>
-<p><em>*Problem *10</em>: Define the function filter_tree which takes in a tree as an
+<p><strong>Problem 10</strong>: Define the function filter_tree which takes in a tree as an
   argument and returns the same tree, but with items included or excluded based
   on the pred argument.</p>
 
@@ -449,7 +450,7 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 
   </div>
 <?php } ?>
-<p><em>*Problem *11</em>: Define the function <code>max_of_tree</code> which takes in a <code>tree</code> as an
+<p><strong>Problem 11</strong>: Define the function <code>max_of_tree</code> which takes in a <code>tree</code> as an
   argument and returns the max of all of the values of each node in the tree.</p>
 
 <pre><code>def max_of_tree(tree):
