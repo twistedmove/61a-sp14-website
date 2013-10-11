@@ -12,7 +12,7 @@ autograder.py
 This file uses features of Python not yet covered in the course.
 """
 
-__version__ = '2'
+__version__ = '2.3'
 
 from autograder import test, run_tests, check_func, check_doctest, test_eval
 

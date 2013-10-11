@@ -59,6 +59,7 @@ def timed(func, timeout, args=(), kwargs={}):
             try:
                 self.result = func(*args, **kwargs)
             except Exception as e:
+                e._message = traceback.format_exc(limit=2)
                 self.error = e
     submission = ReturningThread()
     submission.start()
@@ -82,13 +83,13 @@ def check_func(func, tests,
     for input, output, *desc in tests:
         try:
             val = test_eval(func, input)
-        except:
+        except Exception as e:
             fail_msg = "Function {0} failed".format(func.__name__)
             if desc:
                 print(fail_msg, desc[0])
             else:
                 print(fail_msg, "with input", in_print(input))
-            traceback.print_exception(*sys.exc_info(), limit=2)
+            print(e._message)
             code += 1
             continue
         if not comp(val, output):
