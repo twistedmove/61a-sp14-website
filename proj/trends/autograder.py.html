@@ -69,15 +69,14 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
             </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
                 </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
+                </span>e<span style="font-weight: bold">.</span>_message <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">(</span>limit<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
                 </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>error <span style="font-weight: bold">= </span>e
-                <span style="color: blue">self</span><span style="font-weight: bold">.</span>traceback <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">(</span>limit<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
-    </span>submission <span style="font-weight: bold">= </span>ReturningThread<span style="font-weight: bold">()
+    submission <span style="font-weight: bold">= </span>ReturningThread<span style="font-weight: bold">()
     </span>submission<span style="font-weight: bold">.</span>start<span style="font-weight: bold">()
     </span>submission<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>is_alive<span style="font-weight: bold">():
         </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span><span style="color: red">"Evaluation timed out!"</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>error <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>submission<span style="font-weight: bold">.</span>traceback<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">raise </span>submission<span style="font-weight: bold">.</span>error
     <span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
 
@@ -94,13 +93,13 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span><span style="color: blue; font-weight: bold">for </span>input<span style="font-weight: bold">, </span>output<span style="font-weight: bold">, *</span>desc <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
             </span>val <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>input<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">except</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
             </span>fail_msg <span style="font-weight: bold">= </span><span style="color: red">"Function {0} failed"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>func<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">if </span>desc<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>fail_msg<span style="font-weight: bold">, </span>desc<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])
             </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>fail_msg<span style="font-weight: bold">, </span><span style="color: red">"with input"</span><span style="font-weight: bold">, </span>in_print<span style="font-weight: bold">(</span>input<span style="font-weight: bold">))
-            </span>traceback<span style="font-weight: bold">.</span>print_exception<span style="font-weight: bold">(*</span>sys<span style="font-weight: bold">.</span>exc_info<span style="font-weight: bold">(), </span>limit<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>e<span style="font-weight: bold">.</span>_message<span style="font-weight: bold">)
             </span>code <span style="font-weight: bold">+= </span><span style="color: red">1
             </span><span style="color: blue; font-weight: bold">continue
         if not </span>comp<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>output<span style="font-weight: bold">):
