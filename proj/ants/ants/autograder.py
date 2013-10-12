@@ -154,8 +154,7 @@ def check_for_updates(index, filenames, version):
             print()
 
 def run_tests(name, remote_index, autograder_files, version, **kwargs):
-    parser = argparse.ArgumentParser(
-        description='A subset of the autograder tests for Hog.')
+    parser = argparse.ArgumentParser(description='Autograder for CS 61A.')
     parser.add_argument('-q', '--question', type=int,
                         help='Run tests for the specified question')
     parser.add_argument('-v', '--version', action='store_true',
