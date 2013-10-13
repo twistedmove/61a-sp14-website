@@ -24,7 +24,7 @@
 ################
 
 
-</span><span style="color: blue; font-weight: bold">class </span>Place<span style="font-weight: bold">(</span>object<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">class </span>Place<span style="font-weight: bold">:
     </span><span style="color: darkred">"""A Place holds insects and has an exit to another Place."""
 
     </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>name<span style="font-weight: bold">, </span>exit<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
@@ -74,7 +74,7 @@
         </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>name
 
 
-<span style="color: blue; font-weight: bold">class </span>Insect<span style="font-weight: bold">(</span>object<span style="font-weight: bold">):
+<span style="color: blue; font-weight: bold">class </span>Insect<span style="font-weight: bold">:
     </span><span style="color: darkred">"""An Insect, the base class of Ant and Bee, has armor and a Place."""
 
     </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>armor<span style="font-weight: bold">, </span>place<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
@@ -231,7 +231,7 @@ class </span>HarvesterAnt<span style="font-weight: bold">(</span>Ant<span style=
             </span>bee<span style="font-weight: bold">.</span>move_to<span style="font-weight: bold">(</span>random<span style="font-weight: bold">.</span>choice<span style="font-weight: bold">(</span>exits<span style="font-weight: bold">))
 
 
-</span><span style="color: blue; font-weight: bold">class </span>AntColony<span style="font-weight: bold">(</span>object<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">class </span>AntColony<span style="font-weight: bold">:
     </span><span style="color: darkred">"""An ant collective that manages global game state and simulates time.
 
     Attributes:
@@ -549,6 +549,18 @@ class </span>HungryAnt<span style="font-weight: bold">(</span>Ant<span style="fo
     </span><span style="color: blue; font-weight: bold">def </span>action<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>colony<span style="font-weight: bold">):
         </span><span style="color: red">"*** YOUR CODE HERE ***"
 
+</span><span style="color: blue; font-weight: bold">class </span>QueenPlace<span style="font-weight: bold">:
+    </span><span style="color: darkred">"""A place that represents both places in which the bees find the queen.
+
+    (1) The original colony queen location at the end of all tunnels, and
+    (2) The place in which the QueenAnt resides.
+    """
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>colony_queen<span style="font-weight: bold">, </span>ant_queen<span style="font-weight: bold">):
+        </span><span style="color: red">"*** YOUR CODE HERE ***"
+
+    </span>@property
+    <span style="color: blue; font-weight: bold">def </span>bees<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: red">"*** YOUR CODE HERE ***"
 
 </span><span style="color: blue; font-weight: bold">class </span>QueenAnt<span style="font-weight: bold">(</span>ScubaThrower<span style="font-weight: bold">):
     </span><span style="color: darkred">"""The Queen of the colony.  The game is over if a bee enters her place."""

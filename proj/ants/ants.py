@@ -14,7 +14,7 @@ from collections import OrderedDict
 ################
 
 
-class Place(object):
+class Place:
     """A Place holds insects and has an exit to another Place."""
 
     def __init__(self, name, exit=None):
@@ -64,7 +64,7 @@ class Place(object):
         return self.name
 
 
-class Insect(object):
+class Insect:
     """An Insect, the base class of Ant and Bee, has armor and a Place."""
 
     def __init__(self, armor, place=None):
@@ -221,7 +221,7 @@ class Hive(Place):
             bee.move_to(random.choice(exits))
 
 
-class AntColony(object):
+class AntColony:
     """An ant collective that manages global game state and simulates time.
 
     Attributes:
@@ -539,6 +539,18 @@ class BodyguardAnt(Ant):
     def action(self, colony):
         "*** YOUR CODE HERE ***"
 
+class QueenPlace:
+    """A place that represents both places in which the bees find the queen.
+
+    (1) The original colony queen location at the end of all tunnels, and
+    (2) The place in which the QueenAnt resides.
+    """
+    def __init__(self, colony_queen, ant_queen):
+        "*** YOUR CODE HERE ***"
+
+    @property
+    def bees(self):
+        "*** YOUR CODE HERE ***"
 
 class QueenAnt(ScubaThrower):
     """The Queen of the colony.  The game is over if a bee enters her place."""
