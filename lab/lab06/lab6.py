@@ -2,9 +2,21 @@ from operator import sub, add, mul
 
 
 # Rlist definition
-class Rlist():
-    class EmptyList():
-        pass
+class Rlist:
+    """A recursive list consisting of a first element and the rest.
+
+    >>> s = Rlist(1, Rlist(2, Rlist(3)))
+    >>> s.rest
+    Rlist(2, Rlist(3))
+    >>> len(s)
+    3
+    >>> s[1]
+    2
+    """
+
+    class EmptyList:
+        def __len__(self):
+            return 0
 
     empty = EmptyList()
 
@@ -12,6 +24,27 @@ class Rlist():
         self.first = first
         self.rest = rest
 
+    def __getitem__(self, i):
+        if i == 0:
+            return self.first
+        else:
+            return self.rest[i-1]
+
+    def __len__(self):
+        return 1 + len(self.rest)
+
+    def __repr__(self):
+        return rlist_expression(self)
+
+def rlist_expression(s):
+    """Return a string that would evaluate to s."""
+    if s.rest is Rlist.empty:
+        rest = ''
+    else:
+        rest = ', ' + rlist_expression(s.rest)
+    return 'Rlist({0}{1})'.format(s.first, rest)
+
+# Problem 2
 def foldl(rlist, fn, z):
     """ Left fold
     >>> lst = Rlist(3, Rlist(2, Rlist(1)))
@@ -26,6 +59,7 @@ def foldl(rlist, fn, z):
         return z
     return foldl(______, ______, ______)
 
+# Problem 3
 def foldr(rlist, fn, z):
     """ Right fold
     >>> lst = Rlist(3, Rlist(2, Rlist(1)))
@@ -38,58 +72,61 @@ def foldr(rlist, fn, z):
     """
     "*** YOUR CODE HERE ***"
 
+# Problem 4
 def mapl(lst, fn):
     """ Maps FN on LST
     >>> lst = Rlist(3, Rlist(2, Rlist(1)))
     >>> mapped = mapl(lst, lambda x: x*x)
-    >>> print(rlist_string(mapped))
+    >>> print(rlist_expression(mapped))
     Rlist(9, Rlist(4, Rlist(1)))
     """
     "*** YOUR CODE HERE ***"
 
+# Problem 5
 def filterl(lst, pred):
     """ Filters LST based on PRED
     >>> lst = Rlist(4, Rlist(3, Rlist(2, Rlist(1))))
     >>> filtered = filterl(lst, lambda x: x % 2 == 0)
-    >>> print(rlist_string(filtered))
+    >>> print(rlist_expression(filtered))
     Rlist(4, Rlist(2))
     """
     "*** YOUR CODE HERE ***"
 
+# Problem 6
 def reverse(lst):
     """ Reverses LST with foldl
     >>> reversed = reverse(Rlist(3, Rlist(2, Rlist(1))))
-    >>> print(rlist_string(reversed))
+    >>> print(rlist_expression(reversed))
     Rlist(1, Rlist(2, Rlist(3)))
     >>> reversed = reverse(Rlist(1))
-    >>> print(rlist_string(reversed))
+    >>> print(rlist_expression(reversed))
     Rlist(1)
     >>> reversed = reverse(Rlist.empty)
-    >>> print(rlist_string(reversed))
-    Rlist.empty
+    >>> reversed == Rlist.empty
+    True
     """
     "*** YOUR CODE HERE ***"
 
-# Extra for Experts:
+# Problem 6 Extra for Experts:
 def reverse2(lst):
     """ Reverses LST without the Rlist constructor
     >>> reversed = reverse2(Rlist(3, Rlist(2, Rlist(1))))
-    >>> print(rlist_string(reversed))
+    >>> print(rlist_expression(reversed))
     Rlist(1, Rlist(2, Rlist(3)))
     >>> reversed = reverse2(Rlist(1))
-    >>> print(rlist_string(reversed))
+    >>> print(rlist_expression(reversed))
     Rlist(1)
-    >>> reversed = reverse2(Rlist.empty)
-    >>> print(rlist_string(reversed))
-    Rlist.empty
+    >>> reversed = reverse(Rlist.empty)
+    >>> reversed == Rlist.empty
+    True
     """
     "*** YOUR CODE HERE ***"
 
 identity = lambda x: x
 
-# Extra for Experts:
+# Problem 7 Extra for Experts:
 def foldl2(rlist, fn, z):
-    """ Extra for Experts
+    """ Write foldl using foldr
     >>> list = Rlist(3, Rlist(2, Rlist(1)))
     >>> foldl2(list, sub, 0) # (((0 - 3) - 2) - 1)
     -6
@@ -122,7 +159,7 @@ t = Tree(4,
          Tree(1, Tree(5),
               Tree(3, Tree(2), Tree(9))))
 
-
+# Problem 8
 def size_of_tree(tree):
     r""" Return the number of non-empty nodes in TREE
     >>> print(tree_string(t)) # doctest: +NORMALIZE_WHITESPACE
@@ -138,7 +175,7 @@ def size_of_tree(tree):
     """
     "*** YOUR CODE HERE ***"
 
-
+# Problem 9
 def deep_tree_reverse(tree):
     r""" Reverses the order of a tree
     >>> a = t.copy()
@@ -154,7 +191,7 @@ def deep_tree_reverse(tree):
     """
     "*** YOUR CODE HERE ***"
 
-
+# Problem 10
 def filter_tree(tree, pred):
     r""" Removes TREE if entry of TREE satisfies PRED
     >>> a = t.copy()
@@ -172,6 +209,7 @@ def filter_tree(tree, pred):
     """
     "*** YOUR CODE HERE ***"
 
+# Problem 11
 def max_of_tree(tree):
     r""" Returns the max of all the values of each node in TREE
     >>> print(tree_string(t)) # doctest: +NORMALIZE_WHITESPACE
@@ -186,3 +224,90 @@ def max_of_tree(tree):
     9
     """
     "*** YOUR CODE HERE ***"
+
+
+###########################################################
+# Tree printing functions, kindly provided by Joseph Hui. #
+# You do not need to look at these.                       #
+###########################################################
+
+def tree_string(tree):
+    return "\n".join(tree_block(tree)[0])
+
+def tree_block(tree):
+    """Returns a list of strings, each string being
+    one line in a rectangle of text representing the
+    tree.
+    Also returns the index in the string which is
+    centered above the tree's root.
+
+    num_width: The width of the widest number in the tree (100 => 3)
+    """
+    #If no children, just return string
+    if tree.left is None and tree.right is None:
+        return [str(tree.entry)], len(str(tree.entry))//2
+    num_width = len(str(tree.entry)) #Width of this tree's entry
+    #If only right child:
+    if tree.left is None:
+        r_block, r_cent = tree_block(tree.right)
+        #Add left padding if necessary
+        if r_cent < num_width*3/2:
+            padding = ' '*((num_width*3)//2-r_cent)
+            r_cent += ((num_width*3)//2-r_cent) #Record new center
+            for line_index in range(len(r_block)):
+                r_block[line_index] = padding+r_block[line_index]
+
+        #Generate top two lines
+        t_line = str(tree.entry)
+        t_line += '-'*(r_cent-len(t_line))
+        t_line += ' '*(len(r_block[0])-len(t_line))
+        m_line = ' '*r_cent + '\\'
+        m_line += ' '*(len(r_block[0])-len(m_line))
+
+        return [t_line, m_line]+r_block, num_width//2
+    #If only left child:
+    if tree.right is None:
+        l_block, l_cent = tree_block(tree.left)
+        #Add right padding if necessary
+        if len(l_block[0]) < l_cent+1+num_width:
+            padding = ' '*(l_cent+1+num_width-len(l_block[0]))
+            for line_index in range(len(l_block)):
+                l_block[line_index] = l_block[line_index]+padding
+        #Generate lines
+        t_line = ' '*(l_cent+1)
+        t_line += '-'*(len(l_block[0])-l_cent-1-num_width)
+        t_line += str(tree.entry)
+        m_line = ' '*l_cent+'/'
+        m_line += ' '*(len(l_block[0]) - len(m_line))
+        return [t_line, m_line]+l_block, len(t_line)-num_width//2
+    #Otherwise, has both
+    l_block, l_cent = tree_block(tree.left)
+    r_block, r_cent = tree_block(tree.right)
+
+    #Pad left block
+    spacing = r_cent+len(l_block)-l_cent-2
+    padding = ' '*max(1, (spacing-num_width))
+    for line_index in range(len(l_block)):
+        l_block[line_index] = l_block[line_index]+padding
+
+    #Add left and right blocks
+    new_block = []
+    for line_index in range(max(len(l_block), len(r_block))):
+        new_line = l_block[line_index] if line_index < len(l_block) else ' '*len(l_block[0])
+        new_line += r_block[line_index] if line_index < len(r_block) else ' '*len(r_block[0])
+        new_block.append(new_line)
+    r_cent += len(l_block[0])
+
+    #Generate top lines
+    my_cent = (l_cent+r_cent)//2
+    t_line = ' '*(l_cent+1)
+    t_line += '-'*(my_cent-num_width//2-len(t_line))
+    t_line += str(tree.entry)
+    t_line += '-'*(r_cent-len(t_line))
+    t_line += ' '*(len(new_block[0])-len(t_line))
+
+    m_line = ' '*l_cent + '/'
+    m_line += ' '*(r_cent-len(m_line)) + '\\'
+    m_line += ' '*(len(new_block[0])-len(m_line))
+
+    return [t_line, m_line]+new_block, my_cent

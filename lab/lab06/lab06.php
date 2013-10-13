@@ -59,16 +59,39 @@ the lab. You can get it at the following link:</p>
 
 <p>In lecture, we introduced the OOP version of an <code>Rlist</code>:</p>
 
-<pre><code>class Rlist():
-    class EmptyList():
-        def __repr__(self):
-            return "Rlist.empty"
+<pre><code>class Rlist:
+"""A recursive list consisting of a first element and the rest.
 
-    empty = EmptyList()
+&gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+&gt;&gt;&gt; s.rest
+Rlist(2, Rlist(3))
+&gt;&gt;&gt; len(s)
+3
+&gt;&gt;&gt; s[1]
+2
+"""
 
-    def __init__(self, first, rest=empty):
-        self.first = first
-        self.rest = rest
+class EmptyList:
+    def __len__(self):
+        return 0
+
+empty = EmptyList()
+
+def __init__(self, first, rest=empty):
+    self.first = first
+    self.rest = rest
+
+def __getitem__(self, i):
+    if i == 0:
+        return self.first
+    else:
+        return self.rest[i-1]
+
+def __len__(self):
+    return 1 + len(self.rest)
+
+def __repr__(self):
+    return rlist_expression(self)
 </code></pre>
 
 <p>Just like before, these <code>Rlists</code> have a first and a rest. The difference is
@@ -83,13 +106,22 @@ that, now, the <code>Rlists</code> are mutable.</p>
 
 <p>Don't construct another <code>EmptyList</code>!</p>
 
-<p>Also note that this definition of <code>Rlist</code> also has a <code>__repr__</code> function that
-returns a string representation of the list.</p>
+<p>In this lab, we will be using <code>rlist_expression</code> to print a string
+representation of an Rlist.</p>
+
+<pre><code>def rlist_expression(s):
+    """Return a string that would evaluate to s."""
+    if s.rest is Rlist.empty:
+        rest = ''
+    else:
+        rest = ', ' + rlist_expression(s.rest)
+    return 'Rlist({0}{1})'.format(s.first, rest)
+</code></pre>
 
 <p><strong>Problem 1</strong>: Predict what Python will display when the following lines are
 typed into the interpreter:</p>
 
-<pre><code>&gt;&gt;&gt; print(rlist_string(Rlist(1, Rlist(2))))
+<pre><code>&gt;&gt;&gt; print(rlist_expression(Rlist(1, Rlist(2))))
 _____
 &gt;&gt;&gt; Rlist()
 _____
@@ -176,7 +208,7 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
     &gt;&gt;&gt; foldl(lst, mul, 1) # (((1 * 3) * 2) * 1)
     6
     """
-    if rlist == Rlist.empty:
+    if rlist is Rlist.empty:
         return z
     return foldl(______, ______, ______)
 </code></pre>
@@ -208,7 +240,7 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
   <button id="toggleButton2">Toggle Solution</button>
   <div id="toggleText2" style="display: none">
     <pre><code>def foldr(rlist, fn, z):
-    if rlist == Rlist.empty:
+    if rlist is Rlist.empty:
         return z
     return fn(rlist.first, foldr(rlist.rest, fn, z))
 </code></pre>
@@ -227,7 +259,7 @@ applied to every element of the original list. Use either <code>foldl</code> or
     """ Maps FN on LST
     &gt;&gt;&gt; lst = Rlist(3, Rlist(2, Rlist(1)))
     &gt;&gt;&gt; mapped = mapl(lst, lambda x: x*x)
-    &gt;&gt;&gt; print(rlist_string(mapped))
+    &gt;&gt;&gt; print(rlist_expression(mapped))
     Rlist(9, Rlist(4, Rlist(1)))
     """
     "*** YOUR CODE HERE ***"
@@ -248,7 +280,7 @@ applied to every element of the original list. Use either <code>foldl</code> or
     """ Filters LST based on PRED
     &gt;&gt;&gt; list = Rlist(4, Rlist(3, Rlist(2, Rlist(1))))
     &gt;&gt;&gt; filtered = filterl(lst, lambda x: x % 2 == 0)
-    &gt;&gt;&gt; print(rlist_string(filtered))
+    &gt;&gt;&gt; print(rlist_expression(filtered))
     Rlist(4, Rlist(2))
     """
     "*** YOUR CODE HERE ***"
@@ -273,14 +305,14 @@ applied to every element of the original list. Use either <code>foldl</code> or
 <pre><code>def reverse(lst):
     """ Reverses LST with foldl
     &gt;&gt;&gt; reversed = reverse(Rlist(3, Rlist(2, Rlist(1))))
-    &gt;&gt;&gt; print(rlist_string(reversed))
+    &gt;&gt;&gt; print(rlist_expression(reversed))
     Rlist(1, Rlist(2, Rlist(3)))
     &gt;&gt;&gt; reversed = reverse(Rlist(1))
-    &gt;&gt;&gt; print(rlist_string(reversed))
+    &gt;&gt;&gt; print(rlist_expression(reversed))
     Rlist(1)
     &gt;&gt;&gt; reversed = reverse(Rlist.empty)
-    &gt;&gt;&gt; print(rlist_string(reversed))
-    Rlist.empty
+    &gt;&gt;&gt; reversed == Rlist.empty
+    True
     """
     "*** YOUR CODE HERE ***"
 </code></pre>
@@ -310,7 +342,7 @@ def reverse2(lst):
   in the <code>step</code> function.</p>
 
 <pre><code>def foldl2(rlist, fn, z):
-    """ Extra for Experts
+    """ Write foldl using foldr
     &gt;&gt;&gt; list = Rlist(3, Rlist(2, Rlist(1)))
     &gt;&gt;&gt; foldl2(list, sub, 0) # (((0 - 3) - 2) - 1)
     -6
@@ -368,8 +400,30 @@ most two children. For a general binary tree, order does not matter.
 Additionally, the tree does not have to be balanced. It can be as lopsided as
 one long chain.</p>
 
-<p>Take a moment to study our implementation of binary trees. The implementation of
-trees is in <code>lab6.py</code>.</p>
+<p>Our implementation of binary trees can be found in <code>lab6.py</code>:</p>
+
+<pre><code>class Tree(object):
+    def __init__(self, entry, left=None, right=None):
+        self.entry = entry
+        self.left = left
+        self.right = right
+
+    def copy(self):
+        left = self.left.copy() if self.left else None
+        right = self.right.copy() if self.right else None
+        return Tree(self.entry, left, right)
+</code></pre>
+
+<p>We also included a function <code>tree_string</code>, which prints out a string
+representation of a tree:</p>
+
+<pre><code>&gt;&gt;&gt; print(tree_string(Tree(1, Tree(3, None, Tree(2)), Tree(4, Tree(5), Tree(6)))))
+ -1-
+/   \
+3   4
+ \ / \
+ 2 5 6
+</code></pre>
 
 <p><strong>Problem 8</strong>: Define the function <code>size_of_tree</code> which takes in a tree as an
 argument and returns the number of non-empty nodes in the tree.</p>
