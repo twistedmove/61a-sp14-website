@@ -11,7 +11,7 @@
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 5</title> 
+    <title>CS 61A Fall 2013: Lab 6</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -46,7 +46,7 @@
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 5</h1>
+    <h1>CS 61A Lab 6</h1>
 <h2>Recursive Data Structures</h2>
 <p>We've provided a starter file with skeleton code for the exercises in
 the lab. You can get it at the following link:</p>
@@ -69,12 +69,6 @@ the lab. You can get it at the following link:</p>
     def __init__(self, first, rest=empty):
         self.first = first
         self.rest = rest
-
-    def __repr__(self):
-        args = repr(self.first)
-        if self.rest is not Rlist.empty:
-            args += ", " + repr(self.rest)
-        return "Rlist({})".format(args)
 </code></pre>
 
 <p>Just like before, these <code>Rlists</code> have a first and a rest. The difference is
@@ -95,7 +89,7 @@ returns a string representation of the list.</p>
 <p><strong>Problem 1</strong>: Predict what Python will display when the following lines are
 typed into the interpreter:</p>
 
-<pre><code>&gt;&gt;&gt; Rlist(1, Rlist(2))
+<pre><code>&gt;&gt;&gt; print(rlist_string(Rlist(1, Rlist(2))))
 _____
 &gt;&gt;&gt; Rlist()
 _____
@@ -231,8 +225,9 @@ applied to every element of the original list. Use either <code>foldl</code> or
 
 <pre><code>def mapl(lst, fn):
     """ Maps FN on LST
-    &gt;&gt;&gt; list = Rlist(3, Rlist(2, Rlist(1)))
-    &gt;&gt;&gt; mapl(list, lambda x: x*x)
+    &gt;&gt;&gt; lst = Rlist(3, Rlist(2, Rlist(1)))
+    &gt;&gt;&gt; mapped = mapl(lst, lambda x: x*x)
+    &gt;&gt;&gt; print(rlist_string(mapped))
     Rlist(9, Rlist(4, Rlist(1)))
     """
     "*** YOUR CODE HERE ***"
@@ -252,7 +247,8 @@ applied to every element of the original list. Use either <code>foldl</code> or
 <pre><code>def filterl(lst, pred):
     """ Filters LST based on PRED
     &gt;&gt;&gt; list = Rlist(4, Rlist(3, Rlist(2, Rlist(1))))
-    &gt;&gt;&gt; filterl(list, lambda x: x % 2 == 0)
+    &gt;&gt;&gt; filtered = filterl(lst, lambda x: x % 2 == 0)
+    &gt;&gt;&gt; print(rlist_string(filtered))
     Rlist(4, Rlist(2))
     """
     "*** YOUR CODE HERE ***"
@@ -276,15 +272,21 @@ applied to every element of the original list. Use either <code>foldl</code> or
 
 <pre><code>def reverse(lst):
     """ Reverses LST with foldl
-    &gt;&gt;&gt; reverse(Rlist(3, Rlist(2, Rlist(1))))
+    &gt;&gt;&gt; reversed = reverse(Rlist(3, Rlist(2, Rlist(1))))
+    &gt;&gt;&gt; print(rlist_string(reversed))
     Rlist(1, Rlist(2, Rlist(3)))
-    &gt;&gt;&gt; reverse(Rlist(1))
+    &gt;&gt;&gt; reversed = reverse(Rlist(1))
+    &gt;&gt;&gt; print(rlist_string(reversed))
     Rlist(1)
-    &gt;&gt;&gt; reverse(Rlist.empty)
+    &gt;&gt;&gt; reversed = reverse(Rlist.empty)
+    &gt;&gt;&gt; print(rlist_string(reversed))
     Rlist.empty
     """
     "*** YOUR CODE HERE ***"
 </code></pre>
+
+<p>Extra for experts: Write a version of reverse that do not use the <code>Rlist</code>
+constructor. You do not have to use <code>foldl</code> or <code>foldr</code>.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton5">Toggle Solution</button>
@@ -304,9 +306,6 @@ def reverse2(lst):
 
   </div>
 <?php } ?>
-<p>Extra for experts: Write a version of reverse that do not use the <code>Rlist</code>
-constructor. You do not have to use <code>foldl</code> or <code>foldr</code>.</p>
-
 <p><strong>Problem 7 Extra for Experts</strong>: Write foldl using foldr! You only need to fill
   in the <code>step</code> function.</p>
 
@@ -353,12 +352,14 @@ leaves at the bottom.</p>
 
 <p>Terminology</p>
 
-<pre><code>node     - a point in the tree. In these pictures, each node includes a label (value at each node)
-root     - the node at the top. Every tree has one root node
-children - the nodes directly beneath it. Arity is the number of children that
-           node has.
-leaf     - a node that has no children. (Arity of 0!)
-</code></pre>
+<ul>
+<li><strong>node</strong>: a point in the tree. In these pictures, each node includes
+a label (value at each node)</li>
+<li><strong>root</strong>: the node at the top. Every tree has one root node children
+the nodes directly beneath it. Arity is the number of children that
+node has.</li>
+<li><strong>leaf</strong>: a node that has no children. (Arity of 0!)</li>
+</ul>
 
 <h3>Binary Trees</h3>
 
@@ -374,9 +375,15 @@ trees is in <code>lab6.py</code>.</p>
 argument and returns the number of non-empty nodes in the tree.</p>
 
 <pre><code>def size_of_tree(tree):
-    """ Return the number of non-empty nodes in TREE
-    &gt;&gt;&gt; t
-    Tree(4, Tree(2, Tree(8, Tree(7), None), Tree(3, Tree(1), Tree(6))), Tree(1, Tree(5), Tree(3, Tree(2), Tree(9))))
+    r""" Return the number of non-empty nodes in TREE
+    &gt;&gt;&gt; print(tree_string(t)) # doctest: +NORMALIZE_WHITESPACE
+        -4--
+       /    \
+       2    1-
+      / \  /  \
+     8  3  5  3
+    /  / \   / \
+    7  1 6   2 9
     &gt;&gt;&gt; size_of_tree(t)
     12
     """
@@ -398,11 +405,17 @@ argument and returns the number of non-empty nodes in the tree.</p>
 reverses the given order.</p>
 
 <pre><code>def deep_tree_reverse(tree):
-    """ Reverses the order of a tree
+    r""" Reverses the order of a tree
     &gt;&gt;&gt; a = t.copy()
     &gt;&gt;&gt; deep_tree_reverse(a)
-    &gt;&gt;&gt; a
-    Tree(4, Tree(1, Tree(3, Tree(9), Tree(2)), Tree(5)), Tree(2, Tree(3, Tree(6), Tree(1)), Tree(8, None, Tree(7))))
+    &gt;&gt;&gt; print(tree_string(a)) # doctest: +NORMALIZE_WHITESPACE
+       --4---
+      /      \
+      1-     2-
+     /  \   /  \
+     3  5   3  8
+    / \    / \  \
+    9 2    6 1  7
     """
     "*** YOUR CODE HERE ***"
 </code></pre>
@@ -419,7 +432,7 @@ reverses the given order.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 10</strong>: Define the function filter_tree which takes in a tree as an
+<p><strong>Problem 10</strong>: Define the function <code>filter_tree</code> which takes in a tree as an
   argument and returns the same tree, but with items included or excluded based
   on the pred argument.</p>
 
@@ -427,13 +440,19 @@ reverses the given order.</p>
 function, when you exclude a subtree, you exclude all of its children as well.</p>
 
 <pre><code>def filter_tree(tree, pred):
-    """ Removes TREE if entry of TREE satisfies PRED
+    r""" Removes TREE if entry of TREE satisfies PRED
     &gt;&gt;&gt; a = t.copy()
-    &gt;&gt;&gt; filter_tree(a, lambda x: x % 2 == 0)
-    Tree(4, Tree(2, Tree(8), None), None)
+    &gt;&gt;&gt; filtered = filter_tree(a, lambda x: x % 2 == 0)
+    &gt;&gt;&gt; print(tree_string(filtered)) # doctest: +NORMALIZE_WHITESPACE
+       4
+      /
+     2
+    /
+    8
     &gt;&gt;&gt; a = t.copy()
-    &gt;&gt;&gt; filter_tree(a, lambda x : x &gt; 2)
-    Tree(4)
+    &gt;&gt;&gt; filtered = filter_tree(a, lambda x : x &gt; 2)
+    &gt;&gt;&gt; print(tree_string(filtered))
+    4
     """
     "*** YOUR CODE HERE ***"
 </code></pre>
@@ -454,9 +473,15 @@ function, when you exclude a subtree, you exclude all of its children as well.</
   argument and returns the max of all of the values of each node in the tree.</p>
 
 <pre><code>def max_of_tree(tree):
-    """ Returns the max of all the values of each node in TREE
-    &gt;&gt;&gt; t
-    Tree(4, Tree(2, Tree(8, Tree(7), None), Tree(3, Tree(1), Tree(6))), Tree(1, Tree(5), Tree(3, Tree(2), Tree(9))))
+    r""" Returns the max of all the values of each node in TREE
+    &gt;&gt;&gt; print(tree_string(t)) # doctest: +NORMALIZE_WHITESPACE
+        -4--
+       /    \
+       2    1-
+      / \  /  \
+     8  3  5  3
+    /  / \   / \
+    7  1 6   2 9
     &gt;&gt;&gt; max_of_tree(t)
     9
     """
