@@ -47,7 +47,7 @@
   </head> 
   <body style="font-family: Georgia,serif;">
     <h1>CS 61A Lab 6</h1>
-<h2>Recursive Data Structures</h2>
+<h2>Inheritance and Recursive Data Structures</h2>
 <p>We've provided a starter file with skeleton code for the exercises in
 the lab. You can get it at the following link:</p>
 
@@ -55,43 +55,144 @@ the lab. You can get it at the following link:</p>
 <li><a href="./lab6.py">lab6.py</a></li>
 </ul>
 
+<h3>Inheritance</h3>
+
+<p>You can find additional practice problems from this
+<a href="http://www-inst.eecs.berkeley.edu/~cs61a/sp13/labs/lab07/lab7.php">lab on OOP</a>
+from Spring 2013 helpful.</p>
+
+<p><strong>Problem 1</strong>: Consider the following code:</p>
+
+<pre><code>class Animal(object):
+    def __init__(self):
+        self.is_alive = True  # It's alive!!
+
+class Pet(Animal):
+    def __init__(self, name, year_of_birth, owner=None:
+        Animal.__init__(self)   # call the parent's constructor
+        self.name = name
+        self.age = current_year - year_of_birth
+        self.owner = owner
+
+    def eat(self, thing):
+        print(self.name + " ate a " + str(thing) + "!")
+
+    def talk(self):
+        print("...")
+</code></pre>
+
+<p>Implement a <code>Cat</code> class that inherits from <code>Pet</code>. Use superclass
+methods wherever possible.</p>
+
+<pre><code>class Cat(Pet):
+    def __init__(self, name, year_of_birth, owner, lives=9:
+        "*** YOUR CODE HERE ***"
+
+    def talk(self):
+        """A cat says 'Meow!' when asked to talk."""
+        "*** YOUR CODE HERE ***"
+
+    def lose_life(self):
+        """A cat can only lose a life if they have at least one
+        life. When there are zero lives left, the 'is_alive'
+        variable becomes False.
+        """
+        "*** YOUR CODE HERE ***"
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton0">Toggle Solution</button>
+  <div id="toggleText0" style="display: none">
+    <pre><code>class Cat(Pet):
+    def __init__(self, name, year_of_birth, owner, lives=9):
+        Pet.__init__(self, name, year_of_birth, owner)
+        self.lives = lives
+
+    def talk(self):
+        print('Meow!')
+
+    def lose_life(self):
+        if self.lives &gt; 0:
+            self.lives -= 1
+            if self.lives == 0
+                self.is_alive = False
+        else:
+            print('This cat has no more lives to lose x_x')
+</code></pre>
+
+  </div>
+<?php } ?>
+<p><strong>Problem 2</strong>: Now implement a <code>NoisyCat</code> class, which inherits from
+<code>Cat</code>. A <code>NoisyCat</code> is just like a normal <code>Cat</code> except, when asked to
+talk, it says what a normal <code>Cat</code> says twice.</p>
+
+<pre><code>class NoisyCat(Cat):
+    def __init__(self, name, year_of_birth, owner, lives=9):
+        "*** YOUR CODE HERE ***"
+        # hint: do you need to write another __init__?
+
+    def talk(self):
+        """A NoisyCat will always repeat what he/she said
+        twice."""
+        "*** YOUR CODE HERE ***"
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton1">Toggle Solution</button>
+  <div id="toggleText1" style="display: none">
+    <pre><code>class NoisyCat(Cat):
+    def __init__(self, name, year_of_birth, owner, lives=9):
+        Cat.__init__(self, name, year_of_birth, owner, lives)
+
+    def talk(self):
+        Cat.talk(self)
+        Cat.talk(self)
+</code></pre>
+
+<p>Observe two things:
+1. The <code>__init__</code> method is actually unnecessary, since it does
+   exactly what the superclass <code>__init__</code> does. As such, we could
+   arrive at the correct functionality by simply removing the
+   <code>__init__</code> method in <code>NoisyCat</code>.
+2. In <code>talk</code>, notice we do not use <code>self.talk()</code>. This would cause an
+   infinite recursive loop. Why?</p>
+
+  </div>
+<?php } ?>
 <h3>Recursive Lists</h3>
 
 <p>In lecture, we introduced the OOP version of an <code>Rlist</code>:</p>
 
 <pre><code>class Rlist:
-"""A recursive list consisting of a first element and the rest.
+    """A recursive list consisting of a first element and the rest.
 
-&gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
-&gt;&gt;&gt; s.rest
-Rlist(2, Rlist(3))
-&gt;&gt;&gt; len(s)
-3
-&gt;&gt;&gt; s[1]
-2
-"""
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; print(rlist_expression(s.rest))
+    Rlist(2, Rlist(3))
+    &gt;&gt;&gt; len(s)
+    3
+    &gt;&gt;&gt; s[1]
+    2
+    """
 
-class EmptyList:
+    class EmptyList:
+        def __len__(self):
+            return 0
+
+    empty = EmptyList()
+
+    def __init__(self, first, rest=empty):
+        self.first = first
+        self.rest = rest
+
+    def __getitem__(self, i):
+        if i == 0:
+            return self.first
+        else:
+            return self.rest[i-1]
+
     def __len__(self):
-        return 0
-
-empty = EmptyList()
-
-def __init__(self, first, rest=empty):
-    self.first = first
-    self.rest = rest
-
-def __getitem__(self, i):
-    if i == 0:
-        return self.first
-    else:
-        return self.rest[i-1]
-
-def __len__(self):
-    return 1 + len(self.rest)
-
-def __repr__(self):
-    return rlist_expression(self)
+        return 1 + len(self.rest)
 </code></pre>
 
 <p>Just like before, these <code>Rlists</code> have a first and a rest. The difference is
@@ -118,7 +219,7 @@ representation of an Rlist.</p>
     return 'Rlist({0}{1})'.format(s.first, rest)
 </code></pre>
 
-<p><strong>Problem 1</strong>: Predict what Python will display when the following lines are
+<p><strong>Problem 3</strong>: Predict what Python will display when the following lines are
 typed into the interpreter:</p>
 
 <pre><code>&gt;&gt;&gt; print(rlist_expression(Rlist(1, Rlist(2))))
@@ -145,8 +246,8 @@ _____
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton0">Toggle Solution</button>
-  <div id="toggleText0" style="display: none">
+  <button id="toggleButton2">Toggle Solution</button>
+  <div id="toggleText2" style="display: none">
     <ol>
 <li>Rlist(1, Rlist(2))</li>
 <li>TypeError</li>
@@ -181,7 +282,7 @@ arguments, and a value <code>z</code>. <code>foldr</code> essentially replaces t
 with f, and the empty list with <code>z</code>. It then evaluates the expression and
 returns the result. This is equivalent to:</p>
 
-<pre><code>f(1, f(2, f(3, f(4, f(4, z)))))
+<pre><code>f(1, f(2, f(3, f(4, f(5, z)))))
 </code></pre>
 
 <p>We call this operation a right fold.</p>
@@ -196,7 +297,7 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 
 <p>Also notice that a left fold is equivilant to python's <code>reduce</code> with 3 arguments.</p>
 
-<p><strong>Problem 2</strong>: Write the left fold function by filling in the blanks.</p>
+<p><strong>Problem 4</strong>: Write the left fold function by filling in the blanks.</p>
 
 <pre><code>def foldl(rlist, fn, z):
     """ Left fold
@@ -214,14 +315,14 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton1">Toggle Solution</button>
-  <div id="toggleText1" style="display: none">
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
     <pre><code>foldl(rlist.rest, fn, fn(z, rlist.first))
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 3</strong>: Now write the right fold function.</p>
+<p><strong>Problem 5</strong>: Now write the right fold function.</p>
 
 <pre><code>def foldr(rlist, fn, z):
     """ Right fold
@@ -237,8 +338,8 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
     <pre><code>def foldr(rlist, fn, z):
     if rlist is Rlist.empty:
         return z
@@ -250,7 +351,7 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 <p>Now that we've written the fold functions, let's write some useful functions
   using list folding!</p>
 
-<p><strong>Problem 4</strong>: Write the <code>mapl</code> function, which takes in a Rlist <code>list</code> and a
+<p><strong>Problem 6</strong>: Write the <code>mapl</code> function, which takes in a Rlist <code>lst</code> and a
 function <code>fn</code>, and returns a new Rlist where every element is the function
 applied to every element of the original list. Use either <code>foldl</code> or
 <code>foldr</code>. Hint: it is much easier to write with one of them than the other!</p>
@@ -266,15 +367,15 @@ applied to every element of the original list. Use either <code>foldl</code> or
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
-    <pre><code>def map(lst, fn):
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
+    <pre><code>def mapl(lst, fn):
     return foldr(lst, lambda x, xs: Rlist(fn(x), xs), Rlist.empty)
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 5</strong>: Write the <code>filterl</code> function, using either <code>foldl</code> or <code>foldr</code>.</p>
+<p><strong>Problem 7</strong>: Write the <code>filterl</code> function, using either <code>foldl</code> or <code>foldr</code>.</p>
 
 <pre><code>def filterl(lst, pred):
     """ Filters LST based on PRED
@@ -287,8 +388,8 @@ applied to every element of the original list. Use either <code>foldl</code> or
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton4">Toggle Solution</button>
-  <div id="toggleText4" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <pre><code>def filterl(lst, pred):
     def filtered(x, xs):
         if pred(x):
@@ -299,7 +400,7 @@ applied to every element of the original list. Use either <code>foldl</code> or
 
   </div>
 <?php } ?>
-<p><strong>Problem 6</strong>: Use foldl to write <code>reverse</code>, which takes in a recursive list and
+<p><strong>Problem 8</strong>: Use foldl to write <code>reverse</code>, which takes in a recursive list and
   reverses it. Hint: It only takes one line!</p>
 
 <pre><code>def reverse(lst):
@@ -321,8 +422,8 @@ applied to every element of the original list. Use either <code>foldl</code> or
 constructor. You do not have to use <code>foldl</code> or <code>foldr</code>.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
     <pre><code>def reverse(lst):
     return foldl(lst, lambda x, y: Rlist(y, x), Rlist.empty)
 
@@ -338,7 +439,7 @@ def reverse2(lst):
 
   </div>
 <?php } ?>
-<p><strong>Problem 7 Extra for Experts</strong>: Write foldl using foldr! You only need to fill
+<p><strong>Problem 9 Extra for Experts</strong>: Write foldl using foldr! You only need to fill
   in the <code>step</code> function.</p>
 
 <pre><code>def foldl2(rlist, fn, z):
@@ -357,8 +458,8 @@ def reverse2(lst):
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
     <pre><code>def foldl2(rlist, fn, z):
     def step(x, g):
         return lambda a: g(fn(a, x))
@@ -402,7 +503,7 @@ one long chain.</p>
 
 <p>Our implementation of binary trees can be found in <code>lab6.py</code>:</p>
 
-<pre><code>class Tree(object):
+<pre><code>class Tree:
     def __init__(self, entry, left=None, right=None):
         self.entry = entry
         self.left = left
@@ -425,7 +526,7 @@ representation of a tree:</p>
  2 5 6
 </code></pre>
 
-<p><strong>Problem 8</strong>: Define the function <code>size_of_tree</code> which takes in a tree as an
+<p><strong>Problem 10</strong>: Define the function <code>size_of_tree</code> which takes in a tree as an
 argument and returns the number of non-empty nodes in the tree.</p>
 
 <pre><code>def size_of_tree(tree):
@@ -445,8 +546,8 @@ argument and returns the number of non-empty nodes in the tree.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton7">Toggle Solution</button>
-  <div id="toggleText7" style="display: none">
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
     <pre><code>def size_of_tree(tree):
     if not tree:
         return 0
@@ -455,7 +556,7 @@ argument and returns the number of non-empty nodes in the tree.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 9</strong>: Define the function <code>deep_tree_reverse</code>, which takes a tree and
+<p><strong>Problem 11</strong>: Define the function <code>deep_tree_reverse</code>, which takes a tree and
 reverses the given order.</p>
 
 <pre><code>def deep_tree_reverse(tree):
@@ -475,8 +576,8 @@ reverses the given order.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton8">Toggle Solution</button>
-  <div id="toggleText8" style="display: none">
+  <button id="toggleButton10">Toggle Solution</button>
+  <div id="toggleText10" style="display: none">
     <pre><code>def deep_tree_reverse(tree):
     if tree:
         tree.left, tree.right = tree.right, tree.left
@@ -486,7 +587,7 @@ reverses the given order.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 10</strong>: Define the function <code>filter_tree</code> which takes in a tree as an
+<p><strong>Problem 12</strong>: Define the function <code>filter_tree</code> which takes in a tree as an
   argument and returns the same tree, but with items included or excluded based
   on the pred argument.</p>
 
@@ -512,8 +613,8 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton9">Toggle Solution</button>
-  <div id="toggleText9" style="display: none">
+  <button id="toggleButton11">Toggle Solution</button>
+  <div id="toggleText11" style="display: none">
     <pre><code>def filter_tree(tree, pred):
     if tree and pred(tree.entry):
         return Tree(tree.entry,
@@ -523,7 +624,7 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 11</strong>: Define the function <code>max_of_tree</code> which takes in a <code>tree</code> as an
+<p><strong>Problem 13</strong>: Define the function <code>max_of_tree</code> which takes in a <code>tree</code> as an
   argument and returns the max of all of the values of each node in the tree.</p>
 
 <pre><code>def max_of_tree(tree):
@@ -543,8 +644,8 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton10">Toggle Solution</button>
-  <div id="toggleText10" style="display: none">
+  <button id="toggleButton12">Toggle Solution</button>
+  <div id="toggleText12" style="display: none">
     <pre><code>def max_of_tree(tree):
     if not tree:
         return None
@@ -563,7 +664,7 @@ function, when you exclude a subtree, you exclude all of its children as well.</
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 11; $i++) { ?>
+    <?php for ($i = 0; $i < 13; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });

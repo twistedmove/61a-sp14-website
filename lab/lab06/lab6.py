@@ -1,12 +1,58 @@
 from operator import sub, add, mul
 
+# Inheritance
+
+class Animal:
+    def __init__(self):
+        self.is_alive = True  # It's alive!!
+
+class Pet(Animal):
+    def __init__(self, name, year_of_birth, owner=None):
+        Animal.__init__(self)   # call the parent's constructor
+        self.name = name
+        self.age = current_year - year_of_birth
+        self.owner = owner
+
+    def eat(self, thing):
+        print(self.name + " ate a " + str(thing) + "!")
+
+    def talk(self):
+        print("...")
+
+# Q1
+class Cat(Pet):
+    def __init__(self, name, year_of_birth, owner, lives=9):
+        "*** YOUR CODE HERE ***"
+
+    def talk(self):
+        """A cat says 'Meow!' when asked to talk."""
+        "*** YOUR CODE HERE ***"
+
+    def lose_life(self):
+        """A cat can only lose a life if they have at least one
+        life. When there are zero lives left, the 'is_alive'
+        variable becomes False.
+        """
+        "*** YOUR CODE HERE ***"
+
+# Q2
+class NoisyCat(Cat):
+    def __init__(self, name, year_of_birth, owner, lives=9):
+        "*** YOUR CODE HERE ***"
+        # hint: do you need to write another __init__?
+
+    def talk(self):
+        """A NoisyCat will always repeat what he/she said
+        twice."""
+        "*** YOUR CODE HERE ***"
+
 
 # Rlist definition
 class Rlist:
     """A recursive list consisting of a first element and the rest.
 
     >>> s = Rlist(1, Rlist(2, Rlist(3)))
-    >>> s.rest
+    >>> print(rlist_expression(s.rest))
     Rlist(2, Rlist(3))
     >>> len(s)
     3
@@ -32,9 +78,6 @@ class Rlist:
 
     def __len__(self):
         return 1 + len(self.rest)
-
-    def __repr__(self):
-        return rlist_expression(self)
 
 def rlist_expression(s):
     """Return a string that would evaluate to s."""
@@ -141,7 +184,7 @@ def foldl2(rlist, fn, z):
 
 
 # Tree definition
-class Tree(object):
+class Tree:
 
     def __init__(self, entry, left=None, right=None):
         self.entry = entry
