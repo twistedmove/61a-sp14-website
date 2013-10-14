@@ -478,7 +478,9 @@ its <code>blocks_path</code> attribute is <code>False</code>.  Now
 <code>Bee</code>'s that fly past.  Implement the <code>action</code> method in
 <code>NinjaAnt</code> to reduce the armor of all <code>Bee</code>s in the same
 <code>place</code> as the <code>NinjaAnt</code> by 1, overriding the default
-action method inherited from <code>Ant</code>.</p>
+action method inherited from <code>Ant</code>.  Make sure you also override
+the <code>damage</code> class variable (and use <code>damage</code>,
+of course).</p>
 
 <p>For a challenge, try to win a default game using only
 <code>HarversterAnt</code> and <code>NinjaAnt</code>.</p>
@@ -653,15 +655,15 @@ governed by three special rules:
 <ol>
   <li>If a bee ever enters the place occupied by the queen, then the bees
   immediately win the game. The game ends even if the queen is protected by a
-  bodyguard. The bees also win if any bee reaches the end of a tunnel, as usual.
+  bodyguard. The bees also win if any bee reaches the end of a tunnel where the
+  queen normally would reside.
 
-  <p> In <code>AntColony.simulate</code>, the bees win the game
-  whenever <code>len(self.queen.bees) > 0</code>, where <code>self</code> is
-  the ant colony. Normally, the <code>queen</code> attribute of an
-  <code>AntColony</code> is an instance of a <code>Place</code>.  As part of
-  the <code>action</code> of a <code>QueenAnt</code>, the
-  <code>colony.queen</code> should be replaced by a new object, a
-  <code>QueenPlace</code> (a class that you must add). A
+  <p> In <code>AntColony.simulate</code>, the bees win the game whenever
+  <code>len(self.queen.bees) > 0</code>, where <code>self</code> is the ant
+  colony. Normally, the <code>queen</code> attribute of an
+  <code>AntColony</code> is an instance of a <code>Place</code>.  As part of the
+  <code>action</code> of a <code>QueenAnt</code>, the <code>colony.queen</code>
+  should be replaced by a new object, a <code>QueenPlace</code>. A
   <code>QueenPlace</code> has a <code>bees</code> property method that evaluates
   to the list of all bees that are either in the original
   <code>colony.queen</code> location or the <code>place</code> of the
@@ -688,6 +690,20 @@ governed by three special rules:
   the <code>remove_insect</code> method of <code>Place</code> to enforce this
   condition.</li>
 </ol>
+
+<p>Some suggestions:</p>
+
+<ul>
+  <li>You can find every <code>Place</code> in a tunnel by starting at one
+  <code>Place</code> and then repeatedly follow both its <code>exit</code> and
+  <code>entrance</code> attributes to the ends.
+
+  <li>To detect whether a <code>Place</code> is at the end of a tunnel, check
+  whether its <code>exit</code> or <code>entrance</code> is <code>None</code>.
+
+  <li>To make sure that you don't double the damage of the same ant twice,
+    keep a list of all the ants that have been doubled.
+</ul>
 
 
 <p><b>Extra Credit</b> (2 pts). Implement two final thrower

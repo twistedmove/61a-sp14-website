@@ -7,6 +7,9 @@ import sys
 import imp
 from ucb import main
 import ants
+import autograder
+
+__version__ = '1'
 
 
 class AntTest(unittest.TestCase):
@@ -632,6 +635,16 @@ class TestProblem9(AntTest):
         self.queen = ants.QueenAnt()
         self.imposter = ants.QueenAnt()
 
+    def test_queen_place(self):
+        colony_queen = ants.Place('Original Queen Location of the Colony')
+        ant_queen = ants.Place('Place given to the QueenAnt')
+        queen_place = ants.QueenPlace(colony_queen, ant_queen)
+        colony_queen.bees = [ants.Bee(1, colony_queen) for _ in range(3)]
+        ant_queen.bees = [ants.Bee(2, colony_queen) for _ in range(4)]
+        self.assertEqual(7, len(queen_place.bees), 'QueenPlace has wrong bees')
+        bee_armor = sum(bee.armor for bee in queen_place.bees)
+        self.assertEqual(11, bee_armor, 'QueenPlace has wrong bees')
+
     def test_double(self):
         back = ants.ThrowerAnt()
         thrower_damage = ants.ThrowerAnt.damage
@@ -880,15 +893,42 @@ class TestExtraCredit(AntTest):
         bee.action(self.colony) # no effects
         self.assertEqual(0, slow.armor)
 
+
+project_info = {
+    'name': 'Project 3: Ants',
+    'remote_index': 'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/ants/',
+    'autograder_files': [
+        'ants_grader.py',
+    ],
+    'version': __version__,
+}
+
 @main
 def main(*args):
     import argparse
     parser = argparse.ArgumentParser(description="Run Ants Tests")
     parser.add_argument("--verbose", "-v", action="store_true")
+    parser.add_argument("--question", '-q')
     args = parser.parse_args()
+
+    autograder.check_for_updates(
+        project_info['remote_index'],
+        project_info['autograder_files'],
+        project_info['version'],
+    )
+
     doctest.testmod(ants, verbose=args.verbose)
-    stdout = sys.stdout
+
+    stdout = sys.stdout # suppressing print statements from ants.py
     with open(os.devnull, "w") as sys.stdout:
         verbosity = 2 if args.verbose else 1
-        tests = unittest.main(exit=False, verbosity=verbosity)
+        if args.question:
+            test_name = 'TestProblem' + args.question
+            if test_name in globals():
+                test = globals()[test_name]
+                suite = unittest.makeSuite(test)
+                runner = unittest.TextTestRunner()
+                runner.run(suite)
+        else:
+            tests = unittest.main(exit=False, verbosity=verbosity)
     sys.stdout = stdout

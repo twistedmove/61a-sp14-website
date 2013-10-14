@@ -17,9 +17,12 @@
 <span style="color: blue; font-weight: bold">import </span>imp
 <span style="color: blue; font-weight: bold">from </span>ucb <span style="color: blue; font-weight: bold">import </span>main
 <span style="color: blue; font-weight: bold">import </span>ants
+<span style="color: blue; font-weight: bold">import </span>autograder
+
+__version__ <span style="font-weight: bold">= </span><span style="color: red">'1'
 
 
-<span style="color: blue; font-weight: bold">class </span>AntTest<span style="font-weight: bold">(</span>unittest<span style="font-weight: bold">.</span>TestCase<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">class </span>AntTest<span style="font-weight: bold">(</span>unittest<span style="font-weight: bold">.</span>TestCase<span style="font-weight: bold">):
 
     </span><span style="color: blue; font-weight: bold">def </span>setUp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span>hive<span style="font-weight: bold">, </span>layout <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>Hive<span style="font-weight: bold">(</span>ants<span style="font-weight: bold">.</span>make_test_assault_plan<span style="font-weight: bold">()), </span>ants<span style="font-weight: bold">.</span>test_layout
@@ -642,6 +645,16 @@
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>queen <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>QueenAnt<span style="font-weight: bold">()
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>imposter <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>QueenAnt<span style="font-weight: bold">()
 
+    </span><span style="color: blue; font-weight: bold">def </span>test_queen_place<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>colony_queen <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>Place<span style="font-weight: bold">(</span><span style="color: red">'Original Queen Location of the Colony'</span><span style="font-weight: bold">)
+        </span>ant_queen <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>Place<span style="font-weight: bold">(</span><span style="color: red">'Place given to the QueenAnt'</span><span style="font-weight: bold">)
+        </span>queen_place <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>QueenPlace<span style="font-weight: bold">(</span>colony_queen<span style="font-weight: bold">, </span>ant_queen<span style="font-weight: bold">)
+        </span>colony_queen<span style="font-weight: bold">.</span>bees <span style="font-weight: bold">= [</span>ants<span style="font-weight: bold">.</span>Bee<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">, </span>colony_queen<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>_ <span style="color: blue; font-weight: bold">in </span>range<span style="font-weight: bold">(</span><span style="color: red">3</span><span style="font-weight: bold">)]
+        </span>ant_queen<span style="font-weight: bold">.</span>bees <span style="font-weight: bold">= [</span>ants<span style="font-weight: bold">.</span>Bee<span style="font-weight: bold">(</span><span style="color: red">2</span><span style="font-weight: bold">, </span>colony_queen<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>_ <span style="color: blue; font-weight: bold">in </span>range<span style="font-weight: bold">(</span><span style="color: red">4</span><span style="font-weight: bold">)]
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertEqual<span style="font-weight: bold">(</span><span style="color: red">7</span><span style="font-weight: bold">, </span>len<span style="font-weight: bold">(</span>queen_place<span style="font-weight: bold">.</span>bees<span style="font-weight: bold">), </span><span style="color: red">'QueenPlace has wrong bees'</span><span style="font-weight: bold">)
+        </span>bee_armor <span style="font-weight: bold">= </span>sum<span style="font-weight: bold">(</span>bee<span style="font-weight: bold">.</span>armor <span style="color: blue; font-weight: bold">for </span>bee <span style="color: blue; font-weight: bold">in </span>queen_place<span style="font-weight: bold">.</span>bees<span style="font-weight: bold">)
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertEqual<span style="font-weight: bold">(</span><span style="color: red">11</span><span style="font-weight: bold">, </span>bee_armor<span style="font-weight: bold">, </span><span style="color: red">'QueenPlace has wrong bees'</span><span style="font-weight: bold">)
+
     </span><span style="color: blue; font-weight: bold">def </span>test_double<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span>back <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>ThrowerAnt<span style="font-weight: bold">()
         </span>thrower_damage <span style="font-weight: bold">= </span>ants<span style="font-weight: bold">.</span>ThrowerAnt<span style="font-weight: bold">.</span>damage
@@ -890,17 +903,44 @@
         </span>bee<span style="font-weight: bold">.</span>action<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>colony<span style="font-weight: bold">) </span><span style="color: green; font-style: italic"># no effects
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertEqual<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">, </span>slow<span style="font-weight: bold">.</span>armor<span style="font-weight: bold">)
 
+
+</span>project_info <span style="font-weight: bold">= {
+    </span><span style="color: red">'name'</span><span style="font-weight: bold">: </span><span style="color: red">'Project 3: Ants'</span><span style="font-weight: bold">,
+    </span><span style="color: red">'remote_index'</span><span style="font-weight: bold">: </span><span style="color: red">'http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/ants/'</span><span style="font-weight: bold">,
+    </span><span style="color: red">'autograder_files'</span><span style="font-weight: bold">: [
+        </span><span style="color: red">'ants_grader.py'</span><span style="font-weight: bold">,
+    ],
+    </span><span style="color: red">'version'</span><span style="font-weight: bold">: </span>__version__<span style="font-weight: bold">,
+}
+
 </span>@main
 <span style="color: blue; font-weight: bold">def </span>main<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">import </span>argparse
     parser <span style="font-weight: bold">= </span>argparse<span style="font-weight: bold">.</span>ArgumentParser<span style="font-weight: bold">(</span>description<span style="font-weight: bold">=</span><span style="color: red">"Run Ants Tests"</span><span style="font-weight: bold">)
     </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">"--verbose"</span><span style="font-weight: bold">, </span><span style="color: red">"-v"</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">"store_true"</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">"--question"</span><span style="font-weight: bold">, </span><span style="color: red">'-q'</span><span style="font-weight: bold">)
     </span>args <span style="font-weight: bold">= </span>parser<span style="font-weight: bold">.</span>parse_args<span style="font-weight: bold">()
+
+    </span>autograder<span style="font-weight: bold">.</span>check_for_updates<span style="font-weight: bold">(
+        </span>project_info<span style="font-weight: bold">[</span><span style="color: red">'remote_index'</span><span style="font-weight: bold">],
+        </span>project_info<span style="font-weight: bold">[</span><span style="color: red">'autograder_files'</span><span style="font-weight: bold">],
+        </span>project_info<span style="font-weight: bold">[</span><span style="color: red">'version'</span><span style="font-weight: bold">],
+    )
+
     </span>doctest<span style="font-weight: bold">.</span>testmod<span style="font-weight: bold">(</span>ants<span style="font-weight: bold">, </span>verbose<span style="font-weight: bold">=</span>args<span style="font-weight: bold">.</span>verbose<span style="font-weight: bold">)
-    </span>stdout <span style="font-weight: bold">= </span>sys<span style="font-weight: bold">.</span>stdout
-    with open<span style="font-weight: bold">(</span>os<span style="font-weight: bold">.</span>devnull<span style="font-weight: bold">, </span><span style="color: red">"w"</span><span style="font-weight: bold">) </span>as sys<span style="font-weight: bold">.</span>stdout<span style="font-weight: bold">:
+
+    </span>stdout <span style="font-weight: bold">= </span>sys<span style="font-weight: bold">.</span>stdout <span style="color: green; font-style: italic"># suppressing print statements from ants.py
+    </span>with open<span style="font-weight: bold">(</span>os<span style="font-weight: bold">.</span>devnull<span style="font-weight: bold">, </span><span style="color: red">"w"</span><span style="font-weight: bold">) </span>as sys<span style="font-weight: bold">.</span>stdout<span style="font-weight: bold">:
         </span>verbosity <span style="font-weight: bold">= </span><span style="color: red">2 </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>verbose <span style="color: blue; font-weight: bold">else </span><span style="color: red">1
-        </span>tests <span style="font-weight: bold">= </span>unittest<span style="font-weight: bold">.</span>main<span style="font-weight: bold">(</span>exit<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">, </span>verbosity<span style="font-weight: bold">=</span>verbosity<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">:
+            </span>test_name <span style="font-weight: bold">= </span><span style="color: red">'TestProblem' </span><span style="font-weight: bold">+ </span>args<span style="font-weight: bold">.</span>question
+            <span style="color: blue; font-weight: bold">if </span>test_name <span style="color: blue; font-weight: bold">in </span>globals<span style="font-weight: bold">():
+                </span>test <span style="font-weight: bold">= </span>globals<span style="font-weight: bold">()[</span>test_name<span style="font-weight: bold">]
+                </span>suite <span style="font-weight: bold">= </span>unittest<span style="font-weight: bold">.</span>makeSuite<span style="font-weight: bold">(</span>test<span style="font-weight: bold">)
+                </span>runner <span style="font-weight: bold">= </span>unittest<span style="font-weight: bold">.</span>TextTestRunner<span style="font-weight: bold">()
+                </span>runner<span style="font-weight: bold">.</span>run<span style="font-weight: bold">(</span>suite<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span>tests <span style="font-weight: bold">= </span>unittest<span style="font-weight: bold">.</span>main<span style="font-weight: bold">(</span>exit<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">, </span>verbosity<span style="font-weight: bold">=</span>verbosity<span style="font-weight: bold">)
     </span>sys<span style="font-weight: bold">.</span>stdout <span style="font-weight: bold">= </span>stdout
 
 </pre>
