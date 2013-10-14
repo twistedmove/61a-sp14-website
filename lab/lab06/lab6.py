@@ -19,7 +19,7 @@ class Pet(Animal):
     def talk(self):
         print("...")
 
-# Q1
+# Problem 1
 class Cat(Pet):
     def __init__(self, name, year_of_birth, owner, lives=9):
         "*** YOUR CODE HERE ***"
@@ -35,7 +35,7 @@ class Cat(Pet):
         """
         "*** YOUR CODE HERE ***"
 
-# Q2
+# Problem 2
 class NoisyCat(Cat):
     def __init__(self, name, year_of_birth, owner, lives=9):
         "*** YOUR CODE HERE ***"
@@ -87,7 +87,7 @@ def rlist_expression(s):
         rest = ', ' + rlist_expression(s.rest)
     return 'Rlist({0}{1})'.format(s.first, rest)
 
-# Problem 2
+# Problem 4
 def foldl(rlist, fn, z):
     """ Left fold
     >>> lst = Rlist(3, Rlist(2, Rlist(1)))
@@ -102,7 +102,7 @@ def foldl(rlist, fn, z):
         return z
     return foldl(______, ______, ______)
 
-# Problem 3
+# Problem 5
 def foldr(rlist, fn, z):
     """ Right fold
     >>> lst = Rlist(3, Rlist(2, Rlist(1)))
@@ -115,7 +115,7 @@ def foldr(rlist, fn, z):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 4
+# Problem 6
 def mapl(lst, fn):
     """ Maps FN on LST
     >>> lst = Rlist(3, Rlist(2, Rlist(1)))
@@ -125,7 +125,7 @@ def mapl(lst, fn):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 5
+# Problem 7
 def filterl(lst, pred):
     """ Filters LST based on PRED
     >>> lst = Rlist(4, Rlist(3, Rlist(2, Rlist(1))))
@@ -135,7 +135,7 @@ def filterl(lst, pred):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 6
+# Problem 8
 def reverse(lst):
     """ Reverses LST with foldl
     >>> reversed = reverse(Rlist(3, Rlist(2, Rlist(1))))
@@ -150,7 +150,7 @@ def reverse(lst):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 6 Extra for Experts:
+# Problem 8 Extra for Experts:
 def reverse2(lst):
     """ Reverses LST without the Rlist constructor
     >>> reversed = reverse2(Rlist(3, Rlist(2, Rlist(1))))
@@ -167,7 +167,7 @@ def reverse2(lst):
 
 identity = lambda x: x
 
-# Problem 7 Extra for Experts:
+# Problem 9 Extra for Experts:
 def foldl2(rlist, fn, z):
     """ Write foldl using foldr
     >>> list = Rlist(3, Rlist(2, Rlist(1)))
@@ -202,7 +202,7 @@ t = Tree(4,
          Tree(1, Tree(5),
               Tree(3, Tree(2), Tree(9))))
 
-# Problem 8
+# Problem 10
 def size_of_tree(tree):
     r""" Return the number of non-empty nodes in TREE
     >>> print(tree_string(t)) # doctest: +NORMALIZE_WHITESPACE
@@ -218,7 +218,7 @@ def size_of_tree(tree):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 9
+# Problem 11
 def deep_tree_reverse(tree):
     r""" Reverses the order of a tree
     >>> a = t.copy()
@@ -234,7 +234,7 @@ def deep_tree_reverse(tree):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 10
+# Problem 12
 def filter_tree(tree, pred):
     r""" Removes TREE if entry of TREE satisfies PRED
     >>> a = t.copy()
@@ -252,7 +252,7 @@ def filter_tree(tree, pred):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 11
+# Problem 13
 def max_of_tree(tree):
     r""" Returns the max of all the values of each node in TREE
     >>> print(tree_string(t)) # doctest: +NORMALIZE_WHITESPACE
