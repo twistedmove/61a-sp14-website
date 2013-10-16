@@ -1,6 +1,7 @@
 # Name:
 # Email:
 
+# Q0.
 # Q1.
 
 class VendingMachine(object):
