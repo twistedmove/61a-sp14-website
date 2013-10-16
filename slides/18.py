@@ -4,9 +4,10 @@ def fib(n):
     """Return the nth Fibonacci number."""
     if n == 1:
         return 0
-    if n == 2:
+    elif n == 2:
         return 1
-    return fib(n-2) + fib(n-1)
+    else:
+        return fib(n-2) + fib(n-1)
 
 class Tree:
     """A binary tree with internal entries.
@@ -39,11 +40,13 @@ def fib_tree(n):
     """
     if n == 1:
         return Tree(0)
-    if n == 2:
+    elif n == 2:
         return Tree(1)
-    left = fib_tree(n-2)
-    right = fib_tree(n-1)
-    return Tree(left.entry + right.entry, left, right)
+    else:
+        left = fib_tree(n-2)
+        right = fib_tree(n-1)
+        entry = left.entry + right.entry
+        return Tree(entry, left, right)
 
 def count_entries(tree):
     """Return the number of entries in a Tree.
@@ -53,9 +56,10 @@ def count_entries(tree):
     """
     if tree is None:
         return 0
-    left = count_entries(tree.left)
-    right = count_entries(tree.right)
-    return 1 + left + right
+    else:
+        left = count_entries(tree.left)
+        right = count_entries(tree.right)
+        return 1 + left + right
 
 # Counting factors
 
@@ -105,7 +109,8 @@ def exp(b, n):
     """
     if n == 0:
         return 1
-    return b * exp(b, n-1)
+    else:
+        return b * exp(b, n-1)
 
 def square(x):
     return x*x
@@ -118,7 +123,7 @@ def fast_exp(b, n):
     """
     if n == 0:
         return 1
-    if n % 2 == 0:
+    elif n % 2 == 0:
         return square(fast_exp(b, n//2))
     else:
         return b * fast_exp(b, n-1)
