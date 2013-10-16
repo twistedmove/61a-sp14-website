@@ -9,7 +9,7 @@ from ucb import main
 import ants
 import autograder
 
-__version__ = '1'
+__version__ = '1.1'
 
 
 class AntTest(unittest.TestCase):
@@ -770,7 +770,7 @@ class TestProblem9(AntTest):
 
 
 
-class TestExtraCredit(AntTest):
+class TestProblemEC(AntTest):
 
     def test_status_parameters(self):
         slow = ants.SlowThrower()
@@ -919,16 +919,25 @@ def main(*args):
 
     doctest.testmod(ants, verbose=args.verbose)
 
+    question = args.question
+    if question:
+        question = question.upper()
+        test_name = 'TestProblem' + question
+        if test_name in globals():
+            test = globals()[test_name]
+            suite = unittest.makeSuite(test)
+            runner = unittest.TextTestRunner()
+        else:
+            print('Question "{0}" not recognized.'.format(args.question),
+                  'Try one of the following instead:')
+            print('  2  3  A4  A5  B4  B5  A6  A7  B6  B7  8  9 EC')
+            return
+
     stdout = sys.stdout # suppressing print statements from ants.py
     with open(os.devnull, "w") as sys.stdout:
         verbosity = 2 if args.verbose else 1
-        if args.question:
-            test_name = 'TestProblem' + args.question
-            if test_name in globals():
-                test = globals()[test_name]
-                suite = unittest.makeSuite(test)
-                runner = unittest.TextTestRunner()
-                runner.run(suite)
+        if question:
+            runner.run(suite)
         else:
             tests = unittest.main(exit=False, verbosity=verbosity)
     sys.stdout = stdout

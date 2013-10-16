@@ -6,11 +6,13 @@ class Animal:
     def __init__(self):
         self.is_alive = True  # It's alive!!
 
+CURRENT_YEAR = 2013
+
 class Pet(Animal):
     def __init__(self, name, year_of_birth, owner=None):
         Animal.__init__(self)   # call the parent's constructor
         self.name = name
-        self.age = current_year - year_of_birth
+        self.age = CURRENT_YEAR - year_of_birth
         self.owner = owner
 
     def eat(self, thing):
