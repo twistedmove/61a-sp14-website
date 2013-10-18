@@ -63,7 +63,8 @@ LEAF_COLORS = {'Thrower': 'ForestGreen',
                'Long': 'DarkGreen',
                'Slow': 'LightBlue',
                'Stun': 'Red',
-               'Scuba': 'Blue'}
+               'Scuba': 'Blue',
+               'Queen': 'Purple'}
 
 
 class AntsGUI(object):

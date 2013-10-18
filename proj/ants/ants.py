@@ -332,29 +332,31 @@ def interactive_strategy(colony):
     interact(msg)
 
 def start_with_strategy(args, strategy):
-    usage = """python3 [ants.py|ants_gui.py] [OPTIONS]
-    Run the Ants vs. SomeBees project.
+    """Reads command-line arguments and starts Ants vs. SomeBees with those
+    options."""
+    import argparse
+    parser = argparse.ArgumentParser(description="Play Ants vs. SomeBees")
+    parser.add_argument('-t', '--ten', action='store_true',
+                        help='start with ten food')
+    parser.add_argument('-f', '--full', action='store_true',
+                        help='loads a full layout and assault plan')
+    parser.add_argument('-w', '--water', action='store_true',
+                        help='loads a full layout with water')
+    parser.add_argument('-i', '--insane', action='store_true',
+                        help='loads a difficult assault plan')
+    args = parser.parse_args()
 
-    -h, --help      Prints this help message
-    -t, --ten       Start with ten food
-    -f, --full      Loads a full layout and assault plan
-    -w, --water     Loads a full layout with water
-    -i, --insane    Loads a difficult assault plan
-    """
-    if "-h" in args or "--help" in args:
-        print(usage)
-        return
     assault_plan = make_test_assault_plan()
     layout = test_layout
     food = 2
-    if '-t' in args or '--ten' in args:
+    if args.ten:
         food = 10
-    if '-f' in args or '--full' in args:
+    if args.full:
         assault_plan = make_full_assault_plan()
         layout = dry_layout
-    if '-w' in args or '--water' in args:
+    if args.water:
         layout = mixed_layout
-    if '-i' in args or '--insane' in args:
+    if args.insane:
         assault_plan = make_insane_assault_plan()
     hive = Hive(assault_plan)
     AntColony(strategy, hive, ant_types(), layout, food).simulate()
@@ -560,7 +562,7 @@ class QueenAnt(ScubaThrower):
     implemented = False
 
     def __init__(self):
-        ThrowerAnt.__init__(self, 1)
+        ScubaThrower.__init__(self, 1)
         "*** YOUR CODE HERE ***"
 
     def action(self, colony):
