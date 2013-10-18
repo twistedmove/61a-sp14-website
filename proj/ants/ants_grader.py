@@ -9,7 +9,7 @@ from ucb import main
 import ants
 import autograder
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 
 class AntTest(unittest.TestCase):
@@ -616,6 +616,7 @@ class TestProblem8(AntTest):
         mod_guard.container = False
         self.assertTrue(bodyguard.can_contain(mod_guard), error_msg)
 
+
 class TestProblem9(AntTest):
     @staticmethod
     def queen_layout(queen, register_place, steps=5):
@@ -717,10 +718,12 @@ class TestProblem9(AntTest):
     def test_bodyguard(self):
         bee = ants.Bee(3)
         guard = ants.BodyguardAnt()
+        guard.damage, doubled = 5, 10
         self.colony.places['tunnel_0_1'].add_insect(self.queen)
         self.colony.places['tunnel_0_1'].add_insect(guard)
         self.colony.places['tunnel_0_2'].add_insect(bee)
         self.queen.action(self.colony)
+        self.assertEqual(guard.damage, doubled, 'Bodyguard damage incorrect')
         self.assertFalse(len(self.colony.queen.bees) > 0, 'Game ended')
         bee.action(self.colony)
         self.assertTrue(len(self.colony.queen.bees) > 0, 'Game not ended')
@@ -767,7 +770,6 @@ class TestProblem9(AntTest):
         self.colony.places['tunnel_0_4'].add_insect(bee)
         ant.action(self.colony)
         self.assertEqual(1, bee.armor, "Queen does not buff new ants")
-
 
 
 class TestProblemEC(AntTest):
@@ -930,7 +932,7 @@ def main(*args):
         else:
             print('Question "{0}" not recognized.'.format(args.question),
                   'Try one of the following instead:')
-            print('  2  3  A4  A5  B4  B5  A6  A7  B6  B7  8  9 EC')
+            print('  2  3  A4  A5  B4  B5  A6  A7  B6  B7  8  9  EC')
             return
 
     stdout = sys.stdout # suppressing print statements from ants.py

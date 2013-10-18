@@ -342,29 +342,31 @@ class </span>HarvesterAnt<span style="font-weight: bold">(</span>Ant<span style=
     </span>interact<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">)
 
 </span><span style="color: blue; font-weight: bold">def </span>start_with_strategy<span style="font-weight: bold">(</span>args<span style="font-weight: bold">, </span>strategy<span style="font-weight: bold">):
-    </span>usage <span style="font-weight: bold">= </span><span style="color: darkred">"""python3 [ants.py|ants_gui.py] [OPTIONS]
-    Run the Ants vs. SomeBees project.
+    </span><span style="color: darkred">"""Reads command-line arguments and starts Ants vs. SomeBees with those
+    options."""
+    </span><span style="color: blue; font-weight: bold">import </span>argparse
+    parser <span style="font-weight: bold">= </span>argparse<span style="font-weight: bold">.</span>ArgumentParser<span style="font-weight: bold">(</span>description<span style="font-weight: bold">=</span><span style="color: red">"Play Ants vs. SomeBees"</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-t'</span><span style="font-weight: bold">, </span><span style="color: red">'--ten'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'start with ten food'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-f'</span><span style="font-weight: bold">, </span><span style="color: red">'--full'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'loads a full layout and assault plan'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-w'</span><span style="font-weight: bold">, </span><span style="color: red">'--water'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'loads a full layout with water'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-i'</span><span style="font-weight: bold">, </span><span style="color: red">'--insane'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'loads a difficult assault plan'</span><span style="font-weight: bold">)
+    </span>args <span style="font-weight: bold">= </span>parser<span style="font-weight: bold">.</span>parse_args<span style="font-weight: bold">()
 
-    -h, --help      Prints this help message
-    -t, --ten       Start with ten food
-    -f, --full      Loads a full layout and assault plan
-    -w, --water     Loads a full layout with water
-    -i, --insane    Loads a difficult assault plan
-    """
-    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">"-h" </span><span style="color: blue; font-weight: bold">in </span>args <span style="color: blue; font-weight: bold">or </span><span style="color: red">"--help" </span><span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>usage<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return
     </span>assault_plan <span style="font-weight: bold">= </span>make_test_assault_plan<span style="font-weight: bold">()
     </span>layout <span style="font-weight: bold">= </span>test_layout
     food <span style="font-weight: bold">= </span><span style="color: red">2
-    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'-t' </span><span style="color: blue; font-weight: bold">in </span>args <span style="color: blue; font-weight: bold">or </span><span style="color: red">'--ten' </span><span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">:
+    </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>ten<span style="font-weight: bold">:
         </span>food <span style="font-weight: bold">= </span><span style="color: red">10
-    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'-f' </span><span style="color: blue; font-weight: bold">in </span>args <span style="color: blue; font-weight: bold">or </span><span style="color: red">'--full' </span><span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">:
+    </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>full<span style="font-weight: bold">:
         </span>assault_plan <span style="font-weight: bold">= </span>make_full_assault_plan<span style="font-weight: bold">()
         </span>layout <span style="font-weight: bold">= </span>dry_layout
-    <span style="color: blue; font-weight: bold">if </span><span style="color: red">'-w' </span><span style="color: blue; font-weight: bold">in </span>args <span style="color: blue; font-weight: bold">or </span><span style="color: red">'--water' </span><span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">:
+    <span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>water<span style="font-weight: bold">:
         </span>layout <span style="font-weight: bold">= </span>mixed_layout
-    <span style="color: blue; font-weight: bold">if </span><span style="color: red">'-i' </span><span style="color: blue; font-weight: bold">in </span>args <span style="color: blue; font-weight: bold">or </span><span style="color: red">'--insane' </span><span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">:
+    <span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>insane<span style="font-weight: bold">:
         </span>assault_plan <span style="font-weight: bold">= </span>make_insane_assault_plan<span style="font-weight: bold">()
     </span>hive <span style="font-weight: bold">= </span>Hive<span style="font-weight: bold">(</span>assault_plan<span style="font-weight: bold">)
     </span>AntColony<span style="font-weight: bold">(</span>strategy<span style="font-weight: bold">, </span>hive<span style="font-weight: bold">, </span>ant_types<span style="font-weight: bold">(), </span>layout<span style="font-weight: bold">, </span>food<span style="font-weight: bold">).</span>simulate<span style="font-weight: bold">()
@@ -570,7 +572,7 @@ class </span>HungryAnt<span style="font-weight: bold">(</span>Ant<span style="fo
     </span>implemented <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
 
     def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-        </span>ThrowerAnt<span style="font-weight: bold">.</span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
+        </span>ScubaThrower<span style="font-weight: bold">.</span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
         </span><span style="color: red">"*** YOUR CODE HERE ***"
 
     </span><span style="color: blue; font-weight: bold">def </span>action<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>colony<span style="font-weight: bold">):
