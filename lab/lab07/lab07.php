@@ -142,8 +142,9 @@ True
 
 <p>One really convinient thing about sets is that many operations on sets (adding elements, removing elements, checking membership) run in O(1) constant time. If you are interested on how, look up HashSets or look at the third challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</p>
 
-<p>###Question 3
-Write the following function so it runs in O(n) time.</p>
+<h3>Question 3</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre>
 def extra_elem(a,b):
