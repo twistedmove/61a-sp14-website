@@ -11,7 +11,7 @@
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 6</title> 
+    <title>CS 61A Fall 2013: Lab 7</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -40,13 +40,13 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("10/21/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("10/24/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 6</h1>
+    <h1>CS 61A Lab 7</h1>
 <h2>Sets & Orders of Growth</h2>
 <h2>Sets</h2>
 
@@ -102,7 +102,7 @@ True
   <button id="toggleButton0">Toggle Solution</button>
   <div id="toggleText0" style="display: none">
     <p>def union(s1,s2):
-    union<em>set = set() 
+    union<em>set = set()
     for elem in s1:
         union</em>set.add(elem)
     for elem in s2:
@@ -130,7 +130,7 @@ True
   <button id="toggleButton1">Toggle Solution</button>
   <div id="toggleText1" style="display: none">
     <p>def intersection(s1,s2):
-    intersection<em>set = set() 
+    intersection<em>set = set()
     for elem in s1:
         if elem in s2:
             intersection</em>set.add(elem)
@@ -138,13 +138,14 @@ True
 
   </div>
 <?php } ?>
-<p>##Orders of Growth 
-One really convinient thing about sets is that many operations on sets (adding elements, removing elements, checking membership) run in O(1) constant time. If you are interested on how, look up HashSets or look at the third challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</p>
+<h2>Orders of Growth</h2>
 
-<p>###Question 3 
+<p>One really convinient thing about sets is that many operations on sets (adding elements, removing elements, checking membership) run in O(1) constant time. If you are interested on how, look up HashSets or look at the third challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</p>
+
+<p>###Question 3
 Write the following function so it runs in O(n) time.</p>
 
-<pre> 
+<pre>
 def extra_elem(a,b):
     '''B contains every element in A, and has one additional member, find the additional member'''
     >>> extra_elem(["dog","cat","monkey"], ["dog", "cat", "monkey", "giraffe"])
@@ -174,20 +175,21 @@ def extra_elem(a,b):
 
   </div>
 <?php } ?>
-<p>###Question 4
-Write the following function so it runs in O(n) time.</p>
+<h3>Question 4</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre>
 def add_up(n, lst):
-    ''' Returns true if any two non identical elements in lst add up to any n 
+    ''' Returns true if any two non identical elements in lst add up to any n
     >>> add_up(100,[1,2,3,4,5])
-    False 
+    False
     >>> add_up(7,[1,2,3,4,2])
     True
     >>> add_up(10,[5,5])
     False
     '''
-    *** your code here *** 
+    *** your code here ***
 </pre>
 
 <p></html></p>
@@ -197,9 +199,9 @@ def add_up(n, lst):
   <div id="toggleText3" style="display: none">
     <pre>
 def add_up(n, lst):
-    ''' Returns true if any two nonidentical elements in lst add up to n 
+    ''' Returns true if any two nonidentical elements in lst add up to n
     >>> add_up(100,[1,2,3,4,5])
-    False 
+    False
     >>> add_up(7,[1,2,3,4,2])
     True
     >>> add_up(10,[5,5])
@@ -221,13 +223,13 @@ def add_up(n, lst):
 
 <pre>
 def find_duplicates(lst):
-    ''' Returns true if lst has any duplicates and false if it does not 
+    ''' Returns true if lst has any duplicates and false if it does not
     >>> find_duplicates([1,2,3,4,5])
-    False 
+    False
     >>> find_duplicates([1,2,3,4,2])
     True
     '''
-    *** your code here *** 
+    *** your code here ***
 </pre>
 
 <p></html></p>
@@ -237,9 +239,9 @@ def find_duplicates(lst):
   <div id="toggleText4" style="display: none">
     <pre>
 def find_duplicates(lst):
-    ''' Returns true if lst has any duplicates and false if it does not 
+    ''' Returns true if lst has any duplicates and false if it does not
     >>> find_duplicates([1,2,3,4,5])
-    False 
+    False
     >>> find_duplicates([1,2,3,4,2])
     True
     '''
@@ -250,18 +252,19 @@ def find_duplicates(lst):
 
   </div>
 <?php } ?>
-<p>###Question 6
-Write the following function so it runs in O(n) time.</p>
+<h3>Question 6</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre>
 def find_duplicates_k(k, lst):
-    ''' Returns true if there are any duplicates in lst that are within k indices apart 
+    ''' Returns true if there are any duplicates in lst that are within k indices apart
     >>> find_duplicates_k(3,[1,2,3,4,1])
-    False 
+    False
     >>> find_duplicates_k(4,[1,2,3,4,1])
     True
     '''
-    *** your code here *** 
+    *** your code here ***
 </pre>
 
 <p></html></p>
@@ -273,14 +276,14 @@ def find_duplicates_k(k, lst):
 def find_duplicates_k(k, lst):
     ''' Returns true if there are any duplicates in lst that are within k indices apart '''
     >>> find_duplicates(3,[1,2,3,4,1])
-    False 
+    False
     >>> find_duplicates(4,[1,2,3,4,1])
     True
 
-    prev_set = set() 
+    prev_set = set()
     for i, elem in enumerate(lst):
         if elem in prev_set:
-            return True 
+            return True
         prev_set.add(elem)
         if i - k >= 0:
             prev_set.remove(lst[i - k])
@@ -292,8 +295,9 @@ def find_duplicates_k(k, lst):
 
   </div>
 <?php } ?>
-<p>###Question 7
-Write the following function so it runs in O(log n) time.</p>
+<h3>Question 7</h3>
+
+<p>Write the following function so it runs in O(log n) time.</p>
 
 <pre>
 def pow(n,k)
@@ -302,7 +306,7 @@ def pow(n,k)
     8
     >>> pow(4,2)
     16
-    *** your code here *** 
+    *** your code here ***
 </pre>
 
 <p></html></p>
@@ -312,7 +316,7 @@ def pow(n,k)
   <div id="toggleText6" style="display: none">
     <pre>
 def pow(n,k)
-    ''' Computes n^k 
+    ''' Computes n^k
     >>> pow(2,3)
     8
     >>> pow(4,2)
@@ -330,8 +334,9 @@ def pow(n,k)
 
   </div>
 <?php } ?>
-<p>###Question 8
-Write the following function so it runs in O(n) time </p>
+<h3>Question 8</h3>
+
+<p>Write the following function so it runs in O(n) time</p>
 
 <pre>
 def missing_no(lst)
@@ -341,7 +346,7 @@ def missing_no(lst)
     >>> missing_no(list(filter(lambda x: x != 293, list(range(2000)))))
     293
     '''
-    *** your code here *** 
+    *** your code here ***
 </pre>
 
 <p></html></p>
@@ -357,14 +362,15 @@ def missing_no(lst)
     >>> missing_no(list(filter(lambda x: x != 293, list(range(2000)))))
     293
     '''
-    return sum(range(max(lst)+1)) - sum(lst) 
+    return sum(range(max(lst)+1)) - sum(lst)
 </pre>
 
 <p></html>
 ~solution</p>
 
-<p>###Question 9
-Write the following function so it runs in O(n) time.</p>
+<h3>Question 9</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre>
 def find_duplicates_k_l(k,l, lst):
@@ -386,7 +392,7 @@ def find_duplicates_k_l(k,l, lst):
     >>> find_duplicates_k_l(2,100[100,23,199,275,320,988,27])
     True
     '''
-    *** your code here *** 
+    *** your code here ***
 </pre>
 
   </div>
