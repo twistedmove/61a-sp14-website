@@ -9,7 +9,7 @@ from ucb import main
 import ants
 import autograder
 
-__version__ = '1.2'
+__version__ = '1.3'
 
 
 class AntTest(unittest.TestCase):
@@ -145,6 +145,16 @@ class TestProblemA5(AntTest):
         place.add_insect(buffAnt)
         bee.action(self.colony)
         self.assertEqual(400, bee.armor, error_msg)
+
+    def test_fireant_expiration(self):
+        error_msg = "FireAnt should have, but did not expire"
+        place = self.colony.places["tunnel_0_0"]
+        bee = ants.Bee(1)
+        place.add_insect(bee)
+        ant = ants.FireAnt()
+        place.add_insect(ant)
+        bee.action(self.colony)
+        self.assertEqual(ant.armor, 0, error_msg)
 
 
 class TestProblemB4(AntTest):
