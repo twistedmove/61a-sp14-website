@@ -221,7 +221,8 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
     """
     check_set = set()
     for elem in lst:
-        check_set.add(n - elem)
+        if n - elem != elem:
+            check_set.add(n - elem)
     return bool(intersection(check_set, set(lst)))
 </code></pre>
 
@@ -359,7 +360,7 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 9</strong>: Write the following function so it runs in O(n) time.</p>
+<p><strong>Problem 9 Extra for Experts</strong>: Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def find_duplicates_k_l(k, l, lst):
     """Returns True if there are any two values who in lst that are within k
