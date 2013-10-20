@@ -9,7 +9,7 @@ from ucb import main
 import ants
 import autograder
 
-__version__ = '1'
+__version__ = '1.3'
 
 
 class AntTest(unittest.TestCase):
@@ -145,6 +145,16 @@ class TestProblemA5(AntTest):
         place.add_insect(buffAnt)
         bee.action(self.colony)
         self.assertEqual(400, bee.armor, error_msg)
+
+    def test_fireant_expiration(self):
+        error_msg = "FireAnt should have, but did not expire"
+        place = self.colony.places["tunnel_0_0"]
+        bee = ants.Bee(1)
+        place.add_insect(bee)
+        ant = ants.FireAnt()
+        place.add_insect(ant)
+        bee.action(self.colony)
+        self.assertEqual(ant.armor, 0, error_msg)
 
 
 class TestProblemB4(AntTest):
@@ -616,6 +626,7 @@ class TestProblem8(AntTest):
         mod_guard.container = False
         self.assertTrue(bodyguard.can_contain(mod_guard), error_msg)
 
+
 class TestProblem9(AntTest):
     @staticmethod
     def queen_layout(queen, register_place, steps=5):
@@ -717,10 +728,12 @@ class TestProblem9(AntTest):
     def test_bodyguard(self):
         bee = ants.Bee(3)
         guard = ants.BodyguardAnt()
+        guard.damage, doubled = 5, 10
         self.colony.places['tunnel_0_1'].add_insect(self.queen)
         self.colony.places['tunnel_0_1'].add_insect(guard)
         self.colony.places['tunnel_0_2'].add_insect(bee)
         self.queen.action(self.colony)
+        self.assertEqual(guard.damage, doubled, 'Bodyguard damage incorrect')
         self.assertFalse(len(self.colony.queen.bees) > 0, 'Game ended')
         bee.action(self.colony)
         self.assertTrue(len(self.colony.queen.bees) > 0, 'Game not ended')
@@ -769,8 +782,7 @@ class TestProblem9(AntTest):
         self.assertEqual(1, bee.armor, "Queen does not buff new ants")
 
 
-
-class TestExtraCredit(AntTest):
+class TestProblemEC(AntTest):
 
     def test_status_parameters(self):
         slow = ants.SlowThrower()
@@ -919,16 +931,25 @@ def main(*args):
 
     doctest.testmod(ants, verbose=args.verbose)
 
+    question = args.question
+    if question:
+        question = question.upper()
+        test_name = 'TestProblem' + question
+        if test_name in globals():
+            test = globals()[test_name]
+            suite = unittest.makeSuite(test)
+            runner = unittest.TextTestRunner()
+        else:
+            print('Question "{0}" not recognized.'.format(args.question),
+                  'Try one of the following instead:')
+            print('  2  3  A4  A5  B4  B5  A6  A7  B6  B7  8  9  EC')
+            return
+
     stdout = sys.stdout # suppressing print statements from ants.py
     with open(os.devnull, "w") as sys.stdout:
         verbosity = 2 if args.verbose else 1
-        if args.question:
-            test_name = 'TestProblem' + args.question
-            if test_name in globals():
-                test = globals()[test_name]
-                suite = unittest.makeSuite(test)
-                runner = unittest.TextTestRunner()
-                runner.run(suite)
+        if question:
+            runner.run(suite)
         else:
             tests = unittest.main(exit=False, verbosity=verbosity)
     sys.stdout = stdout
