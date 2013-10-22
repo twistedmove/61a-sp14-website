@@ -19,7 +19,7 @@
 <span style="color: blue; font-weight: bold">import </span>ants
 <span style="color: blue; font-weight: bold">import </span>autograder
 
-__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.3'
+__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.4'
 
 
 </span><span style="color: blue; font-weight: bold">class </span>AntTest<span style="font-weight: bold">(</span>unittest<span style="font-weight: bold">.</span>TestCase<span style="font-weight: bold">):
@@ -48,13 +48,23 @@ __version__ <span style="font-weight: bold">= </span><span style="color: red">'1
     </span><span style="color: blue; font-weight: bold">def </span>test_connectedness<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span>error_msg <span style="font-weight: bold">= </span><span style="color: red">"Entrances not properly initialized"
         </span><span style="color: blue; font-weight: bold">for </span>entrance <span style="color: blue; font-weight: bold">in </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>colony<span style="font-weight: bold">.</span>bee_entrances<span style="font-weight: bold">:
-            </span>cur_place <span style="font-weight: bold">= </span>entrance
-            <span style="color: blue; font-weight: bold">while </span>cur_place<span style="font-weight: bold">:
-                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertIsNotNone<span style="font-weight: bold">(</span>cur_place<span style="font-weight: bold">.</span>entrance<span style="font-weight: bold">, </span>msg<span style="font-weight: bold">=</span>error_msg<span style="font-weight: bold">)
-                </span>cur_place <span style="font-weight: bold">= </span>cur_place<span style="font-weight: bold">.</span>exit
+            </span>place <span style="font-weight: bold">= </span>entrance
+            <span style="color: blue; font-weight: bold">while </span>place<span style="font-weight: bold">:
+                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertIsNotNone<span style="font-weight: bold">(</span>place<span style="font-weight: bold">.</span>entrance<span style="font-weight: bold">, </span>msg<span style="font-weight: bold">=</span>error_msg<span style="font-weight: bold">)
+                </span>place <span style="font-weight: bold">= </span>place<span style="font-weight: bold">.</span>exit
+
+    <span style="color: blue; font-weight: bold">def </span>test_exits_and_entrances_are_different<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">for </span>place <span style="color: blue; font-weight: bold">in </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>colony<span style="font-weight: bold">.</span>places<span style="font-weight: bold">.</span>values<span style="font-weight: bold">():
+            </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertIsNot<span style="font-weight: bold">(</span>place<span style="font-weight: bold">, </span>place<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">,
+                             </span><span style="color: red">'{0} is its own exit'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>place<span style="font-weight: bold">))
+            </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertIsNot<span style="font-weight: bold">(</span>place<span style="font-weight: bold">, </span>place<span style="font-weight: bold">.</span>entrance<span style="font-weight: bold">,
+                             </span><span style="color: red">'{0} is its own entrance'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>place<span style="font-weight: bold">))
+            </span><span style="color: blue; font-weight: bold">if </span>place<span style="font-weight: bold">.</span>exit <span style="color: blue; font-weight: bold">and </span>place<span style="font-weight: bold">.</span>entrance<span style="font-weight: bold">:
+                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>assertIsNot<span style="font-weight: bold">(</span>place<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">, </span>place<span style="font-weight: bold">.</span>entrance<span style="font-weight: bold">,
+                                 </span><span style="color: red">'{0} entrance is its exit'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>place<span style="font-weight: bold">))
 
 
-<span style="color: blue; font-weight: bold">class </span>TestProblemA4<span style="font-weight: bold">(</span>AntTest<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">class </span>TestProblemA4<span style="font-weight: bold">(</span>AntTest<span style="font-weight: bold">):
 
     </span><span style="color: blue; font-weight: bold">def </span>test_water_deadliness<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span>error_msg <span style="font-weight: bold">= </span><span style="color: red">"Water does not kill non-watersafe Insects"
