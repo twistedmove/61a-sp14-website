@@ -376,11 +376,11 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
     &gt;&gt;&gt; find_duplicates_k_l(2, 0, [1, 2, 3, 4, 1])
     False
     &gt;&gt;&gt; find_duplicates_k_l(1, 100, [100, 275, 320, 988, 27])
-    False
+    True
     &gt;&gt;&gt; find_duplicates_k_l(1, 100, [100, 199, 275, 320,988,27])
     True
     &gt;&gt;&gt; find_duplicates_k_l(1, 100, [100, 23, 199, 275,320,988,27])
-    False
+    True
     &gt;&gt;&gt; find_duplicates_k_l(2, 100, [100, 23, 199, 275,320,988,27])
     True
     """
