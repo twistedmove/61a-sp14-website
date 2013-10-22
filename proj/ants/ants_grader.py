@@ -9,7 +9,7 @@ from ucb import main
 import ants
 import autograder
 
-__version__ = '1.3'
+__version__ = '1.4'
 
 
 class AntTest(unittest.TestCase):
@@ -38,10 +38,20 @@ class TestProblem3(AntTest):
     def test_connectedness(self):
         error_msg = "Entrances not properly initialized"
         for entrance in self.colony.bee_entrances:
-            cur_place = entrance
-            while cur_place:
-                self.assertIsNotNone(cur_place.entrance, msg=error_msg)
-                cur_place = cur_place.exit
+            place = entrance
+            while place:
+                self.assertIsNotNone(place.entrance, msg=error_msg)
+                place = place.exit
+
+    def test_exits_and_entrances_are_different(self):
+        for place in self.colony.places.values():
+            self.assertIsNot(place, place.exit,
+                             '{0} is its own exit'.format(place))
+            self.assertIsNot(place, place.entrance,
+                             '{0} is its own entrance'.format(place))
+            if place.exit and place.entrance:
+                self.assertIsNot(place.exit, place.entrance,
+                                 '{0} entrance is its exit'.format(place))
 
 
 class TestProblemA4(AntTest):
