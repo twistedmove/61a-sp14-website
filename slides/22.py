@@ -24,21 +24,6 @@ class Rlist:
 
 s = Rlist(1, Rlist(2, Rlist(3)))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def rlist(first, rest=None):
     """Return a mutable recursive list represented as a function.
 
