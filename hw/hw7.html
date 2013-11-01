@@ -254,6 +254,8 @@ def intersect_set2(set1, set2):
 def adjoin_set2(s, v):
     &quot;&quot;&quot;Return a set containing all elements of s and element v.
 
+    Assume that s is an Rlist with elements sorted from least to greatest.
+
     &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
     &gt;&gt;&gt; adjoin_set2(s, 2.5)
     Rlist(1, Rlist(2, Rlist(2.5, Rlist(3))))
@@ -267,6 +269,9 @@ def adjoin_set2(s, v):
 def union_set2(set1, set2):
     &quot;&quot;&quot;Return a set containing all elements either in set1 or set2.
 
+    Assume that set1 and set2 are both Rlists with elements sorted from least
+    to greatest.
+
     &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
     &gt;&gt;&gt; t = Rlist(1, Rlist(3, Rlist(5)))
     &gt;&gt;&gt; union_set2(s, t)
@@ -279,8 +284,11 @@ def union_set2(set1, set2):
     &quot;*** YOUR CODE HERE ***&quot;
 </pre>
 <p><strong>Q4.</strong> Complete the implementation from lecture of sets represented as binary
-search trees.  Intersection and union are performed by coercing a tree set
-to and from an ordered recursive list:</p>
+search trees.  The entry of a binary search tree is larger than all entries in
+its left branch and smaller than all entries in its right branch.  Moreover,
+non-empty branches of a binary search tree must also be binary search trees.
+Intersection and union are performed by coercing a tree set to and from an
+ordered recursive list:</p>
 <pre class="literal-block">
 class Tree(object):
     &quot;&quot;&quot;A tree with internal values.&quot;&quot;&quot;
@@ -298,6 +306,8 @@ class Tree(object):
 
 def big_tree(left, right):
     &quot;&quot;&quot;Return a tree set of unique elements between left and right.
+
+    This function creates binary search trees for testing.
 
     &gt;&gt;&gt; big_tree(0, 12)
     Tree(6, Tree(2, Tree(0), Tree(4)), Tree(10, Tree(8), Tree(12)))
@@ -373,6 +383,8 @@ number of elements in the tree:</p>
 def tree_to_ordered_sequence(s):
     &quot;&quot;&quot;Return an ordered sequence containing the elements of tree set s.
 
+    Assume that s is a well-formed binary search tree.
+
     &gt;&gt;&gt; b = big_tree(0, 9)
     &gt;&gt;&gt; tree_to_ordered_sequence(b)
     Rlist(1, Rlist(4, Rlist(7, Rlist(9))))
@@ -390,12 +402,34 @@ builds the right branch out of the next right_size elements.  In total,
 <pre class="literal-block">
 def partial_tree(s, n):
     &quot;&quot;&quot;Return a balanced tree of the first n elements of Rlist s, along with
-    the rest of s. A tree is balanced if the length of the path to any two
-    leaves are at most one apart.
+    the rest of s. A tree is balanced if
+
+      (a) the number of entries in its left branch differs from the number
+          of entries in its right branch by at most 1, and
+
+      (b) its non-empty branches are also balanced trees.
+
+    Examples of balanced trees:
+
+    Tree(1)                    # branch difference 0 - 0 = 0
+    Tree(1, Tree(2), None)     # branch difference 1 - 0 = 1
+    Tree(1, None, Tree(2))     # branch difference 0 - 1 = -1
+    Tree(1, Tree(2), Tree(3))  # branch difference 1 - 1 = 0
+
+    Examples of unbalanced trees:
+
+    Tree(1, Tree(2, Tree(3)), None)  # branch difference 2 - 0 = 2
+    Tree(1, Tree(2, Tree(3), None),
+            Tree(4, Tree(5, Tree(6), None), None)) # Unbalanced right branch
 
     &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3, Rlist(4, Rlist(5)))))
     &gt;&gt;&gt; partial_tree(s, 3)
     (Tree(2, Tree(1), Tree(3)), Rlist(4, Rlist(5)))
+    &gt;&gt;&gt; t = Rlist(-2, Rlist(-1, Rlist(0, s)))
+    &gt;&gt;&gt; partial_tree(t, 7)[0]
+    Tree(1, Tree(-1, Tree(-2), Tree(0)), Tree(3, Tree(2), Tree(4)))
+    &gt;&gt;&gt; partial_tree(t, 7)[1]
+    Rlist(5)
     &quot;&quot;&quot;
     if n == 0:
         return None, s
@@ -405,9 +439,6 @@ def partial_tree(s, n):
 
 def ordered_sequence_to_tree(s):
     &quot;&quot;&quot;Return a balanced tree containing the elements of ordered Rlist s.
-
-    A tree is balanced if the lengths of the paths from the root to any two
-    leaves are at most one apart.
 
     Note: this implementation is complete, but the definition of partial_tree
     above is not complete.

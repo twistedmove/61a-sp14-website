@@ -101,6 +101,8 @@ def intersect_set2(set1, set2):
 def adjoin_set2(s, v):
     """Return a set containing all elements of s and element v.
 
+    Assume that s is an Rlist with elements sorted from least to greatest.
+
     >>> s = Rlist(1, Rlist(2, Rlist(3)))
     >>> adjoin_set2(s, 2.5)
     Rlist(1, Rlist(2, Rlist(2.5, Rlist(3))))
@@ -113,6 +115,9 @@ def adjoin_set2(s, v):
 
 def union_set2(set1, set2):
     """Return a set containing all elements either in set1 or set2.
+
+    Assume that set1 and set2 are both Rlists with elements sorted from least
+    to greatest.
 
     >>> s = Rlist(1, Rlist(2, Rlist(3)))
     >>> t = Rlist(1, Rlist(3, Rlist(5)))
@@ -143,6 +148,8 @@ class Tree(object):
 
 def big_tree(left, right):
     """Return a tree set of unique elements between left and right.
+
+    This function creates binary search trees for testing.
 
     >>> big_tree(0, 12)
     Tree(6, Tree(2, Tree(0), Tree(4)), Tree(10, Tree(8), Tree(12)))
@@ -214,6 +221,8 @@ def union_set3(set1, set2):
 def tree_to_ordered_sequence(s):
     """Return an ordered sequence containing the elements of tree set s.
 
+    Assume that s is a well-formed binary search tree.
+
     >>> b = big_tree(0, 9)
     >>> tree_to_ordered_sequence(b)
     Rlist(1, Rlist(4, Rlist(7, Rlist(9))))
@@ -223,12 +232,34 @@ def tree_to_ordered_sequence(s):
 
 def partial_tree(s, n):
     """Return a balanced tree of the first n elements of Rlist s, along with
-    the rest of s. A tree is balanced if the length of the path to any two
-    leaves are at most one apart.
+    the rest of s. A tree is balanced if
+
+      (a) the number of entries in its left branch differs from the number
+          of entries in its right branch by at most 1, and
+
+      (b) its non-empty branches are also balanced trees.
+
+    Examples of balanced trees:
+
+    Tree(1)                    # branch difference 0 - 0 = 0
+    Tree(1, Tree(2), None)     # branch difference 1 - 0 = 1
+    Tree(1, None, Tree(2))     # branch difference 0 - 1 = -1
+    Tree(1, Tree(2), Tree(3))  # branch difference 1 - 1 = 0
+
+    Examples of unbalanced trees:
+
+    Tree(1, Tree(2, Tree(3)), None)  # branch difference 2 - 0 = 2
+    Tree(1, Tree(2, Tree(3), None),
+            Tree(4, Tree(5, Tree(6), None), None)) # Unbalanced right branch
 
     >>> s = Rlist(1, Rlist(2, Rlist(3, Rlist(4, Rlist(5)))))
     >>> partial_tree(s, 3)
     (Tree(2, Tree(1), Tree(3)), Rlist(4, Rlist(5)))
+    >>> t = Rlist(-2, Rlist(-1, Rlist(0, s)))
+    >>> partial_tree(t, 7)[0]
+    Tree(1, Tree(-1, Tree(-2), Tree(0)), Tree(3, Tree(2), Tree(4)))
+    >>> partial_tree(t, 7)[1]
+    Rlist(5)
     """
     if n == 0:
         return None, s
@@ -238,9 +269,6 @@ def partial_tree(s, n):
 
 def ordered_sequence_to_tree(s):
     """Return a balanced tree containing the elements of ordered Rlist s.
-
-    A tree is balanced if the lengths of the paths from the root to any two
-    leaves are at most one apart.
 
     Note: this implementation is complete, but the definition of partial_tree
     above is not complete.
