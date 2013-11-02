@@ -24,9 +24,6 @@
 (define (caddr s)
   'YourCodeHere)
 
-
-
-
 ;;; Q2.
 
 (define (test-q2)
