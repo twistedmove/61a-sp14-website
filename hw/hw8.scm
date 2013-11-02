@@ -45,7 +45,6 @@
 
 (define (gcd m n)
   'YourCodeHere)
-)
 
 ;;; Q4.
 
