@@ -147,6 +147,7 @@
     (assert-equal #f (exponentiation? 'x))
   ))
 
+; Exponentiations are represented as lists that start with ^.
 (define (make-exponentiation base exponent)
   'YourCodeHere)
 
@@ -166,7 +167,7 @@
         (x^3 (make-exponentiation 'x 3)))
     (assert-equal '(* 2 x) (derive x^2 'x))
     (assert-equal '(* 3 (^ x 2)) (derive x^3 'x))
-    (assert-equal '(+ (* 3 (^ x 2)) (* 2 x)) (derive (make-sum x^3 X^2) 'x))
+    (assert-equal '(+ (* 3 (^ x 2)) (* 2 x)) (derive (make-sum x^3 x^2) 'x))
   ))
 
 (define (derive-exponentiation exp var)
