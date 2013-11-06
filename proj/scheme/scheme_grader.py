@@ -693,7 +693,6 @@ project_info = {
     'autograder_files': [
         'scheme_grader.py',
         'scheme_test.py',
-        'tests.scm',
         'autograder.py',
     ],
     'version': __version__,
