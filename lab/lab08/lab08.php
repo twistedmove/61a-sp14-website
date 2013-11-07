@@ -352,8 +352,6 @@ an exception to signal that the user did something wrong.</p>
 <p>And that's it! There you have basic variable declaration. Isn't that cool!?? By the way, this
 was essentially one of the questions on Project 4!</p>
 
-<p>Now move on to the <a href="lab8-scheme.html">Scheme</a> portion of the lab!</p>
-
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
