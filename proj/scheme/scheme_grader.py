@@ -9,7 +9,7 @@ buffer.py, ucb.py
 autograder.py
 """
 
-__version__ = '0.1'
+__version__ = '1.1'
 
 from autograder import test, run_tests, check_func, check_doctest, test_eval
 
@@ -603,16 +603,11 @@ def scheme_eval(snippet):
             exprs.append(scheme.scheme_read(buf))
     except EOFError:
         pass
-    if len(exprs) == 1:
-        expr = exprs[0]
-    else:
-        expr = nil
-        for e in reversed(exprs):
-            expr = Pair(e, expr)
-        expr = Pair('begin', expr)
     env = scheme.create_global_frame()
     try:
-        return scheme.scheme_eval(expr, env)
+        for expr in exprs[:-1]:
+            scheme.scheme_eval(expr, env)
+        return scheme.scheme_eval(exprs[-1], env)
     except scheme.SchemeError as err:
         return 'SchemeError'
     except BaseException as err:
@@ -693,7 +688,6 @@ project_info = {
     'autograder_files': [
         'scheme_grader.py',
         'scheme_test.py',
-        'tests.scm',
         'autograder.py',
     ],
     'version': __version__,

@@ -19,7 +19,7 @@ buffer.py, ucb.py
 autograder.py
 """
 
-</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'0.1'
+</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.1'
 
 </span><span style="color: blue; font-weight: bold">from </span>autograder <span style="color: blue; font-weight: bold">import </span>test<span style="font-weight: bold">, </span>run_tests<span style="font-weight: bold">, </span>check_func<span style="font-weight: bold">, </span>check_doctest<span style="font-weight: bold">, </span>test_eval
 
@@ -613,16 +613,11 @@ autograder.py
             </span>exprs<span style="font-weight: bold">.</span>append<span style="font-weight: bold">(</span>scheme<span style="font-weight: bold">.</span>scheme_read<span style="font-weight: bold">(</span>buf<span style="font-weight: bold">))
     </span><span style="color: blue; font-weight: bold">except </span>EOFError<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">pass
-    if </span>len<span style="font-weight: bold">(</span>exprs<span style="font-weight: bold">) == </span><span style="color: red">1</span><span style="font-weight: bold">:
-        </span>expr <span style="font-weight: bold">= </span>exprs<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
-    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-        </span>expr <span style="font-weight: bold">= </span>nil
-        <span style="color: blue; font-weight: bold">for </span>e <span style="color: blue; font-weight: bold">in </span>reversed<span style="font-weight: bold">(</span>exprs<span style="font-weight: bold">):
-            </span>expr <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>expr<span style="font-weight: bold">)
-        </span>expr <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span><span style="color: red">'begin'</span><span style="font-weight: bold">, </span>expr<span style="font-weight: bold">)
     </span>env <span style="font-weight: bold">= </span>scheme<span style="font-weight: bold">.</span>create_global_frame<span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>scheme<span style="font-weight: bold">.</span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">for </span>expr <span style="color: blue; font-weight: bold">in </span>exprs<span style="font-weight: bold">[:-</span><span style="color: red">1</span><span style="font-weight: bold">]:
+            </span>scheme<span style="font-weight: bold">.</span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return </span>scheme<span style="font-weight: bold">.</span>scheme_eval<span style="font-weight: bold">(</span>exprs<span style="font-weight: bold">[-</span><span style="color: red">1</span><span style="font-weight: bold">], </span>env<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">except </span>scheme<span style="font-weight: bold">.</span>SchemeError as err<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'SchemeError'
     </span><span style="color: blue; font-weight: bold">except </span>BaseException as err<span style="font-weight: bold">:
@@ -703,7 +698,6 @@ check_scheme <span style="font-weight: bold">= </span>make_check_scheme<span sty
     </span><span style="color: red">'autograder_files'</span><span style="font-weight: bold">: [
         </span><span style="color: red">'scheme_grader.py'</span><span style="font-weight: bold">,
         </span><span style="color: red">'scheme_test.py'</span><span style="font-weight: bold">,
-        </span><span style="color: red">'tests.scm'</span><span style="font-weight: bold">,
         </span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">,
     ],
     </span><span style="color: red">'version'</span><span style="font-weight: bold">: </span>__version__<span style="font-weight: bold">,

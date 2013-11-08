@@ -62,25 +62,24 @@ sequence.</p>
 (define (accumulate combiner start n term)
   (if (= n 0)
       start
-      ; Your Code Here
+      'Your-Code-Here
       ))
 
 (define (square x) (* x x))
 
 (accumulate + 0 4 square) ;; Computes 1^2 + 2^2 + 3^2 + 4^2 = 30
 </div>
-<script> prompt("accumulate"); </script>
+<br>
+<button id="toggleButton0">Toggle Solution</button>
 
-<!-- Solution
-(define (accumulate combiner start n term)
-  (if (= n 0)
-      start
-      (combiner (accumulate combiner
-                            start
-                            (- n 1)
-                            term)
-                (term n))))
--->
+<script>
+  prompt("accumulate");
+  $("#toggleButton0").click(function () {
+    var e = editorOf["accumulate"];
+    e.setValue("(define (accumulate combiner start n term)\n  (if (= n 0)\n      start\n      (combiner (accumulate combiner\n                            start\n                            (- n 1)\n                            term)\n                (term n))))\n\n(define (square x) (* x x))\n\n(accumulate + 0 4 square) ;; Computes 1^2 + 2^2 + 3^2 + 4^2 = 30");
+    e.getOption("onBlur")()
+  })
+</script>
 
 <h4>Question 2: Abstraction with data</h4>
 
@@ -133,28 +132,28 @@ sequence.</p>
 <p>Write a procedure <tt>num-leaves</tt>, that counts the number of leaves in a
 tree.</p>
 
-<div id="num-leaves">
-(define (num-leaves tree)
-  ; Your Code Here
+<div id="numLeaves">
+(define (numLeaves tree)
+  'Your-Code-Here
   )
 
-(num-leaves test-tree)
+(numLeaves test-tree)
 ; Should return 2
 </div>
+<br>
+<button id="toggleButton1">Toggle Solution</button>
 <script>
-  prompt("num-leaves");
-  addDep("num-leaves", ["make-btree"]);
+  prompt("numLeaves");
+  addDep("numLeaves", ["make-btree"]);
+  $("#toggleButton1").click(function () {
+    var e = editorOf["numLeaves"];
+    e.setValue(
+"(define (num-leaves tree)\n  (cond ((null? tree) 0)\n        ((and (null? (left tree))\n              (null? (right tree)))\n         1)\n        (else (+ (num-leaves (left tree))\n                 (num-leaves (right tree))))))\n\n(num-leaves test-tree)\n; Should return 2");
+    e.getOption("onBlur")()
+  })
 </script>
 
-<!-- Solution
-(define (num-leaves tree)
-  (cond ((null? tree) 0)
-        ((and (null? (left tree))
-              (null? (right tree)))
-         1)
-        (else (+ (num-leaves (left tree))
-                 (num-leaves (right tree))))))
--->
+
 <br><br><br><br><br><br><br><br><br><br><br><br>
 
 <script>
