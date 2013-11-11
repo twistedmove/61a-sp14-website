@@ -19,7 +19,7 @@ buffer.py, ucb.py
 autograder.py
 """
 
-</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.1'
+</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.2'
 
 </span><span style="color: blue; font-weight: bold">from </span>autograder <span style="color: blue; font-weight: bold">import </span>test<span style="font-weight: bold">, </span>run_tests<span style="font-weight: bold">, </span>check_func<span style="font-weight: bold">, </span>check_doctest<span style="font-weight: bold">, </span>test_eval
 
@@ -53,7 +53,8 @@ autograder.py
         (</span><span style="color: red">"(a (b '(c d)))"</span><span style="font-weight: bold">, </span>pairify<span style="font-weight: bold">([</span><span style="color: red">'a'</span><span style="font-weight: bold">, [</span><span style="color: red">'b'</span><span style="font-weight: bold">, [</span><span style="color: red">'quote'</span><span style="font-weight: bold">, [</span><span style="color: red">'c'</span><span style="font-weight: bold">, </span><span style="color: red">'d'</span><span style="font-weight: bold">]]]])),
         (</span><span style="color: red">"')"</span><span style="font-weight: bold">, </span><span style="color: red">'Error'</span><span style="font-weight: bold">)
     ]
-    </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>catch_syntax_error<span style="font-weight: bold">(</span>read_line<span style="font-weight: bold">), </span>tests1<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>catch_syntax_error<span style="font-weight: bold">(</span>read_line<span style="font-weight: bold">), </span>tests1<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">,
+                  </span>out_print<span style="font-weight: bold">=</span>str<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'2'</span><span style="font-weight: bold">)

@@ -47,6 +47,7 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
 
 </span><span style="color: blue; font-weight: bold">class </span>TimeoutError<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
+    </span>_message <span style="font-weight: bold">= </span><span style="color: red">'Evaluation timed out!'
     </span><span style="color: blue; font-weight: bold">pass
 
 </span>TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">20
@@ -78,8 +79,8 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span>submission<span style="font-weight: bold">.</span>start<span style="font-weight: bold">()
     </span>submission<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>is_alive<span style="font-weight: bold">():
-        </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span><span style="color: red">"Evaluation timed out!"</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>error <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError
+    <span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>error <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">raise </span>submission<span style="font-weight: bold">.</span>error
     <span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
 
