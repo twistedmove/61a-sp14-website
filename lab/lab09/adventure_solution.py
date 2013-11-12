@@ -4,6 +4,7 @@
 # http://www-inst.eecs.berkeley.edu/~cs61a/fa13/lab/lab09/lab09.txt
 
 name = 'Player 1' # Can replace this with your name. :)
+me = None # Will be initalized to Person(name) on the bottom
 
 def adventure():
     while True:
@@ -160,7 +161,7 @@ class Person(object):
         return self.name + ' takes the ' + thing.name
 
     def ask(self, msg):
-        return self.brain(self, msg)
+        return self.think(self, msg)
 
     def go(self, direction):
         return
