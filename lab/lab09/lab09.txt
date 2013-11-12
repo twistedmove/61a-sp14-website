@@ -24,8 +24,8 @@ REQUIREMENTS: an basic understanding of list slicing, Python OOP
 and Exception handling; a desire for Adventure!
 
 Grab the files here:
-http://inst.eecs.berkeley.edu/~cs61a/lab/lab09/adventure.py
-http://inst.eecs.berkeley.edu/~cs61a/lab/lab09/cs61a_world.py
+http://inst.eecs.berkeley.edu/~cs61a/fa13/lab/lab09/adventure.py
+http://inst.eecs.berkeley.edu/~cs61a/fa13/lab/lab09/cs61a_world.py
 
 Today, we will build a text-based adventure game*. This
 involves writing a program that accepts text commands,
