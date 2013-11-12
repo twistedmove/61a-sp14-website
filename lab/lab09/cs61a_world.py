@@ -1,5 +1,9 @@
 # CS 61A World Game Data:
-from adventure import Person, Thing, Place 
+try:
+    print('USING ADVENTURE SOLUTIONS')
+    from adventure_solution import me, Person, Thing, Place 
+except:
+    from adventure import me, Person, Thing, Place 
 
 motd = """
 Welcome to the micro-world of CS 61A! You have a
@@ -47,27 +51,33 @@ Campus = Place('UC Berkeley Campus',
                   'You stumble onto the main campus. There are students going'
                     + ' to and from class. You better get going too!',
                   RubberDucky)
+
 # Sssshhh, Easter egg...
 real_input = input
 def input(prompt):
     result = real_input(prompt)
     if result == 'xyzzy':
         print("Secret win! You've won the game!")
+        print("Okay, here's how the quest actually goes:")
+        print( \
+""" Take the duckies from 271 and campus. Then, make your way
+north to Werdna's house and give both duckies to Werdna. Then
+ask Werdna for advice. Lastly, make your way to Li Ka Shing,
+take the midterm, and then go to victory!!!""")
         print("Now if only life had a cheatcode...")
         exit()
     return result
 
-def check_win_conditions():
-    global place
-    if place == Victory and Exam not in inventory:
+def check_win_conditions(me, Place):
+    if Place.current == Victory and Exam not in me.inventory:
         print("Hold up, you haven't taken the exam!")
         print('Returning you to the exam room...')
-        place = LiKaShing
-        if place == Victory and Exam in inventory:
-            print("You've bested the midterm and won the game! w00t ;D")
-            exit()
+        Place.current = LiKaShing
+    if Place.current == Victory and Exam in me.inventory:
+        print("You've bested the midterm and won the game! w00t ;D")
+        exit()
 
-Exam = Thing('CS 61A Midterm II', 'A 10 page bundle of paper with recursion in Scheme, OOP, environment diagrams, etc...')
+Exam = Thing('midterm', 'A 10 page bundle of paper with recursion in Scheme, OOP, environment diagrams, etc...')
 LiKaShing = Place('Li Ka Shing',
                      'You arrive at the auditorium where lecture is held. The '
                        + 'room is empty.', RubberDucky, Exam)

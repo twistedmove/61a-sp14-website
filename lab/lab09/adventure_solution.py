@@ -4,11 +4,11 @@
 # http://www-inst.eecs.berkeley.edu/~cs61a/fa13/lab/lab09/lab09.txt
 
 name = 'Player 1' # Can replace this with your name. :)
-me = None # Will be initalized to Person(name) on the bottom
+me = None # Will be initalized to Person(name) after Person class is defined
 
 def adventure():
     while True:
-        check_win_conditions()
+        check_win_conditions(me, Place)
         try: # In case of errors... catch them!
             Place.current.describe()
             line = input('adventure> ')
@@ -80,7 +80,7 @@ def adv_apply(operator, operand):
 def is_person(exp):
     return exp in Person.people
 
-def check_win_conditions():
+def check_win_conditions(me, Place):
     pass
 
 # We shouldn't define the following functions in the global frame.  There are
@@ -95,6 +95,7 @@ def stuff(_):
     print('You look through your stuff... you see')
     for e in me.inventory:
         print(e.name + ' - ' + e.description)
+    return '-- End of stuff --'
 
 def look(_):
     return Place.current.look()
@@ -165,6 +166,9 @@ class Person(object):
 
     def go(self, direction):
         return
+
+# Need to initalize after Person class exists
+me = Person(name)
 
 
 class Place(object):
