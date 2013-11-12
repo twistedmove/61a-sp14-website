@@ -205,6 +205,13 @@ the adventure program, which will evaluate your input in terms
 of the adventure code. In order to talk to Python again, you
 kill the adventure program by doing Ctrl-d.
 
+ALTERNATIVELY, if the above didn't work (Ctrl-d takes you out of
+the entire interpreter)
+  > python3
+  >>> from adventure import *
+  >>> from cs61a_world import *
+  >>> adv_parse('look')
+
 Let's start things off by implementing parsing. We do this in
 adv_parse - our Parser. Since our game language is simple,
   we're going to do the lexical (turn line into tokens)
@@ -260,14 +267,16 @@ HINT: consider the following example:
 +++ EXERCISE 2 (10~15 minutes) +++
 ----------------------------------
 adv_eval - our Evaluator. We want to handle all kinds of expressions.
-  For example:
+  For example (assuming you've loaded cs61a_world and adventure):
 
-  >>> place = SodaHall
+  >>> Place.current = SodaHall
   >>> adv_eval(adv_parse('take rubber ducky'))
-  You take the rubber ducky
+  'Player 1 takes the rubber ducky'
   >>> place = WerdnasHouse
-  >>> adv_eval(adv_parse('give rubber ducky to Wendra'))
-  You give Wendra the rubber ducky
+  >>> adv_eval(adv_parse('give rubber ducky to Werdna'))
+  'Werdna takes the rubber ducky'
+
+NOTE: YOU WON'T BE ABLE TO TEST THIS UNTIL YOU FINISH EXERCISE 3.
 
 adv_eval is truly where the action is. It takes the expression
 that is passed in and performs the correct action based on the rules
@@ -296,11 +305,22 @@ function calls that are evaluated without any special rules.
 
 HINT: This is really straightfoward. Don't overthink it.
 
+AT THIS POINT YOU CAN PLAY THE GAME! :D
+
 
 +++ EXERCISE 4 (15 minutes) +++
 -------------------------------
 One thing that would be useful is to figure out what's in our
-inventory. Add code to take care of this. What needs to be modified?
+inventory. For example:
+
+  adventure> take rubber ducky
+  Player 1 takes the rubber ducky
+  adventure> stuff
+  You look through your stuff... you see
+  rubber ducky - Hm. It's yellow and it's rubber and it squeaks. Fascinating.
+  -- End of stuff --
+
+Add code to take care of this. What needs to be modified?
 Does adv_eval and/or adv_apply need to be modified at all?
 
 
@@ -324,7 +344,7 @@ This also speaks to how powerful Python is as a language,
 to allow us to create a full game in relatively short time!
 (The original TA might have hacked this lab together in a night...)
 
-Lab 06a Takeaways:
+Lab 09 Takeaways:
 + Interpreters allow us to directly interact with the computer
     through a language.
 + Interpreters are made of a REPL, a parser, an evaluator, and an

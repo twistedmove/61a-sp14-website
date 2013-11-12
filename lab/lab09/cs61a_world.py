@@ -1,6 +1,5 @@
 # CS 61A World Game Data:
 try:
-    print('USING ADVENTURE SOLUTIONS')
     from adventure_solution import me, Person, Thing, Place 
 except:
     from adventure import me, Person, Thing, Place 
