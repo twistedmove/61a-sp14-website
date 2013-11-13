@@ -162,10 +162,8 @@ class Person(object):
         return self.name + ' takes the ' + thing.name
 
     def ask(self, msg):
-        return self.think(msg)
+        return self.think(self, msg) # Because we override think with a function
 
-    def go(self, direction):
-        return
 
 # Need to initalize after Person class exists
 me = Person(name)
