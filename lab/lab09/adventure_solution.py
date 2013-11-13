@@ -162,7 +162,7 @@ class Person(object):
         return self.name + ' takes the ' + thing.name
 
     def ask(self, msg):
-        return self.think(self, msg)
+        return self.think(msg)
 
     def go(self, direction):
         return
@@ -226,15 +226,13 @@ class Thing(object):
 # This is what @main does (sorta)
 if __name__ == '__main__':
     try:
-        import readline # Why?
-
         from cs61a_world import *
 
         me = Person(name)
         print(motd)
         adventure()
     except ImportError as e:
-        print("ERROR: Something terrible happened to " + world + ".py")
+        print("ERROR: Something terrible happened to cs61a_world.py")
         print("\t Invalid or broken world.")
         print(e)
     except IndexError as e:
