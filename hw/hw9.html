@@ -297,6 +297,61 @@ def brack_read(tokens):
     elif token in LEFT_RIGHT:
         &quot;*** YOUR CODE HERE ***&quot;
 </pre>
+<p><strong>Q3.</strong> (Optional; Extra for experts) The Python Challenge is a website designed
+to teach people the many features of the Python Library. Each page of the site
+is a puzzle that can be solved simply in Python. The solution to each puzzle
+gives the URL of the next.</p>
+<p>There is a function stub below to include your solution to puzzle 4 (the one
+with the picture of a wood carving).  You will have to complete puzzles 0, 1, 2,
+and 3 to reach 4.</p>
+<p><a class="reference external" href="http://www.pythonchallenge.com/pc/def/0.html">http://www.pythonchallenge.com/pc/def/0.html</a></p>
+<p>Some hints:</p>
+<ul>
+<li><p class="first">Puzzle 1. Try <tt class="docutils literal">str.maketrans</tt> to make a dictionary and <tt class="docutils literal">str.translate</tt> to
+generate a new string. Letters are listed in the <tt class="docutils literal">string</tt> module.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; 'Borkozoy'.translate(str.maketrans('oz', 'el'))
+'Berkeley'
+&gt;&gt;&gt; import string
+&gt;&gt;&gt; string.ascii_lowercase
+'abcdefghijklmnopqrstuvwxyz'
+</pre>
+</li>
+<li><p class="first">Puzzles 2 &amp; 3. To view the source code of a web page in a browser, use</p>
+<ul class="simple">
+<li>Chrome:   View &gt; Developer &gt; View Page Source</li>
+<li>Firefox:  Tools &gt; Web Developer &gt; Page Source</li>
+<li>Safari:   View &gt; View Source</li>
+</ul>
+<p>Uppercase letters are also in the <tt class="docutils literal">string</tt> module.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; string.ascii_uppercase
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+</pre>
+</li>
+<li><p class="first">Puzzle 4. Here's an example of fetching the source of a web page in Python.
+The address below links to an archive of the first WWW site.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; base = 'http://www.w3.org/History/19921103-hypertext/hypertext'
+&gt;&gt;&gt; addr = base + '/WWW/TheProject.html'
+&gt;&gt;&gt; from urllib.request import urlopen
+&gt;&gt;&gt; contents = urlopen(addr).read().decode()
+&gt;&gt;&gt; contents.split('\n')[1]
+'&lt;TITLE&gt;The World Wide Web project&lt;/TITLE&gt;'
+</pre>
+<p>As you work on this puzzle, make sure to print the result of each step.</p>
+<p>The comments on the puzzle page say: &quot;urllib may help. DON'T TRY ALL
+NOTHINGS, since it will never end.  400 times is more than enough.&quot;</p>
+</li>
+</ul>
+<p>You can include your solution to puzzle 4 below:</p>
+<pre class="literal-block">
+from urllib.request import urlopen
+
+def puzzle_4():
+    &quot;&quot;&quot;Return the soluton to puzzle 4.&quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
 <p>Support code for Brackulator (from the <a class="reference external" href="http://composingprograms.com/examples/scalc/scalc.html">Calculator</a> example):</p>
 <pre class="literal-block">
 ###################################

@@ -122,6 +122,14 @@ def brack_read(tokens):
         "*** YOUR CODE HERE ***"
 
 
+# Q3.
+
+from urllib.request import urlopen
+
+def puzzle_4():
+    """Return the soluton to puzzle 4."""
+    "*** YOUR CODE HERE ***"
+
 
 ###################################
 # Support classes for Brackulator #
