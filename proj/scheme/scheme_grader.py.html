@@ -19,7 +19,7 @@ buffer.py, ucb.py
 autograder.py
 """
 
-</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.2'
+</span>__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.3'
 
 </span><span style="color: blue; font-weight: bold">from </span>autograder <span style="color: blue; font-weight: bold">import </span>test<span style="font-weight: bold">, </span>run_tests<span style="font-weight: bold">, </span>check_func<span style="font-weight: bold">, </span>check_doctest<span style="font-weight: bold">, </span>test_eval
 
@@ -72,6 +72,7 @@ autograder.py
             </span>pairify<span style="font-weight: bold">([</span><span style="color: red">'a'</span><span style="font-weight: bold">, </span><span style="color: red">'b'</span><span style="font-weight: bold">, </span><span style="color: red">'c'</span><span style="font-weight: bold">, </span><span style="color: red">'d'</span><span style="font-weight: bold">])),
         (</span><span style="color: red">'(. . 2)'</span><span style="font-weight: bold">, </span><span style="color: red">'Error'</span><span style="font-weight: bold">),
         (</span><span style="color: red">'(2 . 3 4 . 5)'</span><span style="font-weight: bold">, </span><span style="color: red">'Error'</span><span style="font-weight: bold">),
+        (</span><span style="color: red">'(2 (3 . 4) 5)'</span><span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">(</span><span style="color: red">2</span><span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">(</span>Pair<span style="font-weight: bold">(</span><span style="color: red">3</span><span style="font-weight: bold">, </span><span style="color: red">4</span><span style="font-weight: bold">), </span>Pair<span style="font-weight: bold">(</span><span style="color: red">5</span><span style="font-weight: bold">, </span>nil<span style="font-weight: bold">)))),
     ]
     </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>catch_syntax_error<span style="font-weight: bold">(</span>read_line<span style="font-weight: bold">), </span>tests1<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
@@ -81,6 +82,7 @@ autograder.py
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'3'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_3<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">return </span>check_doctest<span style="font-weight: bold">(</span><span style="color: red">'apply_primitive'</span><span style="font-weight: bold">, </span>scheme<span style="font-weight: bold">)
+
 
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'4'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_4<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
@@ -104,6 +106,7 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests2<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'5'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'A5'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_A5<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -115,6 +118,7 @@ autograder.py
     </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests1<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'6'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'B6'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_B6<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -166,6 +170,7 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests2<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'9'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'A9'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_A9<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -229,6 +234,7 @@ autograder.py
     </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">: </span>x<span style="font-weight: bold">, </span>tests2<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'11'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'B11'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_B11<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span><span style="color: green; font-style: italic"># Note: Doesn't check well-formed but unrequired list matching.
@@ -290,6 +296,7 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests2<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'13'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'A13'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_A13<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -304,6 +311,7 @@ autograder.py
     </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests1<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'14'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'B14'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_B14<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -330,6 +338,7 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests2<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'15'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'A15'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_A15<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -362,6 +371,7 @@ autograder.py
     </span><span style="color: blue; font-weight: bold">if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests1<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'16'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'A16'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_A16<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -391,6 +401,7 @@ autograder.py
     if </span>check_func<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span>tests2<span style="font-weight: bold">, </span>comp<span style="font-weight: bold">=</span>scheme_equal<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return True
 
+</span>@test<span style="font-weight: bold">(</span><span style="color: red">'17'</span><span style="font-weight: bold">)
 </span>@test<span style="font-weight: bold">(</span><span style="color: red">'B17'</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>problem_B17<span style="font-weight: bold">(</span>grades<span style="font-weight: bold">):
     </span>tests1 <span style="font-weight: bold">= [
@@ -688,6 +699,8 @@ autograder.py
     </span><span style="color: blue; font-weight: bold">return </span>check_scheme
 
 check_scheme <span style="font-weight: bold">= </span>make_check_scheme<span style="font-weight: bold">()
+
+
 
 </span><span style="color: green; font-style: italic">##########################
 # COMMAND LINE INTERFACE #
