@@ -40,298 +40,917 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("11/18/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("11/15/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
     <h1>CS 61A Lab 10</h1>
-<h2>Declarative Programming</h2>
-<h2>Logic</h2>
+<h2>Iterators, Generators, Streams, and Tail-Calls</h2>
+<h3>Iterators</h3>
 
-<p>In Declarative Programming, we aim to define facts about our universe. With these in place, we can make queries in the form of assertions. The system will then check if the query is true, based on a database of facts. It will inform us of what replacements for the variables will make the query true.</p>
+<p>Remember the <code>for</code> loop?  (We really hope so.)  The object that
+the <code>for</code> loop iterates over is required to be an iterable!</p>
 
-<p>The language we will use is called Logic, and an interpreter is already setup for us on the lab machines. To copy the folder to your current directory, run:</p>
-
-<pre><code>    cp -r ~cs61a/lib/lab/lab10/logic .
+<pre><code>for elem in iterable:
+    # do something
 </code></pre>
 
-<p>Just run <code>python3 logic.py</code> after you move your Scheme project files into the folder. Please note that you must have finished up to at least problem 4 on your project in order to do this lab, as this lab depends on your implementation of the <code>Frame</code> class.</p>
+<p><code>for</code> loops only work with iterables, and that means that the object you want to
+use a <code>for</code> loop on must implement the <b>iterable interface</b>.  In particular,
+a <code>for</code> loop makes use of two methods: <code>__iter__</code> and <code>__next__</code>.  In other words,
+an object that implements the iterable interface must implement an <code>__iter__</code> method
+that returns an object that implements the <code>__next__</code>
+method.</p>
 
-<p>Let's review the basics. In Logic, the primitive data types are called symbols: these include numbers and strings. Unlike other languages we have seen in this course, numbers are not evaluated: they are still symbols, but they do not have their regular numerical meaning. Variables in Logic are denoted with a <code>?</code> mark preceding the name. So for example, <code>?x</code> represents the variable <code>x</code>. A relation is a named tuple with a truth value.</p>
+<p>This object that implements the <code>__next__</code> method is
+called an iterator.  While the iterator interface also requires that the object implement
+the <code>__next__</code> and <code>__iter__</code>
+methods, it does not require the <code>__iter__</code> method to
+return a new object.</p>
 
-<p>The next thing we need to do is begin to define facts about our universe. Facts are defined using a combination that starts with the fact keyword. The first relation that follows is the conclusion, and any remaining relations are hypotheses. All hypotheses must be satisfied for the conclusion to be valid.</p>
+<p>Here is an example of a class definition for an object that implements the
+iterator interface:</p>
 
-<pre><code>    logic&gt; (fact (food-chain ?creature1 ?creature2) (eats ?creature1 ?creature3) (eats ?creature3 ?creature2))
+<pre><code>class AnIterator(object):
+    def __init__(self):
+        self.current = 0
+
+    def __next__(self):
+        if self.current &gt; 5:
+            raise StopIteration
+        self.current += 1
+        return self.current
+
+    def __iter__(self):
+        return self
 </code></pre>
 
-<p>Here we have defined the fact for a food chain: If <code>creature1</code> eats <code>creature3</code>, and <code>creature3</code> eats <code>creature2</code>, then <code>creature1</code> is higher on the food chain than <code>creature2</code>.</p>
+<p>Let's go ahead and try out our new toy.</p>
 
-<p>Simple facts contain only a conclusion relation, which is always true.</p>
-
-<pre><code>    logic&gt; (fact (eats shark big-fish))
-    logic&gt; (fact (eats big-fish small-fish))
-    logic&gt; (fact (eats domo kittens))
-    logic&gt; (fact (eats kittens small-fish))
-    logic&gt; (fact (eats zombie brains))
-    logic&gt; (fact (append (1 2) (3 4) (1 2 3 4)))
+<pre><code>&gt;&gt;&gt; for i in AnIterator():
+...     print(i)
+...
+1
+2
+3
+4
+5
 </code></pre>
 
-<p>Here we have defined a few simple facts: that in our universe, <code>sharks</code> eat <code>big-fish</code>, <code>big-fish</code> eat <code>small-fish</code>, <code>Domos</code> eat <code>kittens</code>, <code>kittens</code> eat <code>small-fish</code>, <code>zombies</code> eat <code>brains</code>, and that the list <code>(1 2)</code> appended to <code>(3 4)</code> is equivalent to the list <code>(1 2 3 4)</code>. Poor kittens.</p>
+<p>This is somewhat equivalent to running:</p>
 
-<p>Queries are combinations that start with the query keyword. The interpreter prints the truth value (either <code>Success!</code> or <code>Failed.</code>). If there are variables inside of the query, the interpreter will print all possible mappings that satisfy the query.</p>
-
-<pre><code>    logic&gt; (query (eats zombie brains))
-    Success!
-    logic&gt; (query (eats domo zombie))
-    Failed.
-    logic&gt; (query (eats zombie ?what))
-    Success!
-    what: brains
+<pre><code>t = AnIterator()
+t = t.__iter__()
+try:
+    while True:
+        print(t.__next__())
+except StopIteration as e:
+    pass
 </code></pre>
 
-<p>We're first asking Logic whether a zombie eats brains (the answer is <code>Success!</code>) and if a domo eats zombies (the answer is <code>Failed</code>). Then we ask whether a zombie can eat something (the answer is <code>Success!</code>), and Logic will figure out for us, based on predefined facts in our universe, what a zombie eats. If there are more possible values for what a zombie can eat, then Logic will print out all of the possible values.</p>
+<h4>Q1</h4>
 
-<h4>Question</h4>
+<p>Try running each of the given iterators in a <code>for</code> loop.  Why does each work or not work?</p>
 
-<p>Within your Logic interactive session, type in the <code>food-chain</code> fact, and enter in the facts mentioned from above. Issue a Logic query that answers the following questions:</p>
+<pre><code>class IteratorA(object):
+    def __init__(self):
+        self.start = 5
 
-<ol>
-<li>Do sharks eat big-fish?</li>
-<li>What animal is higher on the food chain than small-fish?</li>
-<li>What animals (if any, or multiple) eat small-fish?</li>
-<li>What animals (if any, or multiple) eat sharks?</li>
-<li>What animals (if any, or multiple) eat zombies?</li>
-</ol>
+    def __next__(self):
+        if self.start == 100:
+            raise StopIteration
+        self.start += 5
+        return self.start
+
+    def __iter__(self):
+        return self
+</code></pre>
+
+<button id="toggleButton0">Explanation</button>
+<div id="toggleText0" style="display: none">
+  <p>No problem, this is a beautiful iterator.</p>
+
+</div>
+<pre><code>class IteratorB(object):
+    def __init__(self):
+        self.start = 5
+
+    def __iter__(self):
+        return self
+</code></pre>
+
+<button id="toggleButton1">Explanation</button>
+<div id="toggleText1" style="display: none">
+  <p>Oh no!  Where is <code>__next__</code>?  This fails to implement the iterator interface because 
+calling <code>__iter__</code> doesn't return something that has a <code>__next__</code> method.</p>
+
+</div>
+<pre><code>class IteratorC(object):
+    def __init__(self):
+        self.start = 5
+
+    def __next__(self):
+        if self.start == 10:
+            raise StopIteration
+        self.start += 1
+        return self.start
+</code></pre>
+
+<button id="toggleButton2">Explanation</button>
+<div id="toggleText2" style="display: none">
+  <p>This also fails to implement the iterator interface.  Without the <strong>iter</strong>
+method, the <code>for</code> loop will error.  The <code>for</code> loop needs to call
+<code>__iter__</code> first because some objects might not implement the <code>__next__</code> method
+themselves, but calling <code>__iter__</code> will return an object that does.</p>
+
+</div>
+<pre><code>class IteratorD(object):
+    def __init__(self):
+        self.start = 1
+
+    def __next__(self):
+        self.start += 1
+        return self.start
+
+    def __iter__(self):
+        return self
+</code></pre>
+
+<p>Watch out on this one.  The amount of output might scare you.</p>
+
+<button id="toggleButton3">Explanation</button>
+<div id="toggleText3" style="display: none">
+  <p>This is an infinite sequence!  Sequences like these are the reason iterators are useful.
+Because iterators delay computation, we can use a finite amount of memory to
+represent an infinitely long sequence.</p>
+
+</div>
+<p>For one of the above iterators that works, try this:</p>
+
+<pre><code>&gt;&gt;&gt; i = IteratorA()
+&gt;&gt;&gt; for item in i:
+...     print(item)
+</code></pre>
+
+<p>Then again:</p>
+
+<pre><code>&gt;&gt;&gt; for item in i:
+...     print(item)
+</code></pre>
+
+<p>With that in mind, try writing an iterator that "restarts" every time
+it is run through a <code>for</code> loop.</p>
+
+<pre><code>&gt;&gt;&gt; i = IteratorRestart(2, 7)
+&gt;&gt;&gt; for item in i:
+...     print(item)
+# should print 2 to 7
+&gt;&gt;&gt; for item in i:
+...     print(item)
+# should still print 2 to 7
+</code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton0">Toggle Solution</button>
-  <div id="toggleText0" style="display: none">
-    <pre><code>    logic&gt; (query (eats shark big-fish))
-    logic&gt; (query (food-chain ?what small-fish))
-    logic&gt; (query (eats ?what small-fish))
-    logic&gt; (query (eats ?what sharks))
-    logic&gt; (query (eats ?what zombie))
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
+    <pre><code>class IteratorRestart(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.current = start
+    def __next__(self):
+        if self.current &gt; self.end:
+            raise StopIteration
+        self.current += 1
+    def __iter__(self):
+        self.current = self.start
+        return self
 </code></pre>
 
   </div>
 <?php } ?>
-<h3>More complicated facts</h3>
+<h4>Q2</h4>
 
-<p>Currently, the <code>food-chain</code> fact is a little lacking. A query <code>(query (food-chain A B))</code> will only output <code>Success!</code> if <code>A</code> and <code>B</code> are separated by only one animal. For instance, if I added the following facts:</p>
+<p>Write an iterator that takes a string as input:</p>
 
-<pre><code>    logic&gt; (fact (eats shark big-fish))
-    logic&gt; (fact (eats big-fish small-fish))
-    logic&gt; (fact (eats small-fish shrimp))
+<pre><code>&gt;&gt;&gt; s = Str("hello")
+&gt;&gt;&gt; for char in s:
+...     print(char)
+...
+h
+e
+l
+l
+o
 </code></pre>
 
-<p>I'd like the <code>food-chain</code> to output that shark is higher on the food chain than shrimp. Currently, the <code>food-chain</code> fact doesn't do this:</p>
-
-<pre><code>    logic&gt; (query (food-chain shark shrimp))
-    Failed
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
+    <pre><code>class Str:
+    def __init__(self, str):
+        self.str = str
+    def __iter__(self):
+        return self.str.__iter__()
 </code></pre>
 
-<p>We will define the <code>food-chain-v2</code> fact that correctly handles arbitrary length hierarchies. We'll use the following logic:</p>
+  </div>
+<?php } ?>
+<p>That works (why?), but just kidding.</p>
 
-<p>Given animals <code>A</code> and <code>B</code>, <code>A</code> is on top of the food chain of <code>B</code> if:</p>
+<pre><code>class Str:
+    def __init__(self, str):
+        self.str = str
+        self.i = -1
+
+    def __next__(self):
+        if self.i &gt;= len(self.str):
+            raise StopIteration
+        self.i += 1
+        return self.str[self.i]
+
+    def __iter__(self):
+        return self
+</code></pre>
+
+<h3>Generators</h3>
+
+<p>A generator is a special type of iterator that can be written using a yield statement:</p>
+
+<pre><code>def &amp;ltgenerator_function&amp;gt():
+    &amp;ltsomevariable&amp;gt = &amp;ltsomething&amp;gt
+    while &amp;ltpredicate&amp;gt:
+        yield &amp;ltsomething&amp;gt
+        &amp;ltincrement variable&amp;gt
+</code></pre>
+
+<p>A generator function can also be run through a <code>for</code> loop:</p>
+
+<pre><code>def generator():
+    i = 0
+    while i &amp;lt 6:
+        yield i
+        i += 1
+
+for i in generator():
+    print(i)
+</code></pre>
+
+<p>To better figure out what is happening, try this:</p>
+
+<pre><code>def generator():
+    print("Starting here")
+    i = 0
+    while i &amp;lt 6:
+        print("Before yield")
+        yield i
+        print("After yield")
+        i += 1
+
+&gt;&gt;&gt; g = generator()
+&gt;&gt;&gt; g
+___ # what is this thing?
+&gt;&gt;&gt; g.__iter__()
+___
+&gt;&gt;&gt; g.__next__()
+___
+&gt;&gt;&gt; g.__next__()
+____
+</code></pre>
+
+<p>Trace through the code and make sure you know where and why each statement
+is printed.</p>
+
+<p>You might have noticed from the Iterators section that the Iterator defined without
+a <code>__next__</code> method failed to run in the <code>for</code> loop.  However, this is not always the case.</p>
+
+<pre><code>class IterGen(object):
+    def __init__(self):
+        self.start = 5
+
+    def __iter__(self):
+        while self.start &amp;lt 10:
+            self.start += 1
+            yield self.start
+
+for i in IterGen():
+    print(i)
+</code></pre>
+
+<p>Think for a moment about why that works.</p>
+
+<p>Think more.</p>
+
+<p>Longer.</p>
+
+<p>Okay, I'll tell you.</p>
+
+<p>The <code>for</code> loop only expects the object returned by <code>__iter__</code> to have a <code>__next__</code> method,
+and the <code>__iter__</code> method is a generator function in this case.  Therefore, when <code>__iter__</code> is called,
+it returns a generator object, which you can call <code>__next__</code> on.</p>
+
+<h4>Q3</h4>
+
+<p>Write a generator that counts down to 0.</p>
+
+<p>Write it in both ways: using a generator function on its own, and
+within the <code>__iter__</code> method of a class.</p>
+
+<pre><code>def countdown(n):
+    """
+    &gt;&gt;&gt; for number in countdown(5):
+    ...     print(number)
+    ...
+    5
+    4
+    3
+    2
+    1
+    0
+    """
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
+    <pre><code>    while n &gt;= 0:
+        yield n
+        n = n - 1
+</code></pre>
+
+  </div>
+<?php } ?>
+<pre><code>class Countdown(object):
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
+    <pre><code>    def __init__(self, cur):
+        self.cur = cur
+
+    def __iter__(self):
+        while self.cur &gt; 0:
+            yield self.cur
+            self.cur -= 1
+</code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q4</h4>
+
+<p>Like in the iterator section, write a generator that outputs
+each character of a string.</p>
+
+<pre><code>def char_gen(str):
+    """
+    &gt;&gt;&gt; for char in char_gen("hello"):
+    ...     print(char)
+    ...
+    h
+    e
+    l
+    l
+    o
+    """
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
+    <pre><code>    i = 0
+    while i &amp;lt len(str):
+        yield str[i]
+        i += 1
+</code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q5</h4>
+
+<p>Write a generator that outputs the hailstone sequence from homework 1.</p>
+
+<pre><code>def hailstone(n):
+    """
+    &gt;&gt;&gt; for num in hailstone(10):
+    ...     print(num)
+    ...
+    10
+    5
+    16
+    8
+    4
+    2
+    1
+    """
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
+    <pre><code>    i = n
+    while i &gt; 1:
+        yield i
+        if i % 2 == 0:
+            i //= 2
+        else:
+            i = i * 3 + 1
+    yield i
+</code></pre>
+
+  </div>
+<?php } ?>
+<p>And now you know how <code>for</code> loops work!  Or more importantly, you have
+become a better computer scientist.</p>
+
+<h3>Streams</h3>
+
+<p>A stream is our third example of a lazy sequence. A stream is a lazily evaluated RList.
+In other words, the stream's elements (except for the first element) are only evaluated when the values are needed.</p>
+
+<p>Take a look at the following code:</p>
+
+<pre><code>class Stream(object):
+    class empty(object):
+        def __repr__(self):
+            return 'Stream.empty'
+
+    empty = empty()
+
+    def __init__(self, first, compute_rest, empty= False):
+        self.first = first
+        self._compute_rest = compute_rest
+        self.empty = empty
+        self._rest = None
+        self._computed = False
+
+    @property
+    def rest(self):
+        assert not self.empty, 'Empty streams have no rest.'
+        if not self._computed:
+            self._rest = self._compute_rest()
+            self._computed = True
+        return self._rest
+
+    def __repr__(self):
+        return 'Stream({0}, &lt;...&gt;)'.format(repr(self.first))
+</code></pre>
+
+<p>We represent Streams using Python objects, similar to the way we defined RLists.
+We nest streams inside one another, and compute one element of the sequence at a time.</p>
+
+<p>Note that instead of specifying all of the elements in <code>__init__</code>,
+we provide a function, <code>compute_rest</code>, that encapsulates the algorithm used
+to calculate the remaining elements of the stream. Remember that the code
+in the function body is not evaluated until it is called, which lets us implement
+the desired evaluation behavior.</p>
+
+<p>This implementation of streams also uses <em>memoization</em>.
+The first time a program asks a <code>Stream</code> for its <code>rest</code> field, the <code>Stream</code>
+code computes the required value using <code>compute_rest</code>, saves the resulting value,
+and then returns it. After that, every time the <code>rest</code> field is referenced,
+the stored value is simply returned and it is not computed again.</p>
+
+<p>Here is an example:</p>
+
+<pre><code>def make_integer_stream(first=1):
+    def compute_rest():
+        return make_integer_stream(first+1)
+    return Stream(first, compute_rest)
+</code></pre>
+
+<p>Notice what is happening here. We start out with a stream whose first element is 1,
+and whose <code>compute_rest</code> function creates another stream. So when we do compute
+the <code>rest</code>, we get another stream whose first element is one greater than the previous element,
+and whose <code>compute_rest</code> creates another stream. Hence, we effectively get an
+infinite stream of integers, computed one at a time. This is almost like an infinite recursion,
+but one which can be viewed one step at a time, and so does not crash.</p>
+
+<h4>Q1</h4>
+
+<p>Write a procedure <code>make_fib_stream()</code> that creates an infinite stream of Fibonacci Numbers.
+Make the first two elements of the stream 0 and 1.</p>
+
+<p>Hint: Consider using a helper procedure that can take two arguments, then think about how to start calling that procedure.</p>
+
+<pre><code>def make_fib_stream():
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton10">Toggle Solution</button>
+  <div id="toggleText10" style="display: none">
+    <pre><code>    return fib_stream_generator(0, 1)
+
+def fib_stream_generator(a, b):
+    def compute_rest():
+        return fib_stream_generator(b, a+b)
+    return Stream(a, compute_rest)
+</code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q2</h4>
+
+<p>Write a procedure <code>sub_streams</code> that takes in two
+streams <code>s1</code>, <code>s2</code>, and returns a new stream
+that is the result of subtracting elements from <code>s1</code>
+by elements from <code>s2</code>.
+For instance, if <code>s1</code> was <code>(1, 2, 3, ...)</code>
+and <code>s2</code> was <code>(2, 4, 6, ...)</code>, then the output would be
+the stream <code>(-1, -2, -3, ...)</code>.
+You can assume that both Streams are infinite.</p>
+
+<pre><code>def sub_streams(s1, s2):
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton11">Toggle Solution</button>
+  <div id="toggleText11" style="display: none">
+    <pre><code>    def compute_rest():
+        return sub_streams(s1.rest, s2.rest)
+    return Stream(s1.first - s2.first, compute_rest)
+</code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q3</h4>
+
+<p>Define a procedure that inputs an infinite Stream, <code>s</code>,
+and a target value and returns <code>True</code> if the stream converges
+to the target within a certain number of values.
+For this example we will say the stream converges if the
+difference between two consecutive values and the difference
+between the value and the target drop below <code>max_diff</code> for 10 consecutive values.
+(Hint: create the stream of differences between consecutive elements using <code>sub_streams</code>)</p>
+
+<pre><code>def converges_to(s, target, max_diff=0.00001, num_values=100):
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton12">Toggle Solution</button>
+  <div id="toggleText12" style="display: none">
+    <pre><code>    count = 0
+    deriv = sub_streams(s.rest, s)
+    for i in range(num_values):
+        if abs(s.first - target) &lt;= max_diff and \
+           abs(deriv.first) &lt;= max_diff:
+            count += 1
+        else:
+            count = 0
+        if count == 10:
+            return True
+        deriv = deriv.rest
+        s = s.rest
+    return False
+</code></pre>
+
+  </div>
+<?php } ?>
+<h3>Higher Order Functions on Streams</h3>
+
+<p>Naturally, as the theme has always been in this class,
+we can abstract our stream procedures to be higher order. Take a look at <code>filter_stream</code>:</p>
+
+<pre><code>def filter_stream(filter_func, stream):
+    def make_filtered_rest():
+        return filter_stream(filter_func, stream.rest)
+    if Stream.empty:
+        return stream
+    elif filter_func(stream.first):
+        return Stream(stream.first, make_filtered_rest)
+    else:
+        return filter_stream(filter_funct, stream.rest)
+</code></pre>
+
+<p>You can see how this function might be useful. Notice how the Stream we create has as its
+<code>compute_rest</code> function a procedure that <em>promises</em> to filter out the rest of the Stream when asked.
+So at any one point, the entire stream has not been filtered.
+Instead, only the part of the stream that has been referenced has been filtered,
+but the rest will be filtered when asked. We can model other higher order Stream
+procedures after this one, and we can combine our higher order Stream procedures to do incredible things!</p>
+
+<h4>Q4</h4>
+
+<p>In a similar model to <code>filter_stream</code>, let's recreate the
+procedure <code>map_stream</code> from lecture, that given a stream <code>stream</code> and
+a one-argument function <code>func</code>, returns a new stream that is the result of
+applying <code>func</code> on every element in <code>stream</code>.</p>
+
+<pre><code>def stream_map(func, stream):
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton13">Toggle Solution</button>
+  <div id="toggleText13" style="display: none">
+    <pre><code>    def compute_rest():
+        return stream_map(func, stream.rest)
+    if stream.empty:
+        return stream
+    else:
+        return Stream(func(stream.first), compute_rest)
+</code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q5</h4>
+
+<p>What does the following Stream output? Try writing out the
+first few values of the stream to see the pattern.</p>
+
+<pre><code>def my_stream():
+    def compute_rest():
+        return add_streams(map_stream(double, 
+                                      my_stream()), 
+                                      my_stream())
+    return Stream(1, compute_rest)
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton14">Toggle Solution</button>
+  <div id="toggleText14" style="display: none">
+    <p>Powers of 3: 1, 3, 9, 27, 81, ...</p>
+
+  </div>
+<?php } ?>
+<h3>Tail Calls</h3>
+
+<p>Recall from lecture that Scheme supports tail-call optimization.
+The example we used was factorial (shown in both Python and Scheme):</p>
+
+<pre><code>def fact(n):
+    if n == 0:
+        return 1
+    return n * fact(n - 1)
+
+(define (fact n)
+    (if (= n 0)
+        1
+        (* n (fact (- n 1)))))
+</code></pre>
+
+<p>Notice that in this version of factorial,
+the return expressions both use recursive calls, and then use the values
+for more "work." In other words, the current frame needs to sit around,
+waiting for the recursive call to return with a value. Then the current frame
+can use that value to calculate the final answer.</p>
+
+<p>As an example, consider a call to <code>fact(5)</code> (Shown with Scheme below).
+We make a new frame for the call, and in carrying out the body of the function,
+we hit the recursive case, where we want to multiply 5 by the return value of the
+call to <code>fact(4)</code>.  Then we want to return this product
+as the answer to <code>fact(5)</code>.  However, before calculating
+this product, we must wait for the call to <code>fact(4)</code>.
+The current frame stays while it waits.  This is true for every successive recursive
+call, so by calling <code>fact(5)</code>, at one point we will have the frame of <code>fact(5)</code>
+as well as the frames of <code>fact(4)</code>, <code>fact(3)</code>, <code>fact(2)</code>, and <code>fact(1)</code>, all waiting for <code>fact(0)</code>.</p>
+
+<pre><code>(fact 5)
+(* 5 (fact 4))
+(* 5 (* 4 (fact 3)))
+(* 5 (* 4 (* 3 (fact 2))))
+(* 5 (* 4 (* 3 (* 2 (fact 1)))))
+(* 5 (* 4 (* 3 (* 2 (* 1 (fact 0))))))
+(* 5 (* 4 (* 3 (* 2 (* 1 1)))))
+(* 5 (* 4 (* 3 (* 2 1))))
+(* 5 (* 4 (* 3 2)))
+(* 5 (* 4 6))
+(* 5 24)
+120
+</code></pre>
+
+<p>Keeping all these frames around wastes a lot of space, so our goal is
+to come up with an implementation of factorial that uses a constant
+amount of space. We notice that in Python we can do this with a while
+loop:</p>
+
+<pre><code>def fact_while(n):
+    total = 1
+    while n &gt; 0:
+        total = total * n
+        n = n - 1
+    return total
+</code></pre>
+
+<p>However, Scheme doesn't have <code>for</code> and
+<code>while</code> constructs. No problem! Everything
+that can be written with while and <code>for</code> loops and also be written recursively.
+Instead of a variable, we introduce a new parameter to keep track of the total.</p>
+
+<pre><code>def fact(n):
+    def fact_optimized(n, total):
+        if n == 0:
+            return total
+        return fact_optimized(n - 1, total * n)
+    return fact_optimized(n, 1)
+
+(define (fact n)
+    (define (fact-optimized n total)
+        (if (= n 0)
+            total
+            (fact-optimized (- n 1) (* total n))))
+    (fact-optimized n 1))
+</code></pre>
+
+<p>Why is this better?</p>
+
+<p>Because Scheme supports tail-call optimization (note that Python <strong>does not</strong>), it knows when it no
+longer needs to keep around frames because there is no further calculation
+to do.  Looking at the last line in <code>fact_optimized</code>,
+we notice that it returns the same thing that the recursive call does,
+no more work required.  Scheme realizes that there is no reason to keep
+around a frame that has no work left to do, so it just has the return of
+the recursive call return directly to whatever called the current frame.</p>
+
+<p>Therefore the last line in <code>fact_optimized</code> is a <strong>tail-call</strong>.</p>
+
+<h4>Q1</h4>
+
+<p>To sum it up (with vocabulary!), here is the quote from lecture:
+"A procedure call that has not yet returned is <strong>active</strong>. Some procedure calls are
+<strong>tail calls</strong>. A Scheme interpreter should support an unbounded number of
+active tail calls."</p>
+
+<p>A tail call is a call expression in a <strong>tail context</strong>:</p>
 
 <ul>
-<li><code>A</code> eats <code>B</code></li>
+<li>The last body sub-expression in a <code>lambda</code> expression</li>
+<li>Sub-expressions 2 and 3 in a tail context <code>if</code> expression</li>
+<li>All non-predicate sub-expressions in a tail context <code>cond</code></li>
+<li>The last sub-expression in a tail context <code>and</code> or <code>or</code></li>
+<li>The last sub-expression in a tail context <code>begin</code></li>
 </ul>
 
-<p>or</p>
+<p>Call expressions in "tail contexts" are tail calls, because there is no reason to
+keep the current frame "active."</p>
 
-<ul>
-<li>There exists an animal <code>C</code> such that <code>A</code> eats <code>C</code>, and <code>C</code> dominates <code>B</code>.</li>
-</ul>
+<p>For the following procedures, decide whether each is tail-call optimized.
+Do not run the procedures (they may not work)!</p>
 
-<p>Notice we have two different cases for the <code>food-chain-v2</code> fact. We can express different cases of a fact simply by entering in each case one at a time:</p>
+<p>Check the recursive calls in tail positions (there might be multiple).
+Is it in a tail context?  In other words, does the last recursive call
+need to return to the caller because there is still more work to be
+done with it?</p>
 
-<pre><code>    logic&gt; (fact (food-chain-v2 ?a ?b) (eats ?a ?b))
-    logic&gt; (fact (food-chain-v2 ?a ?b) (eats ?a ?c) (food-chain-v2 ?c ?b))
-    logic&gt; (query (food-chain-v2 shark shrimp))
-    Success!
+<p>List what each of the tail-calls are to help decide of they are optimized.</p>
+
+<pre><code>(define (question-a x)
+    (if (= x 0)
+        0
+        (+ x (question-a (- x 1)))))
 </code></pre>
 
-<p>Take a few moments and read through how the above facts work, and how it implements the approach we outlined. In particular, make a few queries to <code>food-chain-v2</code> -- for instance, try retrieving all animals that dominate shrimp!</p>
+<button id="toggleButton15">Explanation</button>
+<div id="toggleText15" style="display: none">
+  <p>The tail call is a "+."  This is not optimized, because a recursive call is an
+argument to the call to "+."</p>
 
-<p>Note: In the Logic system, multiple 'definitions' of a fact can exist at the same time (as in <code>food-chain-v2</code>) - definitions don't overwrite each other. Instead, they are all checked when you execute a query against that particular fact. </p>
-
-<h3>Recursively-Defined Rules</h3>
-
-<p>Next, we will define append in the logic style.</p>
-
-<p>As we've done in the past, let's try to explain how <code>append</code> recursively. For instance, given two lists <code>[1, 2, 3], [5, 7</code>], the result of <code>append([1, 2, 3], [5, 7])</code> is:</p>
-
-<pre><code>    [1] + append([2, 3], [5, 7]) =&gt; [1, 2, 3, 5, 7]
+</div>
+<pre><code>(define (question-b x y)
+    (if (= x 0)
+        y
+        (question-b (- x 1) (+ y x))))
 </code></pre>
 
-<p>In Scheme, this would look like:</p>
+<button id="toggleButton16">Explanation</button>
+<div id="toggleText16" style="display: none">
+  <p>Tail-call to question-b.  It is in sub-expression 3 in a tail context if expression.</p>
 
-<pre><code>    (define (append a b) (if (null? a) b (cons (car a) (append (cdr a) b))))
+</div>
+<pre><code>(define (question-c x y)
+    (if (= x y)
+        #t
+        (if (&amp;lt x y)
+            #f
+            (or (question-c (- x 1) (- y 2)) #f))))
 </code></pre>
 
-<p>Thus, we've broken up append into two different cases. Let's start translating this idea into Logic! The first base case is relatively straightforward:</p>
+<button id="toggleButton17">Explanation</button>
+<div id="toggleText17" style="display: none">
+  <p>Does not have a tail-call. (question-c would need to be called outside of the or statement or in the last sub-expression)</p>
 
-<pre><code>    logic&gt; (fact (append () ?b ?b))
-    logic&gt; (query (append () (1 2 3) ?what))
-    Success!
-    what: (1 2 3)
+</div>
+<pre><code>(define (question-d x y)
+    (cond ((= x y) #t)
+            ((&amp;lt x y) #f)
+            (else (or #f (question-d (- x 1) (- y 2))))))
 </code></pre>
 
-<p>So far so good! Now, we have to handle the general (recursive) case:</p>
+<button id="toggleButton18">Explanation</button>
+<div id="toggleText18" style="display: none">
+  <p>There is a tail-call to question-d because it is the last sub-expression in a tail context or statement.</p>
 
-<pre><code>    ;;                         A        B       C               
-    logic&gt; (fact (append (?car . ?cdr) ?b (?car . ?partial)) (append ?cdr ?b ?partial))
+</div>
+<pre><code>(define (question-e x y)
+    (if (&amp;gt x y)
+        (question-e (- y 1) x)
+        (question-e (+ x 10) y)))
 </code></pre>
 
-<p>This translates to: the list <code>A</code> appended to <code>B</code> is <code>C</code> if <code>C</code> is the result of sticking the CAR of <code>A</code> to the result of appending the CDR of <code>A</code> to <code>B</code>. Do you see how the Logic code corresponds to the recursive case of the Scheme function definition? As a summary, here is the complete definition for append:</p>
+<button id="toggleButton19">Explanation</button>
+<div id="toggleText19" style="display: none">
+  <p>Both recursive calls are tail-calls.  But infinite loop!  So please don't do this.</p>
 
-<pre><code>    logic&gt; (fact (append () ?b ?b ))
-    logic&gt; (fact (append (?a . ?r) ?y (?a . ?z)) (append ?r ?y ?z))
+</div>
+<pre><code>(define (question-f n)
+    (if (question-f n)
+        (question-f (- n 1))
+        (question-f (+ n 10))))
 </code></pre>
 
-<p>If it helps you, here's an alternate solution that might be a little easier to read:</p>
+<button id="toggleButton20">Explanation</button>
+<div id="toggleText20" style="display: none">
+  <p>The 2 recursive calls in the non-predicate sub-expressions are tail-calls.</p>
 
-<pre><code>    logic&gt; (fact (car (?car . ?cdr) ?car))
-    logic&gt; (fact (cdr (?car . ?cdr) ?cdr))
-    logic&gt; (fact (append () ?b ?b))
-    logic&gt; (fact (append ?a ?b (?car-a . ?partial)) (car ?a ?car-a) (cdr ?a ?cdr-a) (append ?cdr-a ?b ?partial))
-</code></pre>
+</div>
+<h4>Q2</h4>
 
-<p>Meditate on why this more-verbose solution is equivalent to the first definition for the append fact.</p>
+<p>Write a function last, which takes in a Scheme list and returns the last element
+of the list. Make sure it is tail recursive!</p>
 
-<h3>Exercises</h3>
-
-<p>1 . Using the append fact, issue the following queries, and ruminate on the outputs. Note that some of these queries might result in multiple possible outputs.</p>
-
-<pre><code>    logic&gt; (query (append (1 2 3) (4 5) (1 2 3 4 5)))
-    logic&gt; (query (append (1 2) (5 8) ?what))
-    logic&gt; (query (append (a b c) ?what (a b c oh mai gawd)))
-    logic&gt; (query (append ?what (so cool) (this is so cool)))
-    logic&gt; (query (append ?what1 ?what2 (will this really work)))
-</code></pre>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton1">Toggle Solution</button>
-  <div id="toggleText1" style="display: none">
-    <p>Try it out, type it in the interpreter!</p>
-
-  </div>
-<?php } ?>
-<p>2 . Define a fact <code>(fact (last-element ?lst ?x))</code> that outputs <code>Success</code> if <code>?x</code> is the last element of the input list <code>?lst</code>. Check your facts on queries such as:</p>
-
-<pre><code>    logic&gt; (query (last-element (a b c) c))
-    logic&gt; (query (last-element (3) ?x))
-    logic&gt; (query (last-element (1 2 3) ?x))
-    logic&gt; (query (last-element (2 ?x) (3)))
-</code></pre>
-
-<p>Does your solution work correctly on queries such as <code>(query (last-element ?x (3)))</code>? Why or why not?</p>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
-    <pre><code>    (fact (last-element (?x) ?x))
-    (fact (last-element (?car . ?cdr) ?x) (last-element ?cdr ?x))
-</code></pre>
-
-  </div>
-<?php } ?>
-<p>3 . Define the fact <code>(fact (contains ?elem ?lst))</code> that outputs <code>Success</code> if the <code>?elem</code> is contained inside of the input <code>?lst</code>:</p>
-
-<pre><code>    logic&gt; (query (contains 42 (1 2 42 5)))
-    Success.
-    logic&gt; (query (contains (1 2) (a b (1) (1 2) bye)))
-    Success.
-    logic&gt; (query (contains foo (bar baz garply)))
-    Failed.
+<pre><code>(define (last s)
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
-    <pre><code>    (fact (contains ?elem (?elem . ?cdr)))
-    (fact (contains ?elem (?car . ?cdr)) (contains ?elem ?cdr))
+  <button id="toggleButton21">Toggle Solution</button>
+  <div id="toggleText21" style="display: none">
+    <pre><code>    (if (null? (cdr s))
+        (car s)
+        (last (cdr s))))
 </code></pre>
 
   </div>
 <?php } ?>
-<h2>Challenge Problem!</h2>
+<h4>Q3</h4>
 
-<p>Implement basic math in logic. The following interactive trascript should work, given certain defined rules.</p>
+<p>Write the tail recursive version of a function that returns the nth fibonacci number.
+It might be beneficial to try writing a normal recursive solution and/or a iterative
+Python version first.</p>
 
-<pre><code>    logic&gt; (query (2 + 2 = 4))
-    Success!
-    logic&gt; (query (2 + 1 = 4))
-    Failed.
-    logic&gt; (query (4 - 2 = 2))
-    Success!
-    logic&gt; (query (2 * 2 = 4))
-    Success!
-    logic&gt; (query (2 * ?x = 4))
-    Success!
-    x: 2
-    logic&gt; (query (2 + ?x = 4))
-    Success!
-    x: 2
-    logic&gt; (query (2 ?op 2 = 4))
-    Success!
-    op: +
-    op: *
-    logic&gt; (query (?a + ?b = 4))
-    Success!
-    a: 1    b: 3
-    a: 2    b: 2
-    a: 3    b: 1
-    a: 4    b: 0
-    logic&gt; (query (?a ?op ?b = 4))
-    Success!
-    a: 1    op: +   b: 3
-    a: 2    op: +   b: 2
-    a: 3    op: +   b: 1
-    a: 4    op: +   b: 0
-    a: 4    op: -   b: 0
-    a: 5    op: -   b: 1
-    a: 6    op: -   b: 2
-    a: 7    op: -   b: 3
-    a: 8    op: -   b: 4
-    a: 9    op: -   b: 5
-    a: 4    op: *   b: 1
-    a: 1    op: *   b: 4
-    a: 2    op: *   b: 2
+<pre><code>(define (fib n)
 </code></pre>
 
-<p>Here is a skeleton to get you started. Note that we define all the possible numbers in our given universe by a successive sequence; the only numbers Logic knows about are 0 through 9.</p>
-
-<pre><code>    (fact (succ 0 1))
-    (fact (succ 1 2))
-    (fact (succ 2 3))
-    (fact (succ 3 4))
-    (fact (succ 4 5))
-    (fact (succ 5 6))
-    (fact (succ 6 7))
-    (fact (succ 7 8))
-    (fact (succ 8 9))
-    (fact (succ 9 10))
-
-    (fact (1 + ?x = ?y) YOUR CODE HERE)
-    (fact (?x + ?y = ?z) YOUR CODE HERE)
-
-    (fact (?x - ?y = ?z) YOUR CODE HERE)
-
-    (fact (?x * 0 = 0) YOUR CODE HERE)
-    (fact (1 * ?x = ?x) YOUR CODE HERE)
-    (fact (?x * 1 = ?x) YOUR CODE HERE)
-    (fact (?x * ?y = ?z) YOUR CODE HERE)
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton22">Toggle Solution</button>
+  <div id="toggleText22" style="display: none">
+    <pre><code>    (define (fib-iter k prev curr)
+        (if (= k n) curr
+            (fib-iter (+ k 1) curr (+ curr prev))))
+    (if (= n 1) 0
+        (fib-iter 2 0 1)))
 </code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q4</h4>
+
+<p>Write a tail-recursive function reverse that takes in a Scheme list a returns 
+a reversed copy.  Hint: use a helper function!</p>
+
+<pre><code>(define (reverse-iter lst)
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton23">Toggle Solution</button>
+  <div id="toggleText23" style="display: none">
+    <pre><code>    (reverse-iter nil lst))
+
+(define (reverse-iter sofar rest)
+    (if (null? rest)
+          sofar
+          (reverse-iter (cons (car rest) sofar) (cdr rest))))
+</code></pre>
+
+  </div>
+<?php } ?>
+<h4>Q5</h4>
+
+<p>Write a tail-recursive function that inserts number n into a sorted list
+of numbers, s. Hint: Use the built-in scheme function append.</p>
+
+<pre><code>(define (insert n s)
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton24">Toggle Solution</button>
+  <div id="toggleText24" style="display: none">
+    <pre><code>    (define (insert-help s so-far)
+        (cond ((null? s) so-far)
+                 ((&lt; n (car s)) (append so-far (cons n s)))
+                 (else (insert-help (cdr s) (append so-far (list (car s))))))
+    (insert-help s nil))
+</code></pre>
+
+  </div>
+<?php } ?>
+<p></p>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 4; $i++) { ?>
+    <?php for ($i = 0; $i < 25; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
