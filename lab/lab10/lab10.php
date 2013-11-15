@@ -160,7 +160,7 @@ calling <code>__iter__</code> doesn't return something that has a <code>__next__
 
 <button id="toggleButton2">Explanation</button>
 <div id="toggleText2" style="display: none">
-  <p>This also fails to implement the iterator interface.  Without the <strong>iter</strong>
+  <p>This also fails to implement the iterator interface.  Without the <code>__iter__</code>
 method, the <code>for</code> loop will error.  The <code>for</code> loop needs to call
 <code>__iter__</code> first because some objects might not implement the <code>__next__</code> method
 themselves, but calling <code>__iter__</code> will return an object that does.</p>
@@ -256,8 +256,6 @@ o
         return self.str.__iter__()
 </code></pre>
 
-  </div>
-<?php } ?>
 <p>That works (why?), but just kidding.</p>
 
 <pre><code>class Str:
@@ -275,22 +273,24 @@ o
         return self
 </code></pre>
 
+  </div>
+<?php } ?>
 <h3>Generators</h3>
 
-<p>A generator is a special type of iterator that can be written using a yield statement:</p>
+<p>A generator is a special type of iterator that can be written using a <code>yield</code> statement:</p>
 
 <pre><code>def &amp;ltgenerator_function&amp;gt():
-    &amp;ltsomevariable&amp;gt = &amp;ltsomething&amp;gt
-    while &amp;ltpredicate&amp;gt:
-        yield &amp;ltsomething&amp;gt
-        &amp;ltincrement variable&amp;gt
+    &lt;somevariable&gt; = &lt;something&gt;
+    while &lt;predicate&gt;:
+        yield &lt;something&gt;
+        &lt;increment variable&gt;
 </code></pre>
 
 <p>A generator function can also be run through a <code>for</code> loop:</p>
 
 <pre><code>def generator():
     i = 0
-    while i &amp;lt 6:
+    while i &lt; 6:
         yield i
         i += 1
 
@@ -303,7 +303,7 @@ for i in generator():
 <pre><code>def generator():
     print("Starting here")
     i = 0
-    while i &amp;lt 6:
+    while i &lt; 6:
         print("Before yield")
         yield i
         print("After yield")
