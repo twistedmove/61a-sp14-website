@@ -1,4 +1,4 @@
-# Hiding data
+# Information hiding
 
 class FibIter:
     """An iterator over Fibonacci numbers.
