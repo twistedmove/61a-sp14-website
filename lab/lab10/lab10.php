@@ -40,7 +40,7 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("11/15/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("11/21/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
@@ -160,7 +160,7 @@ calling <code>__iter__</code> doesn't return something that has a <code>__next__
 
 <button id="toggleButton2">Explanation</button>
 <div id="toggleText2" style="display: none">
-  <p>This also fails to implement the iterator interface.  Without the <strong>iter</strong>
+  <p>This also fails to implement the iterator interface.  Without the <code>__iter__</code>
 method, the <code>for</code> loop will error.  The <code>for</code> loop needs to call
 <code>__iter__</code> first because some objects might not implement the <code>__next__</code> method
 themselves, but calling <code>__iter__</code> will return an object that does.</p>
@@ -256,8 +256,6 @@ o
         return self.str.__iter__()
 </code></pre>
 
-  </div>
-<?php } ?>
 <p>That works (why?), but just kidding.</p>
 
 <pre><code>class Str:
@@ -275,22 +273,24 @@ o
         return self
 </code></pre>
 
+  </div>
+<?php } ?>
 <h3>Generators</h3>
 
-<p>A generator is a special type of iterator that can be written using a yield statement:</p>
+<p>A generator is a special type of iterator that can be written using a <code>yield</code> statement:</p>
 
-<pre><code>def &amp;ltgenerator_function&amp;gt():
-    &amp;ltsomevariable&amp;gt = &amp;ltsomething&amp;gt
-    while &amp;ltpredicate&amp;gt:
-        yield &amp;ltsomething&amp;gt
-        &amp;ltincrement variable&amp;gt
+<pre><code>def &lt;generator_function&gt;():
+    &lt;somevariable&gt; = &lt;something&gt;
+    while &lt;predicate&gt;:
+        yield &lt;something&gt;
+        &lt;increment variable&gt;
 </code></pre>
 
 <p>A generator function can also be run through a <code>for</code> loop:</p>
 
 <pre><code>def generator():
     i = 0
-    while i &amp;lt 6:
+    while i &lt; 6:
         yield i
         i += 1
 
@@ -303,7 +303,7 @@ for i in generator():
 <pre><code>def generator():
     print("Starting here")
     i = 0
-    while i &amp;lt 6:
+    while i &lt; 6:
         print("Before yield")
         yield i
         print("After yield")
@@ -331,7 +331,7 @@ a <code>__next__</code> method failed to run in the <code>for</code> loop.  Howe
         self.start = 5
 
     def __iter__(self):
-        while self.start &amp;lt 10:
+        while self.start &lt; 10:
             self.start += 1
             yield self.start
 
@@ -421,7 +421,7 @@ each character of a string.</p>
   <button id="toggleButton8">Toggle Solution</button>
   <div id="toggleText8" style="display: none">
     <pre><code>    i = 0
-    while i &amp;lt len(str):
+    while i &lt; len(str):
         yield str[i]
         i += 1
 </code></pre>
@@ -821,7 +821,7 @@ argument to the call to "+."</p>
 <pre><code>(define (question-c x y)
     (if (= x y)
         #t
-        (if (&amp;lt x y)
+        (if (&lt; x y)
             #f
             (or (question-c (- x 1) (- y 2)) #f))))
 </code></pre>
@@ -833,7 +833,7 @@ argument to the call to "+."</p>
 </div>
 <pre><code>(define (question-d x y)
     (cond ((= x y) #t)
-            ((&amp;lt x y) #f)
+            ((&lt; x y) #f)
             (else (or #f (question-d (- x 1) (- y 2))))))
 </code></pre>
 
@@ -843,7 +843,7 @@ argument to the call to "+."</p>
 
 </div>
 <pre><code>(define (question-e x y)
-    (if (&amp;gt x y)
+    (if (&gt; x y)
         (question-e (- y 1) x)
         (question-e (+ x 10) y)))
 </code></pre>
@@ -947,7 +947,6 @@ of numbers, s. Hint: Use the built-in scheme function append.</p>
 <p></p>
 
   </body>
-  <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
     <?php for ($i = 0; $i < 25; $i++) { ?>
@@ -956,5 +955,4 @@ of numbers, s. Hint: Use the built-in scheme function append.</p>
     });
     <?php } ?>
   </script>
-<?php } ?>
 </html>
