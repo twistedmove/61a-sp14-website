@@ -160,21 +160,23 @@ function logic_eval(expr, env) {
     } else if (expr.first == "query" || expr.first == "?") {
         var results = do_query(expr.second);
         var success = false;
-        var result_str = "";
+        var result_str = [];
         for (var i = 0; i < results.length; i++) {
             if (! success) {
                 scheme_return("Success!");
             }
             success = true;
 
+            var items = [];
             results[i].forEach(function (e) {
-                result_str += e[0].toString() + " " +  e[1].toString() + "\t";
+                items.push(e[0].toString() + ": " + e[1].toString());
             });
-            result_str += "\n";
+            result_str.push(items.join("\t"));
         }
-        scheme_print(result_str);
+        scheme_print(result_str.join("\n"));
         if (! success) {
             scheme_return("Failed.");
+            scheme_print("");
         }
     } else {
         throw "Error: Please provide a fact or query: "+ expr.toString();
