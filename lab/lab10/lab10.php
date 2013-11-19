@@ -40,7 +40,7 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("11/15/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("11/21/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
@@ -279,7 +279,7 @@ o
 
 <p>A generator is a special type of iterator that can be written using a <code>yield</code> statement:</p>
 
-<pre><code>def &amp;ltgenerator_function&amp;gt():
+<pre><code>def &lt;generator_function&gt;():
     &lt;somevariable&gt; = &lt;something&gt;
     while &lt;predicate&gt;:
         yield &lt;something&gt;
@@ -331,7 +331,7 @@ a <code>__next__</code> method failed to run in the <code>for</code> loop.  Howe
         self.start = 5
 
     def __iter__(self):
-        while self.start &amp;lt 10:
+        while self.start &lt; 10:
             self.start += 1
             yield self.start
 
@@ -421,7 +421,7 @@ each character of a string.</p>
   <button id="toggleButton8">Toggle Solution</button>
   <div id="toggleText8" style="display: none">
     <pre><code>    i = 0
-    while i &amp;lt len(str):
+    while i &lt; len(str):
         yield str[i]
         i += 1
 </code></pre>
@@ -472,26 +472,22 @@ In other words, the stream's elements (except for the first element) are only ev
 
 <p>Take a look at the following code:</p>
 
-<pre><code>class Stream(object):
-    class empty(object):
+<pre><code>class Stream:
+    class empty:
         def __repr__(self):
             return 'Stream.empty'
-
     empty = empty()
 
-    def __init__(self, first, compute_rest, empty= False):
+    def __init__(self, first, compute_rest=lambda: Stream.empty):
+        assert callable(compute_rest), 'compute_rest must be callable.'
         self.first = first
         self._compute_rest = compute_rest
-        self.empty = empty
-        self._rest = None
-        self._computed = False
 
     @property
     def rest(self):
-        assert not self.empty, 'Empty streams have no rest.'
-        if not self._computed:
+        if self._compute_rest is not None:
             self._rest = self._compute_rest()
-            self._computed = True
+            self._compute_rest = None
         return self._rest
 
     def __repr__(self):
@@ -793,7 +789,7 @@ Is it in a tail context?  In other words, does the last recursive call
 need to return to the caller because there is still more work to be
 done with it?</p>
 
-<p>List what each of the tail-calls are to help decide of they are optimized.</p>
+<p>List what each of the tail-calls are to help decide if they are optimized.</p>
 
 <pre><code>(define (question-a x)
     (if (= x 0)
@@ -821,7 +817,7 @@ argument to the call to "+."</p>
 <pre><code>(define (question-c x y)
     (if (= x y)
         #t
-        (if (&amp;lt x y)
+        (if (&lt; x y)
             #f
             (or (question-c (- x 1) (- y 2)) #f))))
 </code></pre>
@@ -833,7 +829,7 @@ argument to the call to "+."</p>
 </div>
 <pre><code>(define (question-d x y)
     (cond ((= x y) #t)
-            ((&amp;lt x y) #f)
+            ((&lt; x y) #f)
             (else (or #f (question-d (- x 1) (- y 2))))))
 </code></pre>
 
@@ -843,7 +839,7 @@ argument to the call to "+."</p>
 
 </div>
 <pre><code>(define (question-e x y)
-    (if (&amp;gt x y)
+    (if (&gt; x y)
         (question-e (- y 1) x)
         (question-e (+ x 10) y)))
 </code></pre>
@@ -947,7 +943,6 @@ of numbers, s. Hint: Use the built-in scheme function append.</p>
 <p></p>
 
   </body>
-  <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
     <?php for ($i = 0; $i < 25; $i++) { ?>
@@ -956,5 +951,4 @@ of numbers, s. Hint: Use the built-in scheme function append.</p>
     });
     <?php } ?>
   </script>
-<?php } ?>
 </html>
