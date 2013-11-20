@@ -20,7 +20,7 @@
 (query (child eisenhower ?parent))
 
 
-; Ancestors
+; Recursive facts
 
 (fact (ancestor ?a ?y) (parent ?a ?y))
 (fact (ancestor ?a ?y) (parent ?a ?z) (ancestor ?z ?y))
