@@ -472,26 +472,22 @@ In other words, the stream's elements (except for the first element) are only ev
 
 <p>Take a look at the following code:</p>
 
-<pre><code>class Stream(object):
-    class empty(object):
+<pre><code>class Stream:
+    class empty:
         def __repr__(self):
             return 'Stream.empty'
-
     empty = empty()
 
-    def __init__(self, first, compute_rest, empty= False):
+    def __init__(self, first, compute_rest=lambda: Stream.empty):
+        assert callable(compute_rest), 'compute_rest must be callable.'
         self.first = first
         self._compute_rest = compute_rest
-        self.empty = empty
-        self._rest = None
-        self._computed = False
 
     @property
     def rest(self):
-        assert not self.empty, 'Empty streams have no rest.'
-        if not self._computed:
+        if self._compute_rest is not None:
             self._rest = self._compute_rest()
-            self._computed = True
+            self._compute_rest = None
         return self._rest
 
     def __repr__(self):
@@ -793,7 +789,7 @@ Is it in a tail context?  In other words, does the last recursive call
 need to return to the caller because there is still more work to be
 done with it?</p>
 
-<p>List what each of the tail-calls are to help decide of they are optimized.</p>
+<p>List what each of the tail-calls are to help decide if they are optimized.</p>
 
 <pre><code>(define (question-a x)
     (if (= x 0)
