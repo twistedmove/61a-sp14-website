@@ -98,7 +98,7 @@ function do_query(clauses) {
     return grounded;
 }
 
-var DEPTH_LIMIT = 10;
+var DEPTH_LIMIT = 20;
 function search(clauses, env, depth, result) {
     // Search for an application of rules to establish all the clauses,
     // non-destructively extending the unifier env.  Limit the search to the
