@@ -2,7 +2,7 @@
 
 (fact (append-to-form () ?x ?x))
 (fact (append-to-form (?a . ?r) ?y (?a . ?z))
-      (append-to-form ?r ?y ?z))
+      (append-to-form       ?r  ?y       ?z))
 
 (query (append-to-form (a b c) (d e) ?result))
 (query (append-to-form ?left ?right (a b c d e)))
@@ -16,9 +16,9 @@
 
 (fact (append-non-empty (?a) (?b . ?rest) (?a ?b . ?rest)))
 (fact (append-non-empty (?a . ?r) ?y (?a . ?z))
-      (append-non-empty ?r ?y ?z))
+      (append-non-empty       ?r  ?y       ?z))
 
-(query (append-non-form ?left ?right (a b c d e)))
+(query (append-non-empty ?left ?right (a b c d e)))
 
 (fact (segment ?whole ?whole))
 (fact (segment ?whole ?first . ?rest)
@@ -31,7 +31,8 @@
 ; Anagrams
 
 (fact (insert ?a ?r (?a . ?r)))
-(fact (insert ?a (?b . ?r) (?b . ?s)) (insert ?a ?r ?s))
+(fact (insert ?a (?b . ?r) (?b . ?s))
+      (insert ?a       ?r        ?s))
 
 (query (insert 1 (- - - - - -) ?result))
 (query (insert 1 (- - - - - -) ?r1) (insert 2 ?r1 ?r2))
