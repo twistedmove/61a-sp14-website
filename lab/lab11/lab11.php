@@ -1,60 +1,58 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
+    <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
     <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
                                   Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
                                   Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 10</title> 
+    <title>CS 61A Fall 2013: Lab 11</title>
 
     <?php
-    /* So all of the PHP in this file is to allow for this nice little trick to 
-     * help us avoid having two versions of the questions lying around in the 
-     * repository, which often leads to the two versions going out of sync which 
+    /* So all of the PHP in this file is to allow for this nice little trick to
+     * help us avoid having two versions of the questions lying around in the
+     * repository, which often leads to the two versions going out of sync which
      * leads to annoyance for students.
      *
-     * The idea's pretty simple for the PHP part, just simply have two dates: 
+     * The idea's pretty simple for the PHP part, just simply have two dates:
      *
      *    1. The current date
      *    2. The date the solutions should be released
      *
-     * Using these, we now wrap our solutions in a simple PHP if statement that 
-     * checks if the date is past the release date and only includes the code on 
-     * the page displayed (what the server gives back to the browser) if the 
+     * Using these, we now wrap our solutions in a simple PHP if statement that
+     * checks if the date is past the release date and only includes the code on
+     * the page displayed (what the server gives back to the browser) if the
      * solutions are supposed to be released.
      *
-     * We also use some PHP to create unique IDs for each of the show/hide 
-     * buttons and solution divs, which are then used in the PHP generated 
+     * We also use some PHP to create unique IDs for each of the show/hide
+     * buttons and solution divs, which are then used in the PHP generated
      * jQuery code that we use to create the nice toggling effect.
      *
-     * I apologize if the PHP/jQuery is really offensively bad, this is 
+     * I apologize if the PHP/jQuery is really offensively bad, this is
      * literally the most I've written of either for a single project so far.
      * Comments/suggestions are most welcome!
      *
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("11/18/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("11/28/2013", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
-  </head> 
+  </head>
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 10</h1>
+    <h1>CS 61A Lab 11</h1>
 <h2>Declarative Programming</h2>
-<h2>Logic</h2>
-
 <p>In Declarative Programming, we aim to define facts about our universe. With these in place, we can make queries in the form of assertions. The system will then check if the query is true, based on a database of facts. It will inform us of what replacements for the variables will make the query true.</p>
 
 <p>The language we will use is called Logic, and an interpreter is already setup for us on the lab machines. To copy the folder to your current directory, run:</p>
 
-<pre><code>    cp -r ~cs61a/lib/lab/lab10/logic .
+<pre><code>    cp -r ~cs61a/lib/lab/lab11/logic .
 </code></pre>
 
 <p>Just run <code>python3 logic.py</code> after you move your Scheme project files into the folder. Please note that you must have finished up to at least problem 4 on your project in order to do this lab, as this lab depends on your implementation of the <code>Frame</code> class.</p>
@@ -156,7 +154,7 @@
 
 <p>Take a few moments and read through how the above facts work, and how it implements the approach we outlined. In particular, make a few queries to <code>food-chain-v2</code> -- for instance, try retrieving all animals that dominate shrimp!</p>
 
-<p>Note: In the Logic system, multiple 'definitions' of a fact can exist at the same time (as in <code>food-chain-v2</code>) - definitions don't overwrite each other. Instead, they are all checked when you execute a query against that particular fact. </p>
+<p>Note: In the Logic system, multiple 'definitions' of a fact can exist at the same time (as in <code>food-chain-v2</code>) - definitions don't overwrite each other. Instead, they are all checked when you execute a query against that particular fact.</p>
 
 <h3>Recursively-Defined Rules</h3>
 
@@ -182,7 +180,7 @@
 
 <p>So far so good! Now, we have to handle the general (recursive) case:</p>
 
-<pre><code>    ;;                         A        B       C               
+<pre><code>    ;;                         A        B       C
     logic&gt; (fact (append (?car . ?cdr) ?b (?car . ?partial)) (append ?cdr ?b ?partial))
 </code></pre>
 
@@ -260,7 +258,7 @@
 <?php } ?>
 <h2>Challenge Problem!</h2>
 
-<p>Implement basic math in logic. The following interactive trascript should work, given certain defined rules.</p>
+<p>Implement basic math in logic. The following interactive transcript should work...</p>
 
 <pre><code>    logic&gt; (query (2 + 2 = 4))
     Success!
@@ -327,15 +325,31 @@
     (fact (?x * ?y = ?z) YOUR CODE HERE)
 </code></pre>
 
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
+    <pre><code>
+    (fact (1 + ?x = ?y) (succ ?x ?y))
+    (fact (?x + ?y = ?z) (1 + ?x-1 = ?x) (1 + ?z-1 = ?z) (?x-1 + ?y = ?z-1))
+
+    (fact (?x - ?y = ?z) (?y + ?z = ?x))
+
+    (fact (?x * 0 = 0) (succ ?x ?y))
+    (fact (1 * ?x = ?x) (succ ?x ?y))
+    (fact (?x * 1 = ?x) (succ ?x ?y))
+    (fact (?x * ?y = ?z) (?x * ?y-1 = ?zz) (?zz + ?x = ?z))
+</code></pre>
+
+  </div>
+<?php } ?>
+
   </body>
-  <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 4; $i++) { ?>
+    <?php for ($i = 0; $i < 5; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
     <?php } ?>
   </script>
-<?php } ?>
 </html>
