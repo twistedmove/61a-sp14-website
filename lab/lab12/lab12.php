@@ -50,13 +50,9 @@
 <h2>MapReduce</h2>
 <h2>Starter Files</h2>
 
-<p>To get the files necessary for this lab (such as <code>mr.py</code>), let's copy
-the relevant lab files:</p>
-
-<pre><code>cd
-cp -r ~cs61a/public_html/su13/lab/lab08a/lab8a .
-cd lab8a
-</code></pre>
+<p>This lab makes extensive use of starter files that we provide
+<a href="lab12.zip">here</a>, so make sure to download them! After downloading the
+zip archive, don't forget to extract the files.</p>
 
 <h3>Introduction: MapReduce</h3>
 
@@ -64,83 +60,112 @@ cd lab8a
 developed by Google, which allows a programmer to process large amounts
 of data in parallel on many computers.</p>
 
-<p>Any computation in MapReduce consists primarily of two components: the
-<strong>mapper</strong> and the <strong>reducer</strong>.</p>
+<p>A computation in MapReduce consists two components: the <strong>mapper</strong> and
+the <strong>reducer</strong>.</p>
 
-<p>The <strong>mapper</strong> takes an input file, and outputs a series of key-value
-pairs, like:</p>
+<ul>
+<li><p>The <strong>mapper</strong> takes an input file, and prints out a series of
+key-value pairs:</p>
 
-<pre><code>age 29
-name cecilia
-job gradstudent
-salary 42
-</code></pre>
+<p>age 29
+  name cecilia
+  job gradstudent
+  salary 42</p>
 
 <p>In the example above, the key-value pairs are:</p>
 
 <ul>
-<li>age: 29)</li>
+<li>age: 29</li>
 <li>name: cecilia</li>
 <li>job: gradstudent</li>
 <li>salary: 42</li>
+</ul></li>
+<li><p>The <strong>reducer</strong> takes the (sorted) output from the mapper, and
+outputs a single value for each key. The mapper's output will be
+sorted according to the key.</p></li>
 </ul>
 
-<p>The <strong>reducer</strong> takes the (sorted) output from the mapper, and outputs
-a single value for each key. The mapper's output will be sorted
-according to the key.</p>
-
-<p>The entire MapReduce pipeline can be summarized by the following
-diagram:</p>
+<p>The following diagram summarizes the entire MapReduce pipeline:</p>
 
 <p><img src="mapreduce_diag.png" alt="Mapreduce Diagram" /></p>
 
-<p>We will first start off with a non-parallelized version of MapReduce
-(using your Unix terminal) to introduce the concept of mappers and
-reducers. We will then move onto Hadoop, an open-source implementation
-of MapReduce that parallelizes the framework across a cluster of
-machines.</p>
+<p>This lab is split up into two parts:
+1. <strong>Serial MapReduce</strong>: to introduce our MapReduce framework,
+   we will first use a <em>non-parallelized</em> version. Even with this
+   limitation, we can still do quite a lot of data processing!
+2. <strong>Parallelized MapReduce</strong>: the real power of MapReduce comes from
+   parallelization. The same MapReduce jobs from Part 1 can be executed
+   much faster by using multiple computers (i.e. a <em>cluster</em>) at the
+   same time. For this lab, we will be using <em>Hadoop</em>, an open source
+   implementation of the MapReduce paradignm.</p>
 
-<h3>Serial MapReduce: An Introduction with Line-Counting</h3>
+<h2>Part 1: Serial MapReduce</h2>
 
-<p>Before we parallelize the MapReduce process, let's first get familiar
-with our mappers and reducers. Our first exercise will be to count the
-number of lines in all of Shakespeare's plays.</p>
+<p>In this section, we introduce the framework for mappers and
+reducers. We will be running MapReduce jobs locally, so no
+parallelization occurs during this section. However, observe that we
+can still do an impressive amount of data processing just by defining
+two simple modules: the mapper and the reducer!</p>
 
-<p>On our servers, we happen to have all of Shakespeare's plays in text
-format. For instance, if you're so inclined, feel free to read a few
-phrases from "Romeo and Juliet":</p>
+<h3>Example: Line-Counting</h3>
 
-<pre><code>emacs ~cs61a/lib/shakespeare/romeo_and_juliet.txt &amp;
-</code></pre>
-
-<p>Or how about..."The Tempest"?</p>
-
-<pre><code>emacs ~cs61a/lib/shakespeare/the_tempest.txt &amp;
-</code></pre>
-
-<p>Anyways, we'd like to be able to count all the lines in all of his
-plays. Choose a Shakespeare play (say, <code>the_tempest.txt</code>) and copy it
-into your current directory by doing:</p>
-
-<pre><code>cp ~cs61a/lib/shakespeare/the_tempest.txt .
-</code></pre>
+<p>Our first exercise will be counting the number of lines in one of
+Shakespeare's plays.</p>
 
 <p>To formulate this as a MapReduce problem, we need to define an
 appropriate <code>mapper</code> and <code>reducer</code> function.</p>
 
-<p>One way to do this is to have the mapper create a key-value pair for
-every line in each play, whose key is always the word 'line', and whose
-value is always 1.</p>
+<p>Recall what the <strong>mapper</strong> does: for each line in a text file, the
+mapper outputs a key-value pair. What should our key-value pairs be for
+our line counting example?</p>
 
-<p>The reducer would then simply be a simple sum of all the values, as
-this picture illustrates:</p>
+<ul>
+<li><strong>key</strong>: In our example, we don't care about the contents of each
+line -- there's no need to classify each line. Thus, our key can just
+be the string 'line'.</li>
+<li><strong>value</strong>: We want to count each line exactly once. Thus, our value
+can just be the number 1.</li>
+</ul>
+
+<p>For example, the mapper will take in an input file like
+<a href="http://en.wikipedia.org/wiki/The_Red_Wheelbarrow">this</a>:</p>
+
+<pre><code>so much depends
+upon
+a red wheel
+barrow
+glazed with rain
+water
+beside the white
+chickens.
+</code></pre>
+
+<p>(notice there are 8 lines); it then outputs a sequence of key-value
+pairs like this:</p>
+
+<pre><code>'line'  1
+'line'  1
+'line'  1
+'line'  1
+'line'  1
+'line'  1
+'line'  1
+'line'  1
+</code></pre>
+
+<p>The <strong>reducer</strong> takes this sequence and simply adds up all the values
+that are associated with the key 'line':</p>
+
+<pre><code>'line'  8
+</code></pre>
+
+<p>This is illustrated by the following diagram:</p>
 
 <p><img src="mapreduce_linecount.png" alt="Linecount example" /></p>
 
-<p>Let's implement each feature (mapper, reducer) separately, then see how
-each piece fits together.</p>
+<p>Let's examine the code mapper and reducer.</p>
 
-<h3>The Mapper: <code>line_count.py</code></h3>
+<h4>The Mapper: <code>line_count.py</code></h4>
 
 <p>In your current directory should be a file <code>line_count.py</code> with the
 following body:</p>
@@ -162,10 +187,11 @@ def run():
 <code>stdout</code> (i.e. '<em>standard out</em>', which is typically the terminal
 output).</p>
 
-<p>Let's try running <code>line_count.py</code> by feeding it <code>the_tempest.txt</code>. The
-question is, how do we give <code>the_tempest.txt</code> to <code>line_count.py</code> via
-<code>stdin</code>?  We'll use the Unix pipe '<code>|</code>' feature (<em>Note</em>: the 'pipe' key
-'<code>|</code>' isn't lowercase 'L', it's (typically) Shift+Backslash):</p>
+<p>Let's run <code>line_count.py</code> by feeding it <code>the_tempest.txt</code>
+(provided with the starter files). The question is, how do we give
+<code>the_tempest.txt</code> to <code>line_count.py</code> via <code>stdin</code>?  We'll use the Unix
+pipe '<code>|</code>' feature (<em>Note</em>: the 'pipe' key '<code>|</code>' isn't lowercase 'L',
+it's (typically) Shift+Backslash):</p>
 
 <p><strong>Note</strong>: You will probably have to tell Unix to treat <code>line_count.py</code>
 as an executable by issuing the following command:</p>
@@ -192,15 +218,14 @@ should be full of key-value pairs, looking something like:</p>
 'line' 1
 </code></pre>
 
-<p>What pipe-ing does in Unix is take the output of one program (in this
-case, the <code>cat</code> program), and 'pipe' it into the input to another
+<p>Unix pipe-ing takes the output of one program (in this
+case, the <code>cat</code> program), and 'pipes' it as the input to another
 program (typically via <code>stdin</code>). This technique of piping programs
-together is ubiquitous in Unix-style programming, and is a sign of
-modular programming. The idea is: if you can write modular programs,
-then it will be easy to accomplish tasks by chaining together multiple
-programs. We'll do more with this idea in a moment.</p>
+together is called "mudlar programming" and is ubiquitous in Unix-style
+programming.  Modular programming allows us to write small, simple
+programs and chain them together to accomplish complicated tasks.</p>
 
-<h3>The Reducer: sum.py</h3>
+<h4>The Reducer: sum.py</h4>
 
 <p>In your current directory should be the file <code>sum.py</code>. The body of this
 file should be:</p>
@@ -217,23 +242,44 @@ def run():
         emit(key, sum(value_iterator))
 </code></pre>
 
-<p>This is the reducer, which reads in sorted key-value pairs from
-<code>stdin</code>, and outputs a single value for each key. In this case,
-<code>sum.py</code> will return the <code>sum</code> of all the values for a given key. In
-other words, the reducer is <em>reducing</em> the values of a given key into a
-single value.</p>
+<p>Let's break down the process:
+1. <code>values_by_key</code> is a function that reads input from <code>stdin</code>, and
+   groups all key-value pairs that have the same key. For example,</p>
 
-<p>The <code>emit</code> procedure takes in two arguments: a <code>key</code>, and a
-<code>reduced_value</code>, and performs the necessary bookkeeping so that Hadoop
-is aware that we are combining all key-value pairs from the mapper
-(here, <code>stdin</code>) with the key <code>key</code> into the single value
-<code>reduced_value</code>.</p>
+<pre><code>  'line'  1
+  'line'  1
+  'line'  1
+</code></pre>
 
-<p>For the purposes of this simple line-counter, since the <strong>mapper</strong> only
-returns one type of key ('<code>line</code>'), the <strong>reducer</strong> will also only
-return one value - basically the total number of key-value pairs.</p>
+<p>will turn into the following pair:</p>
 
-<h3>Putting it all together</h3>
+<pre><code>  ('line', [1, 1, 1])
+</code></pre>
+
+<p><em>Note</em>: the second element should actually be an iterator, not a
+   Python list; it is represented with square brackets for visual
+   clarity.
+2. The variables <code>key</code> and <code>value_iterator</code> get bound to their
+   respective values in the example above:</p>
+
+<pre><code>  key: 'line'
+  value_iterator: [1, 1, 1]
+</code></pre>
+
+<p>3. For each of these key-iterator pairs, <code>sum.py</code> will add up all the
+   values in the iterator and output this new value with the same key:</p>
+
+<pre><code>  'line'  3
+</code></pre>
+
+<p>The <code>emit</code> function prints out a key and a value in the format
+   shown above. <code>emit</code> also handles logistics for parallelization,
+   which becomes important in Part 2 of the lab.</p>
+
+<p>You can think of the reducer as taking all the values of a key and
+collapsing it into a single value.</p>
+
+<h4>Putting it all together</h4>
 
 <p>Now that we have the <strong>mapper</strong> and the <strong>reducer</strong> defined, let's put
 it all together in the (simplified) MapReduce framework:</p>
@@ -251,7 +297,7 @@ executable by issuing the following command:</p>
 <pre><code>cat the_tempest.txt | ./line_count.py | sort | ./sum.py
 </code></pre>
 
-<p>Notice that we're using the Unix program <code>sort</code>, which is a 'built-in'
+<p>Notice that we're using the Unix program <code>sort</code>, which is a built-in
 Unix program. As you'd expect, <code>sort</code> will, given a file, sort the
 lines of the file - by default, it will sort it alphabetically.</p>
 
@@ -265,7 +311,7 @@ computing - don't worry, we'll do that soon!</p>
 <h3>Exercises</h3>
 
 <p><strong>Question 1</strong>: Use the MapReduce framework (i.e. Map -> Sort ->
-Reduce) to count the number of times the following (common) words
+Reduce) to count the number of times the following common words
 occur:</p>
 
 <ul>
@@ -282,7 +328,7 @@ reducer, or both?</p>
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton0">Toggle Solution</button>
   <div id="toggleText0" style="display: none">
-    <p>You should only need to create a new mapper - this mapper will look
+    <p>You should only need to create a new mapper -- this mapper will look
 through each word of each line, and create a new key-value pair if the
 word matches one of the words we're looking for. The key will be the
 word itself, and the value will be 1.  Then, all that the reducer has
@@ -316,60 +362,70 @@ def run():
 
   </div>
 <?php } ?>
-<h3>MapReduce with Hadoop</h3>
+<h2>Part 2: Parallelized MapReduce</h2>
 
-<p>We have provided a way to practice making calls to the MapReduce
-framework (using the Hadoop implementation). The provided file <code>mr.py</code>
-will take care of the details of communicating with Hadoop via Python.
-Here are a list of commands that you can give to <code>mr.py</code>:</p>
+<p>Now that we are familiar with the MapReduce framework, it's time to
+parallelize the process! Parallelization across multiple computers
+allows programmers to process vast amounts of data (think Google or
+Facebook) in a reasonable amount of time.</p>
 
-<p><em>Note</em>: Some terminology. The Hadoop framework, for its own reasons,
-maintains its own filesystem separate from the filesystems your
-instructional accounts are on. As such, the following Hadoop filesystem
-commands are performed with respect to your Hadoop filesystem. </p>
+<p>In this part of the lab, we will be using the <strong>Hadoop</strong> implementation
+of MapReduce. The provided file <code>mr.py</code> will take care of the details
+of communicating with Hadoop through Python. All you have to worry
+about is writing the <strong>mapper</strong> and <strong>reducer</strong>, just like before!</p>
 
-<p>To use the distributed-computing power, you'll need to SSH into the
-<code>icluster</code> servers (Hadoop is installed only on these machines).  To do
-this, issue the following terminal command:</p>
+<h3>Getting started</h3>
 
-<pre><code># ssh -X icluster1.eecs.berkeley.edu
+<p>In order to use Hadoop, you need to connect to a special Berkeley
+server called <code>icluster1</code>. This server is able to make connections to
+a cluster of computers for distributed computing. You can connect just
+like you normally would to a Berkeley server:</p>
+
+<pre><code>ssh -X icluster1.eecs.berkeley.edu
 </code></pre>
 
-<p>You will be prompted to log in.</p>
+<p>You will be asked if you want to remember the RSA signature -- type
+yes. You will then be asked to login to your class account.</p>
 
-<p>Then, some environment variables need to be set - issue the following
-Unix command:</p>
+<p>Finally, some Unix environment variables need to be set. Go to the
+directory containing the lab starter files. One of them should be a
+file called <code>envvars</code>. Simply run the following command:</p>
 
-<pre><code>source lab8a_envvars
+<pre><code>source envvars
 </code></pre>
 
-<p>The following are some commands we will be using in conjunction with
-the <code>mr.py</code> file:</p>
+<p>Now you're ready to start using Hadoop!</p>
+
+<h3>Terminology and Commands</h3>
+
+<p>For various reasons, the Hadoop framework uses its own filesystem
+separate from the filesystems on your class account. To interact with
+the Hadoop filesystem, we'll be using <code>mr.py</code>:</p>
 
 <ul>
 <li><p><code>cat</code></p>
 
-<p>#  python3 mr.py cat OUTPUT_DIR</p>
+<p>python3 mr.py cat OUTPUT_DIR</p>
 
 <p>This command prints out the contents of all files in one of the
 directories on the Hadoop FileSystem owned by you (given by
 <code>OUTPUT_DIR</code>).</p></li>
 <li><p><code>ls</code></p>
 
-<p># python3 mr.py ls</p>
+<p>python3 mr.py ls</p>
 
 <p>This command lists the contents of all output directories on the
 Hadoop FileSystem. </p></li>
 <li><p><code>rm</code></p>
 
-<p># python3 mr.py rm OUTPUT_DIR</p>
+<p>python3 mr.py rm OUTPUT_DIR</p>
 
 <p>This command will remove an output directory (and all files within
 it) on the Hadoop FileSystem.  Use this with caution - remember,
 there's no 'undo'!</p></li>
 <li><p><code>run</code></p>
 
-<p># python3 mr.py run MAPPER REDUCER INPUT<em>DIR OUTPUT</em>DIR</p>
+<p>python3 mr.py run MAPPER REDUCER INPUT<em>DIR OUTPUT</em>DIR</p>
 
 <p>This command will run a MapReduce job of your choosing, where:</p>
 
@@ -378,33 +434,48 @@ there's no 'undo'!</p></li>
 <code>line_count.py</code></li>
 <li><code>REDUCER</code>: a Python file that contains the reducer function, e.g.
 <code>sum.py</code></li>
-<li><code>INPUT_DIR</code>: the input file, e.g. <code>../cs61a/shakespeare</code></li>
+<li><code>INPUT_DIR</code>: the input file, e.g. <code>../shakespeare.txt</code></li>
 <li><code>OUTPUT_DIR</code>: the name of the directory where you would like the
-results of the MapReduce job to be dumped into; e.g.
-<code>myjob1</code></li>
+results of the MapReduce job to be dumped into; e.g. <code>myjob1</code></li>
 </ul></li>
 </ul>
 
 <h3>Example: Line-counting with Hadoop</h3>
 
-<p>Now, make sure that your <code>line_count.py</code>, <code>sum.py</code>, and <code>mr.py</code> are in
-the current directory, then issue the command:</p>
+<p>We are going to perform the same line counting example as we did in
+Part 1, but with Hadoop. Make sure that your <code>line_count.py</code>, <code>sum.py</code>,
+and <code>mr.py</code> are in the current directory, then issue the command:</p>
 
-<pre><code># python3 mr.py run line_count.py sum.py ../shakespeare.txt mylinecount
+<pre><code>python3 mr.py run line_count.py sum.py ../shakespeare.txt mylinecount
 </code></pre>
 
 <p>Your terminal should then be flooded with the busy output of Hadoop
-doing its thing. Once it's finished, you'll want to examine the Hadoop
-results!  To do this, first call <code>mr.py</code>'s <code>ls</code> command to see the
-contents of your Hadoop directory:</p>
+doing its thing. In particular, the output should contain lines that
+look like this:</p>
 
-<pre><code># python3 mr.py ls
+<pre><code>map 0%  reduce 0%
+map 100%  reduce 0%
+map 100%  reduce 17%
+map 100%  reduce 67%
+map 100%  reduce 100%
+Job complete: job_201311261343_0001
+Output: output/mylinecount
+</code></pre>
+
+<p>This tells you the progress of your MapReduce job, specifically how
+many mappers and reducers have completed.</p>
+
+<p>Once it's finished, you'll want to examine the Hadoop results!  To do
+this, first issue the following command to see the contents of your
+Hadoop directory:</p>
+
+<pre><code>python3 mr.py ls
 </code></pre>
 
 <p>You should see a directory listing for your <code>mylinecount</code> job. To view
 the results of this job, we'll use <code>mr.py</code>'s <code>cat</code> command:</p>
 
-<pre><code># python3 mr.py cat mylinecount/part-00000
+<pre><code>python3 mr.py cat mylinecount/part-00000
 </code></pre>
 
 <p>As an interesting reference point, one TA ran this MapReduce job on a
@@ -433,9 +504,17 @@ Shakespeare's works:</p>
   <div id="toggleText1" style="display: none">
     <p>The Unix command is:</p>
 
-<pre><code># python3 mr.py run q1_mapper.py sum.py ../shakespeare q2
-# python3 mr.py cat q2
-'he'    267
+<pre><code>python3 mr.py run q1_mapper.py sum.py ../shakespeare.txt q2
+</code></pre>
+
+<p>You can then view the output</p>
+
+<pre><code>python3 mr.py cat q2
+</code></pre>
+
+<p>This should output something like</p>
+
+<pre><code>'he'    267
 'it'    7736
 'she'   2222
 'the'   26785
@@ -450,7 +529,7 @@ want to find out which words are the most common.</p>
 
 <p>Write a MapReduce program that returns each word in a body of text
 paired with the number of times it is used. For example, calling your
-solution with <code>../shakespeare</code> should output something like: </p>
+solution with <code>../shakespeare.txt</code> should output something like: </p>
 
 <pre><code>the 300
 was 249
@@ -494,7 +573,7 @@ def run():
 
 <h4>The Reducer:</h4>
 
-<p>You would re-use <code>sum.py</code>.</p>
+<p>You can re-use <code>sum.py</code>.</p>
 
   </div>
 <?php } ?>
@@ -553,7 +632,7 @@ implementation.</p>
 <p>Long story short, we will use the following command to run this map
 reduce task:</p>
 
-<pre><code>python3 mr.py run_with_cache sentiment_mapper.py sum.py ../shakespeare MY_OUTFILE ../sentiments.csv#sentiments.csv
+<pre><code>python3 mr.py run_with_cache sentiment_mapper.py sum.py ../shakespeare.txt MY_OUTFILE ../sentiments.csv#sentiments.csv
 </code></pre>
 
 <h3>More Fun Exercises!</h3>

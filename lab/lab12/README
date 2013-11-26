@@ -1,0 +1,24 @@
+Setting up the Lab
+==================
+
+To start Hadoop, go on the master account and source the file `envvars`
+from the lab. Then run
+
+    ~/projects/hadoop/hadoop/bin/start-all.sh
+
+This starts all the relevant nodes for Hadoop. Students should now be
+able to run Hadoop jobs. At this point, you should run the linecount
+example from the Part 2 of the lab to verify that it works. If there
+are any difficulties, contact Inst.
+
+The lab makes use of `shakespeare.txt` and `sentiments.csv`. You will
+need to upload this file onto the Hadoop FileSystem:
+
+    hadoop dfs -put ~cs61a/lib/shakespeare.txt ../shakespeare.txt
+    hadoop dfs -put ~cs61a/lib/sentiments.csv ../sentiments.csv
+
+(It appears that the filesystem is cleared periodically.)
+
+To turn off the clusters, run the following from the master account
+
+    ~/projects/hadoop/hadoop/bin/stop-all.sh
