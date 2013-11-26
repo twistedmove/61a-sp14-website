@@ -20,6 +20,7 @@ import scheme_reader
 import scheme_test
 
 facts = []
+debug = False
 
 #############
 # Inference #
@@ -62,7 +63,7 @@ def do_query(clauses):
         yield rval
 
 def debug_print(*s):
-    if True:
+    if debug:
         print(*s)
 
 DEPTH_LIMIT = 20
@@ -88,7 +89,8 @@ def search(clauses, env, depth):
                 elif isvar(second):
                     env.diff(second, first)
 
-                yield from search(clauses.second, env, depth)
+                for item in search(clauses.second, env, depth):
+                    yield item
                 return
 
         for fact in facts:
