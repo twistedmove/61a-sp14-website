@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 5</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-5">
+<h1 class="title">61A Homework 5</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 10/15</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw5.py">hw5.py</a> starter file for the questions below.</p>
+<p><strong>Q1.</strong> Define a function <tt class="docutils literal">reverse_list</tt> that takes a list as an argument and
+returns <tt class="docutils literal">None</tt>, but reverses the elements in the list as a side effect.
+Do not use any built-in <tt class="docutils literal">list</tt> methods (especially not <tt class="docutils literal">reverse</tt>) or
+slicing, but element assignment statements are fine:</p>
+<pre class="literal-block">
+def reverse_list(s):
+    &quot;&quot;&quot;Reverse the contents of list s and return None.
+
+    &gt;&gt;&gt; digits = [6, 2, 9, 5, 1, 4, 1, 3]
+    &gt;&gt;&gt; reverse_list(digits)
+    &gt;&gt;&gt; digits
+    [3, 1, 4, 1, 5, 9, 2, 6]
+    &gt;&gt;&gt; d = digits
+    &gt;&gt;&gt; reverse_list(d)
+    &gt;&gt;&gt; digits
+    [6, 2, 9, 5, 1, 4, 1, 3]
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><em>Hint</em>: This question was also asked in discussion 5, so you get a freebie. You
+should try to implement it on your own before looking up the answer, though!</p>
+<p><strong>Q2.</strong> Define a function <tt class="docutils literal">shuffle</tt> that takes a list with an even number of
+elements (cards) and creates a new list that interleaves the elements of the
+first half with the elements of the second half:</p>
+<pre class="literal-block">
+def card(n):
+    &quot;&quot;&quot;Return the playing card type for a positive n &lt;= 13.&quot;&quot;&quot;
+    assert type(n) == int and n &gt; 0 and n &lt;= 13, &quot;Bad card n&quot;
+    specials = {1: 'A', 11: 'J', 12: 'Q', 13: 'K'}
+    return specials.get(n, str(n))
+
+def shuffle(cards):
+    &quot;&quot;&quot;Return a shuffled list that interleaves the two halves of cards.
+
+    &gt;&gt;&gt; suits = ['♡', '♢', '♤', '♧']
+    &gt;&gt;&gt; cards = [card(n) + suit for n in range(1,14) for suit in suits]
+    &gt;&gt;&gt; cards[:12]
+    ['A♡', 'A♢', 'A♤', 'A♧', '2♡', '2♢', '2♤', '2♧', '3♡', '3♢', '3♤', '3♧']
+    &gt;&gt;&gt; cards[26:30]
+    ['7♤', '7♧', '8♡', '8♢']
+    &gt;&gt;&gt; shuffle(cards)[:12]
+    ['A♡', '7♤', 'A♢', '7♧', 'A♤', '8♡', 'A♧', '8♢', '2♡', '8♤', '2♢', '8♧']
+    &gt;&gt;&gt; shuffle(shuffle(cards))[:12]
+    ['A♡', '4♢', '7♤', '10♧', 'A♢', '4♤', '7♧', 'J♡', 'A♤', '4♧', '8♡', 'J♢']
+    &gt;&gt;&gt; cards[:12]  # Should not be changed
+    ['A♡', 'A♢', 'A♤', 'A♧', '2♡', '2♢', '2♤', '2♧', '3♡', '3♢', '3♤', '3♧']
+    &quot;&quot;&quot;
+    assert len(cards) % 2 == 0, 'len(cards) must be even'
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q3.</strong> Write a version of the mutable <tt class="docutils literal">make_withdraw</tt> function from lecture
+that returns password-protected withdraw functions.  That is, <tt class="docutils literal">make_withdraw</tt>
+should take a password argument (a string) in addition to an initial balance.
+The returned function should take two arguments: an amount to withdraw and a
+password.</p>
+<p>A password-protected <tt class="docutils literal">withdraw</tt> function should only process withdrawals that
+include a password that matches the original.  Upon receiving an incorrect
+password, the function should:</p>
+<ol class="arabic simple">
+<li>Store that incorrect password in a list, and</li>
+<li>Return the string 'Incorrect password'.</li>
+</ol>
+<p>If a withdraw function has been called three times with incorrect passwords
+<tt class="docutils literal">p1</tt>, <tt class="docutils literal">p2</tt>, and <tt class="docutils literal">p3</tt>, then it is locked.  All subsequent calls to the
+function should return:</p>
+<p><tt class="docutils literal">&quot;Your account is locked. Attempts: [&lt;p1&gt;, &lt;p2&gt;, <span class="pre">&lt;p3&gt;]&quot;</span></tt></p>
+<p>The incorrect passwords may be the same or different:</p>
+<pre class="literal-block">
+def make_withdraw(balance, password):
+    &quot;&quot;&quot;Return a password-protected withdraw function.
+
+    &gt;&gt;&gt; w = make_withdraw(100, 'hax0r')
+    &gt;&gt;&gt; w(25, 'hax0r')
+    75
+    &gt;&gt;&gt; w(90, 'hax0r')
+    'Insufficient funds'
+    &gt;&gt;&gt; w(25, 'hwat')
+    'Incorrect password'
+    &gt;&gt;&gt; w(25, 'hax0r')
+    50
+    &gt;&gt;&gt; w(75, 'a')
+    'Incorrect password'
+    &gt;&gt;&gt; w(10, 'hax0r')
+    40
+    &gt;&gt;&gt; w(20, 'n00b')
+    'Incorrect password'
+    &gt;&gt;&gt; w(10, 'hax0r')
+    &quot;Your account is locked. Attempts: ['hwat', 'a', 'n00b']&quot;
+    &gt;&gt;&gt; w(10, 'l33t')
+    &quot;Your account is locked. Attempts: ['hwat', 'a', 'n00b']&quot;
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q4.</strong> Suppose that our banking system requires the ability to make joint
+accounts.  Define a function <tt class="docutils literal">make_joint</tt> that takes three arguments.</p>
+<ol class="arabic simple">
+<li>A password-protected <tt class="docutils literal">withdraw</tt> function,</li>
+<li>The password with which that <tt class="docutils literal">withdraw</tt> function was defined, and</li>
+<li>A new password that can also access the original account.</li>
+</ol>
+<p>The <tt class="docutils literal">make_joint</tt> function returns a <tt class="docutils literal">withdraw</tt> function that provides
+additional access to the original account using <em>either</em> the new or old
+password.  Both functions draw down the same balance. Incorrect passwords
+provided to either function will be stored and cause the functions to be locked
+after three wrong attempts.</p>
+<p><em>Hint</em>: The solution is short (less than 10 lines) and contains no string
+literals!  The key is to call <tt class="docutils literal">withdraw</tt> with the right password and
+interpret the result.  You may assume that all failed attempts to withdraw will
+return some string (for incorrect passwords, locked accounts, or insufficient
+funds), while successful withdrawals will return a number.</p>
+<p>Use <tt class="docutils literal">type(value) == str</tt> to test if some <tt class="docutils literal">value</tt> is a string:</p>
+<pre class="literal-block">
+def make_joint(withdraw, old_password, new_password):
+    &quot;&quot;&quot;Return a password-protected withdraw function that has joint access to
+    the balance of withdraw.
+
+    &gt;&gt;&gt; w = make_withdraw(100, 'hax0r')
+    &gt;&gt;&gt; w(25, 'hax0r')
+    75
+    &gt;&gt;&gt; make_joint(w, 'my', 'secret')
+    'Incorrect password'
+    &gt;&gt;&gt; j = make_joint(w, 'hax0r', 'secret')
+    &gt;&gt;&gt; w(25, 'secret')
+    'Incorrect password'
+    &gt;&gt;&gt; j(25, 'secret')
+    50
+    &gt;&gt;&gt; j(25, 'hax0r')
+    25
+    &gt;&gt;&gt; j(100, 'secret')
+    'Insufficient funds'
+
+    &gt;&gt;&gt; j2 = make_joint(j, 'secret', 'code')
+    &gt;&gt;&gt; j2(5, 'code')
+    20
+    &gt;&gt;&gt; j2(5, 'secret')
+    15
+    &gt;&gt;&gt; j2(5, 'hax0r')
+    10
+
+    &gt;&gt;&gt; j2(25, 'password')
+    'Incorrect password'
+    &gt;&gt;&gt; j2(5, 'secret')
+    &quot;Your account is locked. Attempts: ['my', 'secret', 'password']&quot;
+    &gt;&gt;&gt; j(5, 'secret')
+    &quot;Your account is locked. Attempts: ['my', 'secret', 'password']&quot;
+    &gt;&gt;&gt; w(5, 'hax0r')
+    &quot;Your account is locked. Attempts: ['my', 'secret', 'password']&quot;
+    &gt;&gt;&gt; make_joint(w, 'hax0r', 'hello')
+    &quot;Your account is locked. Attempts: ['my', 'secret', 'password']&quot;
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>ALL FOLLOWING QUESTIONS ARE EXTRA FOR EXPERTS (OPTIONAL)</strong></p>
+<p><a class="reference external" href="http://composingprograms.com/pages/24-mutable-data.html#propagating-constraints">Section 2.4.8</a>
+describes a system for solving equations with multiple free parameters using
+constraint programming, a declarative style of programming that asserts
+constraints and then applies a general method of constraint satisfaction.  The
+following questions ask you to extend that system.  The code for the system
+appears at the end of this homework.</p>
+<p><strong>Q5.</strong> (Extra for experts) Implement the function <tt class="docutils literal">triangle_area</tt> that
+defines a relation among three connectors, the
+base <tt class="docutils literal">b</tt>, height <tt class="docutils literal">h</tt>, and area <tt class="docutils literal">a</tt> of a triangle, so that <tt class="docutils literal">a = 0.5 * b *
+h</tt>:</p>
+<pre class="literal-block">
+def triangle_area(a, b, h):
+    &quot;&quot;&quot;Connect a, b, and h so that a is the area of a triangle with base b and
+    height h.
+
+    &gt;&gt;&gt; a, b, h = [connector(n) for n in ('area', 'base', 'height')]
+    &gt;&gt;&gt; triangle_area(a, b, h)
+    &gt;&gt;&gt; a['set_val']('user', 75.0)
+    area = 75.0
+    &gt;&gt;&gt; b['set_val']('user', 15.0)
+    base = 15.0
+    height = 10.0
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q6.</strong> (Extra for experts) The <tt class="docutils literal">multiplier</tt> constraint from the lecture
+notes is insufficient to model equations that include squared quantities
+because constraint networks must not include loops.  Implement a new constraint
+<tt class="docutils literal">squarer</tt> that represents the squaring relation:</p>
+<pre class="literal-block">
+def squarer(a, b):
+    &quot;&quot;&quot;The constraint that a*a=b.
+
+    &gt;&gt;&gt; x, y = connector('X'), connector('Y')
+    &gt;&gt;&gt; s = squarer(x, y)
+    &gt;&gt;&gt; x['set_val']('user', 10)
+    X = 10
+    Y = 100
+    &gt;&gt;&gt; x['forget']('user')
+    X is forgotten
+    Y is forgotten
+    &gt;&gt;&gt; y['set_val']('user', 16)
+    Y = 16
+    X = 4.0
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q7.</strong> (Extra for experts) Use your <tt class="docutils literal">squarer</tt> constraint to build a
+constraint network for the Pythagorean theorem: <tt class="docutils literal">a</tt> squared plus <tt class="docutils literal">b</tt>
+squared equals <tt class="docutils literal">c</tt> squared:</p>
+<pre class="literal-block">
+def pythagorean(a, b, c):
+    &quot;&quot;&quot;Connect a, b, and c into a network for the Pythagorean theorem:
+    a*a + b*b = c*c
+
+    &gt;&gt;&gt; a, b, c = [connector(name) for name in ('A', 'B', 'C')]
+    &gt;&gt;&gt; pythagorean(a, b, c)
+    &gt;&gt;&gt; a['set_val']('user', 5)
+    A = 5
+    &gt;&gt;&gt; c['set_val']('user', 13)
+    C = 13
+    B = 12.0
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p>The equation solver implementation from the lecture notes:</p>
+<pre class="literal-block">
+def connector(name=None):
+    &quot;&quot;&quot;A connector between constraints.
+
+    &gt;&gt;&gt; celsius = connector('Celsius')
+    &gt;&gt;&gt; fahrenheit = connector('Fahrenheit')
+    &gt;&gt;&gt; converter(celsius, fahrenheit)
+
+    &gt;&gt;&gt; celsius['set_val']('user', 25)
+    Celsius = 25
+    Fahrenheit = 77.0
+
+    &gt;&gt;&gt; fahrenheit['set_val']('user', 212)
+    Contradiction detected: 77.0 vs 212
+
+    &gt;&gt;&gt; celsius['forget']('user')
+    Celsius is forgotten
+    Fahrenheit is forgotten
+
+    &gt;&gt;&gt; fahrenheit['set_val']('user', 212)
+    Fahrenheit = 212
+    Celsius = 100.0
+    &quot;&quot;&quot;
+    informant = None  # The source of the current val
+    constraints = []  # A list of connected constraints
+
+    def set_value(source, value):
+        nonlocal informant
+        val = connector['val']
+        if val is None:
+            informant, connector['val'] = source, value
+            if name is not None:
+                print(name, '=', value)
+            inform_all_except(source, 'new_val', constraints)
+        else:
+            if val != value:
+                print('Contradiction detected:', val, 'vs', value)
+
+    def forget_value(source):
+        nonlocal informant
+        if informant == source:
+            informant, connector['val'] = None, None
+            if name is not None:
+                print(name, 'is forgotten')
+            inform_all_except(source, 'forget', constraints)
+    connector = {'val': None,
+                 'set_val': set_value,
+                 'forget': forget_value,
+                 'has_val': lambda: connector['val'] is not None,
+                 'connect': lambda source: constraints.append(source)}
+
+    return connector
+
+def inform_all_except(source, message, constraints):
+    &quot;&quot;&quot;Inform all constraints of the message, except source.&quot;&quot;&quot;
+    for c in constraints:
+        if c != source:
+            c[message]()
+
+def ternary_constraint(a, b, c, ab, ca, cb):
+    &quot;&quot;&quot;The constraint that ab(a,b)=c and ca(c,a)=b and cb(c,b)=a.&quot;&quot;&quot;
+    def new_value():
+        av, bv, cv = [connector['has_val']() for connector in (a, b, c)]
+        if av and bv:
+            c['set_val'](constraint, ab(a['val'], b['val']))
+        elif av and cv:
+            b['set_val'](constraint, ca(c['val'], a['val']))
+        elif bv and cv:
+            a['set_val'](constraint, cb(c['val'], b['val']))
+    def forget_value():
+        for connector in (a, b, c):
+            connector['forget'](constraint)
+    constraint = {'new_val': new_value, 'forget': forget_value}
+    for connector in (a, b, c):
+        connector['connect'](constraint)
+    return constraint
+
+from operator import add, sub, mul, truediv
+
+def adder(a, b, c):
+    &quot;&quot;&quot;The constraint that a + b = c.&quot;&quot;&quot;
+    return ternary_constraint(a, b, c, add, sub, sub)
+
+def multiplier(a, b, c):
+    &quot;&quot;&quot;The constraint that a * b = c.&quot;&quot;&quot;
+    return ternary_constraint(a, b, c, mul, truediv, truediv)
+
+def constant(connector, value):
+    &quot;&quot;&quot;The constraint that connector = value.&quot;&quot;&quot;
+    constraint = {}
+    connector['set_val'](constraint, value)
+    return constraint
+
+def converter(c, f):
+    &quot;&quot;&quot;Connect c to f to convert from Celsius to Fahrenheit.&quot;&quot;&quot;
+    u, v, w, x, y = [connector() for _ in range(5)]
+    multiplier(c, w, u)
+    multiplier(v, x, u)
+    adder(v, y, f)
+    constant(w, 9)
+    constant(x, 5)
+    constant(y, 32)
+</pre>
+</div>
+</body>
+</html>

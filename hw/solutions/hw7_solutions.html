@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 7</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-7">
+<h1 class="title">61A Homework 7</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 11/5</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw7.py">hw7.py</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> Section <a class="reference external" href="http://composingprograms.com/pages/27-recursive-data-structures.html">2.7</a> and <a class="reference external" href="http://composingprograms.com/pages/28-generic-operations.html">2.8</a> of Composing Programs.</p>
+<p><strong>Q1.</strong> Write a class <tt class="docutils literal">Amount</tt> that represents a collection of nickels and
+pennies.  Include a property method called <tt class="docutils literal">value</tt> that computes the total
+monetary value of the amount from the nickels and pennies.</p>
+<p>Do not add an instance attribute called <tt class="docutils literal">value</tt> to each <tt class="docutils literal">Amount</tt> instance.
+Instead, an <tt class="docutils literal">Amount</tt> should have only two instance attributes: <tt class="docutils literal">nickels</tt>
+and <tt class="docutils literal">pennies</tt>. You do not need to support direct assignment to <tt class="docutils literal">value</tt>.
+(You are welcome to add that feature as well; see the relevant <a class="reference external" href="http://docs.python.org/py3k/library/functions.html#property">Python Property
+docs</a>).</p>
+<p>Finally, write a subclass <tt class="docutils literal">MinimalAmount</tt> with base class <tt class="docutils literal">Amount</tt> that overrides
+the constructor so that all amounts are <em>minimal</em> upon construction.  An
+<tt class="docutils literal">Amount</tt> instance is minimal if it has no more than four pennies, but the
+same value as the nickel and penny quantities passed as arguments:</p>
+<pre class="literal-block">
+class Amount(object):
+    &quot;&quot;&quot;An amount of nickels and pennies.
+
+    &gt;&gt;&gt; a = Amount(3, 7)
+    &gt;&gt;&gt; a.nickels
+    3
+    &gt;&gt;&gt; a.pennies
+    7
+    &gt;&gt;&gt; a.value
+    22
+    &gt;&gt;&gt; a.nickels = 5
+    &gt;&gt;&gt; a.value
+    32
+    &gt;&gt;&gt; a.value = 8
+    &gt;&gt;&gt; a.pennies = 3
+    &quot;&quot;&quot;
+    def __init__(self, nickels, pennies):
+        self.nickels = nickels
+        self.pennies = pennies
+
+    &#64;property
+    def value(self):
+        return 5 * self.nickels + self.pennies
+
+    &#64;value.setter
+    def value(self, value):
+        self.nickels = value // 5
+        self.pennies = value % 5
+
+class MinimalAmount(Amount):
+    &quot;&quot;&quot;An amount of nickels and pennies that is initialized with no more than
+    four pennies, by converting excess pennies to nickels.
+
+    &gt;&gt;&gt; a = MinimalAmount(3, 7)
+    &gt;&gt;&gt; a.nickels
+    4
+    &gt;&gt;&gt; a.pennies
+    2
+    &gt;&gt;&gt; a.value
+    22
+    &quot;&quot;&quot;
+    def __init__(self, nickels, pennies):
+        self.nickels = nickels + pennies // 5
+        self.pennies = pennies % 5
+</pre>
+<p><strong>Q2.</strong> Write a data-directed apply function that computes the area or
+perimeter of either a square or a rectangle. Use a dictionary to store the
+implementations of each function for each type:</p>
+<pre class="literal-block">
+class Square(object):
+    def __init__(self, side):
+        self.side = side
+
+class Rect(object):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+def apply(operator_name, shape):
+    &quot;&quot;&quot;Apply operator to shape.
+
+    &gt;&gt;&gt; apply('area', Square(10))
+    100
+    &gt;&gt;&gt; apply('perimeter', Square(5))
+    20
+    &gt;&gt;&gt; apply('area', Rect(5, 10))
+    50
+    &gt;&gt;&gt; apply('perimeter', Rect(2, 4))
+    12
+    &quot;&quot;&quot;
+    return apply_implementations[(operator_name, type(shape))](shape)
+
+apply_implementations = {
+        ('area', Square): lambda s: s.side ** 2,
+        ('area', Rect): lambda r: r.width * r.height,
+        ('perimeter', Square): lambda s: s.side * 4,
+        ('perimeter', Rect): lambda r: 2 * (r.width + r.height)}
+</pre>
+<p><strong>Q3.</strong> Complete the implementation from lecture of sets represented as sorted
+recursive lists.  Both <tt class="docutils literal">adjoin_set2</tt> and <tt class="docutils literal">union_set2</tt> should take Θ(n) time,
+where n is the size of the input set(s):</p>
+<pre class="literal-block">
+def empty(s):
+    return len(s) == 0
+
+def set_contains2(s, v):
+    &quot;&quot;&quot;Return true if set s contains value v as an element.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; set_contains2(s, 2)
+    True
+    &gt;&gt;&gt; set_contains2(s, 5)
+    False
+    &quot;&quot;&quot;
+    if empty(s) or s.first &gt; v:
+        return False
+    elif s.first == v:
+        return True
+    else:
+        return set_contains2(s.rest, v)
+
+def intersect_set2(set1, set2):
+    &quot;&quot;&quot;Return a set containing all elements common to set1 and set2.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; t = Rlist(2, Rlist(3, Rlist(4)))
+    &gt;&gt;&gt; intersect_set2(s, t)
+    Rlist(2, Rlist(3))
+    &quot;&quot;&quot;
+    if empty(set1) or empty(set2):
+        return Rlist.empty
+    else:
+        e1, e2 = set1.first, set2.first
+        if e1 == e2:
+            return Rlist(e1, intersect_set2(set1.rest, set2.rest))
+        elif e1 &lt; e2:
+            return intersect_set2(set1.rest, set2)
+        elif e2 &lt; e1:
+            return intersect_set2(set1, set2.rest)
+
+def adjoin_set2(s, v):
+    &quot;&quot;&quot;Return a set containing all elements of s and element v.
+
+    Assume that s is an Rlist with elements sorted from least to greatest.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; adjoin_set2(s, 2.5)
+    Rlist(1, Rlist(2, Rlist(2.5, Rlist(3))))
+    &gt;&gt;&gt; adjoin_set2(s, 0.5)
+    Rlist(0.5, Rlist(1, Rlist(2, Rlist(3))))
+    &gt;&gt;&gt; adjoin_set2(s, 3)
+    Rlist(1, Rlist(2, Rlist(3)))
+    &quot;&quot;&quot;
+    if empty(s) or s.first &gt; v:
+        return Rlist(v, s)
+    elif s.first == v:
+        return s
+    else:
+        return Rlist(s.first, adjoin_set2(s.rest, v))
+
+def union_set2(set1, set2):
+    &quot;&quot;&quot;Return a set containing all elements either in set1 or set2.
+
+    Assume that set1 and set2 are both Rlists with elements sorted from least
+    to greatest.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; t = Rlist(1, Rlist(3, Rlist(5)))
+    &gt;&gt;&gt; union_set2(s, t)
+    Rlist(1, Rlist(2, Rlist(3, Rlist(5))))
+    &gt;&gt;&gt; union_set2(s.rest, t)
+    Rlist(1, Rlist(2, Rlist(3, Rlist(5))))
+    &gt;&gt;&gt; union_set2(Rlist.empty, intersect_set2(s.rest, t))
+    Rlist(3)
+    &quot;&quot;&quot;
+    if empty(set1):
+        return set2
+    elif empty(set2):
+        return set1
+    else:
+        e1, e2 = set1.first, set2.first
+        if e1 == e2:
+            return Rlist(e1, union_set2(set1.rest, set2.rest))
+        elif e1 &lt; e2:
+            return Rlist(e1, union_set2(set1.rest, set2))
+        elif e2 &lt; e1:
+            return Rlist(e2, union_set2(set1, set2.rest))
+</pre>
+<p><strong>Q4.</strong> Complete the implementation from lecture of sets represented as binary
+search trees.  The entry of a binary search tree is larger than all entries in
+its left branch and smaller than all entries in its right branch.  Moreover,
+non-empty branches of a binary search tree must also be binary search trees.
+Intersection and union are performed by coercing a tree set to and from an
+ordered recursive list:</p>
+<pre class="literal-block">
+class Tree(object):
+    &quot;&quot;&quot;A tree with internal values.&quot;&quot;&quot;
+
+    def __init__(self, entry, left=None, right=None):
+        self.entry = entry
+        self.left = left
+        self.right = right
+
+    def __repr__(self):
+        args = repr(self.entry)
+        if self.left or self.right:
+            args += ', {0}, {1}'.format(repr(self.left), repr(self.right))
+        return 'Tree({0})'.format(args)
+
+def big_tree(left, right):
+    &quot;&quot;&quot;Return a tree set of unique elements between left and right.
+
+    This function creates binary search trees for testing.
+
+    &gt;&gt;&gt; big_tree(0, 12)
+    Tree(6, Tree(2, Tree(0), Tree(4)), Tree(10, Tree(8), Tree(12)))
+    &quot;&quot;&quot;
+    if left &gt; right:
+        return None
+    split = left + (right - left)//2
+    return Tree(split, big_tree(left, split-2), big_tree(split+2, right))
+
+def set_contains3(s, v):
+    &quot;&quot;&quot;Return true if set s contains value v as an element.
+
+    &gt;&gt;&gt; t = Tree(2, Tree(1), Tree(3))
+    &gt;&gt;&gt; set_contains3(t, 3)
+    True
+    &gt;&gt;&gt; set_contains3(t, 0)
+    False
+    &gt;&gt;&gt; set_contains3(big_tree(20, 60), 34)
+    True
+    &quot;&quot;&quot;
+    if s is None:
+        return False
+    elif s.entry == v:
+        return True
+    elif s.entry &lt; v:
+        return set_contains3(s.right, v)
+    elif s.entry &gt; v:
+        return set_contains3(s.left, v)
+
+def adjoin_set3(s, v):
+    &quot;&quot;&quot;Return a set containing all elements of s and element v.
+
+    &gt;&gt;&gt; b = big_tree(0, 9)
+    &gt;&gt;&gt; b
+    Tree(4, Tree(1), Tree(7, None, Tree(9)))
+    &gt;&gt;&gt; adjoin_set3(b, 5)
+    Tree(4, Tree(1), Tree(7, Tree(5), Tree(9)))
+    &quot;&quot;&quot;
+    if s is None:
+        return Tree(v)
+    elif s.entry == v:
+        return s
+    elif s.entry &lt; v:
+        return Tree(s.entry, s.left, adjoin_set3(s.right, v))
+    elif s.entry &gt; v:
+        return Tree(s.entry, adjoin_set3(s.left, v), s.right)
+
+def intersect_set3(set1, set2):
+    &quot;&quot;&quot;Return a set containing all elements common to set1 and set2.
+
+    &gt;&gt;&gt; s, t = big_tree(0, 12), big_tree(6, 18)
+    &gt;&gt;&gt; intersect_set3(s, t)
+    Tree(8, Tree(6), Tree(10, None, Tree(12)))
+    &quot;&quot;&quot;
+    s1, s2 = map(tree_to_ordered_sequence, (set1, set2))
+    return ordered_sequence_to_tree(intersect_set2(s1, s2))
+
+def union_set3(set1, set2):
+    &quot;&quot;&quot;Return a set containing all elements either in set1 or set2.
+
+    &gt;&gt;&gt; s, t = big_tree(6, 12), big_tree(10, 16)
+    &gt;&gt;&gt; union_set3(s, t)
+    Tree(10, Tree(6, None, Tree(9)), Tree(13, Tree(11), Tree(15)))
+    &quot;&quot;&quot;
+    s1, s2 = map(tree_to_ordered_sequence, (set1, set2))
+    return ordered_sequence_to_tree(union_set2(s1, s2))
+</pre>
+<p>First, implement <tt class="docutils literal">tree_to_ordered_sequence</tt>, which coerces a set represented
+as a <tt class="docutils literal">Tree</tt> into a set represented as an ordered <tt class="docutils literal">Rlist</tt>. If you can,
+implement this function so that it executes in Θ(n) time, where n is the
+number of elements in the tree:</p>
+<pre class="literal-block">
+def tree_to_ordered_sequence(s):
+    &quot;&quot;&quot;Return an ordered sequence containing the elements of tree set s.
+
+    Assume that s is a well-formed binary search tree.
+
+    &gt;&gt;&gt; b = big_tree(0, 9)
+    &gt;&gt;&gt; tree_to_ordered_sequence(b)
+    Rlist(1, Rlist(4, Rlist(7, Rlist(9))))
+    &quot;&quot;&quot;
+    def ttos_iter(s, r):
+        if s is None:
+            return r
+        return ttos_iter(s.left, Rlist(s.entry, ttos_iter(s.right, r)))
+    return ttos_iter(s, Rlist.empty)
+</pre>
+<p>Second, in order to complete the coercion from an ordered sequence set to a tree
+set, implement <tt class="docutils literal">partial_tree</tt>. If you can, implement the function to run in
+Θ(n) time in the length of the input list.</p>
+<p><em>Hint</em>: This function requires two recursive calls. The first call builds a
+left branch out of the first left_size elements of s; Then, the next element is
+used as the entry of the returned tree.  Finally, the second recursive call
+builds the right branch out of the next right_size elements.  In total,
+(left_size + 1 + right_size) = n, where 1 is for the entry:</p>
+<pre class="literal-block">
+def partial_tree(s, n):
+    &quot;&quot;&quot;Return a balanced tree of the first n elements of Rlist s, along with
+    the rest of s. A tree is balanced if
+
+      (a) the number of entries in its left branch differs from the number
+          of entries in its right branch by at most 1, and
+
+      (b) its non-empty branches are also balanced trees.
+
+    Examples of balanced trees:
+
+    Tree(1)                    # branch difference 0 - 0 = 0
+    Tree(1, Tree(2), None)     # branch difference 1 - 0 = 1
+    Tree(1, None, Tree(2))     # branch difference 0 - 1 = -1
+    Tree(1, Tree(2), Tree(3))  # branch difference 1 - 1 = 0
+
+    Examples of unbalanced trees:
+
+    Tree(1, Tree(2, Tree(3)), None)  # branch difference 2 - 0 = 2
+    Tree(1, Tree(2, Tree(3), None),
+            Tree(4, Tree(5, Tree(6), None), None)) # Unbalanced right branch
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3, Rlist(4, Rlist(5)))))
+    &gt;&gt;&gt; partial_tree(s, 3)
+    (Tree(2, Tree(1), Tree(3)), Rlist(4, Rlist(5)))
+    &gt;&gt;&gt; t = Rlist(-2, Rlist(-1, Rlist(0, s)))
+    &gt;&gt;&gt; partial_tree(t, 7)[0]
+    Tree(1, Tree(-1, Tree(-2), Tree(0)), Tree(3, Tree(2), Tree(4)))
+    &gt;&gt;&gt; partial_tree(t, 7)[1]
+    Rlist(5)
+    &quot;&quot;&quot;
+    if n == 0:
+        return None, s
+    left_size = (n-1)//2
+    right_size = n - left_size - 1
+    left, rest = partial_tree(s, left_size)
+    entry, rest = rest.first, rest.rest
+    right, rest = partial_tree(rest, right_size)
+    return Tree(entry, left, right), rest
+
+def ordered_sequence_to_tree(s):
+    &quot;&quot;&quot;Return a balanced tree containing the elements of ordered Rlist s.
+
+    Note: this implementation is complete, but the definition of partial_tree
+    above is not complete.
+
+    &gt;&gt;&gt; ordered_sequence_to_tree(Rlist(1, Rlist(2, Rlist(3))))
+    Tree(2, Tree(1), Tree(3))
+    &gt;&gt;&gt; b = big_tree(0, 20)
+    &gt;&gt;&gt; elements = tree_to_ordered_sequence(b)
+    &gt;&gt;&gt; elements
+    Rlist(1, Rlist(4, Rlist(7, Rlist(10, Rlist(13, Rlist(16, Rlist(19)))))))
+    &gt;&gt;&gt; ordered_sequence_to_tree(elements)
+    Tree(10, Tree(4, Tree(1), Tree(7)), Tree(16, Tree(13), Tree(19)))
+    &quot;&quot;&quot;
+    return partial_tree(s, len(s))[0]
+</pre>
+<p><strong>Q5.</strong> Mario needs to jump over a sequence of Piranha plants, represented as a
+string of spaces (no plant) and P's (plant!).  He only moves forward, and he
+can either step (move forward one space) or jump (move forward two spaces) from
+each position.  How many different ways can Mario traverse a level without
+stepping or jumping into a Piranha plant? Assume that every level begins with a
+space (where Mario starts) and ends with a space (where Mario must end up):</p>
+<pre class="literal-block">
+def mario_number(level):
+    &quot;&quot;&quot;Return the number of ways that Mario can perform a sequence of steps
+    or jumps to reach the end of the level without ever landing in a Piranha
+    plant. Assume that every level begins and ends with a space.
+
+    &gt;&gt;&gt; mario_number(' P P ')   # jump, jump
+    1
+    &gt;&gt;&gt; mario_number(' P P  ')   # jump, jump, step
+    1
+    &gt;&gt;&gt; mario_number('  P P ')  # step, jump, jump
+    1
+    &gt;&gt;&gt; mario_number('   P P ') # step, step, jump, jump or jump, jump, jump
+    2
+    &gt;&gt;&gt; mario_number(' P PP ')  # Mario cannot jump two plants
+    0
+    &gt;&gt;&gt; mario_number('    ')    # step, jump ; jump, step ; step, step, step
+    3
+    &gt;&gt;&gt; mario_number('    P    ')
+    9
+    &gt;&gt;&gt; mario_number('   P    P P   P  P P    P     P ')
+    180
+    &quot;&quot;&quot;
+    def ways(n):
+        if n == len(level)-1:
+            return 1
+        if n &gt;= len(level) or level[n] == 'P':
+            return 0
+        return ways(n+1) + ways(n+2)
+    return ways(0)
+</pre>
+<p><strong>Q6.</strong> (Extra for experts) The <tt class="docutils literal">Rlist</tt> class can represent lists with
+cycles.  That is, a list may contain itself as a sublist.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+&gt;&gt;&gt; s.rest.rest.rest = s
+&gt;&gt;&gt; s[20]
+3
+</pre>
+<dl class="docutils">
+<dt>This question has two parts:</dt>
+<dd><ol class="first last upperalpha simple">
+<li>Write a function has_cycle that returns True if and only if its argument,
+an Rlist instance, contains a cycle.</li>
+<li>Write a function has_cycle_constant that has the same behavior as
+has_cycle but requires only a constant amount of space.</li>
+</ol>
+</dd>
+</dl>
+<p>Hint: The solution to B is short (less than 20 lines of code), but requires a
+clever idea. Try to discover the solution yourself before asking around:</p>
+<pre class="literal-block">
+def has_cycle(s):
+    &quot;&quot;&quot;Return whether Rlist s contains a cycle.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; s.rest.rest.rest = s
+    &gt;&gt;&gt; has_cycle(s)
+    True
+    &gt;&gt;&gt; t = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; has_cycle(t)
+    False
+    &quot;&quot;&quot;
+    lists = set()
+    while s != Rlist.empty:
+        if s in lists:
+            return True
+        lists.add(s)
+        s = s.rest
+    return False
+
+def has_cycle_constant(s):
+    &quot;&quot;&quot;Return whether Rlist s contains a cycle.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; s.rest.rest.rest = s
+    &gt;&gt;&gt; has_cycle_constant(s)
+    True
+    &gt;&gt;&gt; t = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; has_cycle_constant(t)
+    False
+    &quot;&quot;&quot;
+    if s == Rlist.empty:
+        return False
+    else:
+      slow, fast = s, s.rest
+      while fast != Rlist.empty:
+          if fast.rest == Rlist.empty:
+              return False
+          elif fast == slow or fast.rest == slow:
+              return True
+          else:
+              slow, fast = slow.rest, fast.rest.rest
+      return False
+
+class Rlist:
+    &quot;&quot;&quot;A recursive list consisting of a first element and the rest.
+
+    &gt;&gt;&gt; s = Rlist(1, Rlist(2, Rlist(3)))
+    &gt;&gt;&gt; s.rest
+    Rlist(2, Rlist(3))
+    &gt;&gt;&gt; len(s)
+    3
+    &gt;&gt;&gt; s[1]
+    2
+    &quot;&quot;&quot;
+
+    class EmptyList:
+        def __len__(self):
+            return 0
+        def __repr__(self):
+            return &quot;Rlist.empty&quot;
+
+    empty = EmptyList()
+
+    def __init__(self, first, rest=empty):
+        assert type(rest) is Rlist or rest is Rlist.empty
+        self.first = first
+        self.rest = rest
+
+    def __getitem__(self, index):
+        if index == 0:
+            return self.first
+        else:
+            return self.rest[index-1]
+
+    def __len__(self):
+        return 1 + len(self.rest)
+
+    def __repr__(self):
+        return rlist_expression(self)
+
+def rlist_expression(s):
+        &quot;&quot;&quot;Return a string that would evaluate to s.&quot;&quot;&quot;
+        if s.rest is Rlist.empty:
+            rest = ''
+        else:
+            rest = ', ' + rlist_expression(s.rest)
+        return 'Rlist({0}{1})'.format(s.first, rest)
+</pre>
+</div>
+</body>
+</html>

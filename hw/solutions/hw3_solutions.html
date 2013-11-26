@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 3</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-3">
+<h1 class="title">61A Homework 3</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 10/1</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw3.py">hw3.py</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> Section <a class="reference external" href="http://composingprograms.com/pages/17-recursive-functions.html">1.7</a> of the online textbook.</p>
+<p><strong>Q1.</strong> A mathematical function <tt class="docutils literal">G</tt> on positive integers is defined by two cases:</p>
+<p><tt class="docutils literal">G(n) = n,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if n &lt;= 3</tt></p>
+<p><tt class="docutils literal">G(n) = G(n - 1) + 2 * G(n - 2) + 3 * G(n - 3),&nbsp; if n &gt; 3</tt></p>
+<p>Write a recursive function <tt class="docutils literal">g</tt> that computes <tt class="docutils literal">G(n)</tt>. Then, write an
+iterative function <tt class="docutils literal">g_iter</tt> that also computes <tt class="docutils literal">G(n)</tt>:</p>
+<pre class="literal-block">
+def g(n):
+    &quot;&quot;&quot;Return the value of G(n), computed recursively.
+
+    &gt;&gt;&gt; g(1)
+    1
+    &gt;&gt;&gt; g(2)
+    2
+    &gt;&gt;&gt; g(3)
+    3
+    &gt;&gt;&gt; g(4)
+    10
+    &gt;&gt;&gt; g(5)
+    22
+    &quot;&quot;&quot;
+    if n in (1, 2, 3):
+        return n
+    return g(n-1) + 2*g(n-2) + 3*g(n-3)
+
+def g_iter(n):
+    &quot;&quot;&quot;Return the value of G(n), computed iteratively.
+
+    &gt;&gt;&gt; g_iter(1)
+    1
+    &gt;&gt;&gt; g_iter(2)
+    2
+    &gt;&gt;&gt; g_iter(3)
+    3
+    &gt;&gt;&gt; g_iter(4)
+    10
+    &gt;&gt;&gt; g_iter(5)
+    22
+    &quot;&quot;&quot;
+    if n == 1 or n == 2 or n == 3:
+        return n
+    a, b, c = 1, 2, 3
+    while n &gt; 3:
+        a, b, c = b, c, c + 2*b + 3*a
+        n = n - 1
+    return c
+</pre>
+<p><strong>Q2.</strong> Write a function <tt class="docutils literal">has_seven</tt> that takes a positive integer <tt class="docutils literal">n</tt> and
+returns whether <tt class="docutils literal">n</tt> contains the digit 7.  <em>Do not use any assignment
+statements</em>:</p>
+<pre class="literal-block">
+def has_seven(k):
+    &quot;&quot;&quot;Has a has_seven
+    &gt;&gt;&gt; has_seven(3)
+    False
+    &gt;&gt;&gt; has_seven(7)
+    True
+    &gt;&gt;&gt; has_seven(2734)
+    True
+    &gt;&gt;&gt; has_seven(2634)
+    False
+    &gt;&gt;&gt; has_seven(734)
+    True
+    &gt;&gt;&gt; has_seven(7777)
+    True
+    &quot;&quot;&quot;
+    if k % 10 == 7:
+        return True
+    elif k &lt; 10:
+        return False
+    else:
+        return has_seven(k // 10)
+</pre>
+<p><strong>Q3.</strong> The ping-pong sequence counts up starting from 1 and is always either
+counting up or counting down.  At element k, the direction switches if k is a
+multiple of 7 or contains the digit 7.  The first five direction changes are
+after .  The first 30 elements of the ping-pong sequence are listed below, with
+direction swaps marked using brackets at the 7th, 14th, 17th, 21st, 27th, and
+28th elements:</p>
+<pre class="literal-block">
+&quot;1 2 3 4 5 6 [7] 6 5 4 3 2 1 [0] 1 2 [3] 2 1 0 [-1] 0 1 2 3 4 [5] [4] 5 6&quot;
+</pre>
+<p>Implement a function <tt class="docutils literal">pingpong</tt> that returns the nth element of the ping-pong
+sequence. <em>Do not use any assignment statements</em>.</p>
+<p><em>Hint</em>: If you're stuck, try implementing <tt class="docutils literal">pingpong</tt> first using assignment
+and a <tt class="docutils literal">while</tt> statement, then try a recursive implementation without
+assignment:</p>
+<pre class="literal-block">
+def pingpong(n):
+    &quot;&quot;&quot;Return the nth element of the ping-pong sequence.
+
+    &gt;&gt;&gt; pingpong(7)
+    7
+    &gt;&gt;&gt; pingpong(8)
+    6
+    &gt;&gt;&gt; pingpong(15)
+    1
+    &gt;&gt;&gt; pingpong(21)
+    -1
+    &gt;&gt;&gt; pingpong(22)
+    0
+    &gt;&gt;&gt; pingpong(30)
+    6
+    &gt;&gt;&gt; pingpong(68)
+    2
+    &gt;&gt;&gt; pingpong(69)
+    1
+    &gt;&gt;&gt; pingpong(70)
+    0
+    &gt;&gt;&gt; pingpong(71)
+    1
+    &gt;&gt;&gt; pingpong(72)
+    0
+    &gt;&gt;&gt; pingpong(100)
+    2
+    &quot;&quot;&quot;
+    def pingpong_next(k, p, up):
+        if k == n:
+            return p
+        if up:
+            return pingpong_switch(k+1, p+1, up)
+        else:
+            return pingpong_switch(k+1, p-1, up)
+
+    def pingpong_switch(k, p, up):
+        if k % 7 == 0 or has_seven(k):
+            return pingpong_next(k, p, not up)
+        else:
+            return pingpong_next(k, p, up)
+
+    return pingpong_next(1, 1, True)
+</pre>
+<p><strong>Q4.</strong> Write a function that takes a positive integer <tt class="docutils literal">n</tt> and returns the
+number of ten-pairs it contains.  A ten-pair is a pairs of digits within <tt class="docutils literal">n</tt>
+that sum to 10.   <em>Do not use any assignment statements.</em></p>
+<p>The number 7,823,952 has 3 ten-pairs. The first and fourth digits sum
+to 7+3=10, the second and third digits sum to 8+2=10, and the second and last
+digit sum to 8+2=10:</p>
+<pre class="literal-block">
+def ten_pairs(n):
+    &quot;&quot;&quot;Return the number of ten-pairs within positive integer n.
+
+    &gt;&gt;&gt; ten_pairs(7823952)
+    3
+    &gt;&gt;&gt; ten_pairs(55055)
+    6
+    &gt;&gt;&gt; ten_pairs(9641469)
+    6
+    &quot;&quot;&quot;
+    if n &lt; 10:
+        return 0
+    else:
+        return ten_pairs(n//10) + count_digit(n//10, 10 - n%10)
+
+def count_digit(n, digit):
+    &quot;&quot;&quot;Return how many times digit appears in n.
+
+    &gt;&gt;&gt; count_digit(55055, 5)
+    4
+    &quot;&quot;&quot;
+    if n == 0:
+        return 0
+    else:
+        if n%10 == digit:
+            return count_digit(n//10, digit) + 1
+        else:
+            return count_digit(n//10, digit)
+</pre>
+<p><strong>Q5.</strong> Once the machines take over, the denomination of every coin will be a
+power of two: 1-cent, 2-cent, 4-cent, 8-cent, 16-cent, etc.  There will be
+no limit to how much a coin can be worth.</p>
+<p>A set of coins makes change for <tt class="docutils literal">n</tt> if the sum of the values of the coins is <tt class="docutils literal">n</tt>.  For example, the following sets make change for <tt class="docutils literal">7</tt>:</p>
+<ul class="simple">
+<li>7 1-cent coins</li>
+<li>5 1-cent, 1 2-cent coins</li>
+<li>3 1-cent, 2 2-cent coins</li>
+<li>3 1-cent, 1 4-cent coins</li>
+<li>1 1-cent, 3 2-cent coins</li>
+<li>1 1-cent, 1 2-cent, 1 4-cent coins</li>
+</ul>
+<p>Thus, there are 6 ways to make change for <tt class="docutils literal">7</tt>.  Write a function
+<tt class="docutils literal">count_change</tt> that takes a positive integer <tt class="docutils literal">n</tt> and returns the number of
+ways to make change for <tt class="docutils literal">n</tt> using these coins of the future:</p>
+<pre class="literal-block">
+def count_change(amount):
+    &quot;&quot;&quot;Return the number of ways to make change for amount.
+
+    &gt;&gt;&gt; count_change(7)
+    6
+    &gt;&gt;&gt; count_change(10)
+    14
+    &gt;&gt;&gt; count_change(20)
+    60
+    &gt;&gt;&gt; count_change(100)
+    9828
+    &quot;&quot;&quot;
+    return count_using(1, amount)
+
+def count_using(min_coin, amount):
+    if amount &lt; 0:
+        return 0
+    elif amount == 0:
+        return 1
+    elif min_coin &gt; amount:
+        return 0
+    else:
+        with_min = count_using(min_coin, amount - min_coin)
+        without_min = count_using(2*min_coin, amount)
+        return with_min + without_min
+</pre>
+<p><strong>Q6.</strong> (Extra for experts) The recursive factorial function can be written as
+a single expression by using a <a class="reference external" href="http://docs.python.org/py3k/reference/expressions.html#conditional-expressions">conditional expression</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; fact = lambda n: 1 if n == 1 else mul(n, fact(sub(n, 1)))
+&gt;&gt;&gt; fact(5)
+120
+</pre>
+<p>However, this implementation relies on the fact (no pun intended) that <tt class="docutils literal">fact</tt>
+has a name, to which we refer in the body of <tt class="docutils literal">fact</tt>.  To write a recursive
+function, we have always given it a name using a <tt class="docutils literal">def</tt> or assignment
+statement so that we can refer to the function within its own body.  In this
+question, your job is to define fact recursively without giving it a name!</p>
+<p>Write an expression that computes <tt class="docutils literal">n</tt> factorial using only call expressions,
+conditional expressions, and lambda expressions (no assignment or def
+statements).  The <tt class="docutils literal">sub</tt> and <tt class="docutils literal">mul</tt> functons from the operator module are the
+only built-in function required to solve this problem:</p>
+<pre class="literal-block">
+from operator import sub, mul
+
+def make_anonymous_factorial():
+    &quot;&quot;&quot;Return the value of an expression that computes factorial.
+
+    &gt;&gt;&gt; make_anonymous_factorial()(5)
+    120
+    &quot;&quot;&quot;
+    return (lambda f: lambda k: f(f, k))(lambda f, k: k if k == 1 else mul(k, f(f, sub(k, 1))))
+</pre>
+</div>
+</body>
+</html>

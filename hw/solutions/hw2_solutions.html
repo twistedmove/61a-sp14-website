@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 2</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-2">
+<h1 class="title">61A Homework 2</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 9/17</em>.</p>
+<p><strong>Instructions.</strong> We have provided a <a class="reference external" href="hw2.py">hw2.py</a> starter file for the
+questions below. See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial_codereview.html">submission instructions</a>.</p>
+<p><strong>Readings.</strong> <a class="reference external" href="http://composingprograms.com/pages/16-higher-order-functions.html">Section 1.6</a> of the online text.</p>
+<p>Several doctests refer to the <tt class="docutils literal">square</tt> function, which we define as:</p>
+<pre class="literal-block">
+def square(x):
+    &quot;&quot;&quot;Return x squared.&quot;&quot;&quot;
+    return x * x
+</pre>
+<p><strong>Q1.</strong> The <tt class="docutils literal">summation</tt> function from lecture is only the simplest of a vast
+number of similar abstractions that can be captured as higher-order functions.
+Write a similar <tt class="docutils literal">product</tt> function that returns the product of the values of a
+function for <tt class="docutils literal">n</tt> natural number arguments.  Show how to define the <a class="reference external" href="http://en.wikipedia.org/wiki/Factorial">factorial</a> function in terms of <tt class="docutils literal">product</tt>:</p>
+<pre class="literal-block">
+def product(n, term):
+    &quot;&quot;&quot;Return the product of the first n terms in a sequence.
+
+    term -- a function that takes one argument
+
+    &gt;&gt;&gt; product(4, square)
+    576
+    &quot;&quot;&quot;
+    total, k = 1, 1
+    while k &lt;= n:
+        total, k = term(k) * total, k + 1
+    return total
+
+
+def factorial(n):
+    &quot;&quot;&quot;Return n factorial for n &gt;= 0 by calling product.
+
+    &gt;&gt;&gt; factorial(4)
+    24
+    &quot;&quot;&quot;
+    return product(n, lambda k: k)
+</pre>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <tt class="docutils literal">product</tt> function has similar structure to <tt class="docutils literal">summation</tt>, but starts
+accumulation wtih the value <tt class="docutils literal">total=1</tt>. Factorial is a <tt class="docutils literal">product</tt> with the
+identity function as <tt class="docutils literal">term</tt>.</p>
+</div>
+<p><strong>Q2.</strong> Show that both <tt class="docutils literal">summation</tt> and <tt class="docutils literal">product</tt> are instances of a more
+general function, called <tt class="docutils literal">accumulate</tt>, with the following signature:</p>
+<pre class="literal-block">
+def accumulate(combiner, start, n, term):
+    &quot;&quot;&quot;Return the result of combining the first n terms in a sequence.&quot;&quot;&quot;
+    total, k = start, 1
+    while k &lt;= n:
+        total, k = combiner(term(k), total), k + 1
+    return total
+</pre>
+<p>Accumulate takes as arguments the same arguments <tt class="docutils literal">term</tt> and <tt class="docutils literal">n</tt> as
+<tt class="docutils literal">summation</tt> and <tt class="docutils literal">product</tt>, together with a <tt class="docutils literal">combiner</tt> function (of two
+arguments) that specifies how the current term is to be combined with the
+accumulation of the preceding terms and a <tt class="docutils literal">start</tt> value that specifies what
+base value to use to start the accumulation. Implement <tt class="docutils literal">accumulate</tt> and show
+how <tt class="docutils literal">summation</tt> and <tt class="docutils literal">product</tt> can both be defined as simple calls to
+<tt class="docutils literal">accumulate</tt>:</p>
+<pre class="literal-block">
+def summation_using_accumulate(n, term):
+    &quot;&quot;&quot;An implementation of summation using accumulate.
+
+    &gt;&gt;&gt; summation_using_accumulate(4, square)
+    30
+    &quot;&quot;&quot;
+    from operator import add
+    return accumulate(add, 0, n, term)
+
+def product_using_accumulate(n, term):
+    &quot;&quot;&quot;An implementation of product using accumulate.
+
+    &gt;&gt;&gt; product_using_accumulate(4, square)
+    576
+    &quot;&quot;&quot;
+    from operator import mul
+    return accumulate(mul, 1, n, term)
+</pre>
+<p><strong>Q3.</strong> Define a function <tt class="docutils literal">double</tt> that takes a function of one argument as
+an argument and returns a function that applies the original function twice. For
+example, if <tt class="docutils literal">successor</tt> is a function that returns <tt class="docutils literal">1</tt> more than its
+argument, then <tt class="docutils literal">double(inc)</tt> should be a function that returns two more:</p>
+<pre class="literal-block">
+def double(f):
+    &quot;&quot;&quot;Return a function that applies f twice.
+
+    f -- a function that takes one argument
+
+    &gt;&gt;&gt; double(square)(2)
+    16
+    &quot;&quot;&quot;
+    def ff(x):
+        return f(f(x))
+    return ff
+</pre>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that using <tt class="docutils literal">compose1</tt> from class, the body of <tt class="docutils literal">double</tt> can also be
+written as <tt class="docutils literal">return compose1(f, f)</tt></p>
+</div>
+<p><strong>Q4.</strong> If <tt class="docutils literal">f</tt> is a numerical function and <tt class="docutils literal">n</tt> is a positive integer, then
+we can form the nth repeated application of <tt class="docutils literal">f</tt>, which is defined to be the
+function whose value at <tt class="docutils literal">x</tt> is <tt class="docutils literal"><span class="pre">f(f(...(f(x))...))</span></tt>. For example, if <tt class="docutils literal">f</tt>
+adds <tt class="docutils literal">1</tt> to its argument, then the nth repeated application of <tt class="docutils literal">f</tt> adds
+<tt class="docutils literal">n</tt>. Write a function that takes as inputs a function <tt class="docutils literal">f</tt> and a positive
+integer <tt class="docutils literal">n</tt> and returns the function that computes the nth repeated
+application of f:</p>
+<pre class="literal-block">
+def repeated(f, n):
+    &quot;&quot;&quot;Return the function that computes the nth application of f.
+
+    f -- a function that takes one argument
+    n -- a positive integer
+
+    &gt;&gt;&gt; repeated(square, 2)(5)
+    625
+    &gt;&gt;&gt; repeated(square, 4)(5)
+    152587890625
+    &quot;&quot;&quot;
+    g = f
+    while n &gt; 1:
+        g = compose1(f, g)
+        n = n - 1
+    return g
+
+def repeated(f, n):
+    def h(x):
+        k = 0
+        while k &lt; n:
+            x, k = f(x), k + 1
+        return x
+    return h
+
+def repeated(f, n):
+    return accumulate(compose1, f, n-1, lambda k: f)
+</pre>
+<p><em>Hint</em>: You may find it convenient to use <tt class="docutils literal">compose1</tt> from the lecture notes:</p>
+<pre class="literal-block">
+def compose1(f, g):
+    &quot;&quot;&quot;Return a function h, such that h(x) = f(g(x)).&quot;&quot;&quot;
+    def h(x):
+        return f(g(x))
+    return h
+</pre>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p>There are many correct ways to implement <tt class="docutils literal">repeated</tt>.  The first solution
+above creates a new function in every iteration of the <tt class="docutils literal">while</tt> statement
+(via <tt class="docutils literal">compose1</tt>).  The second solution shows that it is also possible to
+implement <tt class="docutils literal">repeated</tt> by creating only a single new function.  That function
+repeatedly applies <tt class="docutils literal">f</tt>.</p>
+<p class="last">As a student pointed out, <tt class="docutils literal">repeated</tt> can also be implemented compactly
+using <tt class="docutils literal">accumulate</tt>, the third solution.</p>
+</div>
+<p><strong>Q5.</strong> (<em>Optional</em> extra for experts) The logician Alonzo Church invented a
+system of representing non-negative integers entirely using functions. Here are
+the definitions of <tt class="docutils literal">0</tt>, and a function that returns <tt class="docutils literal">1</tt> more than its
+argument:</p>
+<pre class="literal-block">
+def zero(f):
+    return lambda x: x
+
+def successor(n):
+    return lambda f: lambda x: f(n(f)(x))
+</pre>
+<p>This representation is known as <em>Church numerals</em>.  Define <tt class="docutils literal">one</tt> and <tt class="docutils literal">two</tt>
+directly, which are also functions.  To get started, apply <tt class="docutils literal">successor</tt> to
+<tt class="docutils literal">zero</tt>.  Then, give a direct definition of the <tt class="docutils literal">add</tt> function (not in terms
+of repeated application of <tt class="docutils literal">successor</tt>) over Church numerals.  Finally,
+implement a function <tt class="docutils literal">church_to_int</tt> that converts a church numeral argument
+to a regular Python <tt class="docutils literal">int</tt>:</p>
+<pre class="literal-block">
+def one(f):
+    &quot;&quot;&quot;Church numeral 1.&quot;&quot;&quot;
+    return lambda x: f(x)
+
+def two(f):
+    &quot;&quot;&quot;Church numeral 2.&quot;&quot;&quot;
+    return lambda x: f(f(x))
+
+def church_to_int(n):
+    &quot;&quot;&quot;Convert the Church numeral n to a Python integer.
+
+    &gt;&gt;&gt; church_to_int(zero)
+    0
+    &gt;&gt;&gt; church_to_int(one)
+    1
+    &gt;&gt;&gt; church_to_int(two)
+    2
+    &quot;&quot;&quot;
+    return n(lambda x: x + 1)(0)
+
+def add_church(m, n):
+    &quot;&quot;&quot;Return the Church numeral for m + n, for Church numerals m and n.
+
+    &gt;&gt;&gt; three = successor(two)
+    &gt;&gt;&gt; church_to_int(add_church(two, three))
+    5
+    &quot;&quot;&quot;
+    return lambda f: lambda x: m(f)(n(f)(x))
+
+def mul_church(m, n):
+    &quot;&quot;&quot;Return the Church numeral for m * n, for Church numerals m and n.
+
+    &gt;&gt;&gt; three = successor(two)
+    &gt;&gt;&gt; four = successor(three)
+    &gt;&gt;&gt; church_to_int(mul_church(two, three))
+    6
+    &gt;&gt;&gt; church_to_int(mul_church(three, four))
+    12
+    &quot;&quot;&quot;
+    return lambda f: m(n(f))
+</pre>
+<p>It is easy to find answers to this question on the Internet.  Try to solve it on
+your own before looking it up!</p>
+<p><em>Note</em>: &quot;Extra for Experts&quot; problems are completely optional.  You are
+encouraged to try these questions, but certainly don't be discouraged if you
+don't solve them.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p>Chruch numerals are a way to represent non-negative integers via repeated
+function application.  The definitions of <tt class="docutils literal">zero</tt>, <tt class="docutils literal">one</tt>, and <tt class="docutils literal">two</tt> show
+that each numeral is a function that takes a function and repeats it a number
+of times on some argument <tt class="docutils literal">x</tt>.</p>
+<p>The <tt class="docutils literal">church_to_int</tt> function reveals how a Church numeral can be mapped to
+our normal notion of non-negative integers using the increment function.</p>
+<p class="last">Addition of Church numerals is function composition of the functions of
+<tt class="docutils literal">x</tt>, while multiplication (added to the question for these solutions) is
+composition of the functions of <tt class="docutils literal">f</tt>.</p>
+</div>
+</div>
+</body>
+</html>

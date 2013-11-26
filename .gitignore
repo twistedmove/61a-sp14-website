@@ -25,3 +25,10 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# Rope folder
+.ropeproject
+
+# Temp files
+*~
+.DS_Store
