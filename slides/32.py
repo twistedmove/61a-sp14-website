@@ -17,6 +17,7 @@ from ucb import main, trace
 
 import scheme
 import scheme_reader
+import scheme_test
 
 facts = []
 
@@ -158,4 +159,7 @@ def run(*argv):
     scheme_reader.buffer_input.__defaults__ = ('logic> ',)
     scheme_reader.buffer_lines.__defaults__ = ('logic> ', False)
     scheme.scheme_eval = process_input
-    scheme.run(*argv)
+    if len(argv) == 2 and argv[0] == '-t':
+        scheme_test.run_tests(argv[1])
+    else:
+        scheme.run(*argv)
