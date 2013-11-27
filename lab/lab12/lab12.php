@@ -343,10 +343,11 @@ command:</p>
 'thee'  100
 </code></pre>
 
-<p><code>Q1_mapper</code>
-    #!/usr/bin/env python3</p>
+<p><code>Q1_mapper</code></p>
 
-<pre><code>import sys
+<pre><code>#!/usr/bin/env python3
+
+import sys
 from ucb import main
 from mr import emit
 
@@ -514,10 +515,10 @@ Shakespeare's works:</p>
 
 <p>This should output something like</p>
 
-<pre><code>'he'    267
-'it'    7736
+<pre><code>'he'    6267
+'it'    7737
 'she'   2222
-'the'   26785
+'the'   26805
 'thee'  3103
 </code></pre>
 
@@ -639,11 +640,11 @@ reduce task:</p>
 
 <p><strong>Question 4b</strong>: Now, we will determine the most commonly used word.
 Write a Python script file <code>most_common_word.py</code> that, given the output
-of the program you wrote in part 3A (via <code>stdin</code>), returns the most
+of the program you wrote in part 3 (via <code>stdin</code>), returns the most
 commonly used word. The usage should look like (assuming you named the
-Hadoop job output <code>wordcounts</code>):</p>
+Hadoop job output <code>q3</code>):</p>
 
-<pre><code># python3 mr.py cat wordcounts | python3 most_common_word.py
+<pre><code># python3 mr.py cat q3 | python3 most_common_word.py
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -659,7 +660,7 @@ from ucb import main
 """
 Usage:
 
-# python3 mr.py cat q3a | python3 q3b.py
+# python3 mr.py cat q3 | python3 q3b.py
 """
 
 def argmax(counter):
@@ -679,11 +680,11 @@ def run():
   </div>
 <?php } ?>
 <p><strong>Question 4c</strong>: Now, write a Python script file that, given the
-MapReduce output from <strong>Q3A</strong> (via <code>stdin</code>), outputs all words used
+MapReduce output from <strong>Q3</strong> (via <code>stdin</code>), outputs all words used
 only once, in alphabetical order. Finally, output the results into a
 text file <code>singles.txt</code>. The Unix command should look like this:</p>
 
-<pre><code># python3 mr.py cat wordcounts | python3 get_singles.py | sort &gt; singles.txt
+<pre><code># python3 mr.py cat q3 | python3 get_singles.py | sort &gt; singles.txt
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -698,7 +699,7 @@ from ucb import main
 
 """
 Usage:
-# python3 mr.py cat wordcounts | python3 get_singles.py | sort &gt; singles.txt
+# python3 mr.py cat q3 | python3 get_singles.py | sort &gt; singles.txt
 
 """
 
@@ -713,8 +714,8 @@ def run():
 
   </div>
 <?php } ?>
-<p><strong>Question 5</strong>: In this question, you will discover write a MapReduce
-program that, given a phrase, outputs which play the phrase came from.</p>
+<p><strong>Question 5</strong>: In this question, you will write a MapReduce program
+that, given a phrase, outputs which play the phrase came from.</p>
 
 <p>Then, use your solution to figure out which play each of the following
 famous Shakespeare phrases came from:</p>
