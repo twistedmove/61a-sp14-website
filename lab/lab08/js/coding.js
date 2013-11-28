@@ -9,7 +9,7 @@ function cleanCode(code) {
   return code.replace(/^\n/, "").replace(/\n*$/, "").replace(/[ \t]*\n/g, "\n").replace(/\s*$/, "");
 }
 
-function $_(s) { 
+function $_(s) {
   // _ to $ where _ = div id's, $ = jQuery objects; read _ as #, $_ consumes a hash and adds a $
   var ret = $("[id={0}]".format(s).replace(/\?/, "\\\?"));
   if (!ret[0]) {
@@ -33,16 +33,16 @@ function getDeps(_editor) {
 
 function getDependedOnCode(_editor) {
   var code = "";
-  
+
   for (var deps = getDeps(_editor), i = 0; i < deps.length; i++) {
     code += getDependedOnCode(deps[i]);
   }
-  
+
   return code + editorOf[_editor].getValue();
 }
 
 function eval_editor(_editor) {
-  
+
   return eval_scheme(getDependedOnCode(_editor));
 }
 
@@ -58,19 +58,18 @@ function makeEditable(_editor) {
 
   var $editor = $_(_editor);
   var code = cleanCode($editor.text());
-  
+
   $editor.empty();
-  
+
   var editor = CodeMirror($editor[0], {
     'value': code,
-    'matchBrackets': true,
-    'onFocus': function() {console.log("focus_callback" + _editor); focus_callback(_editor);}
+    'matchBrackets': true
   });
-  
+
   editor.setOption('extraKeys', {'Ctrl-Enter': function() {
     editor.getOption("onBlur")();
   }});
-  
+
   editorOf[_editor] = editor;
   return editor;
 }
@@ -88,7 +87,7 @@ function linkEditor(_editor, _output, func) { //sync
 
 function getAllDeps(s) {
   var ret = [];
-  for (var i = 0, d = getDeps(s); i < d.length; i++) {  
+  for (var i = 0, d = getDeps(s); i < d.length; i++) {
     ret = ret.concat(getAllDeps(d[i]));
     ret.push(d[i]);
   }
@@ -97,7 +96,7 @@ function getAllDeps(s) {
 
 function getAllPushes(s) {
   var ret = [];
-  for (var i = 0, d = getPushes(s); i < d.length; i++) {  
+  for (var i = 0, d = getPushes(s); i < d.length; i++) {
     ret.push(d[i]);
     ret = ret.concat(getAllPushes(d[i]));
   }
@@ -109,7 +108,7 @@ focus_callback = function(s) {
   for (var i = 0, d = getAllDeps(s); i < d.length; i++) {  //TODO list all deps
     ts += editorOf[d[i]].getValue() + "\n\n";
   }
-  
+
   ts += "<b>" + editorOf[s].getValue() + "</b>";
 
   $("#currently-editing").html("<pre>" + ts + "</pre>");
@@ -179,9 +178,9 @@ function compute(s) {
     }
     $_(_output).empty().append(output_fragment);
   }
-  
+
   w.postMessage(getDependedOnCode(s));
-  
+
   for (var pushes = getPushes(s), i = 0; i < pushes.length; i++) {
     compute(pushes[i]);
   }
@@ -203,7 +202,7 @@ function eval_scheme(code) { //deferred
       return;
     }
   }
-  
+
   console.log(code)
   w.postMessage(code);
 
@@ -221,7 +220,7 @@ function prompt(s, deps) {
 
 function frozen_prompt(s, deps) {
   makeEditable(s);
-  editorOf[s].setOption("readOnly", 'nocursor');  
+  editorOf[s].setOption("readOnly", 'nocursor');
   editorOf[s].setOption('onBlur', function() {
     return compute(s);
   });
@@ -316,7 +315,7 @@ function makeChangeOnFocusInput(i, before, after) {
 function makeForm(uid, right_entries, wrong_entries) {
 
   var form = $('<form>', {'id': uid});
-  
+
   var entries = [];
   for (var i in right_entries) {
     entries.push({text: right_entries[i], score: 'right'});
@@ -324,71 +323,71 @@ function makeForm(uid, right_entries, wrong_entries) {
   for (var i in wrong_entries) {
     entries.push({text: wrong_entries[i], score: 'wrong'});
   }
-  
+
   shuffle(entries);
-  
+
   for (var i in entries) {
     var e = entries[i];
     form.append($("<input>", {type: "checkbox", id: uid + "-" + i, value: e.score}));
     form.append($("<label>", {for: uid + "-" + i, 'html': e.text}));
     form.append($('<br>'));
   }
-  
+
   return form;
 }
 
 function makeMCQ(_mcq, right_entries, wrong_entries) {
   $_(_mcq).append(makeForm(_mcq + "_form", right_entries, wrong_entries));
 
-  $_(_mcq).append($("<div>", {'class': 'p-link', 'id': _mcq + "-submit", 'html': 'submit'}));  
+  $_(_mcq).append($("<div>", {'class': 'p-link', 'id': _mcq + "-submit", 'html': 'submit'}));
   addOutput(_mcq + "-submit");
-  
+
   $_(_mcq + "-submit").click(function() {
-  
+
     var checked = [];
     var unchecked = [];
-    
+
     $_(_mcq + "_form").children("input:checked").each(function(i, j) {
       checked.push(j.value);
     });
-    
+
     $_(_mcq + "_form").children("input:not(:checked)").each(function(i, j) {
       unchecked.push(j.value);
     });
-    
+
     var $out = $_(_mcq + "-submit-output");
-    
+
     console.log(checked);
-    
+
     if (arrayEq(checked,["right"]) && arrayEq(unchecked,["wrong"])) {
       $out.empty().append($("<div class='submit-ans right-answer'> \u2713 </div>"));
     } else {
       $out.empty().append($("<div class='submit-ans wrong-answer'> \u2717 </div>"));
     }
-  
+
 });
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 function createTOC() {
   $("h3, h4").each(function(i) {
-  
+
       var current = $(this);
-      
+
       var title = current.text().slice(0,50).replace(/^\s+/, "").replace(/\s+$/, "").replace(/:/, "").replace(/\s+/g, "-").replace(/\./g, "-").replace(/\-+/g, "-").replace(/[\(\)]/g, "").replace(/\?/, "").replace(/'/g, "");
-      
+
       current.attr("id", title);
-      
+
       var a = $("<a>", {href: "#" + title, html: current.text().slice(0,50), 'class': current[0].nodeName.toLowerCase()});
-      
+
       a.click(function() {
         $('html, body').animate({
             'scrollTop':   $('#' + title).offset().top
         }, 250);
       });
-      
+
       $("#toc").append(a).append($('<br>'));
   });
-  
+
   $('#sidebox').animate({'right':'0%'});
 }
