@@ -67,10 +67,11 @@ the <strong>reducer</strong>.</p>
 <li><p>The <strong>mapper</strong> takes an input file, and prints out a series of
 key-value pairs:</p>
 
-<p>age 29
-  name cecilia
-  job gradstudent
-  salary 42</p>
+<pre><code>age 29
+name cecilia
+job gradstudent
+salary 42
+</code></pre>
 
 <p>In the example above, the key-value pairs are:</p>
 
@@ -242,39 +243,41 @@ def run():
         emit(key, sum(value_iterator))
 </code></pre>
 
-<p>Let's break down the process:
-1. <code>values_by_key</code> is a function that reads input from <code>stdin</code>, and
-   groups all key-value pairs that have the same key. For example,</p>
+<p>Let's break down the process:</p>
 
-<pre><code>  'line'  1
-  'line'  1
-  'line'  1
+<ol>
+<li><p><code>values_by_key</code> is a function that reads input from <code>stdin</code>, and
+groups all key-value pairs that have the same key. For example,</p>
+
+<pre><code>'line'  1
+'line'  1
+'line'  1
 </code></pre>
 
 <p>will turn into the following pair:</p>
 
-<pre><code>  ('line', [1, 1, 1])
+<pre><code>('line', [1, 1, 1])
 </code></pre>
 
 <p><em>Note</em>: the second element should actually be an iterator, not a
-   Python list; it is represented with square brackets for visual
-   clarity.
-2. The variables <code>key</code> and <code>value_iterator</code> get bound to their
-   respective values in the example above:</p>
+Python list; it is represented with square brackets for visual
+clarity.</p></li>
+<li><p>The variables <code>key</code> and <code>value_iterator</code> get bound to their
+respective values in the example above:</p>
 
-<pre><code>  key: 'line'
-  value_iterator: [1, 1, 1]
-</code></pre>
+<pre><code>key: 'line'
+value_iterator: [1, 1, 1]
+</code></pre></li>
+<li><p>For each of these key-iterator pairs, <code>sum.py</code> will add up all the
+values in the iterator and output this new value with the same key:</p>
 
-<p>3. For each of these key-iterator pairs, <code>sum.py</code> will add up all the
-   values in the iterator and output this new value with the same key:</p>
-
-<pre><code>  'line'  3
+<pre><code>'line'  3
 </code></pre>
 
 <p>The <code>emit</code> function prints out a key and a value in the format
-   shown above. <code>emit</code> also handles logistics for parallelization,
-   which becomes important in Part 2 of the lab.</p>
+shown above. <code>emit</code> also handles logistics for parallelization,
+which becomes important in Part 2 of the lab.</p></li>
+</ol>
 
 <p>You can think of the reducer as taking all the values of a key and
 collapsing it into a single value.</p>
@@ -410,27 +413,31 @@ the Hadoop filesystem, we'll be using <code>mr.py</code>:</p>
 <ul>
 <li><p><code>cat</code></p>
 
-<p>python3 mr.py cat OUTPUT_DIR</p>
+<pre><code>python3 mr.py cat OUTPUT_DIR
+</code></pre>
 
 <p>This command prints out the contents of all files in one of the
 directories on the Hadoop FileSystem owned by you (given by
 <code>OUTPUT_DIR</code>).</p></li>
 <li><p><code>ls</code></p>
 
-<p>python3 mr.py ls</p>
+<pre><code>python3 mr.py ls
+</code></pre>
 
 <p>This command lists the contents of all output directories on the
 Hadoop FileSystem. </p></li>
 <li><p><code>rm</code></p>
 
-<p>python3 mr.py rm OUTPUT_DIR</p>
+<pre><code>python3 mr.py rm OUTPUT_DIR
+</code></pre>
 
 <p>This command will remove an output directory (and all files within
 it) on the Hadoop FileSystem.  Use this with caution - remember,
 there's no 'undo'!</p></li>
 <li><p><code>run</code></p>
 
-<p>python3 mr.py run MAPPER REDUCER INPUT<em>DIR OUTPUT</em>DIR</p>
+<pre><code>python3 mr.py run MAPPER REDUCER INPUT_DIR OUTPUT_DIR
+</code></pre>
 
 <p>This command will run a MapReduce job of your choosing, where:</p>
 
