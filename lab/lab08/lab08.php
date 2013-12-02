@@ -353,7 +353,6 @@ an exception to signal that the user did something wrong.</p>
 was essentially one of the questions on Project 4!</p>
 
   </body>
-  <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
     <?php for ($i = 0; $i < 6; $i++) { ?>
@@ -362,5 +361,4 @@ was essentially one of the questions on Project 4!</p>
     });
     <?php } ?>
   </script>
-<?php } ?>
 </html>

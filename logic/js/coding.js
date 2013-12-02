@@ -58,8 +58,7 @@ function makeEditable(_editor) {
 
   var editor = CodeMirror($editor[0], {
     'value': code,
-    'matchBrackets': true,
-    'onFocus': function() {console.log("focus_callback" + _editor); focus_callback(_editor);}
+    'matchBrackets': true
   });
 
   editor.setOption('extraKeys', {'Ctrl-Enter': function() {

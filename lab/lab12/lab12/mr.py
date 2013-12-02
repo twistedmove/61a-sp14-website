@@ -35,7 +35,7 @@ def get_file():
     filepath = os.environ.get('map_input_file', 'stdin')
     filename = os.path.split(filepath)[-1]
     return filename
-    
+
 
 # Helper functions/classes for the interface
 
@@ -98,10 +98,10 @@ def execute(cmd, testing=False):
 @command
 def ls():
     """List contents of all output directories."""
-    cmd = '{0} dfs -ls {1}/*'.format(HADOOP_BIN, OUTPUT_BASE) 
+    cmd = '{0} dfs -ls {1}/*'.format(HADOOP_BIN, OUTPUT_BASE)
     execute(cmd)
 
-@command 
+@command
 def rm(output_dir):
     """Remove an output directory."""
     assert '..' not in output_dir, 'Please do not remove other\' directories'
