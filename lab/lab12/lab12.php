@@ -391,9 +391,8 @@ like you normally would to a Berkeley server:</p>
 <p>You will be asked if you want to remember the RSA signature -- type
 yes. You will then be asked to login to your class account.</p>
 
-<p><em>Note</em>: you will not be able to do this part of the lab locally on your
-own computer. The only way for Hadoop to work with our cluster is if
-you connect to the icluster1 server.</p>
+<p><em>Note</em>: you will only be able to do this part of the lab if you <code>ssh</code>
+onto the icluster1 server.</p>
 
 <p>Finally, some Unix environment variables need to be set. Go to the
 directory containing the lab starter files. One of them should be a
@@ -756,6 +755,14 @@ script:</p>
 
 <p>Also, you might want to look at the included <code>set.py</code> reducer which
 reduces the values of each key into a <code>set</code> (i.e. removing duplicates).</p>
+
+<p>To run the MapReduce job, use the following command:</p>
+
+<pre><code>python3 mr.py MAPPER REDUCER ../shakespeare MY_OUTFILE
+</code></pre>
+
+<p>where <code>MAPPER</code> is the name of your mapper file and <code>REDUCER</code> is the
+name of your reducer file.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton6">Toggle Solution</button>
