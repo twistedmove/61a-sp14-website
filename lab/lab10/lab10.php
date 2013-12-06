@@ -223,7 +223,9 @@ it is run through a <code>for</code> loop.</p>
     def __next__(self):
         if self.current &gt; self.end:
             raise StopIteration
+        temp = self.current
         self.current += 1
+        return temp
     def __iter__(self):
         self.current = self.start
         return self
