@@ -16,8 +16,8 @@ def sqrt(a):
 def pi():
     """Yield approximations that converge to pi.
 
-    >>> print_iterator(sqrt(51))
-    [1, 26.0, 13.98076923076923, 8.81431859062533, 7.300179298823895, ...]
+    >>> print_iterator(pi())
+    [0, 2.6666666666666665, 2.895238095238095, 2.976046176046176, 3.017071817071817, ...]
     """
     total, k = 0, 1
     while True:
