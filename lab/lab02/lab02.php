@@ -723,7 +723,7 @@ _______________
 _______________
 &gt;&gt;&gt; def troy():
 ...     abed = 0
-...     while abed &amp;lt; 10:
+...     while abed &lt; 10:
 ...         def britta():
 ...             return abed
 ...         abed += 1
