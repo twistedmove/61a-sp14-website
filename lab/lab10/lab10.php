@@ -934,9 +934,9 @@ of numbers, s. Hint: Use the built-in scheme function append.</p>
   <button id="toggleButton24">Toggle Solution</button>
   <div id="toggleText24" style="display: none">
     <pre><code>    (define (insert-help s so-far)
-        (cond ((null? s) so-far)
-                 ((&lt; n (car s)) (append so-far (cons n s)))
-                 (else (insert-help (cdr s) (append so-far (list (car s))))))
+        (cond ((null? s) (append so-far (list n)))
+              ((&lt; n (car s)) (append so-far (cons n s)))
+              (else (insert-help (cdr s) (append so-far (list (car s))))))
     (insert-help s nil))
 </code></pre>
 
