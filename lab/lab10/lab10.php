@@ -614,7 +614,7 @@ we can abstract our stream procedures to be higher order. Take a look at <code>f
 <pre><code>def filter_stream(filter_func, stream):
     def make_filtered_rest():
         return filter_stream(filter_func, stream.rest)
-    if Stream.empty:
+    if stream is Stream.empty:
         return stream
     elif filter_func(stream.first):
         return Stream(stream.first, make_filtered_rest)
@@ -644,7 +644,7 @@ applying <code>func</code> on every element in <code>stream</code>.</p>
   <div id="toggleText13" style="display: none">
     <pre><code>    def compute_rest():
         return stream_map(func, stream.rest)
-    if stream.empty:
+    if stream is Stream.empty:
         return stream
     else:
         return Stream(func(stream.first), compute_rest)
@@ -936,7 +936,7 @@ of numbers, s. Hint: Use the built-in scheme function append.</p>
     <pre><code>    (define (insert-help s so-far)
         (cond ((null? s) (append so-far (list n)))
               ((&lt; n (car s)) (append so-far (cons n s)))
-              (else (insert-help (cdr s) (append so-far (list (car s))))))
+              (else (insert-help (cdr s) (append so-far (list (car s)))))))
     (insert-help s nil))
 </code></pre>
 
