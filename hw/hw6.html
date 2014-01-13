@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 6</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-6">
+<h1 class="title">61A Homework 6</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 10/22</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw6.py">hw6.py</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> Section <a class="reference external" href="http://composingprograms.com/pages/25-object-oriented-programming.html">2.5</a> of Composing Programs.</p>
+<p><strong>Q0.</strong> Complete the <a class="reference external" href="https://docs.google.com/forms/d/1sl_9alW4YTWnSMFgAIbrCBxj_wxaXLAaL-KYzQyLXXE/viewform">mid-semester survey</a>.
+We ask for your name and login in order to correlate responses to different
+surveys across the semester.  We will otherwise keep your response confidential
+and anonymous.</p>
+<p><strong>Q1.</strong> Create a class called <tt class="docutils literal">VendingMachine</tt> that represents a vending
+machine for some product. A <tt class="docutils literal">VendingMachine</tt> object returns strings describing
+its interactions.  See the doctest below for examples:</p>
+<pre class="literal-block">
+class VendingMachine(object):
+    &quot;&quot;&quot;A vending machine that vends some product for some price.
+
+    &gt;&gt;&gt; v = VendingMachine('candy', 10)
+    &gt;&gt;&gt; v.vend()
+    'Machine is out of stock.'
+    &gt;&gt;&gt; v.restock(2)
+    'Current candy stock: 2'
+    &gt;&gt;&gt; v.vend()
+    'You must deposit $10 more.'
+    &gt;&gt;&gt; v.deposit(7)
+    'Current balance: $7'
+    &gt;&gt;&gt; v.vend()
+    'You must deposit $3 more.'
+    &gt;&gt;&gt; v.deposit(5)
+    'Current balance: $12'
+    &gt;&gt;&gt; v.vend()
+    'Here is your candy and $2 change.'
+    &gt;&gt;&gt; v.deposit(10)
+    'Current balance: $10'
+    &gt;&gt;&gt; v.vend()
+    'Here is your candy.'
+    &gt;&gt;&gt; v.deposit(15)
+    'Machine is out of stock. Here is your $15.'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q2.</strong> Create a class called <tt class="docutils literal">MissManners</tt> that promotes politeness among
+our objects. A <tt class="docutils literal">MissManners</tt> object takes another object on construction.  It
+has one method, called <tt class="docutils literal">ask</tt>.  It responds by calling methods on the object
+it contains, but only if the caller said please first.</p>
+<p>Hint: Your implementation will need to use the <tt class="docutils literal">*args</tt> notation that allows
+functions to take a flexible number of arguments:</p>
+<pre class="literal-block">
+class MissManners(object):
+    &quot;&quot;&quot;A container class that only forward messages that say please.
+
+    &gt;&gt;&gt; v = VendingMachine('teaspoon', 10)
+    &gt;&gt;&gt; v.restock(2)
+    'Current teaspoon stock: 2'
+    &gt;&gt;&gt; m = MissManners(v)
+    &gt;&gt;&gt; m.ask('vend')
+    'You must learn to say please first.'
+    &gt;&gt;&gt; m.ask('please vend')
+    'You must deposit $10 more.'
+    &gt;&gt;&gt; m.ask('please deposit', 20)
+    'Current balance: $20'
+    &gt;&gt;&gt; m.ask('now will you vend?')
+    'You must learn to say please first.'
+    &gt;&gt;&gt; m.ask('please hand over a teaspoon')
+    'Thanks for asking, but I know not how to hand over a teaspoon'
+    &gt;&gt;&gt; m.ask('please vend')
+    'Here is your teaspoon and $10 change.'
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+</pre>
+<p><strong>Q3.</strong> (Extra for experts) Read Section <a class="reference external" href="http://composingprograms.com/pages/26-implementing-classes-and-objects.html">2.6</a> of Composing Programs. You can also
+watch the <a class="reference external" href="http://www.youtube.com/watch?v=xaIJgbHE0BU&amp;list=PL87898FD0A141069E&amp;index=17">Fall 2012 lecture</a> on this topic.
+Add multiple inheritance to the function-based object system described in that
+section.  You will need to make the following changes:</p>
+<ol class="arabic simple">
+<li>Allow a class to be created with an arbitrary number of base classes.</li>
+<li>Classes should respond to a message <tt class="docutils literal">'mro'</tt> that returns the method
+resolution order for the class.</li>
+<li>Looking up an attribute by name in a class (using the <tt class="docutils literal">'get'</tt> message)
+should follow the method resolution order.</li>
+</ol>
+<p>Choose a method resolution order that ensures a name is never looked up in a
+base class before one of its subclasses:</p>
+<pre class="literal-block">
+def make_instance(some_class):
+    &quot;&quot;&quot;Return a new object instance of some_class.&quot;&quot;&quot;
+    def get_value(name):
+        if name in attributes:
+            return attributes[name]
+        else:
+            value = some_class['get'](name)
+            return bind_method(value, instance)
+
+    def set_value(name, value):
+        attributes[name] = value
+
+    attributes = {}
+    instance = {'get': get_value, 'set': set_value}
+    return instance
+
+def bind_method(value, instance):
+    &quot;&quot;&quot;Return value or a bound method if value is callable.&quot;&quot;&quot;
+    if callable(value):
+        def method(*args):
+            return value(instance, *args)
+        return method
+    else:
+        return value
+
+def make_class(attributes, base_classes=()):
+    &quot;&quot;&quot;Return a new class with attributes.
+
+    attributes -- class attributes
+    base_classes -- a sequence of classes
+    &quot;&quot;&quot;
+    &quot;*** YOUR CODE HERE ***&quot;
+
+def init_instance(some_class, *args):
+    &quot;&quot;&quot;Return a new instance of some_class, initialized with args.&quot;&quot;&quot;
+    instance = make_instance(some_class)
+    init = some_class['get']('__init__')
+    if init:
+        init(instance, *args)
+    return instance
+
+# AsSeenOnTVAccount example from lecture.
+
+def make_account_class():
+    &quot;&quot;&quot;Return the Account class, which has deposit and withdraw methods.&quot;&quot;&quot;
+
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self['set']('holder', account_holder)
+        self['set']('balance', 0)
+
+    def deposit(self, amount):
+        &quot;&quot;&quot;Increase the account balance by amount and return the new balance.&quot;&quot;&quot;
+        new_balance = self['get']('balance') + amount
+        self['set']('balance', new_balance)
+        return self['get']('balance')
+
+    def withdraw(self, amount):
+        &quot;&quot;&quot;Decrease the account balance by amount and return the new balance.&quot;&quot;&quot;
+        balance = self['get']('balance')
+        if amount &gt; balance:
+            return 'Insufficient funds'
+        self['set']('balance', balance - amount)
+        return self['get']('balance')
+
+    return make_class(locals())
+
+Account = make_account_class()
+
+def make_checking_account_class():
+    &quot;&quot;&quot;Return the CheckingAccount class, which imposes a $1 withdrawal fee.
+
+    &gt;&gt;&gt; checking = CheckingAccount['new']('Jack')
+    &gt;&gt;&gt; checking['get']('interest')
+    0.01
+    &gt;&gt;&gt; checking['get']('deposit')(20)
+    20
+    &gt;&gt;&gt; checking['get']('withdraw')(5)
+    14
+    &quot;&quot;&quot;
+    interest = 0.01
+    withdraw_fee = 1
+
+    def withdraw(self, amount):
+        fee = self['get']('withdraw_fee')
+        return Account['get']('withdraw')(self, amount + fee)
+
+    return make_class(locals(), [Account])
+
+CheckingAccount = make_checking_account_class()
+
+def make_savings_account_class():
+    &quot;&quot;&quot;Return the SavingsAccount class, which imposes a $2 deposit fee.
+
+    &gt;&gt;&gt; savings = SavingsAccount['new']('Jack')
+    &gt;&gt;&gt; savings['get']('interest')
+    0.02
+    &gt;&gt;&gt; savings['get']('deposit')(20)
+    18
+    &gt;&gt;&gt; savings['get']('withdraw')(5)
+    13
+    &quot;&quot;&quot;
+    deposit_fee = 2
+
+    def deposit(self, amount):
+        fee = self['get']('deposit_fee')
+        return Account['get']('deposit')(self, amount - fee)
+
+    return make_class(locals(), [Account])
+
+SavingsAccount = make_savings_account_class()
+
+def make_as_seen_on_tv_account_class():
+    &quot;&quot;&quot;Return an account with lots of fees and a free dollar.
+
+    &gt;&gt;&gt; such_a_deal = AsSeenOnTVAccount['new']('Jack')
+    &gt;&gt;&gt; such_a_deal['get']('balance')
+    1
+    &gt;&gt;&gt; such_a_deal['get']('interest')
+    0.01
+    &gt;&gt;&gt; such_a_deal['get']('deposit')(20)
+    19
+    &gt;&gt;&gt; such_a_deal['get']('withdraw')(5)
+    13
+    &quot;&quot;&quot;
+    def __init__(self, account_holder):
+        self['set']('holder', account_holder)
+        self['set']('balance', 1)
+
+    return make_class(locals(), [CheckingAccount, SavingsAccount])
+
+AsSeenOnTVAccount = make_as_seen_on_tv_account_class()
+</pre>
+</div>
+</body>
+</html>

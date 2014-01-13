@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 8</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-8">
+<h1 class="title">61A Homework 8</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 11/12</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw8.scm">hw8.scm</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> <a class="reference external" href="http://composingprograms.com/pages/32-functional-programming.html">Section 3.2</a>
+of Composing Programs.</p>
+<p>To complete this homework, you will need to use the <tt class="docutils literal">stk</tt> interpreter
+installed on the instructional machines.  You can <a class="reference external" href="http://inst.eecs.berkeley.edu/~scheme/">download stk</a> for your home computer.</p>
+<p>You can load the starter file by: <tt class="docutils literal">stk <span class="pre">-load</span> hw8.scm</tt>.</p>
+<p>Scheme does not have a built-in unit testing framework.  To verify behavior, we
+will use the following <tt class="docutils literal"><span class="pre">assert-equal</span></tt> procedure.  Conventionally, the desired
+value is <tt class="docutils literal">v1</tt> and the result to be checked is <tt class="docutils literal">v2</tt>:</p>
+<pre class="literal-block">
+(define (assert-equal v1 v2)
+  (if (equal? v1 v2)
+    (print 'ok)
+    (print (list v2 'does 'not 'equal v1))))
+</pre>
+<p><strong>Q1.</strong> Define the procedures <tt class="docutils literal">cadr</tt> and <tt class="docutils literal">caddr</tt>, which return the second
+and third elements of a list, respectively:</p>
+<pre class="literal-block">
+(define (test-q1)
+  (define counts (list 1 2 3 4))
+  (assert-equal (list 3 4) (cddr counts))
+  (assert-equal 2 (cadr counts))
+  (assert-equal 3 (caddr counts)))
+
+(define (cddr s)
+  (cdr (cdr s)))
+
+(define (cadr s)
+  (car (cdr s)))
+
+(define (caddr s)
+  (car (cddr s)))
+</pre>
+<p><strong>Conditional expressions.</strong> The <tt class="docutils literal">cond</tt> special form is a general conditional
+expression, similar to a multi-clause conditional statement in Python.  The
+general form of a conditional expression is:</p>
+<p><tt class="docutils literal">(cond</tt></p>
+<blockquote>
+<p><tt class="docutils literal">(&lt;p1&gt; &lt;e1&gt;)</tt></p>
+<p><tt class="docutils literal">(&lt;p2&gt; &lt;e2&gt;)</tt></p>
+<p><tt class="docutils literal">...</tt></p>
+<p><tt class="docutils literal">(&lt;pn&gt; &lt;en&gt;)</tt></p>
+<p><tt class="docutils literal">(else <span class="pre">&lt;else-expression&gt;))</span></tt></p>
+</blockquote>
+<p>consisting of the symbol <tt class="docutils literal">cond</tt> followed by pairs of expressions <tt class="docutils literal">(&lt;p&gt;
+&lt;e&gt;)</tt> called clauses. The first expression in each pair is a <em>predicate</em>: an
+expression whose value is interpreted as either <tt class="docutils literal">true</tt> or <tt class="docutils literal">false</tt>.</p>
+<p>Conditional expressions are evaluated as follows. The predicate <tt class="docutils literal">&lt;p1&gt;</tt> is
+evaluated first. If its value is <tt class="docutils literal">false</tt>, then <tt class="docutils literal">&lt;p2&gt;</tt> is evaluated. If
+<tt class="docutils literal">&lt;p2&gt;</tt>'s value is also <tt class="docutils literal">false</tt>, then <tt class="docutils literal">&lt;p3&gt;</tt> is evaluated. This process
+continues until a predicate is found whose value is <tt class="docutils literal">true</tt>, in which case the
+interpreter returns the value of the corresponding consequent expression
+<tt class="docutils literal">&lt;e&gt;</tt> of the clause as the value of the conditional expression. If none of
+the <tt class="docutils literal">&lt;p&gt;</tt>'s is found to be <tt class="docutils literal">true</tt>, the interpreter returns the value of the
+<tt class="docutils literal">else</tt> expression.</p>
+<p>The word &quot;predicate&quot; is used for procedures that return <tt class="docutils literal">true</tt> or <tt class="docutils literal">false</tt>,
+as well as for expressions that evaluate to <tt class="docutils literal">true</tt> or <tt class="docutils literal">false</tt>.</p>
+<p><strong>Q2.</strong> Using <tt class="docutils literal">cond</tt>, define a procedure <tt class="docutils literal">sign</tt> that returns <tt class="docutils literal"><span class="pre">-1</span></tt> for
+negative arguments, <tt class="docutils literal">0</tt> for zero, and <tt class="docutils literal">1</tt> for positive arguments:</p>
+<pre class="literal-block">
+(define (test-q2)
+  (assert-equal -1 (sign -42))
+  (assert-equal 0 (sign 0))
+  (assert-equal 1 (sign 42)))
+
+(define (sign x)
+  (cond ((&gt; x 0) 1)
+        ((= x 0) 0)
+        ((&lt; x 0) -1)))
+</pre>
+<p><strong>Q3.</strong> Define the procedure <tt class="docutils literal">gcd</tt> that uses the
+<a class="reference external" href="http://en.wikipedia.org/wiki/Euclidean_algorithm#Description">Euclidean algorithm</a>
+to find the greatest common divisor of two positive integers:</p>
+<pre class="literal-block">
+(define (test-q3)
+  (assert-equal 4 (gcd 12 8))
+  (assert-equal 4 (gcd 12 16))
+  (assert-equal 8 (gcd 16 8))
+  (assert-equal 6 (gcd 24 42))
+  (assert-equal 5 (gcd 5 5)))
+
+(define (gcd m n)
+  (cond ((= m n) m)
+        ((&lt; m n) (gcd n m))
+        (else (gcd n (- m n)))))
+</pre>
+<p><strong>Q4.</strong> Implement a procedure <tt class="docutils literal">pow</tt> for raising the number <tt class="docutils literal">b</tt> to the
+power of integer <tt class="docutils literal">n</tt> that runs in Theta(log n) time. <em>Hint:</em> Use the built-in
+predicates <tt class="docutils literal">even?</tt> and <tt class="docutils literal">odd?</tt> and the <tt class="docutils literal">square</tt> procedure to implement the
+procedure using successive squaring, as we did in lecture:</p>
+<pre class="literal-block">
+(define (test-q4)
+  (assert-equal 1024 (pow 2 10))
+  (assert-equal 1000 (pow 10 3))
+  (assert-equal 243 (pow 3 5)))
+
+(define (square x) (* x x))
+
+(define (pow b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (pow b (/ n 2))))
+        (else (* b (pow b (- n 1))))))
+</pre>
+<p><strong>Differentiation.</strong> The following problems develop a system for <a class="reference external" href="http://en.wikipedia.org/wiki/Table_of_derivatives#Elementary_rules_of_differentiation">symbolic
+differentiation</a>
+of algebraic expressions.
+The <tt class="docutils literal">derive</tt> Scheme procedure takes an algebraic expression and a
+variable and returns the derivative of the expression with respect to the
+variable. Symbolic differentiation is of special historical significance in
+Lisp. It was one of the motivating examples behind the development of the
+language. Differentiating is a recursive process that applies different rules
+to different kinds of expressions:</p>
+<pre class="literal-block">
+; Derive returns the derivative of exp with respect to var.
+(define (derive exp var)
+  (cond ((number? exp) 0)
+        ((variable? exp) (if (same-variable? exp var) 1 0))
+        ((sum? exp) (derive-sum exp var))
+        ((product? exp) (derive-product exp var))
+        ((exponentiation? exp) (derive-exponentiation exp var))
+        (else 'Error)))
+</pre>
+<p>To implement the system, we will use the following abstract data types.  Sums
+and products are lists, and they are simplified on construction:</p>
+<pre class="literal-block">
+; Variables are represented as symbols
+(define (variable? x) (symbol? x))
+(define (same-variable? v1 v2)
+  (and (variable? v1) (variable? v2) (eq? v1 v2)))
+
+; Numbers are compared with =
+(define (=number? exp num)
+  (and (number? exp) (= exp num)))
+
+; Sums are represented as lists that start with +.
+(define (make-sum a1 a2)
+  (cond ((=number? a1 0) a2)
+        ((=number? a2 0) a1)
+        ((and (number? a1) (number? a2)) (+ a1 a2))
+        (else (list '+ a1 a2))))
+(define (sum? x)
+  (and (pair? x) (eq? (car x) '+)))
+(define (addend s) (cadr s))
+(define (augend s) (caddr s))
+
+; Products are represented as lists that start with *.
+(define (make-product m1 m2)
+(cond ((or (=number? m1 0) (=number? m2 0)) 0)
+      ((=number? m1 1) m2)
+      ((=number? m2 1) m1)
+      ((and (number? m1) (number? m2)) (* m1 m2))
+      (else (list '* m1 m2))))
+(define (product? x)
+  (and (pair? x) (eq? (car x) '*)))
+(define (multiplier p) (cadr p))
+(define (multiplicand p) (caddr p))
+
+(define (test-sum)
+  (assert-equal '(+ a x) (make-sum 'a 'x))
+  (assert-equal '(+ a (+ x 1)) (make-sum 'a (make-sum 'x 1)))
+  (assert-equal 'x (make-sum 'x 0))
+  (assert-equal 'x (make-sum 0 'x))
+  (assert-equal 4 (make-sum 1 3)))
+
+(define (test-product)
+  (assert-equal '(* a x) (make-product 'a 'x))
+  (assert-equal 0 (make-product 'x 0))
+  (assert-equal 'x (make-product 1 'x))
+  (assert-equal 6 (make-product 2 3)))
+</pre>
+<p><strong>Q5.</strong> Implement <tt class="docutils literal"><span class="pre">derive-sum</span></tt>, a procedure that differentiates a sum by
+summing the derivatives of the <tt class="docutils literal">addend</tt> and <tt class="docutils literal">augend</tt>.  Use the abstract
+data type for a sum:</p>
+<pre class="literal-block">
+(define (test-q5)
+  (assert-equal 1 (derive '(+ x 3) 'x)))
+
+(define (derive-sum exp var)
+  (make-sum (derive (addend exp) var)
+            (derive (augend exp) var)))
+</pre>
+<p><strong>Q6.</strong> Implement <tt class="docutils literal"><span class="pre">derive-product</span></tt>, which applies <a class="reference external" href="http://en.wikipedia.org/wiki/Product_rule">the product rule</a> to differentiate products:</p>
+<pre class="literal-block">
+(define (test-q6)
+  (assert-equal 'y (derive '(* x y) 'x))
+  (assert-equal '(+ (* x y) (* y (+ x 3)))
+                (derive '(* (* x y) (+ x 3)) 'x)))
+
+(define (derive-product exp var)
+  (make-sum
+    (make-product (multiplier exp)
+                  (derive (multiplicand exp) var))
+    (make-product (derive (multiplier exp) var)
+                  (multiplicand exp))))
+</pre>
+<p><strong>Q7.</strong> Implement an abstract data type for exponentiation: a <tt class="docutils literal">base</tt> raised to
+the power of an <tt class="docutils literal">exponent</tt>. You can simplify the cases when <tt class="docutils literal">exponent</tt> is
+<tt class="docutils literal">0</tt> or <tt class="docutils literal">1</tt>, or when <tt class="docutils literal">base</tt> is a number and <tt class="docutils literal">exponent</tt> is an integer by
+returning numbers from the constructor <tt class="docutils literal"><span class="pre">make-exponentiation</span></tt>.  In other cases,
+you can represent the exponentiation as a triple <tt class="docutils literal">(^ base exponent)</tt>:</p>
+<pre class="literal-block">
+(define (test-q7)
+  (let ((x^2 (make-exponentiation 'x 2)))
+    (assert-equal 'x (make-exponentiation 'x 1))
+    (assert-equal 1  (make-exponentiation 'x 0))
+    (assert-equal 16 (make-exponentiation 2 4))
+    (assert-equal '(^ x 2) x^2)
+    (assert-equal 'x (base x^2))
+    (assert-equal 2  (exponent x^2))
+    (assert-equal #t (exponentiation? x^2))
+    (assert-equal #f (exponentiation? 1))
+    (assert-equal #f (exponentiation? 'x))
+  ))
+
+; Exponentiations are represented as lists that start with ^.
+(define (make-exponentiation base exponent)
+  (cond ((= exponent 0) 1)
+        ((= exponent 1) base)
+        ((and (number? base) (integer? exponent)) (pow base exponent))
+        (else (list '^ base exponent))))
+
+(define (base exponentiation)
+  (cadr exponentiation))
+
+(define (exponent exponentiation)
+  (caddr exponentiation))
+
+(define (exponentiation? exp)
+  (and (list? exp) (eq? (car exp) '^)))
+</pre>
+<p><strong>Q8.</strong> Implement <tt class="docutils literal"><span class="pre">derive-exponentiation</span></tt>, which uses the
+<a class="reference external" href="http://en.wikipedia.org/wiki/Power_rule">power rule</a> to derive
+exponentiations:</p>
+<pre class="literal-block">
+(define (test-q8)
+  (let ((x^2 (make-exponentiation 'x 2))
+        (x^3 (make-exponentiation 'x 3)))
+    (assert-equal '(* 2 x) (derive x^2 'x))
+    (assert-equal '(* 3 (^ x 2)) (derive x^3 'x))
+    (assert-equal '(+ (* 3 (^ x 2)) (* 2 x)) (derive (make-sum x^3 x^2) 'x))
+  ))
+
+(define (derive-exponentiation exp var)
+  (let ((b (base exp))
+        (n (exponent exp)))
+    (if (number? n)
+      (let ((n-1 (make-sum n -1)))
+        (let ((first (make-product n (make-exponentiation b n-1))))
+          (make-product first (derive b var))))
+      'unknown)))
+</pre>
+<p>When you are finished, all tests should pass (printing a long list of ok's).
+You can run an individual test by calling a test procedure interactively:</p>
+<pre class="literal-block">
+(test-q1)
+(test-q2)
+(test-q3)
+(test-q4)
+(test-q5)
+(test-q6)
+(test-q7)
+(test-q8)
+</pre>
+</div>
+</body>
+</html>

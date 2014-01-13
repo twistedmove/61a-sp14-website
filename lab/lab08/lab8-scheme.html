@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/codemirror.css" />
+<link rel="stylesheet" type="text/css" href="css/isicp.css" />
+<link rel="stylesheet" type="text/css" href="css/theme.css" />
+
+<script src="js/helper.js"></script>
+<script src="js/codemirror.js"></script>
+<script src="js/scheme-mode.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/coding.js"> </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-43609447-3', 'berkeley.edu');
+  ga('send', 'pageview');
+</script>
+</head>
+
+<body>
+<h2> Lab 8 - Scheme </h2>
+
+<hr>
+
+<p>In this part of the lab, we will be learning Scheme. We have provided a
+Javascript based scheme interpreter that will let you interpret Scheme right in
+your browser! You can type code into the boxes, and to run the interpreter,
+either click outside, or press <tt>Ctrl-Enter</tt>. Give it a try below:</p>
+<div id="scheme-example">
+(+ 1 2)
+</div>
+<script> prompt("scheme-example"); </script>
+
+<p>If you like the in-line interpreter, check out
+the <a href="http://xuanji.appspot.com/isicp/">Interactive SICP</a>, where you
+can interpret Scheme expressions while you are reading the book.</p>
+
+<h4>Question 1: Abstraction with procedures</h4>
+
+<p>Fill in the definition for the procedure <tt>accumulate</tt>, as you have
+been asked to do
+in <a href="http://www-inst.eecs.berkeley.edu/~cs61a/fa13/hw/hw2.html">Homework
+2</a>:</p>
+
+<p> Accumulate takes in: </p>
+<ol>
+  <li>
+    <p><tt>combiner</tt>: A function of two arguments</p>
+  </li>
+  <li>
+    <p><tt>start</tt>: A number to start combining with</p>
+  </li>
+  <li>
+    <p><tt>n</tt>: The number of terms to combine</p>
+  </li>
+  <li>
+    <p><tt>term</tt>: A function of one argument that computes the n-th term of the
+sequence.</p>
+  </li>
+</ol>
+
+<p>And returns the result of combining the first <tt>n</tt> terms of the sequence.</p>
+
+<div id="accumulate">
+(define (accumulate combiner start n term)
+  (if (= n 0)
+      start
+      'Your-Code-Here
+      ))
+
+(define (square x) (* x x))
+
+(accumulate + 0 4 square) ;; Computes 1^2 + 2^2 + 3^2 + 4^2 = 30
+</div>
+<br>
+<button id="toggleButton0">Toggle Solution</button>
+
+<script>
+  prompt("accumulate");
+  $("#toggleButton0").click(function () {
+    var e = editorOf["accumulate"];
+    e.setValue("(define (accumulate combiner start n term)\n  (if (= n 0)\n      start\n      (combiner (accumulate combiner\n                            start\n                            (- n 1)\n                            term)\n                (term n))))\n\n(define (square x) (* x x))\n\n(accumulate + 0 4 square) ;; Computes 1^2 + 2^2 + 3^2 + 4^2 = 30");
+    e.getOption("onBlur")()
+  })
+</script>
+
+<h4>Question 2: Abstraction with data</h4>
+
+<p>Remember the tree data structure that we built in discussion.</p>
+
+<div id="make-btree">
+(define (make-btree entry left right)
+  (cons entry (cons left right)))
+
+(define test-tree
+  (make-btree 2
+              (make-btree 1
+                          nil
+                          nil)
+              (make-btree 4
+                          (make-btree 3
+                                      nil
+                                      nil)
+                          nil)))
+;; Represents:
+;     2
+;    / \
+;   1   4
+;      /
+;     3
+
+(define (entry tree)
+  (car tree))
+
+(define (left tree)
+  (car (cdr tree)))
+
+(define (right tree)
+  (cdr (cdr tree)))
+</div>
+<script> prompt("make-btree"); </script>
+
+
+<div id="test-btree">
+(entry test-tree)
+(entry (left test-tree))
+(entry (right test-tree))
+</div>
+<script>
+  prompt("test-btree");
+  addDep("test-btree", ["make-btree"]);
+</script>
+
+
+<p>Write a procedure <tt>num-leaves</tt>, that counts the number of leaves in a
+tree.</p>
+
+<div id="numLeaves">
+(define (numLeaves tree)
+  'Your-Code-Here
+  )
+
+(numLeaves test-tree)
+; Should return 2
+</div>
+<br>
+<button id="toggleButton1">Toggle Solution</button>
+<script>
+  prompt("numLeaves");
+  addDep("numLeaves", ["make-btree"]);
+  $("#toggleButton1").click(function () {
+    var e = editorOf["numLeaves"];
+    e.setValue(
+"(define (num-leaves tree)\n  (cond ((null? tree) 0)\n        ((and (null? (left tree))\n              (null? (right tree)))\n         1)\n        (else (+ (num-leaves (left tree))\n                 (num-leaves (right tree))))))\n\n(num-leaves test-tree)\n; Should return 2");
+    e.getOption("onBlur")()
+  })
+</script>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+<script>
+
+var todo = Object.keys(editorOf);
+
+(function proc() {
+  if (todo.length == 0) {
+    return;
+  }
+  try {
+    var first = todo.shift();
+    editorOf[first].getOption("onBlur")().then(proc);
+  } catch (err) {
+    proc();
+  }
+})();
+
+
+</script>
+
+</body>
+</html>

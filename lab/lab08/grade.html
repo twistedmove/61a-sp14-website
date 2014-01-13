@@ -1,0 +1,96 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/codemirror.css" />
+<link rel="stylesheet" type="text/css" href="css/isicp.css" />
+<link rel="stylesheet" type="text/css" href="css/theme.css" />
+
+<script src="js/helper.js"></script>
+<script src="js/codemirror.js"></script>
+<script src="js/scheme-mode.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/coding.js"> </script>
+</head>
+
+
+<body>
+<h2> Final Grade Calculator </h2>
+
+<p>Enter your midterm and non-exam (homework, project, and quiz) scores to
+	compute minimum scores on the final exam needed for each attainable grade
+	according to the
+	<a href="../../about.html#recover">
+		new midterm recovery policy
+	</a>.
+<div id="grade">
+; Enter your scores here.
+(define midterm1 0)
+(define midterm2 0)
+(define non-exam 120) ; Estimate out of 120
+
+(define (caar s) (car (car s)))
+(define (cadar s) (car (cdr (car s))))
+(define (max x y) (if (> x y) x y))
+(define (min x y) (if (< x y) x y))
+
+; Press Ctrl-Enter to print customized grade thresholds.
+(define (print-grades midterms non-exam)
+  (define grades '((170 D-)
+                   (180 D)
+                   (190 D+)
+                   (200 C-)
+                   (207 C)
+                   (214 C+)
+                   (221 B-)
+                   (237 B)
+                   (253 B+)
+                   (271 A-)
+                   (278 A)
+                   (290 A+)))
+  (define (improvement-bonus final)
+    (let ((points (max 0 (- 60 midterms)))
+          (fraction (/ (max 0 (min 45 (- final 20))) 60)))
+      (* points fraction)))
+  (define (total final)
+    (+ midterms non-exam final (improvement-bonus final)))
+  (define (print-grade final grade)
+    (print (list 'To 'earn 'a 'grade 'of grade 'you 'need final 'points 'on 'the 'final 'exam
+                 (list (floor (improvement-bonus final)) 'points 'recovered))))
+  (define (print-iter final grades)
+    (if (or (null? grades) (> final 80))
+        (print '(Good luck))
+        (if (<= (caar grades) (total final))
+            (begin (print-grade final (cadar grades)) (print-iter final (cdr grades)))
+            (print-iter (+ final 1) grades))))
+  (print-iter 0 grades))
+
+(print-grades (+ midterm1 midterm2) non-exam)
+
+</div>
+<script> prompt("grade"); </script>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+<script>
+
+var todo = Object.keys(editorOf);
+
+(function proc() {
+  if (todo.length == 0) {
+    return;
+  }
+  try {
+    var first = todo.shift();
+    editorOf[first].getOption("onBlur")().then(proc);
+  } catch (err) {
+    proc();
+  }
+})();
+
+</script>
+
+</body>
+</html>

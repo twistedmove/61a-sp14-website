@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<title>61A Homework 9</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-9">
+<h1 class="title">61A Homework 9</h1>
+
+<p><em>Due by 11:59pm on Tuesday, 11/19</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+We have provided a <a class="reference external" href="hw9.py">hw9</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> <a class="reference external" href="http://composingprograms.com/pages/34-interpreters-for-languages-with-combination.html">Section 3.4</a>
+of Composing Programs.</p>
+<p>The Brackulator language shares an evaluator with the <a class="reference external" href="http://composingprograms.com/examples/scalc/scalc.html">Calculator</a> language,
+but uses a more concise syntax. Instead of using operator names or symbols,
+Brackulator indicates operations using different kinds of brackets.</p>
+<p><tt class="docutils literal">[]</tt>: add</p>
+<p><tt class="docutils literal">()</tt>: subtract</p>
+<p><tt class="docutils literal">&lt;&gt;</tt>: multiply</p>
+<p><tt class="docutils literal">{}</tt>: divide</p>
+<p>Operand expressions are separated by spaces within these brackets.  The
+following Brackulator expressions are followed by their Calculator equivalents.</p>
+<p><tt class="docutils literal">&lt;1 2 3&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (* 1 2 3)</tt></p>
+<p><tt class="docutils literal">(5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (- 5)</tt></p>
+<p><tt class="docutils literal">[2{4 8}]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (+ (/ 4 8))</tt></p>
+<p><tt class="docutils literal">&lt;[2{12 <span class="pre">6}](3</span> 4 5)&gt;&nbsp;&nbsp; (* (+ 2 (/ 12 6)) (- 3 4 5))</tt></p>
+<p>By solving the following problems, you will implement a parser, <tt class="docutils literal">brack_read</tt>,
+that returns an expression for the <tt class="docutils literal">calc_eval</tt> evaluator implemented in the
+<a class="reference external" href="http://composingprograms.com/examples/scalc/scalc.html">Calculator</a> example from lecture.</p>
+<p>All of your solutions should be defined in terms of the following dictionaries
+of bracket types, which configure the parser to supply the correct operator for
+each bracket:</p>
+<pre class="literal-block">
+# A dictionary from pairs of matching brackets to the operators they indicate.
+BRACKETS = {('[', ']'): '+',
+            ('(', ')'): '-',
+            ('&lt;', '&gt;'): '*',
+            ('{', '}'): '/'}
+
+# A dictionary with left-bracket keys and corresponding right-bracket values.
+LEFT_RIGHT = {left:right for left, right in BRACKETS.keys()}
+
+# The set of all left and right brackets.
+ALL_BRACKETS = set(b for bs in BRACKETS for b in bs)
+</pre>
+<p><strong>Q1.</strong> Complete tokenize, which splits a Brackulator expression into tokens,
+and raise a <tt class="docutils literal">ValueError</tt> if any token is not a number or a known bracket.
+<em>Hint</em>: You can first surround each bracket with spaces using <tt class="docutils literal">line.replace</tt>,
+then split on spaces. Afterward, check each token to ensure that it is legal.
+The provided <tt class="docutils literal">coerce_to_number</tt> function may prove useful:</p>
+<pre class="literal-block">
+def tokenize(line):
+    &quot;&quot;&quot;Convert a string into a list of tokens.
+
+    &gt;&gt;&gt; tokenize('2.3')
+    [2.3]
+    &gt;&gt;&gt; tokenize('(2 3)')
+    ['(', 2, 3, ')']
+    &gt;&gt;&gt; tokenize('&lt;2 3)')
+    ['&lt;', 2, 3, ')']
+    &gt;&gt;&gt; tokenize('&lt;[2{12.5 6.0}](3 -4 5)&gt;')
+    ['&lt;', '[', 2, '{', 12.5, 6.0, '}', ']', '(', 3, -4, 5, ')', '&gt;']
+
+    &gt;&gt;&gt; tokenize('2.3.4')
+    Traceback (most recent call last):
+        ...
+    ValueError: invalid token 2.3.4
+
+    &gt;&gt;&gt; tokenize('?')
+    Traceback (most recent call last):
+        ...
+    ValueError: invalid token ?
+
+    &gt;&gt;&gt; tokenize('hello')
+    Traceback (most recent call last):
+        ...
+    ValueError: invalid token hello
+
+    &gt;&gt;&gt; tokenize('&lt;(GO BEARS)&gt;')
+    Traceback (most recent call last):
+        ...
+    ValueError: invalid token GO
+    &quot;&quot;&quot;
+    # Surround all brackets by spaces so that they are separated by split.
+    for b in ALL_BRACKETS:
+        line = line.replace(b, ' ' + b + ' ')
+
+    # Convert numerals to numbers and raise ValueErrors for invalid tokens.
+    tokens = []
+    for t in line.split():
+        n = coerce_to_number(t)
+        if n is not None:
+            tokens.append(n)
+        elif t in ALL_BRACKETS:
+            tokens.append(t)
+        else:
+            raise ValueError('invalid token ' + t)
+    return tokens
+
+def coerce_to_number(token):
+    &quot;&quot;&quot;Coerce a string to a number or return None.
+
+    &gt;&gt;&gt; coerce_to_number('-2.3')
+    -2.3
+    &gt;&gt;&gt; print(coerce_to_number('('))
+    None
+    &quot;&quot;&quot;
+    try:
+        return int(token)
+    except (TypeError, ValueError):
+        try:
+            return float(token)
+        except (TypeError, ValueError):
+            return None
+</pre>
+<p><strong>Q2.</strong> Implement <tt class="docutils literal">brack_read</tt>, which returns an expression tree for the first
+valid Brackulator expression in a list of tokens.  The expression tree should
+contain Calculator operators that correspond to the bracket types. Raise a
+<tt class="docutils literal">SyntaxError</tt> for any malformed expression. The <tt class="docutils literal">Pair</tt> class and <tt class="docutils literal">nil</tt>
+object from lecture appear at the bottom of this file. This function is similar
+to <tt class="docutils literal">scheme_read</tt> from Calculator's <a class="reference external" href="http://composingprograms.com/examples/scalc/scheme_reader.py.html">scheme_reader.py</a>.</p>
+<p><em>Hint</em>: Introduce another function <tt class="docutils literal">read_tail</tt> that reads the elements in a
+combination until reaching a closing bracket.  In <tt class="docutils literal">brack_read</tt> make sure that
+the closing bracket of an expression matches the opening bracket.  The
+<tt class="docutils literal">LEFT_RIGHT</tt> dictionary defined above gives you the matching right bracket for
+each type of left bracket.  The <tt class="docutils literal">BRACKETS</tt> dictionary gives you the
+corresponding operator (e.g. '+' for '[' and ']').</p>
+<p>Once you complete this problem, you can place your homework file in the same
+directory as <tt class="docutils literal">scalc.py</tt> (and its supporting files), then run
+<tt class="docutils literal">read_eval_print_loop</tt> to interact with the Brackulator language:</p>
+<pre class="literal-block">
+def brack_read(tokens):
+    &quot;&quot;&quot;Return an expression tree for the first well-formed Brackulator
+    expression in tokens. Tokens in that expression are removed from tokens as
+    a side effect.
+
+    &gt;&gt;&gt; brack_read(tokenize('100'))
+    100
+    &gt;&gt;&gt; brack_read(tokenize('([])'))
+    Pair('-', Pair(Pair('+', nil), nil))
+    &gt;&gt;&gt; print(brack_read(tokenize('&lt;[2{12 6}](3 4 5)&gt;')))
+    (* (+ 2 (/ 12 6)) (- 3 4 5))
+    &gt;&gt;&gt; brack_read(tokenize('(1)(1)')) # More than one expression is ok
+    Pair('-', Pair(1, nil))
+    &gt;&gt;&gt; brack_read(tokenize('[])')) # Junk after a valid expression is ok
+    Pair('+', nil)
+
+    &gt;&gt;&gt; brack_read(tokenize('([]')) # Missing right bracket
+    Traceback (most recent call last):
+        ...
+    SyntaxError: unexpected end of line
+
+    &gt;&gt;&gt; brack_read(tokenize('[)]')) # Extra right bracket
+    Traceback (most recent call last):
+        ...
+    SyntaxError: unexpected )
+
+    &gt;&gt;&gt; brack_read(tokenize('([)]')) # Improper nesting
+    Traceback (most recent call last):
+        ...
+    SyntaxError: unexpected )
+
+    &gt;&gt;&gt; brack_read(tokenize('')) # No expression
+    Traceback (most recent call last):
+        ...
+    SyntaxError: unexpected end of line
+    &quot;&quot;&quot;
+    if not tokens:
+        raise SyntaxError('unexpected end of line')
+    token = tokens.pop(0)
+    n = coerce_to_number(token)
+    if n != None:
+        return n
+    elif token in LEFT_RIGHT:
+        rest = read_tail(tokens)
+        right = tokens.pop(0)
+        if right != LEFT_RIGHT[token]:
+            raise SyntaxError('unexpected ' + right)
+        return Pair(BRACKETS[(token, right)], rest)
+    else:
+        raise SyntaxError('unexpected ' + token)
+
+def read_tail(tokens):
+    if not tokens:
+        raise SyntaxError('unexpected end of line')
+    if tokens[0] in LEFT_RIGHT.values():
+        return nil
+    first = brack_read(tokens)
+    rest = read_tail(tokens)
+    return Pair(first, rest)
+</pre>
+<p><strong>Q3.</strong> (Optional; Extra for experts) The Python Challenge is a website designed
+to teach people the many features of the Python Library. Each page of the site
+is a puzzle that can be solved simply in Python. The solution to each puzzle
+gives the URL of the next.</p>
+<p>There is a function stub below to include your solution to puzzle 4 (the one
+with the picture of a wood carving).  You will have to complete puzzles 0, 1, 2,
+and 3 to reach 4.</p>
+<p><a class="reference external" href="http://www.pythonchallenge.com/pc/def/0.html">http://www.pythonchallenge.com/pc/def/0.html</a></p>
+<p>Some hints:</p>
+<ul>
+<li><p class="first">Puzzle 1. Try <tt class="docutils literal">str.maketrans</tt> to make a dictionary and <tt class="docutils literal">str.translate</tt> to
+generate a new string. Letters are listed in the <tt class="docutils literal">string</tt> module.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; 'Borkozoy'.translate(str.maketrans('oz', 'el'))
+'Berkeley'
+&gt;&gt;&gt; import string
+&gt;&gt;&gt; string.ascii_lowercase
+'abcdefghijklmnopqrstuvwxyz'
+</pre>
+</li>
+<li><p class="first">Puzzles 2 &amp; 3. To view the source code of a web page in a browser, use</p>
+<ul class="simple">
+<li>Chrome:   View &gt; Developer &gt; View Page Source</li>
+<li>Firefox:  Tools &gt; Web Developer &gt; Page Source</li>
+<li>Safari:   View &gt; View Source</li>
+</ul>
+<p>Uppercase letters are also in the <tt class="docutils literal">string</tt> module.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; string.ascii_uppercase
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+</pre>
+</li>
+<li><p class="first">Puzzle 4. Here's an example of fetching the source of a web page in Python.
+The address below links to an archive of the first WWW site.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; base = 'http://www.w3.org/History/19921103-hypertext/hypertext'
+&gt;&gt;&gt; addr = base + '/WWW/TheProject.html'
+&gt;&gt;&gt; from urllib.request import urlopen
+&gt;&gt;&gt; contents = urlopen(addr).read().decode()
+&gt;&gt;&gt; contents.split('\n')[1]
+'&lt;TITLE&gt;The World Wide Web project&lt;/TITLE&gt;'
+</pre>
+<p>As you work on this puzzle, make sure to print the result of each step.</p>
+<p>The comments on the puzzle page say: &quot;urllib may help. DON'T TRY ALL
+NOTHINGS, since it will never end.  400 times is more than enough.&quot;</p>
+</li>
+</ul>
+<p>You can include your solution to puzzle 4 below:</p>
+<pre class="literal-block">
+from urllib.request import urlopen
+
+def puzzle_4():
+    &quot;&quot;&quot;Return the soluton to puzzle 4.&quot;&quot;&quot;
+    base = 'http://www.pythonchallenge.com/pc/def/linkedlist.php?'
+    nothing_prompt = 'and the next nothing is '
+    divide_prompt = 'Yes. Divide by two and keep going.'
+    def parse_nothing(r):
+        n = r.find(nothing_prompt)
+        if n != -1:
+            return r[n+len(nothing_prompt):]
+    last_n = 12345
+    for _ in range(400):
+        addr = base + 'nothing=' + str(last_n)
+        r = urlopen(addr).read().decode().strip()
+        n = parse_nothing(r)
+        if n:
+            last_n = int(n)
+        elif r == divide_prompt:
+            last_n = last_n//2
+        else:
+            return r
+</pre>
+<p>Support code for Brackulator (from the <a class="reference external" href="http://composingprograms.com/examples/scalc/scalc.html">Calculator</a> example):</p>
+<pre class="literal-block">
+###################################
+# Support classes for Brackulator #
+###################################
+
+class Pair(object):
+    &quot;&quot;&quot;A pair has two instance attributes: first and second.  For a Pair to be
+    a well-formed list, second is either a well-formed list or nil.  Some
+    methods only apply to well-formed lists.
+
+    &gt;&gt;&gt; s = Pair(1, Pair(2, nil))
+    &gt;&gt;&gt; s
+    Pair(1, Pair(2, nil))
+    &gt;&gt;&gt; print(s)
+    (1 2)
+    &gt;&gt;&gt; len(s)
+    2
+    &gt;&gt;&gt; s[1]
+    2
+    &gt;&gt;&gt; print(s.map(lambda x: x+4))
+    (5 6)
+    &quot;&quot;&quot;
+    def __init__(self, first, second):
+        self.first = first
+        self.second = second
+
+    def __repr__(self):
+        return &quot;Pair({0}, {1})&quot;.format(repr(self.first), repr(self.second))
+
+    def __str__(self):
+        s = &quot;(&quot; + str(self.first)
+        second = self.second
+        while isinstance(second, Pair):
+            s += &quot; &quot; + str(second.first)
+            second = second.second
+        if second is not nil:
+            s += &quot; . &quot; + str(second)
+        return s + &quot;)&quot;
+
+    def __len__(self):
+        n, second = 1, self.second
+        while isinstance(second, Pair):
+            n += 1
+            second = second.second
+        if second is not nil:
+            raise TypeError(&quot;length attempted on improper list&quot;)
+        return n
+
+    def __getitem__(self, k):
+        if k &lt; 0:
+            raise IndexError(&quot;negative index into list&quot;)
+        y = self
+        for _ in range(k):
+            if y.second is nil:
+                raise IndexError(&quot;list index out of bounds&quot;)
+            elif not isinstance(y.second, Pair):
+                raise TypeError(&quot;ill-formed list&quot;)
+            y = y.second
+        return y.first
+
+    def map(self, fn):
+        &quot;&quot;&quot;Return a Scheme list after mapping Python function FN to SELF.&quot;&quot;&quot;
+        mapped = fn(self.first)
+        if self.second is nil or isinstance(self.second, Pair):
+            return Pair(mapped, self.second.map(fn))
+        else:
+            raise TypeError(&quot;ill-formed list&quot;)
+
+class nil(object):
+    &quot;&quot;&quot;The empty list&quot;&quot;&quot;
+
+    def __repr__(self):
+        return &quot;nil&quot;
+
+    def __str__(self):
+        return &quot;()&quot;
+
+    def __len__(self):
+        return 0
+
+    def __getitem__(self, k):
+        if k &lt; 0:
+            raise IndexError(&quot;negative index into list&quot;)
+        raise IndexError(&quot;list index out of bounds&quot;)
+
+    def map(self, fn):
+        return self
+
+nil = nil() # Assignment hides the nil class; there is only one instance
+</pre>
+<p>To use the following function, you will need to place your homework solution in
+the same directory as the files from the <a class="reference external" href="http://composingprograms.com/examples/scalc/scalc.html">Calculator</a> Example:</p>
+<pre class="literal-block">
+def read_eval_print_loop():
+    &quot;&quot;&quot;Run a read-eval-print loop for the Brackulator language.&quot;&quot;&quot;
+    global Pair, nil
+    from scheme_reader import Pair, nil
+    from scalc import calc_eval
+
+    while True:
+        try:
+            src = tokenize(input('&gt; '))
+            while len(src) &gt; 0:
+              expression = brack_read(src)
+              print(calc_eval(expression))
+        except (SyntaxError, ValueError, TypeError, ZeroDivisionError) as err:
+            print(type(err).__name__ + ':', err)
+        except (KeyboardInterrupt, EOFError):  # &lt;Control&gt;-D, etc.
+            return
+</pre>
+</div>
+</body>
+</html>
