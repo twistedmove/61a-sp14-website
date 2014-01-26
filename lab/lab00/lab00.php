@@ -40,58 +40,15 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("08/31/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("01/30/2014", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 0</h1>
-<h2>Introduction to UNIX/Emacs</h2>
-<h3>Table of Contents</h3>
-
-<ul>
-<li><a href="#Introduction">0. Introduction</a>
-<ul>
-<li><a href="#0.1">0.1. Logging in from Home</a></li>
-</ul></li>
-<li><a href="#1">1. Meet the Terminal</a></li>
-<li><a href="#2">2. Getting used to the Filesystem</a>
-<ul>
-<li><a href="#2.1">2.1. Directories</a>
-<ul>
-<li><a href="#2.1.1">2.1.1. Making Directories</a></li>
-<li><a href="#2.1.2">2.1.2. Changing Directories</a></li>
-<li><a href="#2.1.3">2.1.3. Removing Directories</a></li>
-</ul></li>
-<li><a href="#2.2">2.2. Files</a>
-<ul>
-<li><a href="#2.2.1">2.2.1. Making a File</a></li>
-<li><a href="#2.2.2">2.2.2. Copying Files</a></li>
-<li><a href="#2.2.3">2.2.3. Moving a File</a></li>
-<li><a href="#2.2.4">2.2.4. Renaming a File</a></li>
-</ul></li>
-<li><a href="#2.3">2.3. The Most Useful Unix Command: man</a></li>
-<li><a href="#2.4">2.4. Summary of Unix Commands</a></li>
-</ul></li>
-<li><a href="#3">3. Running Programs: firefox</a></li>
-<li><a href="#4">4. A Recap</a></li>
-<li><a href="#5">5. Our Text Editor: Emacs</a>
-<ul>
-<li><a href="#5.1">5.1. Creating a file in Emacs</a></li>
-<li><a href="#5.2">5.2. Editing a file in Emacs</a></li>
-</ul></li>
-<li><a href="#6">6. The Python Interpreter</a></li>
-<li><a href="#7">7. Emacs, Python, and the Terminal</a></li>
-<li><a href="#A">Appendix A: Hotkeys in Emacs</a>
-<ul>
-<li><a href="#A.1">A.1. The Meta key</a></li>
-<li><a href="#A.2">A.2. Some Useful Hotkeys</a></li>
-</ul></li>
-<li><a href="#B">Appendix B: Unix Commands Summary</a></li>
-</ul>
-
-<h3>0. Introduction</h3>
+    <h1 id="title-main">CS 61A Lab 0</h1>
+<h2 id="title-sub">Introduction to UNIX/Emacs</h2>
+<h2>Introduction to Unix</h2>
 
 <p>Hello! The first thing you might have noticed about these computers is
 that they don't have Windows or MacOS installed. And you're right -
@@ -113,38 +70,38 @@ another log-in form from your TA and start again. If you forget your
 password, you can either e-mail INST at inst@eecs.berkeley.edu, or go
 to 333 Soda.</p>
 
-<h3>0.1. Logging in from Home</h3>
+<h3>Logging in from Home</h3>
 
 <p>If you don't have access to a school computer for this lab, you can
 still try it out: refer to <a href="../lab01/lab01.php">Lab 1</a> for more
 details about setting up your home computer.</p>
 
-<h3>1. Meet the Terminal</h3>
+<h2>Meet the Terminal</h2>
 
 <p>The first thing we're going to do is open the Terminal. To do this,
 click on the launcher in the top left corner. Start typing in
 "Terminal" and it should autocomplete.  You should see something like
 this:</p>
 
-<p><img src="imgs/pick_terminal.png" alt="Opening the Terminal" title="Figure 1: Opening the
+<p><img src="assets/pick_terminal.png" alt="Opening the Terminal" title="Figure 1: Opening the
 Terminal" /></p>
 
 <p>Press "Enter" or click on the Terminal icon and finally, you'll see a
 window that looks something like this:</p>
 
-<p><img src="imgs/terminal.png" alt="Terminal" title="Figure 2: The terminal windw" /></p>
+<p><img src="assets/terminal.png" alt="Terminal" title="Figure 2: The terminal windw" /></p>
 
 <p>This window is called the terminal - this is where you'll be talking
 to the computer. You talk to the computer by entering in commands.
 Here's a neat command - need to look up a date for this month? Try the
 <code>cal</code> command by typing <code>cal</code> into the terminal, then hitting enter:</p>
 
-<p><img src="imgs/cal_cmd.png" alt="Calendar output" title="Figure 3: Your first command" /></p>
+<p><img src="assets/cal_cmd.png" alt="Calendar output" title="Figure 3: Your first command" /></p>
 
 <p>Neat, right? Turns out, these computers can do more than displaying
 the current calendar - crazy, right? </p>
 
-<h3>2. Getting used to the filesystem</h3>
+<h2>Directories</h2>
 
 <p>The most important thing to learn first is how to use the filesystem.
 Unlike in Windows/MacOS, there aren't folders you can
@@ -156,7 +113,7 @@ command line (the command line is the terminal). Everything you did on
 a visual-based filesystem (i.e. like those found on a Windows/MacOS
 system), you can also do via the terminal.</p>
 
-<h3>2.1. Directories</h3>
+<h3>Directories</h3>
 
 <p>First, I'll introduce you to our good friend, <code>ls</code>.</p>
 
@@ -176,7 +133,7 @@ star [122] ~ #
 home directory - we just made our account after all! Let's make some
 stuff! </p>
 
-<h3>2.1.1. Making Directories</h3>
+<h3>Making Directories</h3>
 
 <p>This leads to another good command: the <code>mkdir</code> command.</p>
 
@@ -207,7 +164,7 @@ star [124] ~ #
 
 <p>Hey, there's our new directory! Awesome.</p>
 
-<h3>2.1.2. Changing Directories</h3>
+<h3>Changing Directories</h3>
 
 <p>To get 'inside' the directory, we have a handy command called <code>cd</code>.</p>
 
@@ -247,7 +204,7 @@ star [126] ~ #
 to the home directory. This is handy when you're many directories
 deep, and you don't want to keep repeating <code>cd ..</code> to get back home.</p>
 
-<h3>2.1.3. Removing Directories</h3>
+<h3>Removing Directories</h3>
 
 <p>We've created them - now, we can destroy them! Er, remove them,
 rather. Often, you'll find yourself wanting to delete directories
@@ -268,36 +225,15 @@ following steps:</p>
 
 <p>Summary: We've learned about the following commands:</p>
 
-<table class="txt_table">
-  <col width="250px" align="justify" />
-  <col align="right" />
-  <tr>
-    <th> Command </th>
-    <th> Description </th>
-  </tr>
-  <tr>
-    <td> `cal` </td>
-    <td> Displays the current month </td>
-  </tr>
-  <tr>
-    <td> `ls` </td>
-    <td> Lists the current directory contents </td>
-  </tr>
-  <tr>
-    <td> `mkdir` </td>
-    <td> Creates a new directory with a specified name </td>
-  </tr>
-  <tr>
-    <td> `cd` </td>
-    <td> Moves into/out of directories </td>
-  </tr>
-  <tr>
-    <td> `rm -r` </td>
-    <td> Removes the given directory </td>
-  </tr>
-</table>
+<ul>
+<li><code>cal</code>: displays the current month</li>
+<li><code>ls</code>: lists the current directory contents</li>
+<li><code>mkdir</code>: creates a new directory with a specified name</li>
+<li><code>cd</code> moves into/out of directories</li>
+<li><code>rm -r</code>: removes the given directory</li>
+</ul>
 
-<h3>2.2 Files</h3>
+<h2>Files</h2>
 
 <p>We've done a lot of things so far, but only with directories - we
 probably want to be able to actually have stuff in our directories.
@@ -326,10 +262,10 @@ No, you stop!
 the enter button is the output of the echo command. It's sort of like
 this picture:</p>
 
-<p><img src="imgs/echo_visual.png" alt="Echo visual" title="Figure 4: Visualization of
+<p><img src="assets/echo_visual.png" alt="Echo visual" title="Figure 4: Visualization of
 input/output of he echo command" /></p>
 
-<h3>2.2.1. Making a file</h3>
+<h3>Making a file</h3>
 
 <p>UNIX has a very nice way of creating files using the command <code>touch</code>.
 Let's say we want to create a file called <code>my_file</code>, we can do this by
@@ -344,7 +280,7 @@ lab0 my_file
 inside, we can use another command, called <code>cat</code>. <code>cat</code> is a command
 that displays the contents of a given file: </p>
 
-<pre><code>star [141] ~ # cat my_file &lt;br&gt;
+<pre><code>star [141] ~ # cat my_file
 star [142] ~ #
 </code></pre>
 
@@ -370,7 +306,7 @@ think twice (and thrice!) before using the <code>rm</code> command! </p>
 <p>With directories, we were able to make and remove them. However, for
 files, we can do even more! </p>
 
-<p>Let’s go ahead and make a new file, because we have removed the one we
+<p>Let's go ahead and make a new file, because we have removed the one we
 made in the previous section. </p>
 
 <pre><code>star [139] ~ # touch my_file
@@ -391,9 +327,9 @@ awesome!" to the file, <code>my_file</code>. Be careful though, <code>&gt;</code
 whatever was originally in the file (ours was originally blank). To
 add text to an existing file, use <code>&gt;&gt;</code></p>
 
-<h3>2.2.2 Copying a file</h3>
+<h3>Copying a file</h3>
 
-<p>Let’s say we wanted to make a copy of this file. Well we can use the
+<p>Let's say we wanted to make a copy of this file. Well we can use the
 <code>cp</code> command.  <code>cp</code> takes two parameters, the first is the name of the
 file you want to make a copy of, and the second is the name of the new
 file you want to copy the first file into. For example, if we wanted
@@ -447,7 +383,7 @@ star [281] ~ # ls lab0
 shakespeare.txt
 </code></pre>
 
-<h3>2.2.3. Moving a File</h3>
+<h3>Moving a File</h3>
 
 <p>We can also move a file to a different directory by using the <code>mv</code>
 command.  <code>mv</code> takes in two parameters as well: the first is the
@@ -485,10 +421,10 @@ star [278] ~ # ls
 new_file
 </code></pre>
 
-<p>We have just moved <code>new_file back</code> into our home directory,
+<p>We have just moved <code>new_file</code> back into our home directory,
 which was a parent directory of the lab0 directory.</p>
 
-<h3>2.2.4. Renaming a File</h3>
+<h3>Renaming a File</h3>
 
 <p>Lastly, we can rename a file. To rename a file, we can actually also
 use the <code>mv</code> command. In this case, the <code>mv</code> command still takes in
@@ -503,7 +439,7 @@ best_name_ever
 <p>We have just successfully renamed <code>new_file</code> to be the filename:
 <code>best_name_ever.</code> </p>
 
-<h3>2.3. The most useful UNIX command: man</h3>
+<h3>The most useful UNIX command: man</h3>
 
 <p>We've shown you a lot of commands and it might become a little
 hard to remember what everything does. If you ever forget (and can't
@@ -519,7 +455,7 @@ command with. </p>
 <p>You can navigate forward through the man page with the <code>Enter/ Return</code>
 key and you can quit with <code>q</code> key. </p>
 
-<h3>3. Running programs: Firefox</h3>
+<h2>Running programs: Firefox</h2>
 
 <p>These machines come pre-installed with a variety of programs.  If you
 continue to use the lab machines, two programs that you'll be
@@ -529,7 +465,7 @@ frequently using over the semester are Firefox and Emacs. </p>
 Chrome, etc.). <strong>To open it, you can simply click on the icon on the
 left hand side of your screen.</strong></p>
 
-<h3>4. A recap</h3>
+<h2>A recap</h2>
 
 <p>Whew! We've covered a lot so far, so let's recap what we've done so
 far. </p>
@@ -537,19 +473,19 @@ far. </p>
 <ul>
 <li>How to use commands to navigate the filesystem
 <ul>
-<li>ls, cd</li>
+<li><code>ls</code>, <code>cd</code></li>
 </ul></li>
 <li>How to create/remove directories
 <ul>
-<li>mkdir, rm -r</li>
+<li><code>mkdir</code>, <code>rm -r</code></li>
 </ul></li>
 <li>How to create/remove/display files
 <ul>
-<li>echo, rm, cat</li>
+<li><code>echo</code>, <code>rm</code>, <code>cat</code></li>
 </ul></li>
 <li>How to move/rename/copy files
 <ul>
-<li>mv, cp</li>
+<li><code>mv</code>, <code>cp</code></li>
 </ul></li>
 <li>How to redirect output from one command to another
 <ul>
@@ -565,7 +501,7 @@ far. </p>
 </ul></li>
 </ul>
 
-<p>This is fantastic - definitely all of the commands you'll need for the
+<p>This is fantastic -- definitely all of the commands you'll need for the
 semester. However, we have yet to really create/edit/save text files.
 And no, Microsoft Word is not installed on these machines. But we have
 something better! </p>
@@ -577,12 +513,12 @@ operating system.  Instead of reading this section on Emacs, start
 reading [Lab 1](../lab01/lab01.php) on selecting an editor.
 </div>
 
-<h3>5. Our Text Editor: Emacs</h3>
+<h2>Our Text Editor: Emacs</h2>
 
 <p>Emacs is a very popular free text editor, with quite a bit of history
 behind it (it was created in 1976!). This is the text editor we'll
 primarily be using this semester. However, it's definitely not
-required - some other text editors include:</p>
+required -- some other text editors include:</p>
 
 <ul>
 <li>Notepad++</li>
@@ -615,7 +551,7 @@ Emacs, because the directory in which you open Emacs determines the
 directory that Emacs 'starts off' in. For instance, if I open up Emacs
 in the home directory, and I saved a file called <code>my_file.txt</code>, then
 <code>my_file.txt</code> will appear in the home directory.  But more on that
-later!  </p>
+later!</p>
 
 <p>Let's try opening Emacs with the following: </p>
 
@@ -636,24 +572,24 @@ you're not working anymore :(
 this situation, if you add an ampersand '<code>&amp;</code>' after <code>Emacs</code>, the
 terminal will still be responsive: </p>
 
-<pre><code>  star [145] ~ # emacs &amp;
-  star [146] ~ # ls
-  lab0
-  star [147] ~ # echo "Hooray, you're listening to me"
-  Hooray, you're listening to me
+<pre><code>star [145] ~ # emacs &amp;
+star [146] ~ # ls
+lab0
+star [147] ~ # echo "Hooray, you're listening to me"
+Hooray, you're listening to me
 </code></pre>
 
 <p>A window something like this should open up:</p>
 
-<p><img src="imgs/emacs_splash.png" alt="Emacs Splash" title="Figure 5: The Emacs splash
+<p><img src="assets/emacs_splash.png" alt="Emacs Splash" title="Figure 5: The Emacs splash
 page." /></p>
 
-<p>This is sort of the 'splash page' for Emacs - later, if you're
-interested, you can check out the Emacs Tutorial, but let's not do
-that right now. (It is a valuable resource for learning to use Emacs,
-but it might take more time than you have during lab! :p) </p>
+<p>This is the 'splash page' for Emacs - later, if you're interested, you
+can check out the Emacs Tutorial, but let's not do that right now. (It
+is a valuable resource for learning to use Emacs, but it might take
+more time than you have during lab! :p) </p>
 
-<h3>5.1. Creating a file in Emacs</h3>
+<h3>Creating a file in Emacs</h3>
 
 <p>Now, let's create our new file - to do that, you can do any of the
 following 2 options: </p>
@@ -661,7 +597,7 @@ following 2 options: </p>
 <ul>
 <li><p>Option 1: Go to File menu, and click on Visit New File...</p>
 
-<p><img src="imgs/emacs_new2.png" alt="Emacs new file 2" title="Figure 6: One way to create
+<p><img src="assets/emacs_new2.png" alt="Emacs new file 2" title="Figure 6: One way to create
 a new file in Emacs" /></p>
 
 <p>Once you've done that, a prompt will appear on the bottom area (this
@@ -669,7 +605,7 @@ is called the mini-buffer), asking for the name of the file you wish
 to create. Type in <code>my_epiphany</code> as the file name, and hit enter.
 (See Figure 7 to see what the mini-buffer looks like). </p>
 
-<p><img src="imgs/emacs_minibuffer.png" alt="Emacs minibuffer" title="Figure 7: The
+<p><img src="assets/emacs_minibuffer.png" alt="Emacs minibuffer" title="Figure 7: The
 mini-buffer" /></p></li>
 <li>Option 2: Use the hot-key <code>C-x C-f</code>, then type in <code>my_epiphany</code> in
 the mini-buffer. If you're not sure what <code>C-x C-f</code> means, then check
@@ -687,7 +623,7 @@ two-step process:
 the newly created <code>my_epiphany</code> file. Go ahead and type the sentence:
 "This is going to be a pretty good semester." </p>
 
-<p><img src="imgs/emacs_saving.png" alt="Emacs saving" title="Figure 8: Our new file." /></p>
+<p><img src="assets/emacs_saving.png" alt="Emacs saving" title="Figure 8: Our new file." /></p>
 
 <p>Now that we've added our sentence, let's save the file (either doing
 <code>File -&gt; Save</code> or doing the hotkey <code>C-x C-s</code>. You'll know it's saved
@@ -704,17 +640,17 @@ star [150] ~ # cat my_epiphany
 This is going to be a pretty good semester.
 </code></pre>
 
-<h3>5.2. Editing a file in Emacs</h3>
+<h3>Editing a file in Emacs</h3>
 
-<p>But wait! We want to edit that file - we want to instead say: “This
-semester is going to be a fantastic semester!” </p>
+<p>But wait! We want to edit that file - we want to instead say: "This
+semester is going to be a fantastic semester!" </p>
 
 <p>So, let's edit the file to say this instead. One way we could do this
 is open up Emacs using <code>emacs &amp;</code>, and use the <code>File -&gt; Open</code> (hotkey:
 <code>C-x C-f</code>) to open up the file (typing in <code>my_epiphany</code> in the
 mini-buffer): </p>
 
-<p><img src="imgs/emacs_open.png" alt="Emacs open" title="Figure 9: Opening a file in Emacs" /></p>
+<p><img src="assets/emacs_open.png" alt="Emacs open" title="Figure 9: Opening a file in Emacs" /></p>
 
 <p>Or, we can provide the name of the file as a parameter while opening
 up Emacs: </p>
@@ -740,7 +676,7 @@ what to do, click the mini-buffer and do the hotkey <code>C-g</code>. This will
 cancel the mini-buffer prompt, and also cancel the command that was
 expecting the prompt. </p>
 
-<h3>6. The Python Interpreter</h3>
+<h2>The Python Interpreter</h2>
 
 <p>In Computer Science parlance, an interpreter is a program that lets
 you interactively 'talk' to a programming language. A Python
@@ -764,7 +700,7 @@ to the UNIX terminal prompt, but instead of talking to UNIX, you're
 talking to Python. Try typing in a few simple arithmetic expressions. </p>
 
 <pre><code>&gt;&gt;&gt; 1 + 2
-3        
+3
 &gt;&gt;&gt; 7 * 8 - 9
 47
 &gt;&gt;&gt; (1 + 2) * (3 - 4)
@@ -783,7 +719,7 @@ either of the following: </p>
 <li>Or, doing <code>C-d</code></li>
 </ul>
 
-<h3>7. Emacs, Python, and he Terminal</h3>
+<h2>Emacs, Python, and the Terminal</h2>
 
 <p>The Python interpreter is definitely neat, and allows you to try and
 test out little bits of code relatively easily and quickly.  But as
@@ -804,7 +740,7 @@ directory, either </p>
 <ol>
 <li>from within the terminal, and running a new Emacs instance from
 within the lab0 folder, OR</li>
-<li>from within Emacs by typing in “lab0/” before you write the
+<li>from within Emacs by typing in "lab0/" before you write the
 filename</li>
 </ol>
 
@@ -832,7 +768,7 @@ def greet():
 
 <p>Now, your Emacs screen should look something like this: </p>
 
-<p><img src="imgs/greet.png" alt="greet.py" title="Figure 10: Our simple greet.py program" /></p>
+<p><img src="assets/greet.png" alt="greet.py" title="Figure 10: Our simple greet.py program" /></p>
 
 <p>Let's go back to the terminal and run our little program. </p>
 
@@ -863,7 +799,7 @@ following in the Python interpreter: </p>
 Hello World!
 
 &gt;&gt;&gt; my_name
-'Eric'        
+'Eric'
 &gt;&gt;&gt; greet()
 Greetings Eric, how are you today? 
     -Python
@@ -893,7 +829,7 @@ run it, edit it again, run it again, etc. This will start feeling
 natural as the course progresses (and as you get further in your CS
 career!). </p>
 
-<h3>Appendix A: Hotkeys in Emacs</h3>
+<h2>Appendix A: Hotkeys in Emacs</h2>
 
 <p>If you watch a pro Emacs user work in Emacs, you'll notice that he/she
 never uses the mouse to do anything - everything he/she does is via
@@ -925,7 +861,7 @@ save the current buffer/file. </p>
 access it from the splash screen or by typing <code>C-h t</code>. (First, do
 <code>C-h</code>, then just type <code>t</code>.)</p>
 
-<h3>A.1. The Meta Key</h3>
+<h3>The Meta Key</h3>
 
 <p>Some hotkeys involve the Meta key, such as this hotkey that opens up a
 Scheme interpreter: <code>M-s</code> </p>
@@ -943,7 +879,7 @@ do <code>M-s</code>, you don't hold <code>Esc</code> while pressing <code>s</cod
 <li>Then press the <code>s</code> key </li>
 </ol>
 
-<h3>A.2. Some useful hotkeys</h3>
+<h3>Some useful hotkeys</h3>
 
 <table class="txt_table">
   <col width="250px" align="justify" />
@@ -989,7 +925,7 @@ do <code>M-s</code>, you don't hold <code>Esc</code> while pressing <code>s</cod
   </tr>
 </table>
 
-<h3>Appendix B: Unix Commands Summary (incomplete list)</h3>
+<h2>Appendix B: Unix Commands Summary (incomplete list)</h2>
 
 <table class="txt_table">
   <col width="250px" align="justify" />
