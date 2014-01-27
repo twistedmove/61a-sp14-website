@@ -510,7 +510,7 @@ something better! </p>
 If you plan to use your own computer for most of your work in this
 course, there are many editors to choose from depending on your
 operating system.  Instead of reading this section on Emacs, start
-reading [Lab 1](../lab01/lab01.php) on selecting an editor.
+reading <a href='../lab01/lab01.php'>lab 1</a> on selecting an editor.
 </div>
 
 <h2>Our Text Editor: Emacs</h2>
