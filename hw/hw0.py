@@ -30,7 +30,7 @@ def my_email():
 
 def my_lab_section():
     """Return the number of the lab you most often attend.
-    >>> 11 <= my_lab_section() <= 44
+    >>> 11 <= my_lab_section() <= 32
     True
     """
     return 0
