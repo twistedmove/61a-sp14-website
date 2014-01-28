@@ -317,13 +317,13 @@ lab0 my_file
 <p>Let's add some text to our file. Using the <code>echo</code> command from before,
 we can add text to our file!</p>
 
-<pre><code>star [141] ~ # echo "This semester will be awesome!" &gt; my_file
+<pre><code>star [141] ~ # echo "This semester will be awesome" &gt; my_file
 </code></pre>
 
 <p>For those interested, the <code>&gt;</code> symbol means redirect what is usually
 shown onto the screen into the file that you specified after the <code>&gt;</code>
 symbol.  In this case, we're adding the text "This semester will be
-awesome!" to the file, <code>my_file</code>. Be careful though, <code>&gt;</code> <em>overrides</em>
+awesome" to the file, <code>my_file</code>. Be careful though, <code>&gt;</code> <em>overrides</em>
 whatever was originally in the file (ours was originally blank). To
 add text to an existing file, use <code>&gt;&gt;</code></p>
 
@@ -346,7 +346,7 @@ command, we can see that <code>new_file</code> is simply a copy of <code>my_file
 Exactly what we wanted. </p>
 
 <pre><code>star [275] ~ # cat new_file
-This semester will be awesome!
+This semester will be awesome
 </code></pre>
 
 <p>Now a lot of times we will want you to copy a file from our cs61a
@@ -543,7 +543,7 @@ home directory, and type the sentence:</p>
 <li><p>Then, using Emacs, re-open <code>my_epiphany</code>, and edit it to instead
 say:</p>
 
-<p>"This semester is going to be a fantastic semester!"</p></li>
+<p>"This semester is going to be a fantastic semester"</p></li>
 </ol>
 
 <p>So, let's start with opening up Emacs. It's important where you open
@@ -663,11 +663,11 @@ up Emacs: </p>
 2. Open up the <code>my_epiphany</code> file</p>
 
 <p>Now, modify the file to instead say "This semester is going to be a
-fantastic semester!", save it, and exit Emacs.  <code>cat</code> the file to make
+fantastic semester", save it, and exit Emacs.  <code>cat</code> the file to make
 sure that it worked. </p>
 
 <pre><code>star [152] ~ # cat my_epiphany
-This semester is going to be a fantastic semester!
+This semester is going to be a fantastic semester
 </code></pre>
 
 <p><em>Helpful Tip</em>: If the mini-buffer ever has a prompt that you don't
