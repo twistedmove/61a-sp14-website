@@ -172,18 +172,15 @@ number).</li>
 to open a terminal prompt. This process varies from computer to
 computer. If you're on a Mac or are using a form of Linux (such as
 Ubuntu), you already have a program called 'Terminal' on your computer.
-Open that up and you should be good to go. For Windows users, you have
-several options:</p>
+Open that up and you should be good to go.</p>
 
-<ol>
-<li>We recommend that you download a program called
-<a href="https://openhatch.org/missions/windows-setup/install-git-bash">GitBash</a>
-which allows you to run a Unix like terminal on your Windows
-machine.</li>
-<li>Another option is <a href="http://cygwin.com/install.html">Cygwin</a> which is
-a more advanced version of GitBash with an even more Unix-like
-environment.</li>
-</ol>
+<p>For Windows users, you have
+several options. Windows has a built-in terminal called 
+<code>cmd</code>, which
+ behaves slightly differently than Unix (for example, <code>ls</code>
+is instead called <code>dir</code>). Another option is a program called
+<a href="http://cygwin.com/install.html">Cygwin</a>, which behaves
+more like Unix (follow the link to install Cygwin).</p>
 
 <p>Once you have your terminal open, we'll use what we learned from lab
 0...our handy Unix commands!</p>
@@ -222,10 +219,10 @@ that we have two folders, <code>projects</code> and <code>hw</code>.</p>
 
 <p>The next thing we're going to do is find our downloaded file. If you
 didn't move the file at all, it's probably in <code>~/Downloads</code> on
-Mac/Linux/Windows (GitBash or Cygwin) or
+Mac/Linux/Windows (Cygwin) or
 <code>C:\Users\NAMEOFUSER\Downloads</code> if you're using the Windows Command
 Line (cmd.exe). If your downloads all go to your Desktop, on
-Mac/Linux/Windows (GitBash or Cygwin), that would be <code>~/Desktop</code> and on
+Mac/Linux/Windows (Cygwin), that would be <code>~/Desktop</code> and on
 the Windows Command Prompt, that would be
 <code>C:\Users\NAMEOFUSER\Desktop</code>. Let's <code>cd</code> into that directory.</p>
 
