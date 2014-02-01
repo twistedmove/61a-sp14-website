@@ -42,13 +42,6 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
 def select_dice(score, opponent_score):
     """Select six-sided dice unless the sum of SCORE and OPPONENT_SCORE is a
     multiple of 7, in which case select four-sided dice (Hog wild).
-
-    >>> select_dice(4, 24) == four_sided
-    True
-    >>> select_dice(16, 64) == six_sided
-    True
-    >>> select_dice(0, 0) == four_sided
-    True
     """
     "*** YOUR CODE HERE ***"
 
@@ -84,8 +77,6 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
 
 # Basic Strategy
 
-BASELINE_NUM_ROLLS = 5
-BACON_MARGIN = 8
 
 def always_roll(n):
     """Return a strategy that always rolls N dice.
@@ -155,7 +146,7 @@ def winner(strategy0, strategy1):
     else:
         return 1
 
-def average_win_rate(strategy, baseline=always_roll(BASELINE_NUM_ROLLS)):
+def average_win_rate(strategy, baseline=always_roll(5)):
     """Return the average win rate (0 to 1) of STRATEGY against BASELINE."""
     win_rate_as_player_0 = 1 - make_averaged(winner)(strategy, baseline)
     win_rate_as_player_1 = make_averaged(winner)(baseline, strategy)
@@ -185,34 +176,18 @@ def run_experiments():
 
 # Strategies
 
-def bacon_strategy(score, opponent_score):
-    """This strategy rolls 0 dice if that gives at least BACON_MARGIN points,
-    and rolls BASELINE_NUM_ROLLS otherwise.
-
-    >>> bacon_strategy(0, 0)
-    5
-    >>> bacon_strategy(70, 50)
-    5
-    >>> bacon_strategy(50, 70)
-    0
+def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
+    """This strategy rolls 0 dice if that gives at least MARGIN points,
+    and rolls NUM_ROLLS otherwise.
     """
     "*** YOUR CODE HERE ***"
     return 5 # Replace this statement
 
-def swap_strategy(score, opponent_score):
+def swap_strategy(score, opponent_score, margin=8, num_rolls=5):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
-    rolls BASELINE_NUM_ROLLS if it would result in a harmful swap. It also rolls
-    0 dice if that gives at least BACON_MARGIN points and rolls
-    BASELINE_NUM_ROLLS otherwise.
-
-    >>> swap_strategy(23, 60) # 23 + (1 + max(6, 0)) = 30: Beneficial swap
-    0
-    >>> swap_strategy(27, 18) # 27 + (1 + max(1, 8)) = 36: Harmful swap
-    5
-    >>> swap_strategy(50, 80) # (1 + max(8, 0)) = 9: Lots of free bacon
-    0
-    >>> swap_strategy(12, 12) # Baseline
-    5
+    rolls NUM_ROLLS if it would result in a harmful swap. It also rolls
+    0 dice if that gives at least MARGIN points and rolls
+    NUM_ROLLS otherwise.
     """
     "*** YOUR CODE HERE ***"
     return 5 # Replace this statement
@@ -233,48 +208,6 @@ def final_strategy(score, opponent_score):
 # Note: Functions in this section do not need to be changed.  They use features
 #       of Python not yet covered in the course.
 
-def get_int(prompt, min):
-    """Return an integer greater than or equal to MIN, given by the user."""
-    choice = input(prompt)
-    while not choice.isnumeric() or int(choice) < min:
-        print('Please enter an integer greater than or equal to', min)
-        choice = input(prompt)
-    return int(choice)
-
-def interactive_dice():
-    """A dice where the outcomes are provided by the user."""
-    return get_int('Result of dice roll: ', 1)
-
-def make_interactive_strategy(player):
-    """Return a strategy for which the user provides the number of rolls."""
-    prompt = 'Number of rolls for Player {0}: '.format(player)
-    def interactive_strategy(score, opp_score):
-        if player == 1:
-            score, opp_score = opp_score, score
-        print(score, 'vs.', opp_score)
-        choice = get_int(prompt, 0)
-        return choice
-    return interactive_strategy
-
-def roll_dice_interactive():
-    """Interactively call roll_dice."""
-    num_rolls = get_int('Number of rolls: ', 1)
-    turn_total = roll_dice(num_rolls, interactive_dice)
-    print('Turn total:', turn_total)
-
-def take_turn_interactive():
-    """Interactively call take_turn."""
-    num_rolls = get_int('Number of rolls: ', 0)
-    opp_score = get_int('Opponent score: ', 0)
-    turn_total = take_turn(num_rolls, opp_score, interactive_dice)
-    print('Turn total:', turn_total)
-
-def play_interactive():
-    """Interactively call play."""
-    strategy0 = make_interactive_strategy(0)
-    strategy1 = make_interactive_strategy(1)
-    score0, score1 = play(strategy0, strategy1)
-    print('Final scores:', score0, 'to', score1)
 
 @main
 def run(*args):
@@ -284,22 +217,9 @@ def run(*args):
     """
     import argparse
     parser = argparse.ArgumentParser(description="Play Hog")
-    parser.add_argument('--interactive', '-i', type=str,
-                        help='Run interactive tests for the specified question')
     parser.add_argument('--run_experiments', '-r', action='store_true',
                         help='Runs strategy experiments')
     args = parser.parse_args()
 
-    if args.interactive:
-        test = args.interactive + '_interactive'
-        if test not in globals():
-            print('To use the -i option, please choose one of these:')
-            print('\troll_dice', '\ttake_turn', '\tplay', sep='\n')
-            exit(1)
-        try:
-            globals()[test]()
-        except (KeyboardInterrupt, EOFError):
-            print('\nQuitting interactive test')
-            exit(0)
-    elif args.run_experiments:
+    if args.run_experiments:
         run_experiments()

@@ -52,13 +52,6 @@ GOAL_SCORE <span style="font-weight: bold">= </span><span style="color: red">100
 </span><span style="color: blue; font-weight: bold">def </span>select_dice<span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span>opponent_score<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Select six-sided dice unless the sum of SCORE and OPPONENT_SCORE is a
     multiple of 7, in which case select four-sided dice (Hog wild).
-
-    &gt;&gt;&gt; select_dice(4, 24) == four_sided
-    True
-    &gt;&gt;&gt; select_dice(16, 64) == six_sided
-    True
-    &gt;&gt;&gt; select_dice(0, 0) == four_sided
-    True
     """
     </span><span style="color: red">"*** YOUR CODE HERE ***"
 
@@ -94,8 +87,6 @@ GOAL_SCORE <span style="font-weight: bold">= </span><span style="color: red">100
 
 # Basic Strategy
 
-</span>BASELINE_NUM_ROLLS <span style="font-weight: bold">= </span><span style="color: red">5
-</span>BACON_MARGIN <span style="font-weight: bold">= </span><span style="color: red">8
 
 </span><span style="color: blue; font-weight: bold">def </span>always_roll<span style="font-weight: bold">(</span>n<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Return a strategy that always rolls N dice.
@@ -165,7 +156,7 @@ GOAL_SCORE <span style="font-weight: bold">= </span><span style="color: red">100
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">1
 
-</span><span style="color: blue; font-weight: bold">def </span>average_win_rate<span style="font-weight: bold">(</span>strategy<span style="font-weight: bold">, </span>baseline<span style="font-weight: bold">=</span>always_roll<span style="font-weight: bold">(</span>BASELINE_NUM_ROLLS<span style="font-weight: bold">)):
+</span><span style="color: blue; font-weight: bold">def </span>average_win_rate<span style="font-weight: bold">(</span>strategy<span style="font-weight: bold">, </span>baseline<span style="font-weight: bold">=</span>always_roll<span style="font-weight: bold">(</span><span style="color: red">5</span><span style="font-weight: bold">)):
     </span><span style="color: darkred">"""Return the average win rate (0 to 1) of STRATEGY against BASELINE."""
     </span>win_rate_as_player_0 <span style="font-weight: bold">= </span><span style="color: red">1 </span><span style="font-weight: bold">- </span>make_averaged<span style="font-weight: bold">(</span>winner<span style="font-weight: bold">)(</span>strategy<span style="font-weight: bold">, </span>baseline<span style="font-weight: bold">)
     </span>win_rate_as_player_1 <span style="font-weight: bold">= </span>make_averaged<span style="font-weight: bold">(</span>winner<span style="font-weight: bold">)(</span>baseline<span style="font-weight: bold">, </span>strategy<span style="font-weight: bold">)
@@ -195,34 +186,18 @@ GOAL_SCORE <span style="font-weight: bold">= </span><span style="color: red">100
 
 </span><span style="color: green; font-style: italic"># Strategies
 
-</span><span style="color: blue; font-weight: bold">def </span>bacon_strategy<span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span>opponent_score<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""This strategy rolls 0 dice if that gives at least BACON_MARGIN points,
-    and rolls BASELINE_NUM_ROLLS otherwise.
-
-    &gt;&gt;&gt; bacon_strategy(0, 0)
-    5
-    &gt;&gt;&gt; bacon_strategy(70, 50)
-    5
-    &gt;&gt;&gt; bacon_strategy(50, 70)
-    0
+</span><span style="color: blue; font-weight: bold">def </span>bacon_strategy<span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span>opponent_score<span style="font-weight: bold">, </span>margin<span style="font-weight: bold">=</span><span style="color: red">8</span><span style="font-weight: bold">, </span>num_rolls<span style="font-weight: bold">=</span><span style="color: red">5</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""This strategy rolls 0 dice if that gives at least MARGIN points,
+    and rolls NUM_ROLLS otherwise.
     """
     </span><span style="color: red">"*** YOUR CODE HERE ***"
     </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">5 </span><span style="color: green; font-style: italic"># Replace this statement
 
-</span><span style="color: blue; font-weight: bold">def </span>swap_strategy<span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span>opponent_score<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">def </span>swap_strategy<span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span>opponent_score<span style="font-weight: bold">, </span>margin<span style="font-weight: bold">=</span><span style="color: red">8</span><span style="font-weight: bold">, </span>num_rolls<span style="font-weight: bold">=</span><span style="color: red">5</span><span style="font-weight: bold">):
     </span><span style="color: darkred">"""This strategy rolls 0 dice when it would result in a beneficial swap and
-    rolls BASELINE_NUM_ROLLS if it would result in a harmful swap. It also rolls
-    0 dice if that gives at least BACON_MARGIN points and rolls
-    BASELINE_NUM_ROLLS otherwise.
-
-    &gt;&gt;&gt; swap_strategy(23, 60) # 23 + (1 + max(6, 0)) = 30: Beneficial swap
-    0
-    &gt;&gt;&gt; swap_strategy(27, 18) # 27 + (1 + max(1, 8)) = 36: Harmful swap
-    5
-    &gt;&gt;&gt; swap_strategy(50, 80) # (1 + max(8, 0)) = 9: Lots of free bacon
-    0
-    &gt;&gt;&gt; swap_strategy(12, 12) # Baseline
-    5
+    rolls NUM_ROLLS if it would result in a harmful swap. It also rolls
+    0 dice if that gives at least MARGIN points and rolls
+    NUM_ROLLS otherwise.
     """
     </span><span style="color: red">"*** YOUR CODE HERE ***"
     </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">5 </span><span style="color: green; font-style: italic"># Replace this statement
@@ -243,48 +218,6 @@ GOAL_SCORE <span style="font-weight: bold">= </span><span style="color: red">100
 # Note: Functions in this section do not need to be changed.  They use features
 #       of Python not yet covered in the course.
 
-</span><span style="color: blue; font-weight: bold">def </span>get_int<span style="font-weight: bold">(</span>prompt<span style="font-weight: bold">, </span>min<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Return an integer greater than or equal to MIN, given by the user."""
-    </span>choice <span style="font-weight: bold">= </span>input<span style="font-weight: bold">(</span>prompt<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">while not </span>choice<span style="font-weight: bold">.</span>isnumeric<span style="font-weight: bold">() </span><span style="color: blue; font-weight: bold">or </span>int<span style="font-weight: bold">(</span>choice<span style="font-weight: bold">) &lt; </span>min<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Please enter an integer greater than or equal to'</span><span style="font-weight: bold">, </span>min<span style="font-weight: bold">)
-        </span>choice <span style="font-weight: bold">= </span>input<span style="font-weight: bold">(</span>prompt<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>int<span style="font-weight: bold">(</span>choice<span style="font-weight: bold">)
-
-</span><span style="color: blue; font-weight: bold">def </span>interactive_dice<span style="font-weight: bold">():
-    </span><span style="color: darkred">"""A dice where the outcomes are provided by the user."""
-    </span><span style="color: blue; font-weight: bold">return </span>get_int<span style="font-weight: bold">(</span><span style="color: red">'Result of dice roll: '</span><span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
-
-</span><span style="color: blue; font-weight: bold">def </span>make_interactive_strategy<span style="font-weight: bold">(</span>player<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Return a strategy for which the user provides the number of rolls."""
-    </span>prompt <span style="font-weight: bold">= </span><span style="color: red">'Number of rolls for Player {0}: '</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>player<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">def </span>interactive_strategy<span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span>opp_score<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">if </span>player <span style="font-weight: bold">== </span><span style="color: red">1</span><span style="font-weight: bold">:
-            </span>score<span style="font-weight: bold">, </span>opp_score <span style="font-weight: bold">= </span>opp_score<span style="font-weight: bold">, </span>score
-        <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>score<span style="font-weight: bold">, </span><span style="color: red">'vs.'</span><span style="font-weight: bold">, </span>opp_score<span style="font-weight: bold">)
-        </span>choice <span style="font-weight: bold">= </span>get_int<span style="font-weight: bold">(</span>prompt<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return </span>choice
-    <span style="color: blue; font-weight: bold">return </span>interactive_strategy
-
-<span style="color: blue; font-weight: bold">def </span>roll_dice_interactive<span style="font-weight: bold">():
-    </span><span style="color: darkred">"""Interactively call roll_dice."""
-    </span>num_rolls <span style="font-weight: bold">= </span>get_int<span style="font-weight: bold">(</span><span style="color: red">'Number of rolls: '</span><span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
-    </span>turn_total <span style="font-weight: bold">= </span>roll_dice<span style="font-weight: bold">(</span>num_rolls<span style="font-weight: bold">, </span>interactive_dice<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Turn total:'</span><span style="font-weight: bold">, </span>turn_total<span style="font-weight: bold">)
-
-</span><span style="color: blue; font-weight: bold">def </span>take_turn_interactive<span style="font-weight: bold">():
-    </span><span style="color: darkred">"""Interactively call take_turn."""
-    </span>num_rolls <span style="font-weight: bold">= </span>get_int<span style="font-weight: bold">(</span><span style="color: red">'Number of rolls: '</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">)
-    </span>opp_score <span style="font-weight: bold">= </span>get_int<span style="font-weight: bold">(</span><span style="color: red">'Opponent score: '</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">)
-    </span>turn_total <span style="font-weight: bold">= </span>take_turn<span style="font-weight: bold">(</span>num_rolls<span style="font-weight: bold">, </span>opp_score<span style="font-weight: bold">, </span>interactive_dice<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Turn total:'</span><span style="font-weight: bold">, </span>turn_total<span style="font-weight: bold">)
-
-</span><span style="color: blue; font-weight: bold">def </span>play_interactive<span style="font-weight: bold">():
-    </span><span style="color: darkred">"""Interactively call play."""
-    </span>strategy0 <span style="font-weight: bold">= </span>make_interactive_strategy<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
-    </span>strategy1 <span style="font-weight: bold">= </span>make_interactive_strategy<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">)
-    </span>score0<span style="font-weight: bold">, </span>score1 <span style="font-weight: bold">= </span>play<span style="font-weight: bold">(</span>strategy0<span style="font-weight: bold">, </span>strategy1<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Final scores:'</span><span style="font-weight: bold">, </span>score0<span style="font-weight: bold">, </span><span style="color: red">'to'</span><span style="font-weight: bold">, </span>score1<span style="font-weight: bold">)
 
 </span>@main
 <span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">):
@@ -294,24 +227,11 @@ GOAL_SCORE <span style="font-weight: bold">= </span><span style="color: red">100
     """
     </span><span style="color: blue; font-weight: bold">import </span>argparse
     parser <span style="font-weight: bold">= </span>argparse<span style="font-weight: bold">.</span>ArgumentParser<span style="font-weight: bold">(</span>description<span style="font-weight: bold">=</span><span style="color: red">"Play Hog"</span><span style="font-weight: bold">)
-    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'--interactive'</span><span style="font-weight: bold">, </span><span style="color: red">'-i'</span><span style="font-weight: bold">, </span>type<span style="font-weight: bold">=</span>str<span style="font-weight: bold">,
-                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'Run interactive tests for the specified question'</span><span style="font-weight: bold">)
     </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'--run_experiments'</span><span style="font-weight: bold">, </span><span style="color: red">'-r'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
                         </span>help<span style="font-weight: bold">=</span><span style="color: red">'Runs strategy experiments'</span><span style="font-weight: bold">)
     </span>args <span style="font-weight: bold">= </span>parser<span style="font-weight: bold">.</span>parse_args<span style="font-weight: bold">()
 
-    </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>interactive<span style="font-weight: bold">:
-        </span>test <span style="font-weight: bold">= </span>args<span style="font-weight: bold">.</span>interactive <span style="font-weight: bold">+ </span><span style="color: red">'_interactive'
-        </span><span style="color: blue; font-weight: bold">if </span>test <span style="color: blue; font-weight: bold">not in </span>globals<span style="font-weight: bold">():
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'To use the -i option, please choose one of these:'</span><span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\troll_dice'</span><span style="font-weight: bold">, </span><span style="color: red">'\ttake_turn'</span><span style="font-weight: bold">, </span><span style="color: red">'\tplay'</span><span style="font-weight: bold">, </span>sep<span style="font-weight: bold">=</span><span style="color: red">'\n'</span><span style="font-weight: bold">)
-            </span>exit<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-            </span>globals<span style="font-weight: bold">()[</span>test<span style="font-weight: bold">]()
-        </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>KeyboardInterrupt<span style="font-weight: bold">, </span>EOFError<span style="font-weight: bold">):
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\nQuitting interactive test'</span><span style="font-weight: bold">)
-            </span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>args<span style="font-weight: bold">.</span>run_experiments<span style="font-weight: bold">:
+    </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>run_experiments<span style="font-weight: bold">:
         </span>run_experiments<span style="font-weight: bold">()
 </span>
 </pre>
