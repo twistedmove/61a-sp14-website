@@ -47,7 +47,7 @@
   <body style="font-family: Georgia,serif;">
     <h1 id="title-main">CS 61A Lab 2</h1>
 <h2 id="title-sub">Control Flow and Higher Order Functions</h2>
-<h3>Python flags</h3>
+<h2>Python flags</h2>
 
 <p>Sometimes, you can append certain "flags" on the command line to
 inspect your code further. Here are a few useful ones that'll come in
@@ -112,37 +112,29 @@ expressions.  Then try it and make sure your answer was correct, or if
 not, that you understand why! Remember, to start Python, type <code>python3</code>
 into the command line.</p>
 
-<pre><code># Q1
-&gt;&gt;&gt; a = 1
-&gt;&gt;&gt; b = a + 1
-&gt;&gt;&gt; a + b + a * b 
-______________
-
-# Q2
+<pre><code>&gt;&gt;&gt; a = 4
+&gt;&gt;&gt; b = a
+&gt;&gt;&gt; a = 10
 &gt;&gt;&gt; a == b
 ______________
 
-# Q3
 &gt;&gt;&gt; z, y = 1, 2
 &gt;&gt;&gt; print(z)
 ______________
 
-# Q4
 &gt;&gt;&gt; def square(x):
 ...     print(x * x)        # Hit enter twice
 ...
-&gt;&gt;&gt; a = square(b)
+&gt;&gt;&gt; a = square(2)
 ______________
 
-# Q5
 &gt;&gt;&gt; print(a)
 ______________
 
-# Q6
 &gt;&gt;&gt; def square(y):
 ...     return y * y        # Hit enter twice
 ...
-&gt;&gt;&gt; a = square(b)
+&gt;&gt;&gt; a = square(2)
 &gt;&gt;&gt; print(a)
 _______________
 </code></pre>
@@ -151,7 +143,6 @@ _______________
   <button id="toggleButton0">Toggle Solution</button>
   <div id="toggleText0" style="display: none">
     <ol>
-<li><code>5</code></li>
 <li><code>False</code></li>
 <li><code>1</code></li>
 <li><code>4</code></li>
@@ -230,8 +221,8 @@ _______________
 <?php } ?>
 <h3>Boolean order of operations</h3>
 
-<p>Just like with mathematical operators, boolean operators (<code>and</code>, <code>or</code>,
-and <code>not</code>) have an order of operations, too:</p>
+<p>Just like mathematical operators, boolean operators (<code>and</code>, <code>or</code>,
+and <code>not</code>) have an order of operations:</p>
 
 <ul>
 <li><code>not</code> (highest priority)</li>
@@ -254,8 +245,8 @@ acceptable to do so in your code.</p>
 
 <h3>Short-circuit operators</h3>
 
-<p>In Python, <code>and</code> and <code>or</code> are examples of <em>short-circuit operators</em>.
-Consider the following line of code:</p>
+<p>In Python, <code>and</code> and <code>or</code> are examples of <em>short-circuiting operators</em>.
+Consider the following code:</p>
 
 <pre><code>10 &gt; 3 or 1 / 0 != 1
 </code></pre>
@@ -263,8 +254,8 @@ Consider the following line of code:</p>
 <p>Generally, operands are evaluated from left to right in Python. The
 expression <code>10 &gt; 3</code> will be evaluated first, then <code>1 / 0 != 1</code> will be
 evaluated. The problem is, evaluating <code>1 / 0</code> will cause Python to
-raise an error, stopping function evaluation altogether! (You can try
-dividing by 0 in the interpreter).</p>
+raise an error, stopping evaluation altogether! (You can try dividing
+by 0 in the interpreter).</p>
 
 <p>However, the original line of code will not cause any errors -- in
 fact, it will evaluate to <code>True</code>. This is made possible due to
@@ -305,8 +296,6 @@ ZeroDivisionError: division by zero
 <p>What would the Python interpreter display?</p>
 
 <pre><code>&gt;&gt;&gt; a, b = 10, 6
-
-# Q1
 &gt;&gt;&gt; if a == b:
 ...     a
 ... else:
@@ -314,7 +303,6 @@ ZeroDivisionError: division by zero
 ...
 _______________
 
-# Q2
 &gt;&gt;&gt; if a == 4:
 ...     6
 ... elif b &gt;= 4:
@@ -331,11 +319,6 @@ ________________
     <ol>
 <li><code>6</code></li>
 <li><code>23</code></li>
-<li><p>This output contains two lines:</p>
-
-<pre><code>10
-6
-</code></pre></li>
 </ol>
 
   </div>
@@ -363,12 +346,10 @@ for <em>assignment</em>, while <code>==</code> (double equals) is used for
 <pre><code># bad
 &gt;&gt;&gt; if x and y &gt; 0:
 ...     print("uh oh!")
-...
 
 # good!
 &gt;&gt;&gt; if x &gt; 0 and y &gt; 0:
 ...     print("yay!")
-...
 </code></pre></li>
 </ol>
 
@@ -381,7 +362,6 @@ for <em>assignment</em>, while <code>==</code> (double equals) is used for
 ...         return x
 ...     else:
 ...         return -x
-...
 </code></pre>
 
 <p>It is syntactically correct to rewrite <code>abs</code> in the following way:</p>
@@ -390,17 +370,15 @@ for <em>assignment</em>, while <code>==</code> (double equals) is used for
 ...     if x &gt;= 0:
 ...         return x
 ...     return -x       # missing else statement!
-...
 </code></pre>
 
-<p>This is possible as a direct consequence of how <code>return</code> works -- when
+<p>This is a direct consequence of how <code>return</code> works -- when
 Python sees a <code>return</code> statement, it will <em>immediately terminate</em> the
 function, and the rest of the function will not be evaluated.  In the
 above example, if <code>x &gt;= 0</code>, Python will never reach the final line.
-Try to convince yourself that this is indeed the case before moving
-on.</p>
+Try to convince yourself that this is indeed the case before moving on.</p>
 
-<p>Keep in mind that <strong>omitting the <code>else</code> only work if the function is
+<p>Keep in mind that <strong>omitting the <code>else</code> only works if the function is
 terminated</strong>!  For example, the following function will <em>always</em> print
 "less than zero", because the function is not terminated in the body
 of the <code>if</code> suite:</p>
@@ -469,18 +447,10 @@ __________________
 ...     print(n)
 __________________
 
+&gt;&gt;&gt; # typing Ctrl-C will stop infinite loops
 &gt;&gt;&gt; n = 4
 &gt;&gt;&gt; while True:
 ...     n -= 1
-...     print(n)
-__________________
-
-&gt;&gt;&gt; n = 10
-&gt;&gt;&gt; while n &gt; 0:
-...     if n % 2 == 0:
-...         n -= 1
-...     elif n % 2 != 0:
-...         n -= 3
 ...     print(n)
 __________________
 </code></pre>
@@ -495,18 +465,7 @@ __________________
 512
 256
 </code></pre></li>
-<li><p>This output contains 8 lines:</p>
-
-<pre><code>128
-64
-32
-16
-8
-4
-2
-1
-</code></pre></li>
-<li>Nothing shows up</li>
+<li>There is no output</li>
 <li><p>This output contains 5 lines:</p>
 
 <pre><code>26
@@ -537,13 +496,6 @@ __________________
     -1
     -2
     ...</li>
-<li>This output contains 6 lines:
-    9
-    6
-    5
-    2
-    1
-    -2</li>
 </ol>
 
   </div>
@@ -624,33 +576,7 @@ divides evenly into a number. For example:</p>
 
   </div>
 <?php } ?>
-<p>Next, write a function <code>divide(num, divisor)</code> without using the '/' or
-'//'. </p>
-
-<pre><code>def divide(num, divisor):
-    """
-    &gt;&gt;&gt; divide(8, 2)
-    4
-    """
-    "*** YOUR CODE HERE ***"
-</code></pre>
-
-<p><em>Hint</em>: Use a <code>while</code> loop.</p>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
-    <pre><code>def divide(num, divisor):
-    count = 0
-    while num &gt; 0:
-        num -= divisor
-        count += 1
-    return count
-</code></pre>
-
-  </div>
-<?php } ?>
-<h3>Error messages</h3>
+<h2>Error messages</h2>
 
 <p>By now, you've probably seen a couple of error messages. Even though
 they might look intimidating, error messages are actually very helpful
@@ -673,14 +599,14 @@ error messages, try to identify the problem before asking for
 help.</strong> You can often Google unknown error messages to see what
 similar mistakes others have made to help you debug your own code.</p>
 
-<p>Here's a link to a helpful <a href="http://inst.eecs.berkeley.edu/~cs61a-te/notes/debugging.html">Debugging Guide</a>
+<p>Here's a link to a helpful <a href="http://albertwu.org/cs61a/notes/debugging">Debugging Guide</a>
 written by Albert Wu.</p>
 
 <h2>Higher Order Functions</h2>
 
 <p>Higher order functions are functions that take a function as an input,
 and/or output a function. We will be exploring many applications of
-higher order functions. </p>
+higher order functions.</p>
 
 <h3 class='question'>Question 5</h3>
 
@@ -752,8 +678,8 @@ ________________
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <p>We recommend you try typing these statements into the interpreter.</p>
 
 <ol>
@@ -881,8 +807,8 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton7">Toggle Solution</button>
-  <div id="toggleText7" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <pre><code>def cycle(f1, f2, f3):
     def ret_fn(n):
         def ret(x):
@@ -908,7 +834,7 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 8; $i++) { ?>
+    <?php for ($i = 0; $i < 7; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
