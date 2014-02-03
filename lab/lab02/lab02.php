@@ -323,7 +323,7 @@ ________________
 
   </div>
 <?php } ?>
-<h3>Common Mistakes with if statments</h3>
+<h3>Common Mistakes with if statements</h3>
 
 <ol>
 <li><p>Using <code>=</code> instead of <code>==</code>: remember, <code>=</code> (single equals) is used
@@ -509,27 +509,33 @@ integer), and modulo (percent sign <code>%</code> in Python; similar to a
 remainder):</p>
 
 <ul>
-<li>True Division (decimal division):
-    &gt;&gt;&gt; 1 / 4
-    0.25
-    &gt;&gt;&gt; 4 / 2
-    2.0
-    &gt;&gt;&gt; 5/3
-    1.666666666667</li>
-<li>Floor Division (integer division):
-    &gt;&gt;&gt; 1 // 4
-    0
-    &gt;&gt;&gt; 4 // 2
-    2
-    &gt;&gt;&gt; 5 // 3
-    1</li>
-<li>Modulo (similar to a remainder):
-    &gt;&gt;&gt; 1 % 4
-    1
-    &gt;&gt;&gt; 4 % 2
-    0
-    &gt;&gt;&gt; 5 % 3
-    2</li>
+<li><p>True Division (decimal division):</p>
+
+<pre><code>&gt;&gt;&gt; 1 / 4
+0.25
+&gt;&gt;&gt; 4 / 2
+2.0
+&gt;&gt;&gt; 5/3
+1.666666666667
+</code></pre></li>
+<li><p>Floor Division (integer division):</p>
+
+<pre><code>&gt;&gt;&gt; 1 // 4
+0
+&gt;&gt;&gt; 4 // 2
+2
+&gt;&gt;&gt; 5 // 3
+1
+</code></pre></li>
+<li><p>Modulo (similar to a remainder):</p>
+
+<pre><code>&gt;&gt;&gt; 1 % 4
+1
+&gt;&gt;&gt; 4 % 2
+0
+&gt;&gt;&gt; 5 % 3
+2
+</code></pre></li>
 </ul>
 
 <p>Given the operators above, the following relationship holds:</p>
@@ -697,7 +703,7 @@ ________________
 
   </div>
 <?php } ?>
-<h3>Environment Diagrams</h3>
+<h3 class='question'>Question 6: Environment Diagrams</h3>
 
 <p>If you haven't found this gem already,
 <a href="http://tutor.composingprograms.com">tutor.composingprograms.com</a>
@@ -749,7 +755,7 @@ sub5(6)
 sub5(10) == add3(2)
 </code></pre>
 
-<h3 class='question'>Question 6: I heard you liked functions so I put functions in your functions</h3>
+<h3 class='question'>Question 7: I heard you liked functions so I put functions in your functions</h3>
 
 <p>Define a function <code>cycle</code> which takes in three functions as arguments:
 <code>f1</code>, <code>f2</code>, <code>f3</code>. <code>cycle</code> will then return another function. The
