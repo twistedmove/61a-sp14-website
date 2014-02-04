@@ -667,7 +667,7 @@ _______________
 _______________
 &gt;&gt;&gt; def troy():
 ...     abed = 0
-...     while abed &amp;lt; 10:
+...     while abed &lt; 10:
 ...         def britta():
 ...             return abed
 ...         abed += 1
@@ -819,7 +819,7 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
     def ret_fn(n):
         def ret(x):
             i = 0
-            while i &amp;lt; n:
+            while i &lt; n:
                 if i % 3 == 0:
                     x = f1(x)
                 elif i % 3 == 1:
