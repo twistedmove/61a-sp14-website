@@ -1,6 +1,5 @@
 class Account:
     """An account has a balance and a holder.
-    All accounts share a common interest rate.
 
     >>> a = Account('John')
     >>> a.holder

@@ -101,6 +101,9 @@ def count_factors_fast(n):
 
 # Exponentiation
 
+from ucb import trace
+
+@trace
 def exp(b, n):
     """Return b to the n.
 
@@ -115,6 +118,7 @@ def exp(b, n):
 def square(x):
     return x*x
 
+@trace
 def fast_exp(b, n):
     """Return b to the n.
 
