@@ -4,9 +4,8 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
@@ -40,15 +39,15 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("09/12/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("02/06/2014", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 2</h1>
-<h2>Control Flow</h2>
-<h3>Python flags</h3>
+    <h1 id="title-main">CS 61A Lab 2</h1>
+<h2 id="title-sub">Control Flow and Higher Order Functions</h2>
+<h2>Python flags</h2>
 
 <p>Sometimes, you can append certain "flags" on the command line to
 inspect your code further. Here are a few useful ones that'll come in
@@ -104,44 +103,38 @@ interactive session:</p>
 <pre><code>python3 -i
 </code></pre>
 
-<h3>Warm Up: What would Python print?</h3>
+<h2>Control Structures</h2>
+
+<h3 class='question'>Question 1: What would Python print?</h3>
 
 <p>Predict what Python will print in response to each of these
 expressions.  Then try it and make sure your answer was correct, or if
-not, that you understand why! If you don't remember how to start
-Python, type in: <code>python3</code> into the command line.</p>
+not, that you understand why! Remember, to start Python, type <code>python3</code>
+into the command line.</p>
 
-<pre><code># Q1
-&gt;&gt;&gt; a = 1
-&gt;&gt;&gt; b = a + 1
-&gt;&gt;&gt; a + b + a * b 
-______________
-
-# Q2
+<pre><code>&gt;&gt;&gt; a = 4
+&gt;&gt;&gt; b = a
+&gt;&gt;&gt; a = 10
 &gt;&gt;&gt; a == b
 ______________
 
-# Q3
 &gt;&gt;&gt; z, y = 1, 2
 &gt;&gt;&gt; print(z)
 ______________
 
-# Q4
 &gt;&gt;&gt; def square(x):
 ...     print(x * x)        # Hit enter twice
 ...
-&gt;&gt;&gt; a = square(b)
+&gt;&gt;&gt; a = square(2)
 ______________
 
-# Q5
 &gt;&gt;&gt; print(a)
 ______________
 
-# Q6
 &gt;&gt;&gt; def square(y):
 ...     return y * y        # Hit enter twice
 ...
-&gt;&gt;&gt; a = square(b)
+&gt;&gt;&gt; a = square(2)
 &gt;&gt;&gt; print(a)
 _______________
 </code></pre>
@@ -149,19 +142,21 @@ _______________
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton0">Toggle Solution</button>
   <div id="toggleText0" style="display: none">
-    <pre><code>Q1: 5
-Q2: False
-Q3: 1
-Q4: 4
-Q5: None
-Q6: 4
-</code></pre>
+    <ol>
+<li><code>False</code></li>
+<li><code>1</code></li>
+<li><code>4</code></li>
+<li><code>None</code></li>
+<li><code>4</code></li>
+</ol>
 
   </div>
 <?php } ?>
-<h3>Boolean operators</h3>
+<h2>Boolean operators</h2>
 
-<p><strong>Problem 1</strong>: What would Python print? Try to figure it out before
+<h3 class='question'>Question 2</h3>
+
+<p>What would Python print? Try to figure it out before
 you type it into the interpreter!</p>
 
 <pre><code># Q1
@@ -209,23 +204,25 @@ _______________
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton1">Toggle Solution</button>
   <div id="toggleText1" style="display: none">
-    <pre><code>Q1: False
-Q2: True
-Q3: False
-Q4: True
-Q5: False
-Q6: True
-Q7: False
-Q8: True
-Q9: False
-Q10: True
-</code></pre>
+    <ol>
+<li><code>False</code></li>
+<li><code>True</code></li>
+<li><code>False</code></li>
+<li><code>True</code></li>
+<li><code>False</code></li>
+<li><code>True</code></li>
+<li><code>False</code></li>
+<li><code>True</code></li>
+<li><code>False</code></li>
+<li><code>True</code></li>
+</ol>
 
   </div>
 <?php } ?>
-<p><strong>Boolean order of operations:</strong> just like with mathematical
-operators, boolean operators (<code>and</code>, <code>or</code>, and <code>not</code>) have an order of
-operations, too:</p>
+<h3>Boolean order of operations</h3>
+
+<p>Just like mathematical operators, boolean operators (<code>and</code>, <code>or</code>,
+and <code>not</code>) have an order of operations:</p>
 
 <ul>
 <li><code>not</code> (highest priority)</li>
@@ -246,8 +243,10 @@ operations, too:</p>
 <p>If you find writing parentheses to be clearer, it is perfectly
 acceptable to do so in your code.</p>
 
-<p><strong>Short-circuit operators:</strong> in Python, <code>and</code> and <code>or</code> are examples of
-<em>short-circuit operators</em>.  Consider the following line of code:</p>
+<h3>Short-circuit operators</h3>
+
+<p>In Python, <code>and</code> and <code>or</code> are examples of <em>short-circuiting operators</em>.
+Consider the following code:</p>
 
 <pre><code>10 &gt; 3 or 1 / 0 != 1
 </code></pre>
@@ -255,8 +254,8 @@ acceptable to do so in your code.</p>
 <p>Generally, operands are evaluated from left to right in Python. The
 expression <code>10 &gt; 3</code> will be evaluated first, then <code>1 / 0 != 1</code> will be
 evaluated. The problem is, evaluating <code>1 / 0</code> will cause Python to
-raise an error, stopping function evaluation altogether! (You can try
-dividing by 0 in the interpreter).</p>
+raise an error, stopping evaluation altogether! (You can try dividing
+by 0 in the interpreter).</p>
 
 <p>However, the original line of code will not cause any errors -- in
 fact, it will evaluate to <code>True</code>. This is made possible due to
@@ -290,22 +289,13 @@ Traceback (most recent call last):
 ZeroDivisionError: division by zero
 </code></pre>
 
-<p>Short-circuiting allows you to write boolean expressions while
-avoiding errors.  Using division by zero as an example:</p>
+<h2>if statements</h2>
 
-<pre><code>x != 0 and 3 / x &gt; 3
-</code></pre>
+<h3 class='question'>Question 3</h3>
 
-<p>In the line above, the first operand is used to guard against a
-<code>ZeroDivisionError</code> that could be caused by the second operand.</p>
-
-<h3><code>if</code> statements</h3>
-
-<p><strong>Problem 2:</strong>: What would the Python interpreter display?</p>
+<p>What would the Python interpreter display?</p>
 
 <pre><code>&gt;&gt;&gt; a, b = 10, 6
-
-# Q1
 &gt;&gt;&gt; if a == b:
 ...     a
 ... else:
@@ -313,7 +303,6 @@ avoiding errors.  Using division by zero as an example:</p>
 ...
 _______________
 
-# Q2
 &gt;&gt;&gt; if a == 4:
 ...     6
 ... elif b &gt;= 4:
@@ -327,15 +316,14 @@ ________________
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton2">Toggle Solution</button>
   <div id="toggleText2" style="display: none">
-    <pre><code>Q1: 6
-Q2: 23
-Q3: 10
-6
-</code></pre>
+    <ol>
+<li><code>6</code></li>
+<li><code>23</code></li>
+</ol>
 
   </div>
 <?php } ?>
-<p>The following are some <strong>common mistakes</strong> when using <code>if</code> statements:</p>
+<h3>Common Mistakes with if statements</h3>
 
 <ol>
 <li><p>Using <code>=</code> instead of <code>==</code>: remember, <code>=</code> (single equals) is used
@@ -358,24 +346,22 @@ for <em>assignment</em>, while <code>==</code> (double equals) is used for
 <pre><code># bad
 &gt;&gt;&gt; if x and y &gt; 0:
 ...     print("uh oh!")
-...
 
 # good!
 &gt;&gt;&gt; if x &gt; 0 and y &gt; 0:
 ...     print("yay!")
-...
 </code></pre></li>
 </ol>
 
-<p><strong>Guarded commands</strong>
-Consider the following function:</p>
+<h3>Omitting the <code>else</code></h3>
+
+<p>Consider the following function:</p>
 
 <pre><code>&gt;&gt;&gt; def abs(x):
 ...     if x &gt;= 0:
 ...         return x
 ...     else:
 ...         return -x
-...
 </code></pre>
 
 <p>It is syntactically correct to rewrite <code>abs</code> in the following way:</p>
@@ -384,17 +370,15 @@ Consider the following function:</p>
 ...     if x &gt;= 0:
 ...         return x
 ...     return -x       # missing else statement!
-...
 </code></pre>
 
-<p>This is possible as a direct consequence of how <code>return</code> works -- when
+<p>This is a direct consequence of how <code>return</code> works -- when
 Python sees a <code>return</code> statement, it will <em>immediately terminate</em> the
 function, and the rest of the function will not be evaluated.  In the
 above example, if <code>x &gt;= 0</code>, Python will never reach the final line.
-Try to convince yourself that this is indeed the case before moving
-on.</p>
+Try to convince yourself that this is indeed the case before moving on.</p>
 
-<p>Keep in mind that <strong>guarded commands only work if the function is
+<p>Keep in mind that <strong>omitting the <code>else</code> only works if the function is
 terminated</strong>!  For example, the following function will <em>always</em> print
 "less than zero", because the function is not terminated in the body
 of the <code>if</code> suite:</p>
@@ -411,13 +395,15 @@ greater than zero
 less than zero
 </code></pre>
 
-<p>In general, using guarded commands will make your code more concise --
+<p>In general, omitting the <code>else</code> will make your code more concise --
 however, if you find that it makes your code harder to read, by all
 means use an <code>else</code> statement.</p>
 
-<h3><code>while</code> loops</h3>
+<h2>while loops</h2>
 
-<p><strong>Problem 3</strong>: What would Python print?</p>
+<h3 class='question'>Question 4</h3>
+
+<p>What would Python print?</p>
 
 <pre><code>&gt;&gt;&gt; n = 2
 &gt;&gt;&gt; def exp_decay(n):
@@ -425,7 +411,7 @@ means use an <code>else</code> statement.</p>
 ...         return
 ...     while n &gt; 0:
 ...         print(n)
-...         n = n // 2 # See exercise 3 for an explanation of what '//' stands for
+...         n = n // 2
 ...
 &gt;&gt;&gt; exp_decay(1024)
 __________________
@@ -461,18 +447,10 @@ __________________
 ...     print(n)
 __________________
 
+&gt;&gt;&gt; # typing Ctrl-C will stop infinite loops
 &gt;&gt;&gt; n = 4
 &gt;&gt;&gt; while True:
 ...     n -= 1
-...     print(n)
-__________________
-
-&gt;&gt;&gt; n = 10
-&gt;&gt;&gt; while n &gt; 0:
-...     if n % 2 == 0:
-...         n -= 1
-...     elif n % 2 != 0:
-...         n -= 3
 ...     print(n)
 __________________
 </code></pre>
@@ -480,106 +458,94 @@ __________________
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton3">Toggle Solution</button>
   <div id="toggleText3" style="display: none">
-    <pre><code>1024
+    <ol>
+<li><p>This output contains 3 lines:</p>
+
+<pre><code>1024
 512
 256
+</code></pre></li>
+<li>There is no output</li>
+<li><p>This output contains 5 lines:</p>
 
-128
-64
-32
-16
-8
-4
-2
-1
-
-Nothing shows up
-
-26
+<pre><code>26
 39
 40
 53
 53
-
-2
-4
-6
-8
-
-2
-1
-0
-
-2
-1
-0
--1
-
-3
-2
-1
-0
--1
--2
-...
-Goes on forever!
-
-9
-6
-5
-2
-1
--2
-</code></pre>
+</code></pre></li>
+<li>This output contains 4 lines:
+    2
+    4
+    6
+    8</li>
+<li>This output contains 3 lines:
+    2
+    1
+    0</li>
+<li>This output contains 3 lines:
+    2
+    1
+    0
+    -1</li>
+<li>This output goes on forever!
+    3
+    2
+    1
+    0
+    -1
+    -2
+    ...</li>
+</ol>
 
   </div>
 <?php } ?>
 <h3>Division</h3>
 
-<p>Before we write our next function, let's look at the idea of floor
-division (rounds down to the nearest integer) versus true division
-(decimal division).</p>
+<p>Before we write our next function, let's compare the ideas of true
+division (single slash <code>/</code> in Python; does decimal division), floor
+division (double slash <code>//</code> in Python; rounds down to the nearest
+integer), and modulo (percent sign <code>%</code> in Python; similar to a
+remainder):</p>
 
-<table border="0">
-<tr>
-<th>True Division</th>
-<th>Floor Division</th>
-</tr>
-<tr>
-<td> `>>> 1 / 4`</td>
-<td> `>>> 1 // 4`</td>
-</tr>
-<tr>
-<td>0.25</td>
-<td>0</td>
-</tr>
-<tr>
-<td> `>>> 4 / 2`</td>
-<td> `>>> 4 // 2`</td>
-</tr>
-<tr>
-<td>2.0</td>
-<td>2</td>
-</tr>
-<tr>
-<td> `>>> 5 / 3`</td>
-<td> `>>> 5 // 3`</td>
-</td>
-<tr>
-<td>1.666666666667</td>
-<td>1</td>
-</tr>
-</table>
+<ul>
+<li><p>True Division (decimal division):</p>
 
-<p>Thus, if we have an operator "%" that gives us the remainder of
-dividing two numbers, we can see that the following rule applies: </p>
+<pre><code>&gt;&gt;&gt; 1 / 4
+0.25
+&gt;&gt;&gt; 4 / 2
+2.0
+&gt;&gt;&gt; 5/3
+1.666666666667
+</code></pre></li>
+<li><p>Floor Division (integer division):</p>
+
+<pre><code>&gt;&gt;&gt; 1 // 4
+0
+&gt;&gt;&gt; 4 // 2
+2
+&gt;&gt;&gt; 5 // 3
+1
+</code></pre></li>
+<li><p>Modulo (similar to a remainder):</p>
+
+<pre><code>&gt;&gt;&gt; 1 % 4
+1
+&gt;&gt;&gt; 4 % 2
+0
+&gt;&gt;&gt; 5 % 3
+2
+</code></pre></li>
+</ul>
+
+<p>Given the operators above, the following relationship holds:</p>
 
 <pre><code>b * (a // b) + (a % b) = a
 </code></pre>
 
 <p>Now, define a function <code>factors(n)</code> which takes in a number, n, and
-prints out all of the numbers that divide n evenly. For example, a
-call with n=20 should result as follows (order doesn’t matter):</p>
+prints out all of the numbers that divide <code>n</code> evenly. For example, a
+call with <code>n = 20</code> should result as follows (order doesn’t matter):</p>
 
 <pre><code>&gt;&gt;&gt; factors(20)
 20
@@ -590,8 +556,8 @@ call with n=20 should result as follows (order doesn’t matter):</p>
 1
 </code></pre>
 
-<p>Helpful Tip: You can use the % to find if something divides evenly
-into a number. % gives you a remainder, as follows:</p>
+<p><em>Hint</em>: One common use of the <code>%</code> operator is to find if something
+divides evenly into a number. For example:</p>
 
 <pre><code>&gt;&gt;&gt; 10 % 5
 0
@@ -607,42 +573,16 @@ into a number. % gives you a remainder, as follows:</p>
   <button id="toggleButton4">Toggle Solution</button>
   <div id="toggleText4" style="display: none">
     <pre><code>def factors(n):
-  x = n
-  while x &gt; 0:
-    if (n % x == 0):
-        print(x)
-    x -= 1
+    x = n
+    while x &gt; 0:
+        if (n % x == 0):
+            print(x)
+        x -= 1
 </code></pre>
 
   </div>
 <?php } ?>
-<p>Next, write a function <code>divide(num, divisor)</code> without using the '/' or
-'//'. </p>
-
-<pre><code>def divide(num, divisor):
-    """
-    &gt;&gt;&gt; divide(8, 2)
-    4
-    """
-    "*** YOUR CODE HERE ***"
-</code></pre>
-
-<p><em>Hint</em>: Use a while loop.</p>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
-    <pre><code>def divide(num, divisor):
-    count = 0
-    while num &gt; 0:
-        num -= divisor
-        count += 1
-    return count
-</code></pre>
-
-  </div>
-<?php } ?>
-<h3>Error messages</h3>
+<h2>Error messages</h2>
 
 <p>By now, you've probably seen a couple of error messages. Even though
 they might look intimidating, error messages are actually very helpful
@@ -665,16 +605,20 @@ error messages, try to identify the problem before asking for
 help.</strong> You can often Google unknown error messages to see what
 similar mistakes others have made to help you debug your own code.</p>
 
-<p>Here's a link to a helpful <a href="http://inst.eecs.berkeley.edu/~cs61a-te/notes/debugging.html" title="&gt;Debugging Guide">Debugging Guide</a>
+<p>Here's a link to a helpful <a href="http://albertwu.org/cs61a/notes/debugging">Debugging Guide</a>
 written by Albert Wu.</p>
 
-<h3>Higher ORder Functions</h3>
+<h2>Higher Order Functions</h2>
 
 <p>Higher order functions are functions that take a function as an input,
 and/or output a function. We will be exploring many applications of
-higher order functions.  For each question, try to determine what
-Python would print. Then check in the interactive interpreter to see
-if you got the right answer.</p>
+higher order functions.</p>
+
+<h3 class='question'>Question 5</h3>
+
+<p>For each question, try to determine what Python would print. Then
+check in the interactive interpreter to see if you got the right
+answer.</p>
 
 <pre><code>&gt;&gt;&gt; def square(x):
 ...     return x*x
@@ -740,26 +684,29 @@ ________________
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <p>We recommend you try typing these statements into the interpreter.</p>
 
-<pre><code>1) -16
-2) first
-3) second
-39
-4) 65
-5) 13
-6) True
-7) False
-8) 20
-</code></pre>
+<ol>
+<li>-16</li>
+<li>first</li>
+<li>This output has two lines:
+    second
+    3</li>
+<li>65</li>
+<li>13</li>
+<li>True</li>
+<li>False</li>
+<li>20</li>
+</ol>
 
   </div>
 <?php } ?>
-<h3>Environment Diagrams</h3>
+<h3 class='question'>Question 6: Environment Diagrams</h3>
 
-<p>If you haven't found this gem already, <a href="http://tutor.composingprograms.com">tutor.composingprograms.com</a>
+<p>If you haven't found this gem already,
+<a href="http://tutor.composingprograms.com">tutor.composingprograms.com</a>
 has a great visualization tool for environment diagrams. Post in your
 python code and it will generate an environment diagram you can walk
 through step-by-step! Use it to help you check your answers!</p>
@@ -808,7 +755,7 @@ sub5(6)
 sub5(10) == add3(2)
 </code></pre>
 
-<h3>I Heard You Liked Functions So I Put Functions In Your Functions</h3>
+<h3 class='question'>Question 7: I heard you liked functions so I put functions in your functions</h3>
 
 <p>Define a function <code>cycle</code> which takes in three functions as arguments:
 <code>f1</code>, <code>f2</code>, <code>f3</code>. <code>cycle</code> will then return another function. The
@@ -866,23 +813,23 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton7">Toggle Solution</button>
-  <div id="toggleText7" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <pre><code>def cycle(f1, f2, f3):
-  def ret_fn(n):
-    def ret(x):
-      i = 0
-      while i &amp;lt; n:
-        if i % 3 == 0:
-          x = f1(x)
-        elif i % 3 == 1:
-          x = f2(x)
-        else:
-          x = f3(x)
-        i += 1
-      return x
-    return ret
-  return ret_fn
+    def ret_fn(n):
+        def ret(x):
+            i = 0
+            while i &lt; n:
+                if i % 3 == 0:
+                    x = f1(x)
+                elif i % 3 == 1:
+                    x = f2(x)
+                else:
+                    x = f3(x)
+                i += 1
+            return x
+        return ret
+    return ret_fn
 </code></pre>
 
   </div>
@@ -893,7 +840,7 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 8; $i++) { ?>
+    <?php for ($i = 0; $i < 7; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });

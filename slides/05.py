@@ -40,6 +40,7 @@ def make_adder(n):
         return k + n
     return adder
 
+
 # Lexical scope and returning functions
 
 def f(x, y):
@@ -50,6 +51,7 @@ def g(a):
 
 # This expression causes an error because y is not bound in g.
 # f(1, 2)
+
 
 # Composition
 
@@ -67,5 +69,5 @@ def triple(x):
 
 squiple = compose1(square, triple)
 tripare = compose1(triple, square)
-squadder = compose1(square, make_adder(2))
+compose1(square, make_adder(2))(3)
 

@@ -45,7 +45,7 @@ def count_same(pairs):
     return same_count
 
 few = range(-2, 2)
-many = range(-2, 50000000)
+many = range(-2, 20000000)
 
 # List mutation
 
