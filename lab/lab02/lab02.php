@@ -411,7 +411,7 @@ means use an <code>else</code> statement.</p>
 ...         return
 ...     while n &gt; 0:
 ...         print(n)
-...         n = n // 2 # See exercise 3 for an explanation of what '//' stands for
+...         n = n // 2
 ...
 &gt;&gt;&gt; exp_decay(1024)
 __________________
@@ -667,7 +667,7 @@ _______________
 _______________
 &gt;&gt;&gt; def troy():
 ...     abed = 0
-...     while abed &amp;lt; 10:
+...     while abed &lt; 10:
 ...         def britta():
 ...             return abed
 ...         abed += 1
@@ -819,7 +819,7 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
     def ret_fn(n):
         def ret(x):
             i = 0
-            while i &amp;lt; n:
+            while i &lt; n:
                 if i % 3 == 0:
                     x = f1(x)
                 elif i % 3 == 1:
