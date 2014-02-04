@@ -411,7 +411,7 @@ means use an <code>else</code> statement.</p>
 ...         return
 ...     while n &gt; 0:
 ...         print(n)
-...         n = n // 2 # See exercise 3 for an explanation of what '//' stands for
+...         n = n // 2
 ...
 &gt;&gt;&gt; exp_decay(1024)
 __________________
