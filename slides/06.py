@@ -99,10 +99,12 @@ def newton_solve(func, deriv, start, tolerance):
     return iter_solve(start, close_enough, newton_update, 1000000000)
 
 def square_root(a):
-    """Compute an approximation to the square root of X.
+    """Compute an approximation to the square root of A.
     >>> round(square_root(9), 10)   # round to 10 decimal places
     3.0
     """
+    if a < 0:
+        raise ValueError("square root of negative value")
     return newton_solve(lambda x: x*x - a, lambda x: 2 * x, 
                         a/2, a * 1e-10)
 
@@ -114,3 +116,35 @@ def cube_root(a):
     return newton_solve(lambda x: x**3 - a, lambda x: 3 * x ** 2,
                         a/3, a * 1e-10)
 
+
+# Secant method
+
+def iter_solve2(guess, done, update, state=None):
+    """Return the result of repeatedly applying UPDATE to GUESS
+    and STATE, until DONE yields a true value when applied to
+    GUESS and STATE.  UPDATE returns an updated guess and state."""
+    while not done(guess, state):
+        guess, state = update(guess, state)
+    return guess
+
+def secant_solve(func, start0, start1, tolerance):
+    """An approximate solution to FUNC(x) == 0 for which
+    |FUNC(x)|<TOLERANCE, as computed by the secant method
+    beginning at points START0 and START1."""
+    
+    def close_enough(x, state):
+        return abs(func(x)) < tolerance
+    def secant_update(xk, xk1):
+        return (xk - func(xk) * (xk - xk1) 
+                                / (func(xk) - func(xk1)), 
+                xk)
+    return iter_solve2(start1, close_enough, secant_update, start0)
+
+def square_root2(x):
+    """An approximation to the square root of X, using the secant method.
+    >>> round(square_root2(9), 10)
+    3.0
+    """
+    if x < 0:
+        raise ValueError("square root of negative value")
+    return secant_solve(lambda y: y*y - x, 1, 0.5 * (x + 1), x * 1.0e-10)
