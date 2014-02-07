@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
 <title>61A Quiz 1</title>
 <style type="text/css">
 
@@ -143,7 +143,7 @@ materials, including a Python 3 interpreter, course videos, slides, and
 readings. Please <em>do not</em> discuss these specific questions with your classmates,
 and <em>do not</em> scour the web for answers or post your answers online.</p>
 <p>Submit with <tt class="docutils literal">submit quiz1</tt>. You may submit more than once before the deadline;
-only the final submission will be scored. See the online <a class="reference external" href="../submit_tutorial_codereview.html">submission
+only the final submission will be scored. See the online <a class="reference external" href="../submit_tutorial.html">submission
 instructions</a> for more details.</p>
 <p>Your submission will be graded automatically for correctness.  Your
 implementations <em>do not</em> need to be efficient, as long as they are correct. If
@@ -165,67 +165,79 @@ Python 3 introduced in sections
 <a class="reference external" href="http://composingprograms.com/pages/14-designing-functions.html">1.4</a>, and
 <a class="reference external" href="http://composingprograms.com/pages/15-control.html">1.5</a>
 of the online text.</p>
-<p><strong>Q1.</strong> Three positive numbers are <em>triangular</em> if none of them is greater than
-or equal to the sum of the other two. (Three triangular numbers could be the
-side lengths of a triangle.) Implement the function <tt class="docutils literal">triangular</tt> that takes
-three positive numbers as arguments and returns <tt class="docutils literal">True</tt> if they are triangular,
-or <tt class="docutils literal">False</tt> if they are not:</p>
+<p><strong>Q1.</strong> An <em>open interval</em> is a range of numbers that does not include
+its end points.  For example, (10, 15) stands for all numbers that are
+strictly greater than 10 and strictly less than 15. Two intervals
+<em>overlap</em> if they contain any points in common.  For example (10, 15)
+overlaps (14, 16), but not (1, 5) or (15, 16).  The intervals (10, 10)
+or (10, 9) contain no numbers, since nothing is both greater than and
+less than 10, or greater than 10 and less than 9.  Implement the
+function <tt class="docutils literal">overlaps</tt> to take four numbers as arguments, representing
+the bounds of two intervals, and return <tt class="docutils literal">True</tt> if the intervals
+overlap and <tt class="docutils literal">False</tt> otherwise.:</p>
 <pre class="literal-block">
-def triangular(x, y, z):
-    &quot;&quot;&quot;Return whether x, y, and z are triangular.
+def overlaps(low0, high0, low1, high1):
+    &quot;&quot;&quot;Return whether the open intervals (LOW0, HIGH0) and (LOW1, HIGH1)
+    overlap.
 
-    &gt;&gt;&gt; triangular(3, 4, 5)
+    &gt;&gt;&gt; overlaps(10, 15, 14, 16)
     True
-    &gt;&gt;&gt; triangular(3, 14, 5) # 14 is greater than 3 + 5
+    &gt;&gt;&gt; overlaps(10, 15, 1, 5)
     False
-    &gt;&gt;&gt; triangular(7.5, 3.5, 4) # 7.5 is equal to 3.5 + 4
+    &gt;&gt;&gt; overlaps(10, 10, 9, 11)
     False
-    &gt;&gt;&gt; result = triangular(5, 4, 3) # Return, don't print
+    &gt;&gt;&gt; result = overlaps(1, 5, 0, 3)  # Return, don't print
     &gt;&gt;&gt; result
     True
     &quot;&quot;&quot;
     &quot;*** YOUR CODE HERE ***&quot;
 </pre>
-<p><strong>Q2.</strong> Implement the function <tt class="docutils literal">next_square</tt> that takes as input a positive
-integer and returns the smallest perfect square greater than its argument. A
+<p><strong>Q2.</strong> Implement the function <tt class="docutils literal">last_square</tt>, which takes as input a positive
+integer and returns the largest perfect square less than its argument. A
 perfect square is any integer multiplied by itself:</p>
 <pre class="literal-block">
-def next_square(x):
-    &quot;&quot;&quot;Return the smallest perfect square greater than x.
+def last_square(x):
+    &quot;&quot;&quot;Return the largest perfect square less than X, where X&gt;0.
 
-    &gt;&gt;&gt; next_square(10)
-    16
-    &gt;&gt;&gt; next_square(39)
-    49
-    &gt;&gt;&gt; next_square(100)
-    121
-    &gt;&gt;&gt; result = next_square(2) # Return, don't print
+    &gt;&gt;&gt; last_square(10)
+    9
+    &gt;&gt;&gt; last_square(39)
+    36
+    &gt;&gt;&gt; last_square(100)
+    81
+    &gt;&gt;&gt; result = last_square(2) # Return, don't print
     &gt;&gt;&gt; result
-    4
+    1
     &quot;&quot;&quot;
     &quot;*** YOUR CODE HERE ***&quot;
 </pre>
 <p><em>Hint:</em> If you're stuck, try writing a function that prints out the first 5
 perfect squares using a <tt class="docutils literal">while</tt> statement: 1, 4, 9, 16, 25.  Then, adapt that
 <tt class="docutils literal">while</tt> statement to this question by changing the header.</p>
-<p><strong>Q3.</strong> Implement the function <tt class="docutils literal">digit_span</tt> that takes as input a positive
-integer and returns the difference between its largest digit and its smallest
-digit.  For example, the digits of 2013 are 2, 1, 0, and 3; the difference
-between 3 and 0 is 3.  The digits of 75 are 7 and 5; the difference between 7
-and 5 is 2.  The return value will never be negative:</p>
+<p><strong>Q3.</strong> Implement the function <tt class="docutils literal">ordered_digits</tt>,
+which takes as input a positive
+integer and returns <tt class="docutils literal">True</tt> if its digits, read left to right, are in
+non-decreasing order, and <tt class="docutils literal">False</tt> otherwise.
+For example, the digits of 5, 11, 127, 1357 are ordered, but not those of
+21 or 1375.:</p>
 <pre class="literal-block">
-def digit_span(x):
-    &quot;&quot;&quot;Return the difference between x's largest and smallest digits.
+def ordered_digits(x):
+    &quot;&quot;&quot;Return True if the (base 10) digits of X&gt;0 are in non-decreasing
+    order, and False otherwise.
 
-    &gt;&gt;&gt; digit_span(2013) # 3 - 0 = 3
-    3
-    &gt;&gt;&gt; digit_span(75) # 7 - 5 = 2
-    2
-    &gt;&gt;&gt; digit_span(2345678765432) # 8 - 2 = 6
-    6
-    &gt;&gt;&gt; result = digit_span(6473465) # Return, don't print
+    &gt;&gt;&gt; ordered_digits(5)
+    True
+    &gt;&gt;&gt; ordered_digits(11)
+    True
+    &gt;&gt;&gt; ordered_digits(127)
+    True
+    &gt;&gt;&gt; ordered_digits(1357)
+    True
+    &gt;&gt;&gt; ordered_digits(21)
+    False
+    &gt;&gt;&gt; result = ordered_digits(1375) # Return, don't print
     &gt;&gt;&gt; result
-    4
+    False
     &quot;&quot;&quot;
     &quot;*** YOUR CODE HERE ***&quot;
 </pre>

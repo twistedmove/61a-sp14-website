@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
 <title>61A Quiz 1</title>
 <style type="text/css">
 
@@ -165,117 +165,136 @@ Python 3 introduced in sections
 <a class="reference external" href="http://composingprograms.com/pages/14-designing-functions.html">1.4</a>, and
 <a class="reference external" href="http://composingprograms.com/pages/15-control.html">1.5</a>
 of the online text.</p>
-<p><strong>Q1.</strong> Three positive numbers are <em>triangular</em> if none of them is greater than
-or equal to the sum of the other two. (Three triangular numbers could be the
-side lengths of a triangle.) Implement the function <tt class="docutils literal">triangular</tt> that takes
-three positive numbers as arguments and returns <tt class="docutils literal">True</tt> if they are triangular,
-or <tt class="docutils literal">False</tt> if they are not:</p>
+<p><strong>Q1.</strong> An <em>open interval</em> is a range of numbers that does not include
+its end points.  For example, (10, 15) stands for all numbers that are
+strictly greater than 10 and strictly less than 15. Two intervals
+<em>overlap</em> if they contain any points in common.  For example (10, 15)
+overlaps (14, 16), but not (1, 5) or (15, 16).  The intervals (10, 10)
+or (10, 9) contain no numbers, since nothing is both greater than and
+less than 10, or greater than 10 and less than 9.  Implement the
+function <tt class="docutils literal">overlaps</tt> to take four numbers as arguments, representing
+the bounds of two intervals, and return <tt class="docutils literal">True</tt> if the intervals
+overlap and <tt class="docutils literal">False</tt> otherwise.:</p>
 <pre class="literal-block">
-def triangular(x, y, z):
-    &quot;&quot;&quot;Return whether x, y, and z are triangular.
+def overlaps(low0, high0, low1, high1):
+    &quot;&quot;&quot;Return whether the open intervals (LOW0, HIGH0) and (LOW1, HIGH1)
+    overlap.
 
-    &gt;&gt;&gt; triangular(3, 4, 5)
+    &gt;&gt;&gt; overlaps(10, 15, 14, 16)
     True
-    &gt;&gt;&gt; triangular(3, 14, 5) # 14 is greater than 3 + 5
+    &gt;&gt;&gt; overlaps(10, 15, 1, 5)
     False
-    &gt;&gt;&gt; triangular(7.5, 3.5, 4) # 7.5 is equal to 3.5 + 4
+    &gt;&gt;&gt; overlaps(10, 10, 9, 11)
     False
-    &gt;&gt;&gt; result = triangular(5, 4, 3) # Return, don't print
+    &gt;&gt;&gt; result = overlaps(1, 5, 0, 3)  # Return, don't print
     &gt;&gt;&gt; result
     True
-    &gt;&gt;&gt; triangles = [(1, 2, 2), (2, 1, 2), (2, 2, 1), (2, 2, 2), (4, 3, 5),
-    ... (3, 5, 4), (5, 3, 4), (4, 5, 3), (5, 4, 3)]
-    &gt;&gt;&gt; [triangular(*t) for t in triangles].count(False)
+    &gt;&gt;&gt; [overlaps(a0, b0, a1, b1) for a0, b0, a1, b1 in
+    ...       ( (1, 4, 2, 3), (1, 4, 0, 2), (1, 4, 3, 5), (0.1, 0.4, 0.2, 0.3),
+    ...         (2, 3, 1, 4), (0, 2, 1, 4), (3, 5, 1, 4) )].count(False)
     0
-    &gt;&gt;&gt; lines = [(1, 2, 3), (2, 1, 3), (1, 3, 2), (3, 1, 2), (2, 3, 1),
-    ... (3, 2, 1)]
-    &gt;&gt;&gt; [triangular(*t) for t in lines].count(True)
-    0
-    &gt;&gt;&gt; other = [(0.1, 0.1, 1), (0.1, 1, 0.1), (1, 0.1, 0.1)]
-    &gt;&gt;&gt; [triangular(*t) for t in other].count(True)
+    &gt;&gt;&gt; [overlaps(a0, b0, a1, b1) for a0, b0, a1, b1 in
+    ...       ( (1, 4, -1, 0), (1, 4, 5, 6), (1, 4, 4, 5), (1, 4, 0, 1),
+    ...         (-1, 0, 1, 4), (5, 6, 1, 4), (4, 5, 1, 4), (0, 1, 1, 4),
+    ...         (5, 5, 3, 6), (5, 3, 4, 6), (5, 5, 5, 5),
+    ...         (3, 6, 5, 5), (4, 6, 5, 3), (0.3, 0.6, 0.5, 0.5) )].count(True)
     0
     &quot;&quot;&quot;
-    return x + y + z &gt; 2 * max(x, y, z)
+    return low1 &lt; min(high0, high1) &gt; low0
 </pre>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">There are many solutions to this problem.  The solution above follows from the
-observation that the sum of the sides of a triangle is always greater than
-twice its longest side.</p>
+<p class="last">There are many solutions to this problem.  One way to look at it is to
+consider conditions under which the intervals <em>don't</em> overlap.  Clearly
+for the intervals not to overlap, one has to come entirely before the other.
+This becomes <tt class="docutils literal">high1 &lt;= low0 or high0 &lt;= low1</tt>, which when negated is
+<tt class="docutils literal">high1 &gt; low0 and high1 &gt; low1</tt>.
+In addition, both lowers bounds must be less than their respective
+upper bounds (or the intervals are empty).  The solution given combines
+these observations.</p>
 </div>
-<p><strong>Q2.</strong> Implement the function <tt class="docutils literal">next_square</tt> that takes as input a positive
-integer and returns the smallest perfect square greater than its argument. A
+<p><strong>Q2.</strong> Implement the function <tt class="docutils literal">last_square</tt>, which takes as input a positive
+integer and returns the largest perfect square less than its argument. A
 perfect square is any integer multiplied by itself:</p>
 <pre class="literal-block">
-def next_square(x):
-    &quot;&quot;&quot;Return the smallest perfect square greater than x.
+def last_square(x):
+    &quot;&quot;&quot;Return the largest perfect square less than X, where X&gt;0.
 
-    &gt;&gt;&gt; next_square(10)
-    16
-    &gt;&gt;&gt; next_square(39)
-    49
-    &gt;&gt;&gt; next_square(100)
-    121
-    &gt;&gt;&gt; result = next_square(2) # Return, don't print
+    &gt;&gt;&gt; last_square(10)
+    9
+    &gt;&gt;&gt; last_square(39)
+    36
+    &gt;&gt;&gt; last_square(100)
+    81
+    &gt;&gt;&gt; result = last_square(2) # Return, don't print
     &gt;&gt;&gt; result
-    4
-    &gt;&gt;&gt; cases = [(1, 4), (2, 4), (3, 4), (4, 9), (8, 9), (9, 16), (15, 16),
-    ... (16, 25), (24, 25), (25, 36), (26, 36)]
-    &gt;&gt;&gt; [next_square(s) == t for s, t in cases].count(False)
+    1
+    &gt;&gt;&gt; cases = [(1, 0), (2, 1), (3, 1), (4, 1), (5, 4), (6, 4),
+    ...          (10, 9), (17, 16), (26, 25), (36, 25), (46, 36)]
+    &gt;&gt;&gt; [last_square(s) == t for s, t in cases].count(False)
     0
     &quot;&quot;&quot;
-    k = 1
-    while k * k &lt;= x:
+    k = 0
+    while k * k &lt; x:
         k = k + 1
-    return k * k
+    return (k-1) * (k-1)
 </pre>
 <p><em>Hint:</em> If you're stuck, try writing a function that prints out the first 5
 perfect squares using a <tt class="docutils literal">while</tt> statement: 1, 4, 9, 16, 25.  Then, adapt that
 <tt class="docutils literal">while</tt> statement to this question by changing the header.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">We iterate over perfect squares until finding one larger than the input.
+<p class="last">We iterate over perfect squares until we find the first
+one larger or equal to the input.
+The answer is then the square <em>before</em> that one.
 This solution is inefficient, but an efficient solution requires taking
-a square root, which we will discuss shortly in the class.</p>
+a square root.</p>
 </div>
-<p><strong>Q3.</strong> Implement the function <tt class="docutils literal">digit_span</tt> that takes as input a positive
-integer and returns the difference between its largest digit and its smallest
-digit.  For example, the digits of 2013 are 2, 1, 0, and 3; the difference
-between 3 and 0 is 3.  The digits of 75 are 7 and 5; the difference between 7
-and 5 is 2.  The return value will never be negative:</p>
+<p><strong>Q3.</strong> Implement the function <tt class="docutils literal">ordered_digits</tt>,
+which takes as input a positive
+integer and returns <tt class="docutils literal">True</tt> if its digits, read left to right, are in
+non-decreasing order, and <tt class="docutils literal">False</tt> otherwise.
+For example, the digits of 5, 11, 127, 1357 are ordered, but not those of
+21 or 1375.:</p>
 <pre class="literal-block">
-def digit_span(x):
-    &quot;&quot;&quot;Return the difference between x's largest and smallest digits.
+def ordered_digits(x):
+    &quot;&quot;&quot;Return True if the (base 10) digits of X&gt;0 are in non-decreasing
+    order, and False otherwise.
 
-    &gt;&gt;&gt; digit_span(2013) # 3 - 0 = 3
-    3
-    &gt;&gt;&gt; digit_span(75) # 7 - 5 = 2
-    2
-    &gt;&gt;&gt; digit_span(2345678765432) # 8 - 2 = 6
-    6
-    &gt;&gt;&gt; result = digit_span(6473465) # Return, don't print
+    &gt;&gt;&gt; ordered_digits(5)
+    True
+    &gt;&gt;&gt; ordered_digits(11)
+    True
+    &gt;&gt;&gt; ordered_digits(127)
+    True
+    &gt;&gt;&gt; ordered_digits(1357)
+    True
+    &gt;&gt;&gt; ordered_digits(21)
+    False
+    &gt;&gt;&gt; result = ordered_digits(1375) # Return, don't print
     &gt;&gt;&gt; result
-    4
-    &gt;&gt;&gt; cases = [(1084, 8), (3105, 5), (7000, 7), (174, 6), (714, 6),
-    ... (147, 6), (121, 1), (33553355335544664466446644, 3)]
-    &gt;&gt;&gt; [digit_span(s) == t for s, t in cases].count(False)
+    False
+    &gt;&gt;&gt; cases = [(1, True), (9, True), (10, False), (11, True), (32, False),
+    ...          (23, True), (99, True), (111, True), (122, True), (223, True),
+    ...          (232, False), (999, True),
+    ...          (13334566666889, True), (987654321, False)]
+    &gt;&gt;&gt; [ordered_digits(s) == t for s, t in cases].count(False)
     0
     &quot;&quot;&quot;
-    largest, smallest = x % 10, x % 10
-    x = x // 10
-    while x &gt; 0:
-        largest = max(largest, x % 10)
-        smallest = min(smallest, x % 10)
+    last = x % 10
+    val = x // 10
+    while x &gt; 0 and last &gt;= x % 10:
+        last = x % 10
         x = x // 10
-    return largest - smallest
+    return x == 0
 </pre>
 <p><em>Hint:</em> You can use <tt class="docutils literal">//</tt> and <tt class="docutils literal">%</tt> to separate a positive integer into its
 one's digit and the rest of its digits.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">We find the largest and smallest digits, initializing with the one's digit.
-In each iteration of the while statement, we update largest and smallest, then
-remove the current one's digit of the remaining digits.</p>
+<p class="last">We split off each digit in turn from the right, comparing it to the previous
+digit we split off, which was the one immediately to its right.  We stop
+when we run out of digits or we find an out-of-order digit.</p>
 </div>
 </div>
 </body>
