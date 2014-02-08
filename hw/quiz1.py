@@ -1,18 +1,19 @@
-# Name:
-# Email:
+#  Name:
+#  Email:
 
 # Q1.
 
-def triangular(x, y, z):
-    """Return whether x, y, and z are triangular.
+def overlaps(low0, high0, low1, high1):
+    """Return whether the open intervals (LOW0, HIGH0) and (LOW1, HIGH1)
+    overlap.
 
-    >>> triangular(3, 4, 5)
+    >>> overlaps(10, 15, 14, 16)
     True
-    >>> triangular(3, 14, 5) # 14 is greater than 3 + 5
+    >>> overlaps(10, 15, 1, 5)
     False
-    >>> triangular(7.5, 3.5, 4) # 7.5 is equal to 3.5 + 4
+    >>> overlaps(10, 10, 9, 11)
     False
-    >>> result = triangular(5, 4, 3) # Return, don't print
+    >>> result = overlaps(1, 5, 0, 3)  # Return, don't print
     >>> result
     True
     """
@@ -20,35 +21,40 @@ def triangular(x, y, z):
 
 # Q2.
 
-def next_square(x):
-    """Return the smallest perfect square greater than x.
+def last_square(x):
+    """Return the largest perfect square less than X, where X>0.
 
-    >>> next_square(10)
-    16
-    >>> next_square(39)
-    49
-    >>> next_square(100)
-    121
-    >>> result = next_square(2) # Return, don't print
+    >>> last_square(10)
+    9
+    >>> last_square(39)
+    36
+    >>> last_square(100)
+    81
+    >>> result = last_square(2) # Return, don't print
     >>> result
-    4
+    1
     """
     "*** YOUR CODE HERE ***"
 
 # Q3.
 
-def digit_span(x):
-    """Return the difference between x's largest and smallest digits.
+def ordered_digits(x):
+    """Return True if the (base 10) digits of X>0 are in non-decreasing
+    order, and False otherwise.
 
-    >>> digit_span(2013) # 3 - 0 = 3
-    3
-    >>> digit_span(75) # 7 - 5 = 2
-    2
-    >>> digit_span(2345678765432) # 8 - 2 = 6
-    6
-    >>> result = digit_span(6473465) # Return, don't print
+    >>> ordered_digits(5)
+    True
+    >>> ordered_digits(11)
+    True
+    >>> ordered_digits(127)
+    True
+    >>> ordered_digits(1357)
+    True
+    >>> ordered_digits(21)
+    False
+    >>> result = ordered_digits(1375) # Return, don't print
     >>> result
-    4
+    False
     """
     "*** YOUR CODE HERE ***"
 

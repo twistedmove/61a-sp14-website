@@ -3,6 +3,8 @@ class Account:
     All accounts share a common interest rate.
 
     >>> a = Account('John')
+    >>> a.holder
+    'John'
     >>> a.deposit(100)
     100
     >>> a.withdraw(90)
@@ -13,13 +15,16 @@ class Account:
     10
     >>> a.interest
     0.02
+    >>> Account.interest = 0.04
+    >>> a.interest
+    0.04
     """
 
     interest = 0.02  # A class attribute
 
     def __init__(self, account_holder):
-        self.balance = 0
         self.holder = account_holder
+        self.balance = 0
 
     def deposit(self, amount):
         """Add amount to balance."""
@@ -32,3 +37,6 @@ class Account:
             return 'Insufficient funds'
         self.balance = self.balance - amount
         return self.balance
+
+
+

@@ -1,7 +1,8 @@
 # Recursive lists with cycles.
 
 class Rlist:
-    """A recursive list consisting of a first element and the rest.
+    """A recursive list consisting of a first element
+    and the rest of the list, which is an Rlist or empty.
 
     >>> s = Rlist(1, Rlist(2, Rlist(3)))
     >>> s.first = 5
@@ -23,6 +24,23 @@ class Rlist:
         self.rest = rest
 
 s = Rlist(1, Rlist(2, Rlist(3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def rlist(first, rest=None):
     """Return a mutable recursive list represented as a function.

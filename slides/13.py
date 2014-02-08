@@ -8,7 +8,6 @@ def values_demos():
     curry = eval('lambda f: lambda x: lambda y: f(x, y)')
     curry(add)(3)(4)
 
-
 def string_demos():
     'here' in "Where's Waldo?"
     'Mississippi'.count('i')
@@ -44,7 +43,7 @@ def fib(k):
     if k == 1:
         return 0
     previous, current = 0, 1  # current is the second Fibonacci number.
-    for _ in range(2, k):
+    for _ in range(k-2):
          previous, current = current, previous + current
     return current
 
@@ -54,8 +53,10 @@ def even(n):
 def sum_even_fibs(n):
     """Sum the first n even Fibonacci numbers.
 
-    >>> sum_even_fibs(11)
+    >>> sum_even_fibs(10)
     44
+    >>> sum(map(fib, filter(even, range(1, 11))))
+    55
     """
     return sum(filter(even, map(fib, range(1, n+1))))
 
@@ -81,7 +82,6 @@ def acronym_gen(name):
     """
     return tuple(w[0] for w in name.split() if capitalized(w))
 
-berkeley = 'University of California at Berkeley'
-sum_even_fibs(11)
+berkeley = 'University of California Berkeley'
 acronym(berkeley)
 

@@ -1,144 +1,150 @@
-# Currying
+# General iterative solving, recursive version I
 
-def curry2(f):
-    """Returns a function g such that g(x)(y) == f(x, y).
+def iter_solve(guess, done, update):
+    """Return the result of repeatedly applying UPDATE, 
+    starting at GUESS, until DONE yields a true value 
+    when applied to the result.  UPDATE takes a guees
+    and returns an updated guess."""
+    if done(guess):
+        return guess
+    else:
+        return iter_solve(update(guess), done, update)
 
-    >>> from operator import add
-    >>> add_three = curry2(add)(3)
-    >>> add_three(4)
-    7
+
+# General iterative solving, recursive version II
+
+def iter_solve(guess, done, update):
+    """Return the result of repeatedly applying UPDATE, 
+    starting at GUESS, until DONE yields a true value 
+    when applied to the result.  UPDATE takes a guees
+    and returns an updated guess."""
+    def solution(guess):
+        if done(guess):
+            return guess
+        else:
+            return solution(update(guess))
+    return solution(guess)
+
+
+# General iterative solving, iterative version
+
+def iter_solve(guess, done, update):
+    """Return the result of repeatedly applying UPDATE, 
+    starting at GUESS, until DONE yields a true value 
+    when applied to the result.  UPDATE takes a guees
+    and returns an updated guess."""
+    while not done(guess):
+        guess = update(guess)
+    return guess
+
+
+# General iterative solving with iteration limit, recursive
+
+def iter_solve(guess, done, update, iteration_limit=32):
+    """Return the result of repeatedly applying UPDATE, 
+    starting at GUESS, until DONE yields a true value 
+    when applied to the result.  Causes error if more than
+    ITERATION_LIMIT applications of UPDATE are necessary."""
+
+    def solution(guess, iteration_limit):
+        if done(guess):
+            return guess
+        elif iteration_limit <= 0:
+            raise ValueError("failed to converge")
+        else:
+            return solution(update(guess), iteration_limit-1)
+    return solution(guess, iteration_limit)
+
+# General iterative solving with iteration limit, iterative
+
+def iter_solve(guess, done, update, iteration_limit=32):
+    """Return the result of repeatedly applying UPDATE, 
+    starting at GUESS, until DONE yields a true value 
+    when applied to the result.  Causes error if more than
+    ITERATION_LIMIT applications of UPDATE are necessary."""
+
+    while not done(guess):
+        if iteration_limit <= 0:
+            raise ValueError("failed to converge")
+        guess, iteration_limit = update(guess), iteration_limit-1
+    return guess
+
+
+# Direct implementation of square root using Newton's method
+
+def square_root(x):
+    """Compute an approximation to the square root of X.
+    >>> round(square_root(9), 10)   # round to 10 decimal places
+    3.0
     """
-    def g(x):
-        def h(y):
-            return f(x, y)
-        return h
-    return g
+    if x < 0:
+        raise ValueError("square root of negative value")
+    tol = abs(x) * 1.0e-10
+    y = x * 0.5
+    while abs(y*y - x) > tol:
+        y -= (y * y - x) / (2.0 * y)    # y = y - (y*y - x)/ (2.0 * y)
+    return y
 
-# Direct implementations of iterative improvement
+
+# General Newton's method
+
+def newton_solve(func, deriv, start, tolerance):
+    """Return x such that |FUNC(x)| < TOLERANCE, given initial
+    estimate START and assuming DERIV is the derivatative of FUNC."""
+    def close_enough(x):
+        return abs(func(x)) < tolerance
+    def newton_update(x):
+        return x - func(x) / deriv(x) 
+
+    return iter_solve(start, close_enough, newton_update, 1000000000)
 
 def square_root(a):
-    """Return the square root of a.
-
-    >>> square_root(9)
+    """Compute an approximation to the square root of A.
+    >>> round(square_root(9), 10)   # round to 10 decimal places
     3.0
     """
-    x = 1
-    while x * x != a:
-        x = square_root_update(x, a)
-    return x
-
-def square_root_update(x, a):
-    return (x + a/x) / 2
+    if a < 0:
+        raise ValueError("square root of negative value")
+    return newton_solve(lambda x: x*x - a, lambda x: 2 * x, 
+                        a/2, a * 1e-10)
 
 def cube_root(a):
-    """Return the cube root of a.
-
-    >>> cube_root(27)
-    3.0
-    """
-    x = 1
-    while pow(x, 3) != a:
-        x = cube_root_update(x, a)
-    return x
-
-def cube_root_update(x, a):
-    return (2*x + a/(x*x)) / 3
-
-# General iterative improvement
-
-def improve(update, close, guess=1):
-    """Iteratively improve guess with update until close(guess) is true."""
-    while not close(guess):
-        guess = update(guess)
-    return guess
-
-def improve(update, close, guess=1, max_updates=100):
-    """Iteratively improve guess with update until close(guess) is true or
-    max_updates have been applied."""
-    k = 0
-    while not close(guess) and k < max_updates:
-        guess = update(guess)
-        k = k + 1
-    return guess
-
-def approx_eq(x, y, tolerance=1e-15):
-    return abs(x - y) < tolerance
-
-def square_root_improve(a):
-    """Return the square root of a.
-
-    >>> square_root_improve(9)
-    3.0
-    """
-    def update(x):
-        return square_root_update(x, a)
-    def close(x):
-        return approx_eq(x * x, a)
-    return improve(update, close)
-
-def cube_root_improve(a):
-    """Return the cube root of a.
-
-    >>> cube_root_improve(27)
-    3.0
-    """
-    return improve(lambda x: cube_root_update(x, a),
-                   lambda x: approx_eq(x*x*x, a))
-
-# Newton's method
-
-def find_zero(f, df):
-    """Return a zero of the function f with derivative df."""
-    def near_zero(x):
-        return approx_eq(f(x), 0)
-    return improve(newton_update(f, df), near_zero)
-
-def newton_update(f, df):
-    """Return an update function for f with derivative df,
-    using Newton's method."""
-    def update(x):
-        return x - f(x) / df(x)
-    return update
-
-def square_root_newton(a):
-    """Return the square root of a.
-
-    >>> square_root_newton(9)
-    3.0
-    """
-    def f(x):
-        return x*x - a
-    def df(x):
-        return 2*x
-    return find_zero(f, df)
-
-def cube_root_newton(a):
-    """Return the cube root of a.
-
-    >>> cube_root_newton(27)
-    3.0
-    """
-    return find_zero(lambda x: x*x*x - a, lambda x: 3*x*x)
-
-def power(x, n):
-    """Return x * x * x * ... * x for x repeated n times."""
-    product, k = 1, 0
-    while k < n:
-        product, k = product * x, k + 1
-    return product
-
-def nth_root_of_a(n, a):
-    """Return the nth root of a.
-
-    >>> nth_root_of_a(2, 64)
-    8.0
-    >>> nth_root_of_a(3, 64)
-    4.0
-    >>> nth_root_of_a(6, 64)
+    """Compute an approximation to the cube root of X.
+    >>> round(cube_root(8), 10)   # round to 10 decimal places
     2.0
     """
-    def f(x):
-        return power(x, n) - a
-    def df(x):
-        return n * power(x, n-1)
-    return find_zero(f, df)
+    return newton_solve(lambda x: x**3 - a, lambda x: 3 * x ** 2,
+                        a/3, a * 1e-10)
+
+
+# Secant method
+
+def iter_solve2(guess, done, update, state=None):
+    """Return the result of repeatedly applying UPDATE to GUESS
+    and STATE, until DONE yields a true value when applied to
+    GUESS and STATE.  UPDATE returns an updated guess and state."""
+    while not done(guess, state):
+        guess, state = update(guess, state)
+    return guess
+
+def secant_solve(func, start0, start1, tolerance):
+    """An approximate solution to FUNC(x) == 0 for which
+    |FUNC(x)|<TOLERANCE, as computed by the secant method
+    beginning at points START0 and START1."""
+    
+    def close_enough(x, state):
+        return abs(func(x)) < tolerance
+    def secant_update(xk, xk1):
+        return (xk - func(xk) * (xk - xk1) 
+                                / (func(xk) - func(xk1)), 
+                xk)
+    return iter_solve2(start1, close_enough, secant_update, start0)
+
+def square_root2(x):
+    """An approximation to the square root of X, using the secant method.
+    >>> round(square_root2(9), 10)
+    3.0
+    """
+    if x < 0:
+        raise ValueError("square root of negative value")
+    return secant_solve(lambda y: y*y - x, 1, 0.5 * (x + 1), x * 1.0e-10)
