@@ -55,7 +55,6 @@ exercises in the lab. You can get them in the following places:</p>
 <ul>
 <li><a href="starter/recursion.py">recursion.py</a></li>
 <li><a href="starter/tuples.py">tuples.py</a></li>
-<li><a href="starter/rlists.py">rlists.py</a></li>
 </ul>
 
 <h2>Lambda Expressions</h2>
@@ -110,36 +109,6 @@ f = lambda: lambda x: lambda: x
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 2</h3>
-
-<p>Using a <code>lambda</code> expression, complete the <code>mul_by_num</code> function. This
-function should take an argument and return a one argument function
-that multiplies any value passed to it by the original number. Its
-body must be one line long:</p>
-
-<pre><code>def mul_by_num(num):
-    """
-    Returns a function that takes one argument and returns num times that
-    argument.
-    &gt;&gt;&gt; x = mul_by_num(5)
-    &gt;&gt;&gt; y = mul_by_num(2)
-    &gt;&gt;&gt; x(3)
-    15
-    &gt;&gt;&gt; y(-4)
-    -8
-    """
-    return ________________________________________
-</code></pre>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton1">Toggle Solution</button>
-  <div id="toggleText1" style="display: none">
-    <pre><code>def mul_by_num(num):
-    return lambda num2: num * num2
-</code></pre>
-
-  </div>
-<?php } ?>
 <h3>Environment Diagrams</h3>
 
 <p>Try drawing environment diagrams for the following code and predicting
@@ -180,8 +149,8 @@ _________
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
+  <button id="toggleButton1">Toggle Solution</button>
+  <div id="toggleText1" style="display: none">
     <p>Please use the online environment diagram drawer, linked at the bottom
 of the class webpage.</p>
 
@@ -239,24 +208,7 @@ simpler version of the problem. Now ask yourself how you can use
 this result to solve the original problem.</p></li>
 </ol>
 
-<h3 class='question'>Question 3: In summation...</h3>
-
-<p>Write a function <code>sum</code> that takes a single argument <code>n</code>
-and computes the sum of all integers between 0 and <code>n</code>. Assume <code>n</code> is
-non-negative.</p>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
-    <pre><code>def sum(n):
-    if n == 0:
-        return 0
-    return n + sum(n-1)
-</code></pre>
-
-  </div>
-<?php } ?>
-<h3 class='question'>Question 4</h3>
+<h3 class='question'>Question 2: In summation...</h3>
 
 <p>Now write the recursive version of <code>summation</code>. Recall
 that <code>summation</code> takes two arguments, a number <code>n</code> and a function
@@ -264,8 +216,8 @@ that <code>summation</code> takes two arguments, a number <code>n</code> and a f
 between 0 and <code>n</code> and taking the sum.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton4">Toggle Solution</button>
-  <div id="toggleText4" style="display: none">
+  <button id="toggleButton2">Toggle Solution</button>
+  <div id="toggleText2" style="display: none">
     <pre><code>def summation(n, term):
     if n == 0:
         return term(0)
@@ -274,7 +226,7 @@ between 0 and <code>n</code> and taking the sum.</p>
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 5</h3>
+<h3 class='question'>Question 3</h3>
 
 <p>The greatest common divisor of two positive integers <code>a</code> and <code>b</code> is the
 largest integer which evenly divides both numbers (with no remainder).
@@ -296,8 +248,8 @@ the larger value divided by the smaller value</li>
 <p>Write the <code>gcd</code> function using Euclid's algorithm.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
     <pre><code>def gcd_rec(a, b):
     a, b = max(a, b), min(a, b)
     if a % b == 0:
@@ -315,7 +267,7 @@ def gcd_iter(a, b):
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 6: Recursive Boogaloo</h3>
+<h3 class='question'>Question 4: Recursive Boogaloo</h3>
 
 <p>Recall the <code>hailstone</code> function from homework 1. You
 pick a positive integer <code>n</code> as the start. If <code>n</code> is even, divide it
@@ -324,8 +276,8 @@ until <code>n</code> is 1. Write a recursive version of hailstone that prints ou
 the values of the sequence and returns the number of steps.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
     <pre><code>def hailstone(n):
     print(n)
     if n == 1:
@@ -338,7 +290,7 @@ the values of the sequence and returns the number of steps.</p>
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 7</h3>
+<h3 class='question'>Question 5</h3>
 
 <p>Consider an insect in an <em>M</em> by <em>N</em> grid. The insect starts at the top
 left corner, <em>(0, 0)</em>, and wants to end up at the bottom right corner,
@@ -359,8 +311,8 @@ diferent paths (only 3 are shown above).</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton7">Toggle Solution</button>
-  <div id="toggleText7" style="display: none">
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <pre><code>def paths(m, n):
     if x == 1 or y == 1:
         return 1
@@ -376,7 +328,7 @@ diferent paths (only 3 are shown above).</p>
 <p>Predict what Python will display when you type the following into the
 interpreter. Then try it to check your answers.</p>
 
-<h3 class='question'>Question 8</h3>
+<h3 class='question'>Question 6</h3>
 
 <pre><code>&gt;&gt;&gt; x = (1, 2, 3)
 &gt;&gt;&gt; x[0]     # Q1
@@ -391,8 +343,8 @@ ______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton8">Toggle Solution</button>
-  <div id="toggleText8" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <ol>
 <li>1</li>
 <li>IndexError</li>
@@ -402,7 +354,7 @@ ______
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 9</h3>
+<h3 class='question'>Question 7</h3>
 
 <pre><code>&gt;&gt;&gt; x = (1, 2, 3, 4)
 &gt;&gt;&gt; x[1:3]       # Q1
@@ -416,8 +368,8 @@ ______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton9">Toggle Solution</button>
-  <div id="toggleText9" style="display: none">
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
     <ol>
 <li>(2, 3)</li>
 <li>(1, 2)</li>
@@ -427,7 +379,7 @@ ______
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 10</h3>
+<h3 class='question'>Question 8</h3>
 
 <pre><code>&gt;&gt;&gt; y = (1,)
 &gt;&gt;&gt; len(y)       # Q1
@@ -448,8 +400,8 @@ ______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton10">Toggle Solution</button>
-  <div id="toggleText10" style="display: none">
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
     <ol>
 <li>1</li>
 <li>True</li>
@@ -481,8 +433,8 @@ ______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton11">Toggle Solution</button>
-  <div id="toggleText11" style="display: none">
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
     <ol>
 <li><code>x[2][1]</code></li>
 <li><code>x[0][0]</code></li>
@@ -491,7 +443,7 @@ ______
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 11</h3>
+<h3 class='question'>Question 9</h3>
 
 <p>Write a function <code>reverse</code> which takes a tuple and returns the reverse.
 Write both an iterative and a recursive version. You may (and should)
@@ -515,8 +467,8 @@ def reverse_recursive(tup):
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton12">Toggle Solution</button>
-  <div id="toggleText12" style="display: none">
+  <button id="toggleButton10">Toggle Solution</button>
+  <div id="toggleText10" style="display: none">
     <pre><code>def reverse_iter(tup):
     new, i = (), 0
     while i &lt; len(tup):
@@ -532,7 +484,7 @@ def reverse_recursive(tup):
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 12</h3>
+<h3 class='question'>Question 10</h3>
 
 <p>Write a function <code>merge</code> which takes 2 <em>sorted</em> tuples <code>tup1</code> and
 <code>tup2</code>, and returns a new tuple that contains all the elements in the
@@ -552,8 +504,8 @@ two tuples in sorted order.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton13">Toggle Solution</button>
-  <div id="toggleText13" style="display: none">
+  <button id="toggleButton11">Toggle Solution</button>
+  <div id="toggleText11" style="display: none">
     <pre><code>def merge(tup1, tup2):
     if not tup1 or not tup2:
         return tup1 + tup2
@@ -580,166 +532,11 @@ assignment." In other words, you can't change the elements in a tuple
 because tuples are immutable. Later in the course, we'll see the
 opposite -- <em>mutable</em> data structures.</p>
 
-<h2>Recursive Lists</h2>
-
-<p>Recall that the constructor and selectors for <code>rlist</code>s are as follows:</p>
-
-<pre><code>empty_rlist = None
-
-def rlist(first, rest=empty_rlist):
-    return (first, rest)
-
-def first(rlist):
-    return rlist[0]
-
-def rest(rlist):
-    return rlist[1]
-</code></pre>
-
-<p>As you do the questions below, keep in mind that an rlist is an
-abstract data type! In other words, your code should not assume that
-rlists are implemented as tuples.</p>
-
-<h3 class='question'>Question 13</h3>
-
-<p>It would be convenient if we had a way to convert from tuples to
-rlists. Write a function <code>tup_to_rlist</code> that does exactly that.</p>
-
-<p><em>Hint</em>: if you are writing the function iteratively, it might
-be helpful to reverse the tuple first.</p>
-
-<pre><code>def tup_to_rlist(tup):
-    """Converts a tuple to an rlist.
-
-    &gt;&gt;&gt; tup = (1, 2, 3, 4)
-    &gt;&gt;&gt; r = tup_to_rlist(tup)
-    &gt;&gt;&gt; first(r)
-    1
-    &gt;&gt;&gt; first(rest(rest(r)))
-    3
-    &gt;&gt;&gt; r = tup_to_rlist(())
-    &gt;&gt;&gt; r is empty_rlist
-    True
-    """
-    "***YOUR CODE HERE ***"
-</code></pre>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton14">Toggle Solution</button>
-  <div id="toggleText14" style="display: none">
-    <pre><code>def tup_to_rlist(tup):
-    if not tup:
-        return empty_rlist
-    return rlist(tup[0], tup_to_rlist(tup[1:]))
-</code></pre>
-
-  </div>
-<?php } ?>
-<h3 class='question'>Question 14</h3>
-
-<p>Recall the sequence abstraction: a sequence has a finite <em>length</em> and
-supports <em>element selection</em>. Implement the <code>len_rlist(lst)</code> function,
-which calculates the length of an rlist, and the <code>getitem_rlist(i,
-lst)</code> function, which gets the <em>i</em>th item in the rlist.</p>
-
-<pre><code>def len_rlist(lst):
-    """Returns the length of the rlist.
-
-    &gt;&gt;&gt; lst = tup_to_rlist((1, 2, 3, 4))
-    &gt;&gt;&gt; len_rlist(lst)
-    4
-    &gt;&gt;&gt; lst = tup_to_rlist(())
-    &gt;&gt;&gt; len_rlist(lst)
-    0
-    """
-    "*** YOUR CODE HERE ***"
-
-def getitem_rlist(i, lst):
-    """Returns the ith item in the rlist. If the index exceeds the
-    length of the rlist, return 'Error'.
-
-    &gt;&gt;&gt; lst = tup_to_rlist((1, 2, 3, 4))
-    &gt;&gt;&gt; getitem_rlist(0, lst)
-    1
-    &gt;&gt;&gt; getitem_rlist(3, lst)
-    4
-    &gt;&gt;&gt; getitem_rlist(4, lst)
-    'Error'
-    """
-    "*** YOUR CODE HERE ***"
-</code></pre>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton15">Toggle Solution</button>
-  <div id="toggleText15" style="display: none">
-    <pre><code>def len_rlist(lst):
-    if lst == empty_rlist:
-        return 0
-    return 1 + len_rlist(rest(lst))
-
-def getitem_rlist(i, lst):
-    "*** YOUR CODE HERE ***"
-    if lst == empty_rlist:
-        return 'Error'
-    elif i == 0:
-        return first(lst)
-    else:
-        return getitem_rlist(i - 1, rest(lst))
-</code></pre>
-
-  </div>
-<?php } ?>
-<h3 class='question'>Question 15</h3>
-
-<p>Now let's write an <code>insert</code> function that inserts an item at a specific
-index in the rlist. If the index is greater than the current length,
-you should insert the item at the end of the list.</p>
-
-<p><em>Hint</em>: This will be much easier to implement using recursion, rather
-than using iteration!</p>
-
-<p><em>Note</em>: Since rlists are immutable, we are not actually inserting the
-item into the <em>original</em> rlist. Instead, we are creating a copy of the
-original rlist, but with the provided item added at the specified
-index. The original rlist stays the same.</p>
-
-<pre><code>def insert_rlist(r, item, index):
-    """ Returns an rlist matching r but with the given item
-    inserted at the specified index. If the index is greater than
-    the current length, the item is appended to the end of the
-    list.
-
-    &gt;&gt;&gt; r = rlist(1, rlist(2, rlist(3)))
-    &gt;&gt;&gt; new = insert_rlist(r, 9001, 1)
-    &gt;&gt;&gt; first(r)
-    1
-    &gt;&gt;&gt; first(rest(r))  # second element
-    9001
-    """
-    "*** Your code here. ***"
-</code></pre>
-
-<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton16">Toggle Solution</button>
-  <div id="toggleText16" style="display: none">
-    <pre><code>def insert_rlist(r, item, index):
-    if r == empty_rlist:
-        return rlist(item, empty_rlist)
-    elif index == 0:
-        return rlist(item, r)
-    else:
-        return rlist(first(r), insert_rlist(rest(r), item, index-1))
-</code></pre>
-
-  </div>
-<?php } ?>
-<p></p>
-
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 17; $i++) { ?>
+    <?php for ($i = 0; $i < 12; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
