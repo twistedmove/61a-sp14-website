@@ -300,7 +300,7 @@ the number of different paths the insect can take from the start to the
 goal. (There is a closed-form solution to this problem, but try to
 answer it procedurally using recursion.)</p>
 
-<p>![assets/grid.jpg]</p>
+<p><img src="assets/grid.jpg" alt="grid" /></p>
 
 <p>For example, the 2 by 2 brid has a total of two ways for the insect to
 move from the start to the goal. For the 3 by 3 grid, the insect has 6
