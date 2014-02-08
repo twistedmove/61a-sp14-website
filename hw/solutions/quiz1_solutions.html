@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.12: http://docutils.sourceforge.net/" />
 <title>61A Quiz 1</title>
 <style type="text/css">
 
@@ -206,10 +206,10 @@ def overlaps(low0, high0, low1, high1):
 <p class="first admonition-title">Note</p>
 <p class="last">There are many solutions to this problem.  One way to look at it is to
 consider conditions under which the intervals <em>don't</em> overlap.  Clearly
-for the intervals not to overlap, one has to come entirely before the other.
+for two non-empty not to overlap, one has to come entirely before the other.
 This becomes <tt class="docutils literal">high1 &lt;= low0 or high0 &lt;= low1</tt>, which when negated is
 <tt class="docutils literal">high1 &gt; low0 and high1 &gt; low1</tt>.
-In addition, both lowers bounds must be less than their respective
+In addition, both lower bounds must be less than their respective
 upper bounds (or the intervals are empty).  The solution given combines
 these observations.</p>
 </div>
