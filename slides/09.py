@@ -72,14 +72,17 @@ def sierpinski(x, y, side, depth):
         sierpinski(x + side/4, y + height, side/2, depth-1)
         sierpinski(x + side/2, y, side/2, depth-1)
 
-def draw_triangle(x, y, side, depth):
+def draw_triangle(x, y, side, depth, rendering_speed='fastest'):
     """Draw a Sierpinski triangle of given SIDE and DEPTH with lower-left
     corner at (X, Y) after first clearing the screen and initializing the
-    graphics package."""
+    graphics package.  Optionally specify a rendering speed ('slow', 'fast',
+    fastest')"""
     mode('logo')
+    hideturtle()
     clear()
+    speed(rendering_speed)
     sierpinski(x, y, side, depth)
-    
+    hideturtle()
 
 def gcd(m, n):
     """Return the largest k that evenly divides both m and n.
