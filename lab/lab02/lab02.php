@@ -459,11 +459,19 @@ __________________
   <button id="toggleButton3">Toggle Solution</button>
   <div id="toggleText3" style="display: none">
     <ol>
-<li><p>This output contains 3 lines:</p>
+<li><p>This output contains 11 lines:</p>
 
 <pre><code>1024
 512
 256
+128
+64
+32
+16
+8
+4
+2
+1
 </code></pre></li>
 <li>There is no output</li>
 <li><p>This output contains 5 lines:</p>
@@ -667,7 +675,7 @@ _______________
 _______________
 &gt;&gt;&gt; def troy():
 ...     abed = 0
-...     while abed &lt; 10:
+...     while abed &amp;lt; 10:
 ...         def britta():
 ...             return abed
 ...         abed += 1
@@ -693,7 +701,7 @@ ________________
 <li>first</li>
 <li>This output has two lines:
     second
-    3</li>
+    39</li>
 <li>65</li>
 <li>13</li>
 <li>True</li>
@@ -819,7 +827,7 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
     def ret_fn(n):
         def ret(x):
             i = 0
-            while i &lt; n:
+            while i &amp;lt; n:
                 if i % 3 == 0:
                     x = f1(x)
                 elif i % 3 == 1:
