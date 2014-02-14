@@ -10,17 +10,19 @@ odds[odds[3]-odds[2]]
 
 empty_rlist = None
 
-def rlist(first, rest):
-    """Return a recursive list from its first element and the rest."""
+def rlist(first, rest = empty_rlist):
+    """A recursive list, r, such that first(R) is FIRST and 
+    rest(R) is REST, which must be an rlist."""
     return (first, rest)
 
-def first(s):
-    """Return the first element of a recursive list s."""
-    return s[0]
+def first(r):
+    """The first item in R."""
+    return r[0]
 
-def rest(s):
-    """Return the rest of the elements of a recursive list s."""
-    return s[1]
+def rest(r):
+    """The tail of R: the sequence consisting of items 1, 2,...,
+    renumbered from 0."""
+    return r[1]
 
 ### +++ === ABSTRACTION BARRIER === +++ ###
 
@@ -40,17 +42,17 @@ both = rlist(alts, rlist(counts, empty_rlist))
 # Implementing the sequence abstraction
 
 def len_rlist(s):
-    """Return the length of recursive list s.
-
-    >>> len_rlist(counts)
-    4
-    >>> len_rlist(both)
+    """The length of rlist S.
+    >>>len_rlist(empty_rlist)
+    0
+    >>>len_rlist(rlist(1, rlist(4, empty_rlist)))
     2
     """
-    length = 0
+
+    sofar = 0
     while s != empty_rlist:
-        s, length = rest(s), length + 1
-    return length
+        sofar, s = sofar+1, rest(s)
+    return sofar
 
 def getitem_rlist(s, i):
     """Return the element at index i of recursive list s.
