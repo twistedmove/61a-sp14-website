@@ -314,7 +314,7 @@ diferent paths (only 3 are shown above).</p>
   <button id="toggleButton5">Toggle Solution</button>
   <div id="toggleText5" style="display: none">
     <pre><code>def paths(m, n):
-    if x == 1 or y == 1:
+    if m == 1 or n == 1:
         return 1
     return paths(m - 1, n) + paths(m, n - 1)
 </code></pre>
