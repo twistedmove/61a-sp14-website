@@ -1,0 +1,46 @@
+CS61A Prolog-in-Scheme
+
+In This Directory: Programs From Lecture
+----------------------------------------
+
+append.pro:   Definition of (append X Y Z).
+ancestor.pro: Definition of (father X Y) and (ancestor X Y)
+sort.pro:     Definitions of (ordered X), (le X Y), (sorted X Y), (perm X Y),
+              (member X Y R)
+
+
+Running scmlog
+--------------
+
+To execute on the instructional servers:
+
+   # scmlog
+
+Commands:
+
+   load FILE         ; Reads commands from FILE.
+   clear             ; Clear the fact database
+   (fact CONCLUSION HYPOTHESIS1 HYPOTHESIS2 ... HYPOTHESISn)
+                     ; Declares that CONCLUSION is true iff each 
+                     ; HYPOTHESISi is true (n >= 0).
+   (? ASSERTION1 ASSERTION2 ...)
+                     ; Determines whether (and for what variable substitutions)
+                     ; ASSERTION1, etc., are simultaneously satisfied, according
+                     ; to the current facts.
+   quit              ; Exit from program.
+
+All conclusions, hypotheses, and assertions are Scheme expressions. 
+Symbols that start with _ are logical variables (replaceable by any Scheme
+expression).
+
+
+
+Installing at home
+------------------
+
+You'll need Python3.  Copy the directory ~cs61a/lib/scmlog to a
+directory on your home computer (call it DIR). Then you can run scmlog
+with your system's equivalent of
+
+       python3 DIR/scmlog/prolog.py
+
