@@ -16,7 +16,7 @@ def indent_lines(s, n):
 
 import re
 def indent_lines(s, n):
-    return re.sub(r'(?m)^', ' ' * n, a)
+    return re.sub(r'(?m)^', ' ' * n, s)
 
 def values_demos():
     eval('200')
