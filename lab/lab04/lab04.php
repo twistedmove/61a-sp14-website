@@ -4,9 +4,8 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
@@ -46,11 +45,252 @@
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 4</h1>
-<h2>Lists and dictionaries</h2>
-<p>We've provided a starter file with skeleton code for the exercises in the lab. You can get it through the following link
-<a href="./shakespeare.py">shakespeare.py</a></p>
+    <h1 id="title-main">CS 61A Lab 4</h1>
+<h2 id="title-sub">Lists and dictionaries</h2>
+<h2>Starter Files</h2>
 
+<p>We've provided a set of starter files with skeleton code for the
+exercises in the lab. You can get them in the following places:</p>
+
+<ul>
+<li><a href="starter/lists.py">lists.py</a></li>
+<li><a href="starter/shakespeare.py">shakespeare.py</a></li>
+<li><a href="starter/shakespeare.txt">shakespeare.txt</a></li>
+</ul>
+
+<h2>Lists</h2>
+
+<p>Previously, we had dealt with tuples, which are immutable sequences.
+Python has built-in <em>lists</em>, which are mutable. This means you can modify
+lists without creating entirely new ones. Lists have <em>state</em>, unlike
+tuples.</p>
+
+<p>Just like with tuples, you can use slicing notation with lists. In
+addition, not only can retrieve a slice from a list, you can also
+<em>assign</em> to a slice of a list. This is possible because lists are
+mutable.</p>
+
+<h3 class='question'>Question 1</h3>
+
+<p>What does Python print? Think about these before typing it into an
+interpreter!</p>
+
+<pre><code>&gt;&gt;&gt; lst = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; lst[4] = 1
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst[2:4] = [9, 8]
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst[3] = ['hi', 'bye']
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst[3:] = ['jom', 'magrotker']
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst[1:3] = [2, 3, 4, 5, 6, 7, 8]
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst == lst[:]
+_________
+&gt;&gt;&gt; lst is lst[:]
+_________
+&gt;&gt;&gt; a = lst[:]
+&gt;&gt;&gt; a[0] = 'oogly'
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst = [1, 2, 3, 4]
+&gt;&gt;&gt; b = ['foo', 'bar']
+&gt;&gt;&gt; lst[0] = b
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; b[1] = 'ply'
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; b = ['farply', 'garply']
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst[0] = lst
+&gt;&gt;&gt; lst
+_________
+&gt;&gt;&gt; lst[0][0][0][0][0]
+_________
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton0">Toggle Solution</button>
+  <div id="toggleText0" style="display: none">
+    <ol>
+<li><code>[1, 2, 3, 4, 1, 6]</code></li>
+<li><code>[1, 2, 9, 8, 1, 6]</code></li>
+<li><code>[1, 2, 9, ['hi', 'bye'], 1, 6]</code></li>
+<li><code>[1, 2, 9, 'jom', 'magrotker']</code></li>
+<li><code>[1, 2, 3, 4, 5, 6, 7, 8, 'jom', 'magrotker']</code></li>
+<li><code>True</code></li>
+<li><code>False</code></li>
+<li><code>[1, 2, 3, 4, 5, 6, 7, 8, 'jom', 'magrotker']</code></li>
+<li><code>[['foo', 'bar'], 2, 3, 4]</code></li>
+<li><code>[['foo', 'ply'], 2, 3, 4]</code></li>
+<li><code>[['foo', 'ply'], 2, 3, 4]</code></li>
+<li><code>[[...], 2, 3, 4]</code></li>
+<li><code>[[...], 2, 3, 4]</code></li>
+</ol>
+
+  </div>
+<?php } ?>
+<h3>List Methods</h3>
+
+<p>Python has a <code>list</code> class that contains many useful methods.  Using the
+builtin <code>dir()</code> function will show you all of them, like so:</p>
+
+<pre><code>dir(list)
+</code></pre>
+
+<p>Some of the most common methods include <code>append()</code>, <code>extend()</code>, and
+<code>pop()</code>.</p>
+
+<pre><code>&gt;&gt;&gt; l = [3, 5, 6]
+&gt;&gt;&gt; l.append(10) # adds an element to the end
+&gt;&gt;&gt; l
+[3, 5, 6, 10]
+&gt;&gt;&gt; l.extend([-1, -6]) # concatenates another list to the end
+&gt;&gt;&gt; l
+[3, 5, 6, 10, -1, -6]
+&gt;&gt;&gt; l.pop() # removes and returns the last element
+-6
+&gt;&gt;&gt; l
+[3, 5, 6, 10, -1]
+&gt;&gt;&gt; l.pop(2) # removes and returns the element at the index given
+6
+&gt;&gt;&gt; l
+[3, 5, 10, -1]
+</code></pre>
+
+<p>Try to solve the following list problems with mutation. This means that
+each function should mutate the original list. In other words:</p>
+
+<pre><code>&gt;&gt;&gt; original_list = [5, -1, 29, 0]
+&gt;&gt;&gt; function(original_list) # doesn't return anything
+&gt;&gt;&gt; original_list
+# mutated list here
+</code></pre>
+
+<p>Prioritize solving these problems with iteration, but for extra
+practice, also solve them using recursion. Remember: these functions
+should NOT return anything. This is to emphasize that these functions
+should utilize mutability.</p>
+
+<h3 class='question'>Question 2</h3>
+
+<p>Write a function that reverses the given list.</p>
+
+<pre><code>def reverse(lst):
+    """Reverses lst using mutation.
+    &gt;&gt;&gt; original_list = [5, -1, 29, 0]
+    &gt;&gt;&gt; reverse(original_list)
+    &gt;&gt;&gt; original_list
+    [0, 29, -1, 5]
+    """
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton1">Toggle Solution</button>
+  <div id="toggleText1" style="display: none">
+    <pre><code># Iterative
+def reverse(lst):
+    midpoint = len(lst) // 2
+    last = len(lst) - 1
+    for i in range(midpoint):
+        lst[i], lst[last - i] = lst[last - i], lst[i]
+
+# Recursive1
+def reverse(lst):
+    if len(lst) &gt; 1:
+        temp = lst.pop()
+        reverse(lst)
+        lst.insert(0, temp)
+
+# Recursive2
+def reverse(lst):
+    midpoint = len(lst) // 2
+    last = len(lst) - 1
+    def helper(i):
+        if i == midpoint:
+            return
+        lst[i], lst[last - i] = lst[last - i], lst[i]
+        helper(i + 1)
+    helper(0)
+</code></pre>
+
+  </div>
+<?php } ?>
+<h3 class='question'>Question 3</h3>
+
+<p>Write a function that maps a function on the given list.</p>
+
+<pre><code>def map(fn, lst):
+    """Maps fn onto lst using mutation.
+    &gt;&gt;&gt; original_list = [5, -1, 2, 0]
+    &gt;&gt;&gt; map(lambda x: x * x, original_list)
+    &gt;&gt;&gt; original_list
+    [25, 1, 4, 0]
+    """
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton2">Toggle Solution</button>
+  <div id="toggleText2" style="display: none">
+    <pre><code># Iterative
+def map(fn, lst):
+    for i in range(len(lst)):
+        lst[i] = fn(lst[i])
+
+# Recursive
+def map(fn, lst):
+    if lst: # True when lst != []
+        temp = lst.pop(0)
+        map(fn, lst)
+        lst.insert(0, fn(temp))
+</code></pre>
+
+  </div>
+<?php } ?>
+<h3 class='question'>Question 4</h3>
+
+<p>Write a function that filters a list, only keeping elements that
+satisfy the predicate.</p>
+
+<pre><code>def filter(pred, lst):
+    """Filters lst with pred using mutation.
+    &gt;&gt;&gt; original_list = [5, -1, 2, 0]
+    &gt;&gt;&gt; filter(lambda x: x % 2 == 0, original_list)
+    &gt;&gt;&gt; original_list
+    [2, 0]
+    """
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
+    <pre><code># Iterative
+def filter(pred, lst):
+    i = len(lst) - 1
+    while i &gt;= 0:
+        if not pred(lst[i]):
+            lst.pop(i)
+        i -= 1
+
+# Recursive
+def filter(pred, lst):
+    if lst: 
+        temp = lst.pop(0)
+        filter(pred, lst)
+        if pred(temp):
+            lst.insert(0, temp)
+</code></pre>
+
+  </div>
+<?php } ?>
 <h3>List Comprehensions</h3>
 
 <p>So far, we've covered lists, a powerful, mutable data structure that
@@ -60,36 +300,103 @@ created using a syntax called "list comprehension." Using a list
 comprehension is very similar to using the map or filter functions,
 but will return a list as opposed to a filter or map object.</p>
 
-<pre><code>&gt;&gt;&gt; a = [x+1 for x in range(10) if x % 2 == 0]
-&gt;&gt;&gt; a
-[1, 3, 5, 7, 9]
+<pre><code>&gt;&gt;&gt; [i**2 for i in (1, 2, 3, 4) if i%2 == 0]
+[4, 16]
 </code></pre>
 
-<p><strong>Problem 1</strong>: To practice, write a function that adds two matrices
-together using generator expression(s). The function should take in
-two 2D lists of the same dimensions.</p>
+<p>is equivalent to</p>
 
-<pre><code>&gt;&gt;&gt; add_matrices([[1, 3], [2, 0]], [[-3, 0], [1, 2]])
-[[-2, 3], [3, 2]]
+<pre><code>&gt;&gt;&gt; lst = []
+&gt;&gt;&gt; for i in (1, 2, 3, 4):
+...     if i % 2 == 0:
+...         lst.append(i**2)
+&gt;&gt;&gt; lst
+[4, 16]
+</code></pre>
+
+<p>List comprehensions allow you to apply <strong>map</strong> and <strong>filter</strong> at the
+same time, in very compact syntax. The general syntax for a list
+comprehension is</p>
+
+<pre><code>[&lt;expression&gt; for &lt;element&gt; in &lt;sequence&gt; if &lt;conditional&gt;]
+</code></pre>
+
+<p>The syntax is designed to read like English: "Compute the expression
+for each element in the sequence if the conditional is true."</p>
+
+<h3 class='question'>Question 5</h3>
+
+<p>Implement a function <code>coords</code>, which takes a funciton, a sequence, and
+an upper and lower bound on output of the function. <code>coords</code> then
+returns a list of x, y coordinate pairs (tuples) such that:</p>
+
+<ul>
+<li>Each pair contains (x, fn(x))</li>
+<li>The x coordinates can only be elements in the sequence</li>
+<li>Only pairs whose y coordinate is within the upper and lower bounds
+are included</li>
+</ul>
+
+<p>See the doctest if you are still confused.</p>
+
+<p>One other thing: your answer can only be <em>one line long</em>. You should
+make use of list comprehensions!</p>
+
+<pre><code>def coords(fn, seq, lower, upper):
+    """
+    &gt;&gt;&gt; seq = (-4, -2, 0, 1, 3)
+    &gt;&gt;&gt; fn = lambda x: x**2
+    &gt;&gt;&gt; coords(fn, seq, 1, 9)
+    [(-2, 4), (1, 1), (3, 9)]
+    """ 
+    return _______________
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton0">Toggle Solution</button>
-  <div id="toggleText0" style="display: none">
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
+    <pre><code>def coords(fn, seq, lower, upper):
+    return [(x, fn(x)) for x in seq if lower &lt;= fn(x) &lt;= upper]
+</code></pre>
+
+  </div>
+<?php } ?>
+<h3 class='question'>Question 6</h3>
+
+<p>To practice, write a function that adds two matrices together using
+generator expression(s). The function should take in two 2D lists of
+the same dimensions.</p>
+
+<pre><code>def add_matrices(x, y):
+    """
+    &gt;&gt;&gt; add_matrices([[1, 3], [2, 0]], [[-3, 0], [1, 2]])
+    [[-2, 3], [3, 2]]
+    """
+    return ________________
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <pre><code>def add_matrices(x, y):
     return [[x[i][j] + y[i][j] for j in range(len(x[0]))] for i in range(len(x))]
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 2</strong>: Now write a list comprehension that will create a deck
-of cards. Each element in the list will be a card, which is
-represented by a tuple containing the suit as a string and the value
-as an int.</p>
+<h3 class='question'>Question 7</h3>
+
+<p>Now write a list comprehension that will create a deck of cards. Each
+element in the list will be a card, which is represented by a tuple
+containing the suit as a string and the value as an int.</p>
+
+<pre><code>def deck():
+    return ________________
+</code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton1">Toggle Solution</button>
-  <div id="toggleText1" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <pre><code>def deck():
     return [(suit, value) for suit in ("spades", "clubs", "diamonds", "hearts") for value in range(1, 14)]
 </code></pre>
@@ -104,9 +411,13 @@ Note that <code>sort</code> is a <em>stable sort</em>. Now, use the <code>sort</
 sort a shuffled deck. It should put cards of the same suit together,
 and also sort each card in each suit in increasing value.</p>
 
+<pre><code>def sort_deck(deck):
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
     <pre><code>def sort_deck(deck):
     deck.sort(key=lambda card: card[1])
     deck.sort(key=lambda card: card[0])
@@ -114,7 +425,7 @@ and also sort each card in each suit in increasing value.</p>
 
   </div>
 <?php } ?>
-<h3>Shakespeare and Dictionaries</h3>
+<h2>Dictionaries and Shakespeare</h2>
 
 <p>First, let's talk about dictionaries. Dictionaries are simple an
 unordered set of key-value pairs. To create a dictionary, use the
@@ -131,21 +442,17 @@ using the key: </p>
 
 <pre><code>&gt;&gt;&gt; webster['Shawn']
 'pineapple'
-
 &gt;&gt;&gt; webster['Kim']
 'blueberry'
 </code></pre>
 
 <p>You can modify an entry for an existing key in the dictionary using
-the following syntax. Adding a new key follows the identical syntax!</p>
+the following syntax. Adding a new key follows identical syntax!</p>
 
 <pre><code>&gt;&gt;&gt; webster['Shawn'] = 'strawberry'
-
 &gt;&gt;&gt; webster['Shawn']
 'strawberry'
-
 &gt;&gt;&gt; webster['Carlton'] = 'donut' # new entry!
-
 &gt;&gt;&gt; webster['Carlton']
 'donut
 </code></pre>
@@ -165,43 +472,41 @@ a word from that list, and we continue this process. This eventually
 will terminate in a period (".") and we will have generated a
 Shakespearean sentence!</p>
 
-<p>The object that we'll be looking things up in is called a 'successor
-table', although really it's just a dictionary. The keys in this
+<p>The object that we'll be looking things up in is called a "successor
+table", although really it's just a dictionary. The keys in this
 dictionary are words, and the values are lists of successors to those
-words. </p>
+words.</p>
 
-<p>A copy of the framework code is located in <code>~cs61a/lib/shakespeare.py</code>
--- you should copy it to your directory</p>
+<h3 class='question'>Question 8</h3>
 
 <p>Here's an incomplete definition of the <code>build_successors_table</code>
 function. The input is a list of words (corresponding to a
 Shakespearean text), and the output is a successors table. (By
-default, the first word is a successor to '.'). See the example below: </p>
+default, the first word is a successor to "."). See the example below:</p>
 
-<pre><code>&gt;&gt;&gt; def build_successors_table(tokens):
-        table = {}
-        prev = '.'
-        for word in tokens:
-            if prev in table:
-                "***FILL THIS IN***"
+<pre><code>def build_successors_table(tokens):
+    """Return a dictionary: keys are words; values are lists of
+    successors.
 
-            else:
-                "***FILL THIS IN***"
-
-            prev = word
-        return table
-
-&gt;&gt;&gt; text = ['We', 'came', 'to', 'investigate', ',', 'catch', 'bad', 'guys', 'and', 'to', 'eat', 'pie', '.']
-
-&gt;&gt;&gt; table = build_successors_table(text)
-
-&gt;&gt;&gt; table
-{'and': ['to'], 'We': ['came'], 'bad': ['guys'], 'pie': ['.'], ',': ['catch'], '.': ['We'], 'to': ['investigate', 'eat'], 'investigate': [','], 'catch': ['bad'], 'guys': ['and'], 'eat': ['pie'], 'came': ['to']}
+    &gt;&gt;&gt; text = ['We', 'came', 'to', 'investigate', ',', 'catch', 'bad', 'guys', 'and', 'to', 'eat', 'pie', '.']
+    &gt;&gt;&gt; table = build_successors_table(text)
+    &gt;&gt;&gt; table
+    {'and': ['to'], 'We': ['came'], 'bad': ['guys'], 'pie': ['.'], ',': ['catch'], '.': ['We'], 'to': ['investigate', 'eat'], 'investigate': [','], 'catch': ['bad'], 'guys': ['and'], 'eat': ['pie'], 'came': ['to']}
+    """
+    table = {}
+    prev = '.'
+    for word in tokens:
+        if prev in table:
+            "***YOUR CODE HERE ***"
+        else:
+            "***YOUR CODE HERE ***"
+        prev = word
+    return table
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
     <pre><code>def build_successors_table(tokens):
     table = {}
     prev = '.'
@@ -216,31 +521,35 @@ default, the first word is a successor to '.'). See the example below: </p>
 
   </div>
 <?php } ?>
+<h3 class='question'>Question 9</h3>
+
 <p>Let's generate some sentences! Suppose we're given a starting word. We
 can look up this word in our table to find its list of successors, and
 then randomly select a word from this list to be the next word in the
-sentence. Then we just repeat until we reach some ending punctuation.
-(Note: to randomly select from a list, first make sure you import the
+sentence. Then we just repeat until we reach some ending punctuation.</p>
+
+<p><em>Hint</em>: to randomly select from a list, first make sure you import the
 Python random library with <code>import random</code> and then use the expression
-<code>random.choice(my_list)</code>) This might not be a bad time to play around
-with adding strings together as well. Let's fill in the
-<code>construct_sent</code> function!</p>
+<code>random.choice(my_list)</code>)</p>
+
+<p>This might not be a bad time to play around with adding strings
+together as well. Let's fill in the <code>construct_sent</code> function!</p>
 
 <pre><code>def construct_sent(word, table):
+    """Prints a random sentence starting with word, sampling from
+    table.
+    """
     import random
     result = ''
     while word not in ['.', '!', '?']:
-        "**FILL THIS IN**"
-
+        "***YOUR CODE HERE ***"
     return result + word
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton4">Toggle Solution</button>
-  <div id="toggleText4" style="display: none">
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
     <pre><code>def construct_sent(word, table):
-    """Prints a random sentence starting with word, sampling from
-    table"""
     import random
     result = ''
     while word not in ['.', '!', '?']:
@@ -253,8 +562,9 @@ with adding strings together as well. Let's fill in the
 <?php } ?>
 <p>Great! Now all that's left is to run our functions with some actual
 code. The following snippet included in the skeleton code will return
-a list containing the words in all of the works of Shakespeare.
-(warning: do not try to print the return result of this function):</p>
+a list containing the words in all of the works of Shakespeare.</p>
+
+<p><em>Warning</em>: do <strong>NOT</strong> try to print the return result of this function):</p>
 
 <pre><code>def shakespeare_tokens(path = 'shakespeare.txt', url = 'http://goo.gl/SztLfX'):
     """Return the words of Shakespeare's plays as a list"""
@@ -271,7 +581,6 @@ a list containing the words in all of the works of Shakespeare.
 our successors table.  Let's make the following assignments: </p>
 
 <pre><code>&gt;&gt;&gt; tokens = shakespeare_tokens()
-
 &gt;&gt;&gt; table = build_successors_table(tokens)
 </code></pre>
 
@@ -311,7 +620,7 @@ the folowing:</p>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 5; $i++) { ?>
+    <?php for ($i = 0; $i < 10; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
