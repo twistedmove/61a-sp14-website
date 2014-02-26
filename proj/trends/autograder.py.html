@@ -8,55 +8,113 @@
 <h3>autograder.py (<a href="autograder.py">plain text</a>)</h3>
 <hr>
 <pre>
-<span style="color: darkred">"""Common utility functions for automatic grading."""
+<span style="color: darkred">"""
+Student autograder utilities.
 
-</span><span style="color: blue; font-weight: bold">import </span>sys<span style="font-weight: bold">, </span>os<span style="font-weight: bold">, </span>traceback
-<span style="color: blue; font-weight: bold">from </span>doctest <span style="color: blue; font-weight: bold">import </span>DocTestFinder<span style="font-weight: bold">, </span>DocTestRunner
-<span style="color: blue; font-weight: bold">from </span>collections <span style="color: blue; font-weight: bold">import </span>namedtuple<span style="font-weight: bold">, </span>defaultdict
-<span style="color: blue; font-weight: bold">import </span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">, </span>urllib<span style="font-weight: bold">.</span>error
+This file provides a common interface for the CS 61A project
+student-side autograder. Students do not need to read or understand
+the contents of this file.
+
+Usage:
+This file is intended to run as the main script. Test cases should
+be defined in two files:
+
+* locked_tests.py
+* unlocked_tests.py
+
+This file supports the following primary options:
+
+* Unlocking tests (-u): Students will receive test cases in locked
+    form. Test cases can be unlocked by using the "-u" flag. Once a
+    test is unlocked, students will be able to run the autograder with
+    those cases (see below)
+* Testing individual questions (-q): Students can test an individual
+    question using the "-q" flag. Omitting the "-q" flag will test
+    all unlocked test cases. By default, the autograder will stop once
+    the first error is encountered (see below)
+* Testing all questions regardless of errors (-a): When specified, the
+    autograder continues running even if it encounters errors. The
+    "-a" flag works even if the "-q" is used
+* Interactive debugging (-i): by default, when the autograder
+    encounters an error, it prints the stack trace and terminates. The
+    "-i" will instead print the stack trace, then open an interactive
+    console to allow students to inspect the environment.
+"""
+
+</span><span style="color: blue; font-weight: bold">import </span>argparse
+<span style="color: blue; font-weight: bold">from </span>code <span style="color: blue; font-weight: bold">import </span>InteractiveConsole
+<span style="color: blue; font-weight: bold">import </span>hmac
+<span style="color: blue; font-weight: bold">import </span>pickle
+<span style="color: blue; font-weight: bold">import </span>rlcompleter
 <span style="color: blue; font-weight: bold">import </span>re
-<span style="color: blue; font-weight: bold">import </span>argparse
+<span style="color: blue; font-weight: bold">import </span>traceback
+<span style="color: blue; font-weight: bold">import </span>urllib<span style="font-weight: bold">.</span>request
+<span style="color: blue; font-weight: bold">import </span>os
 
-Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight: bold">(</span><span style="color: red">'Test'</span><span style="font-weight: bold">, [</span><span style="color: red">'name'</span><span style="font-weight: bold">, </span><span style="color: red">'fn'</span><span style="font-weight: bold">])
-</span>TESTS <span style="font-weight: bold">= []
+__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.0'
 
-</span><span style="color: green; font-style: italic"># set path for autograder to test current working directory
-</span>sys<span style="font-weight: bold">.</span>path<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">:</span><span style="color: red">0</span><span style="font-weight: bold">] = [ </span>os<span style="font-weight: bold">.</span>getcwd<span style="font-weight: bold">() ]
+</span><span style="color: green; font-style: italic">#############
+# Utilities #
+#############
 
-</span><span style="color: blue; font-weight: bold">def </span>test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Decorator to register a test. A test returns a true value on failure."""
-    </span>TESTS<span style="font-weight: bold">.</span>append<span style="font-weight: bold">(</span>Test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">, </span>fn<span style="font-weight: bold">))
-    </span><span style="color: blue; font-weight: bold">return </span>fn
+</span><span style="color: blue; font-weight: bold">class </span>TestException<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Custom exception for autograder."""
 
-<span style="color: blue; font-weight: bold">def </span>test_all<span style="font-weight: bold">(</span>project_name<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">=</span>TESTS<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Run all TESTS. Exits with a useful code: 0 for ok, 1 for problems."""
-    </span><span style="color: blue; font-weight: bold">for </span>test <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
-        </span>underline<span style="font-weight: bold">(</span><span style="color: red">'Test {0}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>test<span style="font-weight: bold">.</span>name<span style="font-weight: bold">))
-        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-            </span>failure <span style="font-weight: bold">= </span>test<span style="font-weight: bold">.</span>fn<span style="font-weight: bold">(</span><span style="color: blue">None</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">except </span>Exception as inst<span style="font-weight: bold">:
-            </span>traceback<span style="font-weight: bold">.</span>print_exc<span style="font-weight: bold">()
-            </span>failure <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
-        if </span>failure<span style="font-weight: bold">:
-            </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'All released tests passed'</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
-    </span>sys<span style="font-weight: bold">.</span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>test_src<span style="font-weight: bold">, </span>outputs<span style="font-weight: bold">, </span>explanation<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">, </span>preamble<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
+                 </span>timeout<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
+        </span>super<span style="font-weight: bold">().</span>__init__<span style="font-weight: bold">()
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>test_src <span style="font-weight: bold">= </span>test_src
+        <span style="color: blue">self</span><span style="font-weight: bold">.</span>outputs <span style="font-weight: bold">= </span>outputs
+        <span style="color: blue">self</span><span style="font-weight: bold">.</span>explanation <span style="font-weight: bold">= </span>explanation
+        <span style="color: blue">self</span><span style="font-weight: bold">.</span>preamble <span style="font-weight: bold">= </span>preamble
+        <span style="color: blue">self</span><span style="font-weight: bold">.</span>timeout<span style="font-weight: bold">=</span>timeout
 
-</span><span style="color: blue; font-weight: bold">class </span>TimeoutError<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">pass
+<span style="color: blue; font-weight: bold">def </span>underline<span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>under<span style="font-weight: bold">=</span><span style="color: red">'='</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Underlines a given line with the specified under style.
 
-</span>TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">20
-</span><span style="color: blue; font-weight: bold">def </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">=</span>TIMEOUT<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>inputs<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is not </span>tuple<span style="font-weight: bold">:
-        </span>inputs <span style="font-weight: bold">= (</span>inputs<span style="font-weight: bold">,)
-    </span>result <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">, </span>inputs<span style="font-weight: bold">, </span>kwargs<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>result
+    PARAMETERS:
+    line  -- str
+    under -- str; a one-character string that specifies the underline
+             style
 
-<span style="color: blue; font-weight: bold">def </span>timed<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kwargs<span style="font-weight: bold">={}):
-    </span><span style="color: darkred">"""Calls FUNC with arguments ARGS and keyword arguments KWARGS. If it takes
-    longer than TIMEOUT seconds to finish executing, a TimeoutError will be
-    raised."""
+    RETURNS:
+    str; the underlined version of line
+    """
+    </span><span style="color: blue; font-weight: bold">return </span>line <span style="font-weight: bold">+ </span><span style="color: red">'\n' </span><span style="font-weight: bold">+ </span>under <span style="font-weight: bold">* </span>len<span style="font-weight: bold">(</span>line<span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">def </span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>prompt<span style="font-weight: bold">=</span><span style="color: red">'&gt;&gt;&gt; '</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Formats a given line as if it had been typed in an interactive
+    interpreter.
+
+    PARAMETERS:
+    line   -- object; represents a line of Python code. If not a
+              string, line will be converted using repr. Otherwise,
+              expected to contain no newlines for aesthetic reasons
+    prompt -- str; prompt symbol. If a space is desired between the
+              symbol and input, prompt must contain the space itself
+    RETURNS:
+    str; the formatted version of line
+    """
+    </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>line<span style="font-weight: bold">) != </span>str<span style="font-weight: bold">:
+        </span>line <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">(</span>line<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>prompt <span style="font-weight: bold">+ </span>line
+
+
+<span style="color: blue; font-weight: bold">class </span>TimeoutError<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
+    </span>_message <span style="font-weight: bold">= </span><span style="color: red">'Evaluation timed out!'
+
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>timeout<span style="font-weight: bold">):
+        </span>super<span style="font-weight: bold">().</span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>timeout <span style="font-weight: bold">= </span>timeout
+
+TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
+</span><span style="color: blue; font-weight: bold">def </span>timed<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>timeout<span style="font-weight: bold">=</span>TIMEOUT<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Evaluates expr in the given frame.
+
+    PARAMETERS:
+    expr  -- str; Python expression to be evaluated
+    frame -- dict; environment in which expr should be evaluated
+    """
     </span><span style="color: blue; font-weight: bold">from </span>threading <span style="color: blue; font-weight: bold">import </span>Thread
     <span style="color: blue; font-weight: bold">class </span>ReturningThread<span style="font-weight: bold">(</span>Thread<span style="font-weight: bold">):
         </span><span style="color: darkred">"""Creates a daemon Thread with a result variable."""
@@ -67,7 +125,7 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
             self</span><span style="font-weight: bold">.</span>error <span style="font-weight: bold">= </span><span style="color: blue">None
         </span><span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
             </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span>func<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">)
+                </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>result <span style="font-weight: bold">= </span>fn<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kargs<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
                 </span>e<span style="font-weight: bold">.</span>_message <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">(</span>limit<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
                 </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>error <span style="font-weight: bold">= </span>e
@@ -75,111 +133,510 @@ Test <span style="font-weight: bold">= </span>namedtuple<span style="font-weight
     </span>submission<span style="font-weight: bold">.</span>start<span style="font-weight: bold">()
     </span>submission<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>is_alive<span style="font-weight: bold">():
-        </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span><span style="color: red">"Evaluation timed out!"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">raise </span>TimeoutError<span style="font-weight: bold">(</span>timeout<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>submission<span style="font-weight: bold">.</span>error <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">raise </span>submission<span style="font-weight: bold">.</span>error
     <span style="color: blue; font-weight: bold">return </span>submission<span style="font-weight: bold">.</span>result
 
-<span style="color: blue; font-weight: bold">def </span>check_func<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
-               </span>comp <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">: </span>x <span style="font-weight: bold">== </span>y<span style="font-weight: bold">,
-               </span>in_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">, </span>out_print <span style="font-weight: bold">= </span>repr<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Test FUNC according to sequence TESTS.  Each item in TESTS consists of
-    (I, V, D=None), where I is a tuple of inputs to FUNC (if not a tuple,
-    (I,) is substituted) and V is the proper output according to comparison
-    COMP.  Prints erroneous cases.  In case of error, uses D as the test
-    description, or constructs a description from I and V otherwise.
-    Returns 0 for all correct, or the number of tests failed."""
-    </span>code <span style="font-weight: bold">= </span><span style="color: red">0
-    </span><span style="color: blue; font-weight: bold">for </span>input<span style="font-weight: bold">, </span>output<span style="font-weight: bold">, *</span>desc <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
+<span style="color: green; font-style: italic">#####################
+# Testing Mechanism #
+#####################
+
+</span>PS1 <span style="font-weight: bold">= </span><span style="color: red">'&gt;&gt;&gt; '
+</span>PS2 <span style="font-weight: bold">= </span><span style="color: red">'... '
+
+</span><span style="color: blue; font-weight: bold">def </span>get_name<span style="font-weight: bold">(</span>test<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">return </span>test<span style="font-weight: bold">[</span><span style="color: red">'name'</span><span style="font-weight: bold">] </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>test<span style="font-weight: bold">[</span><span style="color: red">'name'</span><span style="font-weight: bold">])==</span>str <span style="color: blue; font-weight: bold">else </span>test<span style="font-weight: bold">[</span><span style="color: red">'name'</span><span style="font-weight: bold">][</span><span style="color: red">0</span><span style="font-weight: bold">]
+
+</span><span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(</span>test<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Runs all test suites for this class.
+
+    PARAMETERS:
+    test         -- dict; test cases for a single question
+    global_frame -- dict; bindings for the global frame
+    interactive  -- bool; True if interactive mode is enabled
+
+    DESCRIPTION:
+    Test suites should be correspond to the key 'suites' in test.
+    If no such key exists, run as if zero suites are
+    defined. Use the first value corresponding to the key 'name' in
+    test as the name of the test.
+
+    RETURNS:
+    bool; True if all suites passed.
+    """
+    </span>name <span style="font-weight: bold">= </span>get_name<span style="font-weight: bold">(</span>test<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>underline<span style="font-weight: bold">(</span><span style="color: red">'Test ' </span><span style="font-weight: bold">+ </span>name<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">if </span>global_frame <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span>global_frame <span style="font-weight: bold">= {}
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'note' </span><span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\n'</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>process_input<span style="font-weight: bold">(</span>test<span style="font-weight: bold">[</span><span style="color: red">'note'</span><span style="font-weight: bold">])))
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'suites' </span><span style="color: blue; font-weight: bold">not in </span>test<span style="font-weight: bold">:
+        </span>test<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">] = []
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'cache' </span><span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">:
+        </span>test<span style="font-weight: bold">[</span><span style="color: red">'cache'</span><span style="font-weight: bold">](</span>global_frame<span style="font-weight: bold">)
+
+    </span>preamble <span style="font-weight: bold">= </span><span style="color: red">''
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'preamble' </span><span style="color: blue; font-weight: bold">in </span>test <span style="color: blue; font-weight: bold">and </span><span style="color: red">'all' </span><span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">]:
+        </span>preamble <span style="font-weight: bold">+= </span>test<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span><span style="color: red">'all'</span><span style="font-weight: bold">]
+    </span>postamble <span style="font-weight: bold">= </span><span style="color: red">''
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'postamble' </span><span style="color: blue; font-weight: bold">in </span>test <span style="color: blue; font-weight: bold">and </span><span style="color: red">'all' </span><span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">[</span><span style="color: red">'postamble'</span><span style="font-weight: bold">]:
+        </span>postamble <span style="font-weight: bold">+= </span>test<span style="font-weight: bold">[</span><span style="color: red">'postamble'</span><span style="font-weight: bold">][</span><span style="color: red">'all'</span><span style="font-weight: bold">]
+
+    </span>passed <span style="font-weight: bold">= </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">for </span>counter<span style="font-weight: bold">, </span>suite <span style="color: blue; font-weight: bold">in </span>enumerate<span style="font-weight: bold">(</span>test<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">]):
+        </span><span style="color: green; font-style: italic"># Preamble and Postamble
+        </span>new_preamble <span style="font-weight: bold">= </span>preamble
+        <span style="color: blue; font-weight: bold">if </span><span style="color: red">'preamble' </span><span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">:
+            </span>new_preamble <span style="font-weight: bold">+= </span>test<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">].</span>get<span style="font-weight: bold">(</span>counter<span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">)
+        </span>new_postamble <span style="font-weight: bold">= </span>postamble
+        <span style="color: blue; font-weight: bold">if </span><span style="color: red">'postamble' </span><span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">:
+            </span>new_postamble <span style="font-weight: bold">+= </span>test<span style="font-weight: bold">[</span><span style="color: red">'postamble'</span><span style="font-weight: bold">].</span>get<span style="font-weight: bold">(</span>counter<span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">)
+        </span>new_postamble <span style="font-weight: bold">= </span>compile<span style="font-weight: bold">(</span><span style="color: red">'\n'</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>process_input<span style="font-weight: bold">(</span>new_postamble<span style="font-weight: bold">)),
+                  </span><span style="color: red">'{} suite {} postamble'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>counter<span style="font-weight: bold">),
+                  </span><span style="color: red">'exec'</span><span style="font-weight: bold">)
+        </span><span style="color: green; font-style: italic"># Run tests
         </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-            </span>val <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>func<span style="font-weight: bold">, </span>input<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
-            </span>fail_msg <span style="font-weight: bold">= </span><span style="color: red">"Function {0} failed"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>func<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">if </span>desc<span style="font-weight: bold">:
-                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>fail_msg<span style="font-weight: bold">, </span>desc<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])
+            </span>run_suite<span style="font-weight: bold">(</span>new_preamble<span style="font-weight: bold">, </span>suite<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">(),
+                      </span><span style="color: red">'{} suite {}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>counter<span style="font-weight: bold">))
+        </span><span style="color: blue; font-weight: bold">except </span>TestException as e<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>new_postamble<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">())
+            </span>failed <span style="font-weight: bold">= </span>handle_failure<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>counter <span style="font-weight: bold">+ </span><span style="color: red">1</span><span style="font-weight: bold">,
+                                       </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">(),
+                                       </span>interactive<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">assert </span>failed<span style="font-weight: bold">, </span><span style="color: red">'Autograder error'
+            </span><span style="color: blue; font-weight: bold">break
+        else</span><span style="font-weight: bold">:
+            </span>passed <span style="font-weight: bold">+= </span><span style="color: red">1
+        </span><span style="color: blue; font-weight: bold">finally</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>new_postamble<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">())
+    </span>total_cases <span style="font-weight: bold">= </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">for </span>suite <span style="color: blue; font-weight: bold">in </span>test<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">]:
+        </span>total_cases <span style="font-weight: bold">+= </span>len<span style="font-weight: bold">(</span>suite<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>passed <span style="font-weight: bold">== </span>len<span style="font-weight: bold">(</span>test<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">]):
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'All unlocked tests passed!'</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>test<span style="font-weight: bold">[</span><span style="color: red">'total_cases'</span><span style="font-weight: bold">] </span><span style="color: blue; font-weight: bold">and </span>total_cases <span style="font-weight: bold">&lt; </span>test<span style="font-weight: bold">[</span><span style="color: red">'total_cases'</span><span style="font-weight: bold">]:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Note: {} still has {} locked cases.'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(
+                </span>name<span style="font-weight: bold">,
+                </span>test<span style="font-weight: bold">[</span><span style="color: red">'total_cases'</span><span style="font-weight: bold">] - </span>total_cases<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+    </span><span style="color: blue; font-weight: bold">return </span>passed <span style="font-weight: bold">== </span>len<span style="font-weight: bold">(</span>test<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">])
+
+</span><span style="color: blue; font-weight: bold">def </span>run_suite<span style="font-weight: bold">(</span>preamble<span style="font-weight: bold">, </span>suite<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">, </span>label<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Runs tests for a single suite.
+
+    PARAMETERS:
+    preamble     -- str; the preamble that should be run before
+                    every test
+    suite        -- list; each element is a test case, represented
+                    as a 2-tuple or 3-tuple
+    global_frame -- dict; global frame
+
+    DESCRIPTION:
+    Each test case in the parameter suite is represented as a
+    2-tuple or a 3-tuple:
+
+        (input, outputs)
+        (input, outputs, explanation)
+
+    where:
+    input       -- str; a (possibly multiline) string of Python
+                   source code
+    outputs     -- iterable or string; if string, outputs is the
+                   sole expected output. If iterable, each element
+                   in outputs should correspond to an input slot
+                   in input (delimited by '$ ').
+    explanation -- (optional) str; an explanation for the test
+
+    For each test, a new frame is created and houses all bindings
+    made by the test. The preamble will run first (if it exists)
+    before the test input.
+
+    Expected output and actual output is tested on shallow equality
+    (==). If a test fails, a TestException will be raised that
+    contains information about the test.
+
+    RAISES:
+    TestException; contains information about the test that failed.
+    """
+    </span>new_preamble <span style="font-weight: bold">= </span>compile<span style="font-weight: bold">(</span><span style="color: red">'\n'</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>process_input<span style="font-weight: bold">(</span>preamble<span style="font-weight: bold">)),
+                       </span><span style="color: red">'{} preamble'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>label<span style="font-weight: bold">), </span><span style="color: red">'exec'</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>new_preamble<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">for </span>test<span style="font-weight: bold">, </span>outputs<span style="font-weight: bold">, *</span>explanation <span style="color: blue; font-weight: bold">in </span>suite<span style="font-weight: bold">:
+        </span>frame <span style="font-weight: bold">= </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">()
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>outputs<span style="font-weight: bold">) == </span>str<span style="font-weight: bold">:
+            </span>outputs <span style="font-weight: bold">= (</span>outputs<span style="font-weight: bold">,)
+        </span>out_iter <span style="font-weight: bold">= </span>iter<span style="font-weight: bold">(</span>outputs<span style="font-weight: bold">)
+
+        </span>lines <span style="font-weight: bold">= </span>process_input<span style="font-weight: bold">(</span>test<span style="font-weight: bold">)
+        </span>current<span style="font-weight: bold">, </span>prompts <span style="font-weight: bold">= </span><span style="color: red">''</span><span style="font-weight: bold">, </span><span style="color: red">0
+        </span><span style="color: blue; font-weight: bold">for </span>i<span style="font-weight: bold">, </span>line <span style="color: blue; font-weight: bold">in </span>enumerate<span style="font-weight: bold">(</span>lines<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">if </span>line<span style="font-weight: bold">.</span>startswith<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>\
+                    <span style="font-weight: bold">(</span>i <span style="font-weight: bold">== </span>len<span style="font-weight: bold">(</span>lines<span style="font-weight: bold">) - </span><span style="color: red">1 </span><span style="color: blue; font-weight: bold">and </span>prompts <span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">):
+                </span>prompts <span style="font-weight: bold">+= </span><span style="color: red">1
+                </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+                    </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>current<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">except</span><span style="font-weight: bold">:
+                    </span><span style="color: blue; font-weight: bold">raise </span>TestException<span style="font-weight: bold">(</span>test<span style="font-weight: bold">, </span>outputs<span style="font-weight: bold">, </span>explanation<span style="font-weight: bold">,
+                                        </span>preamble<span style="font-weight: bold">)
+                </span>current <span style="font-weight: bold">= </span><span style="color: red">''
+                </span>output <span style="font-weight: bold">= </span>next<span style="font-weight: bold">(</span>out_iter<span style="font-weight: bold">)
+                </span>expect <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>output<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+                    </span>actual <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>line<span style="font-weight: bold">.</span>lstrip<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">), </span>frame<span style="font-weight: bold">))
+                </span><span style="color: blue; font-weight: bold">except</span><span style="font-weight: bold">:
+                    </span><span style="color: blue; font-weight: bold">raise </span>TestException<span style="font-weight: bold">(</span>test<span style="font-weight: bold">, </span>outputs<span style="font-weight: bold">, </span>explanation<span style="font-weight: bold">,
+                                        </span>preamble<span style="font-weight: bold">)
+
+                </span><span style="color: blue; font-weight: bold">if </span>expect <span style="font-weight: bold">!= </span>actual<span style="font-weight: bold">:
+                    </span><span style="color: blue; font-weight: bold">if </span>explanation<span style="font-weight: bold">:
+                        </span>explanation <span style="font-weight: bold">= </span>explanation<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
+                    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                        </span>explanation <span style="font-weight: bold">= </span><span style="color: red">''
+                    </span><span style="color: blue; font-weight: bold">raise </span>TestException<span style="font-weight: bold">(</span>test<span style="font-weight: bold">, </span>outputs<span style="font-weight: bold">, </span>explanation<span style="font-weight: bold">,
+                                        </span>preamble<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>fail_msg<span style="font-weight: bold">, </span><span style="color: red">"with input"</span><span style="font-weight: bold">, </span>in_print<span style="font-weight: bold">(</span>input<span style="font-weight: bold">))
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>e<span style="font-weight: bold">.</span>_message<span style="font-weight: bold">)
-            </span>code <span style="font-weight: bold">+= </span><span style="color: red">1
+                </span>current <span style="font-weight: bold">+= </span>line <span style="font-weight: bold">+ </span><span style="color: red">'\n'
+        </span><span style="color: blue; font-weight: bold">if </span>prompts <span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">:
+            </span>output <span style="font-weight: bold">= </span>next<span style="font-weight: bold">(</span>out_iter<span style="font-weight: bold">)
+            </span>expect <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>output<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
+            </span>actual <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>lstrip<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">), </span>frame<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">if </span>expect <span style="font-weight: bold">!= </span>actual<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">if </span>explanation<span style="font-weight: bold">:
+                    </span>explanation <span style="font-weight: bold">= </span>explanation<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
+                </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                    </span>explanation <span style="font-weight: bold">= </span><span style="color: red">''
+                </span><span style="color: blue; font-weight: bold">raise </span>TestException<span style="font-weight: bold">(</span>test<span style="font-weight: bold">, </span>outputs<span style="font-weight: bold">, </span>explanation<span style="font-weight: bold">,
+                                    </span>preamble<span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">def </span>handle_failure<span style="font-weight: bold">(</span>error<span style="font-weight: bold">, </span>suite<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">, </span>interactive<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Handles a test failure.
+
+    PARAMETERS:
+    error        -- TestException; contains information about the
+                    failed test
+    suite        -- int; suite number (for informational purposes)
+    global_frame -- dict; global frame
+    interactive  -- bool; True if interactive mode is enabled
+
+    DESCRIPTION:
+    Expected output and actual output are checked with shallow
+    equality (==).
+
+    RETURNS:
+    bool; True if error actually occurs, which should always be
+    the case -- handle_failure should only be called if a test
+    fails.
+    """
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>underline<span style="font-weight: bold">(</span><span style="color: red">'Test case failed:'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>suite<span style="font-weight: bold">), </span>under<span style="font-weight: bold">=</span><span style="color: red">'-'</span><span style="font-weight: bold">))
+    </span>console <span style="font-weight: bold">= </span>InteractiveConsole<span style="font-weight: bold">(</span>locals<span style="font-weight: bold">=</span>global_frame<span style="font-weight: bold">)
+    </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+    for </span>line <span style="color: blue; font-weight: bold">in </span>process_input<span style="font-weight: bold">(</span>error<span style="font-weight: bold">.</span>preamble<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if not </span>incomplete <span style="color: blue; font-weight: bold">and not </span>line<span style="font-weight: bold">:
+            </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+            continue
+        </span>prompt <span style="font-weight: bold">= </span>PS2 <span style="color: blue; font-weight: bold">if </span>incomplete <span style="color: blue; font-weight: bold">else </span>PS1
+        <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>prompt<span style="font-weight: bold">))
+        </span>incomplete <span style="font-weight: bold">= </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">)
+
+    </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+    </span>outputs <span style="font-weight: bold">= </span>iter<span style="font-weight: bold">(</span>error<span style="font-weight: bold">.</span>outputs<span style="font-weight: bold">)
+    </span>lines <span style="font-weight: bold">= </span>process_input<span style="font-weight: bold">(</span>error<span style="font-weight: bold">.</span>test_src<span style="font-weight: bold">)
+    </span>prompts <span style="font-weight: bold">= </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">for </span>i<span style="font-weight: bold">, </span>line <span style="color: blue; font-weight: bold">in </span>enumerate<span style="font-weight: bold">(</span>lines<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>line<span style="font-weight: bold">.</span>startswith<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>\
+                <span style="font-weight: bold">(</span>i <span style="font-weight: bold">== </span>len<span style="font-weight: bold">(</span>lines<span style="font-weight: bold">) - </span><span style="color: red">1 </span><span style="color: blue; font-weight: bold">and </span>prompts <span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">):
+            </span>line <span style="font-weight: bold">= </span>line<span style="font-weight: bold">.</span>lstrip<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">)
+            </span>prompt <span style="font-weight: bold">= </span>PS2 <span style="color: blue; font-weight: bold">if </span>incomplete <span style="color: blue; font-weight: bold">else </span>PS1
+            <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>prompt<span style="font-weight: bold">))
+
+            </span>expect <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>next<span style="font-weight: bold">(</span>outputs<span style="font-weight: bold">), </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">())
+            </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+                </span>actual <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>line<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">()))
+            </span><span style="color: blue; font-weight: bold">except </span>RuntimeError<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'# Error: maximum recursion depth exceeded'</span><span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
+                    </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+                </span><span style="color: blue; font-weight: bold">return True
+            except </span>TimeoutError as e<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'# Error: evaluation exceeded {} seconds'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>e<span style="font-weight: bold">.</span>timeout<span style="font-weight: bold">))
+                </span><span style="color: blue; font-weight: bold">return True
+            except </span>Exception as e<span style="font-weight: bold">:
+                </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'# Error: expected'</span><span style="font-weight: bold">, </span>repr<span style="font-weight: bold">(</span>expect<span style="font-weight: bold">), </span><span style="color: red">'got'</span><span style="font-weight: bold">,
+                      </span>e<span style="font-weight: bold">.</span>__class__<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
+                    </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+                </span><span style="color: blue; font-weight: bold">return True
+
+            print</span><span style="font-weight: bold">(</span>display_prompt<span style="font-weight: bold">(</span>actual<span style="font-weight: bold">, </span>prompt<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">))
+            </span><span style="color: blue; font-weight: bold">if </span>expect <span style="font-weight: bold">!= </span>actual<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'# Error: expected'</span><span style="font-weight: bold">, </span>repr<span style="font-weight: bold">(</span>expect<span style="font-weight: bold">), </span><span style="color: red">'got'</span><span style="font-weight: bold">, </span>repr<span style="font-weight: bold">(</span>actual<span style="font-weight: bold">))
+                </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
+                    </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+                </span><span style="color: blue; font-weight: bold">return True
+            </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+        else</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">if not </span>incomplete <span style="color: blue; font-weight: bold">and not </span>line<span style="font-weight: bold">:
+                </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+                continue
+            </span>prompt <span style="font-weight: bold">= </span>PS2 <span style="color: blue; font-weight: bold">if </span>incomplete <span style="color: blue; font-weight: bold">else </span>PS1
+            <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>prompt<span style="font-weight: bold">))
+            </span>incomplete <span style="font-weight: bold">= </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+    </span><span style="color: blue; font-weight: bold">return False
+
+def </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Starts an interactive console."""
+    </span>console<span style="font-weight: bold">.</span>interact<span style="font-weight: bold">(</span><span style="color: red">'# Interactive console\n'
+                     '# Type exit() to quit'</span><span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">def </span>process_input<span style="font-weight: bold">(</span>src<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Splits a (possibly multiline) string of Python input into
+    a list, adjusting for common indents.
+
+    PARAMETERS:
+    src -- str; (possibly) multiline string of Python input
+
+    DESCRIPTION:
+    Indentation adjustment is determined by the first nonempty
+    line. The characters of indentation for that line will be
+    removed from the front of each subsequent line.
+
+    RETURNS:
+    list of strings; lines of Python input
+    """
+    </span>src <span style="font-weight: bold">= </span>src<span style="font-weight: bold">.</span>lstrip<span style="font-weight: bold">(</span><span style="color: red">'\n'</span><span style="font-weight: bold">).</span>rstrip<span style="font-weight: bold">()
+    </span>match <span style="font-weight: bold">= </span>re<span style="font-weight: bold">.</span>match<span style="font-weight: bold">(</span><span style="color: red">'\s+'</span><span style="font-weight: bold">, </span>src<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>match<span style="font-weight: bold">:
+        </span>length <span style="font-weight: bold">= </span>len<span style="font-weight: bold">(</span>match<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span>length <span style="font-weight: bold">= </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">return </span><span style="font-weight: bold">[</span>line<span style="font-weight: bold">[</span>length<span style="font-weight: bold">:] </span><span style="color: blue; font-weight: bold">for </span>line <span style="color: blue; font-weight: bold">in </span>src<span style="font-weight: bold">.</span>split<span style="font-weight: bold">(</span><span style="color: red">'\n'</span><span style="font-weight: bold">)]
+
+</span><span style="color: green; font-style: italic">##########################
+# Command Line Interface #
+##########################
+
+</span><span style="color: blue; font-weight: bold">def </span>run_preamble<span style="font-weight: bold">(</span>preamble<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Displays the specified preamble."""
+    </span>console <span style="font-weight: bold">= </span>InteractiveConsole<span style="font-weight: bold">(</span>frame<span style="font-weight: bold">)
+    </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+    for </span>line <span style="color: blue; font-weight: bold">in </span>process_input<span style="font-weight: bold">(</span>preamble<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if not </span>incomplete <span style="color: blue; font-weight: bold">and not </span>line<span style="font-weight: bold">:
+            </span>incomplete <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+            continue
+        </span>prompt <span style="font-weight: bold">= </span>PS2 <span style="color: blue; font-weight: bold">if </span>incomplete <span style="color: blue; font-weight: bold">else </span>PS1
+        <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>prompt<span style="font-weight: bold">))
+        </span>incomplete <span style="font-weight: bold">= </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">def </span>get_test<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">, </span>question<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Retrieves a test for the specified question in the given list
+    of tests.
+
+    PARAMETERS:
+    tests    -- list of dicts; list of tests
+    quesiton -- str; name of test
+
+    RETURNS:
+    dict; the test corresponding to question. If no such test is found,
+    return None
+    """
+    </span><span style="color: blue; font-weight: bold">for </span>test <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'name' </span><span style="color: blue; font-weight: bold">not in </span>test<span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">continue
-        if not </span>comp<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>output<span style="font-weight: bold">):
-            </span>wrong_msg <span style="font-weight: bold">= </span><span style="color: red">"Wrong result from {0}:"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>func<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">if </span>desc<span style="font-weight: bold">:
-                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>wrong_msg<span style="font-weight: bold">, </span>desc<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])
+        </span>names <span style="font-weight: bold">= </span>test<span style="font-weight: bold">[</span><span style="color: red">'name'</span><span style="font-weight: bold">]
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>names<span style="font-weight: bold">) == </span>str<span style="font-weight: bold">:
+            </span>names <span style="font-weight: bold">= (</span>names<span style="font-weight: bold">,)
+        </span><span style="color: blue; font-weight: bold">if </span>question <span style="color: blue; font-weight: bold">in </span>names<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">return </span>test
+
+<span style="color: blue; font-weight: bold">def </span>unlock<span style="font-weight: bold">(</span>question<span style="font-weight: bold">, </span>locked_tests<span style="font-weight: bold">, </span>unlocked_tests<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Unlocks a question, given locked_tests and unlocked_tests.
+
+    PARAMETERS:
+    question       -- str; the name of the test
+    locked_tests   -- module; contains a list of locked tests
+    unlocked_tests -- module; contains a list of unlocked tests
+
+    DESCRIPTION:
+    This function incrementally unlocks all cases in a specified
+    question. Students must answer in the order that test cases are
+    written. Once a test case is unlocked, it will remain unlocked.
+
+    Persistant state is stored by rewriting the contents of
+    locked_tests.py and unlocked_tests.py. Students should NOT manually
+    change these files.
+    """
+    </span>hash_key <span style="font-weight: bold">= </span>locked_tests<span style="font-weight: bold">[</span><span style="color: red">'hash_key'</span><span style="font-weight: bold">]
+    </span>imports <span style="font-weight: bold">= </span>unlocked_tests<span style="font-weight: bold">[</span><span style="color: red">'project_info'</span><span style="font-weight: bold">][</span><span style="color: red">'imports'</span><span style="font-weight: bold">]
+
+    </span>locked <span style="font-weight: bold">= </span>get_test<span style="font-weight: bold">(</span>locked_tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">], </span>question<span style="font-weight: bold">)
+    </span>unlocked <span style="font-weight: bold">= </span>get_test<span style="font-weight: bold">(</span>unlocked_tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">], </span>question<span style="font-weight: bold">)
+    </span>name <span style="font-weight: bold">= </span>get_name<span style="font-weight: bold">(</span>locked<span style="font-weight: bold">)
+
+    </span>prompt <span style="font-weight: bold">= </span><span style="color: red">'?'
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>underline<span style="font-weight: bold">(</span><span style="color: red">'Unlocking tests for {}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>name<span style="font-weight: bold">)))
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'At each "{}", type in what you would expect the output to be if you had implemented {}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>prompt<span style="font-weight: bold">, </span>name<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Type exit() to quit'</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+
+    </span>global_frame <span style="font-weight: bold">= {}
+    </span><span style="color: blue; font-weight: bold">for </span>line <span style="color: blue; font-weight: bold">in </span>imports<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">)
+
+    </span>has_preamble <span style="font-weight: bold">= </span><span style="color: red">'preamble' </span><span style="color: blue; font-weight: bold">in </span>locked
+    <span style="color: blue; font-weight: bold">if </span>has_preamble <span style="color: blue; font-weight: bold">and </span><span style="color: red">'all' </span><span style="color: blue; font-weight: bold">in </span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">]:
+        </span>run_preamble<span style="font-weight: bold">(</span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span><span style="color: red">'all'</span><span style="font-weight: bold">], </span>global_frame<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>hash_fn<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>hmac<span style="font-weight: bold">.</span>new<span style="font-weight: bold">(</span>hash_key<span style="font-weight: bold">.</span>encode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">),
+                        </span>x<span style="font-weight: bold">.</span>encode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)).</span>digest<span style="font-weight: bold">()
+
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'suites' </span><span style="color: blue; font-weight: bold">not in </span>locked<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return
+    for </span>suite_num<span style="font-weight: bold">, </span>suite <span style="color: blue; font-weight: bold">in </span>enumerate<span style="font-weight: bold">(</span>locked<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">]):
+        </span><span style="color: blue; font-weight: bold">assert </span>suite_num <span style="font-weight: bold">&lt;= </span>len<span style="font-weight: bold">(</span>unlocked<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">]), </span><span style="color: red">'Incorrect number of suites'
+        </span><span style="color: blue; font-weight: bold">if not </span>suite<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">continue
+        if </span>has_preamble <span style="color: blue; font-weight: bold">and </span>suite_num <span style="color: blue; font-weight: bold">in </span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">]:
+            </span>run_preamble<span style="font-weight: bold">(</span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span>suite_num<span style="font-weight: bold">],
+                         </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">())
+            </span>unlocked<span style="font-weight: bold">.</span>setdefault<span style="font-weight: bold">(</span><span style="color: red">'preamble'</span><span style="font-weight: bold">, {})[</span>suite_num<span style="font-weight: bold">] = </span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span>suite_num<span style="font-weight: bold">]
+        </span><span style="color: blue; font-weight: bold">while </span>suite<span style="font-weight: bold">:
+            </span>case <span style="font-weight: bold">= </span>suite<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
+            </span>lines <span style="font-weight: bold">= [</span>x<span style="font-weight: bold">.</span>strip<span style="font-weight: bold">() </span><span style="color: blue; font-weight: bold">for </span>x <span style="color: blue; font-weight: bold">in </span>case<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">].</span>split<span style="font-weight: bold">(</span><span style="color: red">'\n'</span><span style="font-weight: bold">)
+                     </span><span style="color: blue; font-weight: bold">if </span>x<span style="font-weight: bold">.</span>strip<span style="font-weight: bold">() != </span><span style="color: red">''</span><span style="font-weight: bold">]
+            </span>answers <span style="font-weight: bold">= []
+            </span>outputs <span style="font-weight: bold">= </span>case<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">]
+            </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>outputs<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">not in </span><span style="font-weight: bold">(</span>list<span style="font-weight: bold">, </span>tuple<span style="font-weight: bold">):
+                </span>outputs <span style="font-weight: bold">= [</span>outputs<span style="font-weight: bold">]
+            </span>output_num <span style="font-weight: bold">= </span><span style="color: red">0
+            </span><span style="color: blue; font-weight: bold">for </span>line <span style="color: blue; font-weight: bold">in </span>lines<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">if </span>len<span style="font-weight: bold">(</span>lines<span style="font-weight: bold">) &gt; </span><span style="color: red">1 </span><span style="color: blue; font-weight: bold">and not </span>line<span style="font-weight: bold">.</span>startswith<span style="font-weight: bold">(</span><span style="color: red">'$'</span><span style="font-weight: bold">):
+                    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"&gt;&gt;&gt; " </span><span style="font-weight: bold">+ </span>line<span style="font-weight: bold">)
+                    </span><span style="color: blue; font-weight: bold">continue
+                </span>line <span style="font-weight: bold">= </span>line<span style="font-weight: bold">.</span>lstrip<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"&gt;&gt;&gt; " </span><span style="font-weight: bold">+ </span>line<span style="font-weight: bold">)
+                </span>correct <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+                while not </span>correct<span style="font-weight: bold">:
+                    </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+                        </span>student_input <span style="font-weight: bold">= </span>input<span style="font-weight: bold">(</span>prompt <span style="font-weight: bold">+ </span><span style="color: red">' '</span><span style="font-weight: bold">)
+                    </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>KeyboardInterrupt<span style="font-weight: bold">, </span>EOFError<span style="font-weight: bold">):
+                        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+                            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\nExiting unlocker...'</span><span style="font-weight: bold">)
+                        </span><span style="color: green; font-style: italic"># When you use Ctrl+C in Windows, it throws
+                        # two exceptions, so you need to catch both of
+                        # them.... aka Windows is terrible.
+                        </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>KeyboardInterrupt<span style="font-weight: bold">, </span>EOFError<span style="font-weight: bold">):
+                            </span><span style="color: blue; font-weight: bold">pass
+                        return
+                    if </span>student_input <span style="color: blue; font-weight: bold">in </span><span style="font-weight: bold">(</span><span style="color: red">'exit()'</span><span style="font-weight: bold">, </span><span style="color: red">'quit()'</span><span style="font-weight: bold">):
+                        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\nExiting unlocker...'</span><span style="font-weight: bold">)
+                        </span><span style="color: blue; font-weight: bold">return
+                    </span>correct <span style="font-weight: bold">= </span>hash_fn<span style="font-weight: bold">(</span>student_input<span style="font-weight: bold">) == </span>outputs<span style="font-weight: bold">[</span>output_num<span style="font-weight: bold">]
+                    </span><span style="color: blue; font-weight: bold">if not </span>correct<span style="font-weight: bold">:
+                        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Not quite...try again!"</span><span style="font-weight: bold">)
+                </span>answers<span style="font-weight: bold">.</span>append<span style="font-weight: bold">(</span>student_input<span style="font-weight: bold">)
+                </span>output_num <span style="font-weight: bold">+= </span><span style="color: red">1
+            </span>case<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">] = </span>answers
+            <span style="color: blue; font-weight: bold">if </span>len<span style="font-weight: bold">(</span>unlocked<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">]) == </span>suite_num<span style="font-weight: bold">:
+                </span>unlocked<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">].</span>append<span style="font-weight: bold">([</span>case<span style="font-weight: bold">])
             </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>wrong_msg<span style="font-weight: bold">, </span><span style="color: red">"input"</span><span style="font-weight: bold">, </span>in_print<span style="font-weight: bold">(</span>input<span style="font-weight: bold">))
-                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"   returned"</span><span style="font-weight: bold">, </span>val<span style="font-weight: bold">, </span><span style="color: red">"not"</span><span style="font-weight: bold">, </span>out_print<span style="font-weight: bold">(</span>output<span style="font-weight: bold">))
-            </span>code <span style="font-weight: bold">+= </span><span style="color: red">1
-    </span><span style="color: blue; font-weight: bold">return </span>code
+                </span>unlocked<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">][-</span><span style="color: red">1</span><span style="font-weight: bold">].</span>append<span style="font-weight: bold">(</span>case<span style="font-weight: bold">)
+            </span>suite<span style="font-weight: bold">.</span>pop<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
 
-<span style="color: blue; font-weight: bold">def </span>check_doctest<span style="font-weight: bold">(</span>func_name<span style="font-weight: bold">, </span>module<span style="font-weight: bold">, </span>run<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Check that MODULE.FUNC_NAME doctest passes."""
-    </span>func <span style="font-weight: bold">= </span>getattr<span style="font-weight: bold">(</span>module<span style="font-weight: bold">, </span>func_name<span style="font-weight: bold">)
-    </span>tests <span style="font-weight: bold">= </span>DocTestFinder<span style="font-weight: bold">().</span>find<span style="font-weight: bold">(</span>func<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">if not </span>tests<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"No doctests found for " </span><span style="font-weight: bold">+ </span>func_name<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return True
-    </span>fn <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">lambda</span><span style="font-weight: bold">: </span>DocTestRunner<span style="font-weight: bold">().</span>run<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])
-    </span>result <span style="font-weight: bold">= </span>test_eval<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>tuple<span style="font-weight: bold">())
-    </span><span style="color: blue; font-weight: bold">if </span>result<span style="font-weight: bold">.</span>failed <span style="font-weight: bold">!= </span><span style="color: red">0</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"A doctest example failed for " </span><span style="font-weight: bold">+ </span>func_name <span style="font-weight: bold">+ </span><span style="color: red">"."</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return True
-    return False
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Congratulations, you have unlocked this case!"</span><span style="font-weight: bold">)
 
-def </span>underline<span style="font-weight: bold">(</span>s<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Print string S, double underlined in ASCII."""
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>s<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'='</span><span style="font-weight: bold">*</span>len<span style="font-weight: bold">(</span>s<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"You have unlocked all of the tests for this question!"</span><span style="font-weight: bold">)
 
-</span><span style="color: blue; font-weight: bold">def </span>check_for_updates<span style="font-weight: bold">(</span>index<span style="font-weight: bold">, </span>filenames<span style="font-weight: bold">, </span>version<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">def </span>check_for_updates<span style="font-weight: bold">(</span>remote<span style="font-weight: bold">, </span>version<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You are running version'</span><span style="font-weight: bold">, </span>version<span style="font-weight: bold">, </span><span style="color: red">'of the autograder'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span>remotes <span style="font-weight: bold">= {}
-        </span><span style="color: blue; font-weight: bold">for </span>filename <span style="color: blue; font-weight: bold">in </span>filenames<span style="font-weight: bold">:
-            </span>path <span style="font-weight: bold">= </span>os<span style="font-weight: bold">.</span>path<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>index<span style="font-weight: bold">, </span>filename<span style="font-weight: bold">)
-            </span>data <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(</span>path<span style="font-weight: bold">,))
-            </span>remotes<span style="font-weight: bold">[</span>filename<span style="font-weight: bold">] = </span>data<span style="font-weight: bold">.</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
+        </span>url <span style="font-weight: bold">= </span>os<span style="font-weight: bold">.</span>path<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>remote<span style="font-weight: bold">, </span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">)
+        </span>data <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">, (</span>url<span style="font-weight: bold">,), </span>timeout<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
+        </span>contents <span style="font-weight: bold">= </span>data<span style="font-weight: bold">.</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>URLError<span style="font-weight: bold">, </span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>HTTPError<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Couldn't check remote autograder"</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return
+        </span><span style="color: blue; font-weight: bold">return False
     except </span>TimeoutError<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Checking for updates timed out."</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return
-    </span>remote_version <span style="font-weight: bold">= </span>re<span style="font-weight: bold">.</span>search<span style="font-weight: bold">(</span><span style="color: red">"__version__ = '(.*)'"</span><span style="font-weight: bold">,
-                               </span>remotes<span style="font-weight: bold">[</span>filenames<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]])
+        </span><span style="color: blue; font-weight: bold">return False
+    </span>remote_version <span style="font-weight: bold">= </span>re<span style="font-weight: bold">.</span>search<span style="font-weight: bold">(</span><span style="color: red">"__version__\s*=\s*'(.*)'"</span><span style="font-weight: bold">,
+                               </span>contents<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>remote_version <span style="color: blue; font-weight: bold">and </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">) != </span>version<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Version'</span><span style="font-weight: bold">, </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">),
-              </span><span style="color: red">'is available with new tests.'</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Version'</span><span style="font-weight: bold">, </span>remote_version<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">), </span><span style="color: red">'is available.'</span><span style="font-weight: bold">)
         </span>prompt <span style="font-weight: bold">= </span>input<span style="font-weight: bold">(</span><span style="color: red">'Do you want to automatically download these files? [y/n]: '</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'y' </span><span style="color: blue; font-weight: bold">in </span>prompt<span style="font-weight: bold">.</span>lower<span style="font-weight: bold">():
-            </span><span style="color: blue; font-weight: bold">for </span>file <span style="color: blue; font-weight: bold">in </span>filenames<span style="font-weight: bold">:
-                </span>with open<span style="font-weight: bold">(</span>file<span style="font-weight: bold">, </span><span style="color: red">'w'</span><span style="font-weight: bold">) </span>as new<span style="font-weight: bold">:
-                    </span>new<span style="font-weight: bold">.</span>write<span style="font-weight: bold">(</span>remotes<span style="font-weight: bold">[</span>file<span style="font-weight: bold">])
-                    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\t'</span><span style="font-weight: bold">, </span>file<span style="font-weight: bold">, </span><span style="color: red">'updated'</span><span style="font-weight: bold">)
+            </span>with open<span style="font-weight: bold">(</span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">, </span><span style="color: red">'w'</span><span style="font-weight: bold">) </span>as new<span style="font-weight: bold">:
+                </span>new<span style="font-weight: bold">.</span>write<span style="font-weight: bold">(</span>contents<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'... autograder.py updated!'</span><span style="font-weight: bold">)
             </span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You can download the new autograder from the following links:'</span><span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">for </span>file <span style="color: blue; font-weight: bold">in </span>filenames<span style="font-weight: bold">:
-                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\t' </span><span style="font-weight: bold">+ </span>os<span style="font-weight: bold">.</span>path<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>index<span style="font-weight: bold">, </span>file<span style="font-weight: bold">))
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You can download the new autograder from the following link:'</span><span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'\t' </span><span style="font-weight: bold">+ </span>os<span style="font-weight: bold">.</span>path<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>remote<span style="font-weight: bold">, </span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">))
+            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+            </span><span style="color: blue; font-weight: bold">return True
+    return False
 
-</span><span style="color: blue; font-weight: bold">def </span>run_tests<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>remote_index<span style="font-weight: bold">, </span>autograder_files<span style="font-weight: bold">, </span>version<span style="font-weight: bold">, **</span>kwargs<span style="font-weight: bold">):
-    </span>parser <span style="font-weight: bold">= </span>argparse<span style="font-weight: bold">.</span>ArgumentParser<span style="font-weight: bold">(
-        </span>description<span style="font-weight: bold">=</span><span style="color: red">'A subset of the autograder tests for Hog.'</span><span style="font-weight: bold">)
-    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-q'</span><span style="font-weight: bold">, </span><span style="color: red">'--question'</span><span style="font-weight: bold">, </span>type<span style="font-weight: bold">=</span>int<span style="font-weight: bold">,
+def </span>run_all_tests<span style="font-weight: bold">():
+    </span><span style="color: darkred">"""Runs a command line interface for the autograder."""
+    </span>parser <span style="font-weight: bold">= </span>argparse<span style="font-weight: bold">.</span>ArgumentParser<span style="font-weight: bold">(</span>description<span style="font-weight: bold">=</span><span style="color: red">'CS61A autograder'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-u'</span><span style="font-weight: bold">, </span><span style="color: red">'--unlock'</span><span style="font-weight: bold">, </span>type<span style="font-weight: bold">=</span>str<span style="font-weight: bold">, 
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'Unlocks the specified question'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-q'</span><span style="font-weight: bold">, </span><span style="color: red">'--question'</span><span style="font-weight: bold">, </span>type<span style="font-weight: bold">=</span>str<span style="font-weight: bold">,
                         </span>help<span style="font-weight: bold">=</span><span style="color: red">'Run tests for the specified question'</span><span style="font-weight: bold">)
-    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-v'</span><span style="font-weight: bold">, </span><span style="color: red">'--version'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
-                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'Prints autograder version and exits'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-a'</span><span style="font-weight: bold">, </span><span style="color: red">'--all'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'Runs all tests, regardless of failures'</span><span style="font-weight: bold">)
+    </span>parser<span style="font-weight: bold">.</span>add_argument<span style="font-weight: bold">(</span><span style="color: red">'-i'</span><span style="font-weight: bold">, </span><span style="color: red">'--interactive'</span><span style="font-weight: bold">, </span>action<span style="font-weight: bold">=</span><span style="color: red">'store_true'</span><span style="font-weight: bold">,
+                        </span>help<span style="font-weight: bold">=</span><span style="color: red">'Enables interactive mode upon failure'</span><span style="font-weight: bold">)
     </span>args <span style="font-weight: bold">= </span>parser<span style="font-weight: bold">.</span>parse_args<span style="font-weight: bold">()
 
-    </span>check_for_updates<span style="font-weight: bold">(</span>remote_index<span style="font-weight: bold">, </span>autograder_files<span style="font-weight: bold">, </span>version<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>version<span style="font-weight: bold">:
+    </span>with open<span style="font-weight: bold">(</span><span style="color: red">'unlocked_tests.pkl'</span><span style="font-weight: bold">, </span><span style="color: red">'rb'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
+        </span>unlocked_tests <span style="font-weight: bold">= </span>pickle<span style="font-weight: bold">.</span>load<span style="font-weight: bold">(</span>f<span style="font-weight: bold">)
+    </span>new <span style="font-weight: bold">= </span>check_for_updates<span style="font-weight: bold">(</span>unlocked_tests<span style="font-weight: bold">[</span><span style="color: red">'project_info'</span><span style="font-weight: bold">][</span><span style="color: red">'remote'</span><span style="font-weight: bold">],
+                            </span>__version__<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>new<span style="font-weight: bold">:
         </span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>args<span style="font-weight: bold">.</span>question <span style="color: blue; font-weight: bold">and </span><span style="color: red">0 </span><span style="font-weight: bold">&lt; </span>args<span style="font-weight: bold">.</span>question <span style="font-weight: bold">&lt;= </span>len<span style="font-weight: bold">(</span>TESTS<span style="font-weight: bold">):
-        </span>tests <span style="font-weight: bold">= [</span>TESTS<span style="font-weight: bold">[</span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">-</span><span style="color: red">1</span><span style="font-weight: bold">]]
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
+
+    </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>unlock<span style="font-weight: bold">:
+        </span>with open<span style="font-weight: bold">(</span><span style="color: red">'locked_tests.pkl'</span><span style="font-weight: bold">, </span><span style="color: red">'rb'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
+            </span>locked_tests <span style="font-weight: bold">= </span>pickle<span style="font-weight: bold">.</span>load<span style="font-weight: bold">(</span>f<span style="font-weight: bold">)
+        </span>unlock<span style="font-weight: bold">(</span>args<span style="font-weight: bold">.</span>unlock<span style="font-weight: bold">, </span>locked_tests<span style="font-weight: bold">, </span>unlocked_tests<span style="font-weight: bold">)
+
+        </span>with open<span style="font-weight: bold">(</span><span style="color: red">'locked_tests.pkl'</span><span style="font-weight: bold">, </span><span style="color: red">'wb'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
+            </span>pickle<span style="font-weight: bold">.</span>dump<span style="font-weight: bold">(</span>locked_tests<span style="font-weight: bold">, </span>f<span style="font-weight: bold">, </span>pickle<span style="font-weight: bold">.</span>HIGHEST_PROTOCOL<span style="font-weight: bold">)
+        </span>with open<span style="font-weight: bold">(</span><span style="color: red">'unlocked_tests.pkl'</span><span style="font-weight: bold">, </span><span style="color: red">'wb'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
+            </span>pickle<span style="font-weight: bold">.</span>dump<span style="font-weight: bold">(</span>unlocked_tests<span style="font-weight: bold">, </span>f<span style="font-weight: bold">, </span>pickle<span style="font-weight: bold">.</span>HIGHEST_PROTOCOL<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-        </span>tests <span style="font-weight: bold">= </span>TESTS
-    test_all<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">:
+            </span>tests <span style="font-weight: bold">= </span>get_test<span style="font-weight: bold">(</span>unlocked_tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">], </span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">if not </span>tests<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Test {} does not exist'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">))
+                </span>exit<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">)
+            </span>tests <span style="font-weight: bold">= [</span>tests<span style="font-weight: bold">]
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span>tests <span style="font-weight: bold">= </span>unlocked_tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">]
+
+        </span>global_frame <span style="font-weight: bold">= {}
+        </span><span style="color: blue; font-weight: bold">for </span>line <span style="color: blue; font-weight: bold">in </span>unlocked_tests<span style="font-weight: bold">[</span><span style="color: red">'project_info'</span><span style="font-weight: bold">][</span><span style="color: red">'imports'</span><span style="font-weight: bold">]:
+            </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">for </span>test <span style="color: blue; font-weight: bold">in </span>tests<span style="font-weight: bold">:
+            </span>passed <span style="font-weight: bold">= </span>run<span style="font-weight: bold">(</span>test<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">, </span>args<span style="font-weight: bold">.</span>interactive<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">if not </span>args<span style="font-weight: bold">.</span>all <span style="color: blue; font-weight: bold">and not </span>passed<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">return
+        print</span><span style="font-weight: bold">(</span>underline<span style="font-weight: bold">(</span><span style="color: red">'Note:'</span><span style="font-weight: bold">, </span>under<span style="font-weight: bold">=</span><span style="color: red">'-'</span><span style="font-weight: bold">))
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: darkred">"""Remember that the tests in this autograder are not exhaustive, so try your own tests in the interpreter!"""</span><span style="font-weight: bold">)
+
+
+</span><span style="color: blue; font-weight: bold">if </span>__name__ <span style="font-weight: bold">== </span><span style="color: red">'__main__'</span><span style="font-weight: bold">:
+    </span>run_all_tests<span style="font-weight: bold">()
 </span>
 </pre>
 </body>

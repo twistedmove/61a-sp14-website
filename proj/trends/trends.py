@@ -106,22 +106,8 @@ def extract_words(text):
 
 def make_sentiment(value):
     """Return a sentiment, which represents a value that may not exist.
-
-    >>> positive = make_sentiment(0.2)
-    >>> neutral = make_sentiment(0)
-    >>> unknown = make_sentiment(None)
-    >>> has_sentiment(positive)
-    True
-    >>> has_sentiment(neutral)
-    True
-    >>> has_sentiment(unknown)
-    False
-    >>> sentiment_value(positive)
-    0.2
-    >>> sentiment_value(neutral)
-    0
     """
-    assert value is None or (value >= -1 and value <= 1), 'Illegal value'
+    assert value is None or (value >= -1 and value <= 1), 'Illegal sentiment value'
     "*** YOUR CODE HERE ***"
 
 def has_sentiment(s):

@@ -116,22 +116,8 @@
 
 </span><span style="color: blue; font-weight: bold">def </span>make_sentiment<span style="font-weight: bold">(</span>value<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Return a sentiment, which represents a value that may not exist.
-
-    &gt;&gt;&gt; positive = make_sentiment(0.2)
-    &gt;&gt;&gt; neutral = make_sentiment(0)
-    &gt;&gt;&gt; unknown = make_sentiment(None)
-    &gt;&gt;&gt; has_sentiment(positive)
-    True
-    &gt;&gt;&gt; has_sentiment(neutral)
-    True
-    &gt;&gt;&gt; has_sentiment(unknown)
-    False
-    &gt;&gt;&gt; sentiment_value(positive)
-    0.2
-    &gt;&gt;&gt; sentiment_value(neutral)
-    0
     """
-    </span><span style="color: blue; font-weight: bold">assert </span>value <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None </span><span style="color: blue; font-weight: bold">or </span><span style="font-weight: bold">(</span>value <span style="font-weight: bold">&gt;= -</span><span style="color: red">1 </span><span style="color: blue; font-weight: bold">and </span>value <span style="font-weight: bold">&lt;= </span><span style="color: red">1</span><span style="font-weight: bold">), </span><span style="color: red">'Illegal value'
+    </span><span style="color: blue; font-weight: bold">assert </span>value <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None </span><span style="color: blue; font-weight: bold">or </span><span style="font-weight: bold">(</span>value <span style="font-weight: bold">&gt;= -</span><span style="color: red">1 </span><span style="color: blue; font-weight: bold">and </span>value <span style="font-weight: bold">&lt;= </span><span style="color: red">1</span><span style="font-weight: bold">), </span><span style="color: red">'Illegal sentiment value'
     "*** YOUR CODE HERE ***"
 
 </span><span style="color: blue; font-weight: bold">def </span>has_sentiment<span style="font-weight: bold">(</span>s<span style="font-weight: bold">):
