@@ -129,15 +129,10 @@ get started. Downloading each file individually is error-prone. </p>
   href='unlocked_tests.pkl'>unlocked_tests.pkl</a>. If you need to
 download them again, make sure to download both files.</p>
 
-<p>Finally, you can download a <a
-  href='../../../trends/all_tweets.zip'>larger dataset</a> once you are
-done with your project. <b>Warning</b>: this dataset is 153 MB in
-zipped form. After extracting from the archive, you can move
-<code>tweets2011.txt</code> and <code>tweets2014.txt</code> to the
-<code>data</code> directory. <b>Note:</b> as stated in the accompanying
-<code>README.txt</code>, the dataset is intended solely for use with
-this project. Contents of <code>tweets2014.txt</code> may not be
-redistributed or made public (e.g. on a version-control repository).</p>
+<p>Finally, we have provided a <a href='#large-dataset'>larger
+  dataset</a> that you can use once you are done with the project. See
+instructions at the end of this document for ways to get the
+dataset.</p>
 
 <h3>Logistics</h3>
 
@@ -433,18 +428,33 @@ representation for tweets defined in question 1, using the -f flag.
 python3 trends.py -f -m texas
 </pre>
 
-<p>Finally, you can download a <a
+<p id='large-dataset'>Finally, you can download a <a
   href='../../../trends/all_tweets.zip'>larger dataset</a> once you are
-done with your project. <b>Warning</b>: this dataset is 153 MB in
-zipped form. <b>Note:</b> as stated in the accompanying
+done with your project. After extracting from the archive, you can move
+<code>tweets2011.txt</code> and <code>tweets2014.txt</code> to the
+<code>data</code> directory.</p>
+
+<p><b>Warning</b>: this dataset is 153 MB in
+zipped form. If you would rather not download the files, you can copy
+your trends project onto your <b>class account</b>, and do the
+following on your class account:</p>
+
+<pre>
+cd trends/data
+setup-tweets
+</pre>
+
+<p>If you run your project from your class account, make sure to use
+the <code>-X</code> with <code>ssh</code> (on Macs or Linux) or enable
+XMing (on Windows)!</p>
+
+<b>Note:</b> as stated in the accompanying
 <code>README.txt</code>, the dataset is intended solely for use with
 this project. Contents of <code>tweets2014.txt</code> may not be
 redistributed or made public (e.g. on a version-control repository).</p>
-<p>After extracting from the archive, you can move
-<code>tweets2011.txt</code> and <code>tweets2014.txt</code> to the
-<code>data</code> directory.  You can then use the <code>-m</code> flag
-above to search for more phrases, and the <code>-t</code> to specify
-the data file, like the following:</p>
+<p>After setting up the new tweets in your data directory, You can then
+use the <code>-m</code> flag above to search for more phrases, and the
+<code>-t</code> to specify the data file, like the following:</p>
 
 <pre>
 python3 trends.py -m christmas -t tweets2011.txt
