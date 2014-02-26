@@ -294,13 +294,13 @@ def draw_state_sentiments(state_sentiments):
         if center is not None:
             draw_name(name, center)
 
-def draw_map_for_query(term='my job'):
+def draw_map_for_query(term='my job', file_name='tweets2011.txt'):
     """Draw the sentiment map corresponding to the tweets that contain term.
 
     Some term suggestions:
     New York, Texas, sandwich, my life, justinbieber
     """
-    tweets = load_tweets(make_tweet, term)
+    tweets = load_tweets(make_tweet, term, file_name)
     tweets_by_state = group_tweets_by_state(tweets)
     state_sentiments = average_sentiments(tweets_by_state)
     draw_state_sentiments(state_sentiments)
@@ -326,7 +326,8 @@ def run(*args):
     parser = argparse.ArgumentParser(description="Run Trends")
     parser.add_argument('--print_sentiment', '-p', action='store_true')
     parser.add_argument('--draw_centered_map', '-d', action='store_true')
-    parser.add_argument('--draw_map_for_query', '-m', action='store_true')
+    parser.add_argument('--draw_map_for_query', '-m', type=str)
+    parser.add_argument('--tweets_file', '-t', type=str, default='tweets2011.txt')
     parser.add_argument('--use_functional_tweets', '-f', action='store_true')
     parser.add_argument('text', metavar='T', type=str, nargs='*',
                         help='Text to process')
@@ -335,6 +336,10 @@ def run(*args):
         swap_tweet_representation()
         print("Now using a functional representation of tweets!")
         args.use_functional_tweets = False
+    if args.draw_map_for_query:
+        draw_map_for_query(args.draw_map_for_query, args.tweets_file)
+        print(args.tweets_file)
+        return
     for name, execute in args.__dict__.items():
         if name != 'text' and execute:
             globals()[name](' '.join(args.text))

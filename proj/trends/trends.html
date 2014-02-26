@@ -130,10 +130,14 @@ get started. Downloading each file individually is error-prone. </p>
 download them again, make sure to download both files.</p>
 
 <p>Finally, you can download a <a
-  href='../../../all_tweets.zip'>larger dataset</a> once you are
-done with your project. <b>Warning</b>: this dataset is 81 MB in zipped
-form. After extracting from the archive, you can move
-<code>all_tweets.txt</code> to the <code>data</code> directory.</p>
+  href='../../../trends/all_tweets.zip'>larger dataset</a> once you are
+done with your project. <b>Warning</b>: this dataset is 153 MB in
+zipped form. After extracting from the archive, you can move
+<code>tweets2011.txt</code> and <code>tweets2014.txt</code> to the
+<code>data</code> directory. <b>Note:</b> as stated in the accompanying
+<code>README.txt</code>, the dataset is intended solely for use with
+this project. Contents of <code>tweets2014.txt</code> may not be
+redistributed or made public (e.g. on a version-control repository).</p>
 
 <h3>Logistics</h3>
 
@@ -432,11 +436,24 @@ python3 trends.py -f -m texas
 <p>Finally, you can download a <a
   href='../../../all_tweets.zip'>larger dataset</a> once you are
 done with your project. <b>Warning</b>: this dataset is 81 MB in zipped
-form. After extracting from the archive, you can move
-<code>all_tweets.txt</code> to the <code>data</code> directory. You can
-then use the <code>-m</code> flag above to search for more phrases, like the following:</p>
+form.
 
-<pre>python3 trends.py -m christmas</pre>
+<p>Finally, you can download a <a
+  href='../../../trends/all_tweets.zip'>larger dataset</a> once you are
+done with your project. <b>Warning</b>: this dataset is 153 MB in
+zipped form. <b>Note:</b> as stated in the accompanying
+<code>README.txt</code>, the dataset is intended solely for use with
+this project. Contents of <code>tweets2014.txt</code> may not be
+redistributed or made public (e.g. on a version-control repository).</p>
+<p>After extracting from the archive, you can move
+<code>tweets2011.txt</code> and <code>tweets2014.txt</code> to the
+<code>data</code> directory.  You can then use the <code>-m</code> flag
+above to search for more phrases, and the <code>-t</code> to specify
+the data file, like the following:</p>
+
+<pre>
+python3 trends.py -m christmas -t tweets2011.txt
+python3 trends.py -m christmas -t tweets2014.txt</pre>
 
 <p><i>Congratulations!</i> One more 61A project completed.
 

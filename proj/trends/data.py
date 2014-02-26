@@ -27,19 +27,19 @@ def load_sentiments(file_name=DATA_PATH + "sentiments.csv"):
 
 word_sentiments = load_sentiments()
 
-def file_name_for_term(term):
+def file_name_for_term(term, unfiltered_name):
     """Return a valid filename that corresponds to an arbitrary term string."""
     valid_characters = '-_' + string.ascii_letters + string.digits
     no_space = term.replace(' ', '_')
-    return ''.join(c for c in no_space if c in valid_characters) + '.txt'
+    return ''.join(c for c in no_space if c in valid_characters) + '_' +  unfiltered_name
 
 def generate_filtered_file(unfiltered_name, term):
     """Return the path to a file containing tweets that match term, generating
     that file if necessary.
     """
-    filtered_path = DATA_PATH + file_name_for_term(term)
+    filtered_path = DATA_PATH + file_name_for_term(term, unfiltered_name)
     if not os.path.exists(filtered_path):
-        print('Generating filtered tweets file for "{0}".'.format(term))
+        print('Generating filtered tweets file for "{0}" using tweets from {1}.'.format(term, unfiltered_name))
         r = re.compile('\W' + term + '\W', flags=re.IGNORECASE)
         with open(filtered_path, mode='w', encoding='utf8') as out:
             unfiltered = open(DATA_PATH + unfiltered_name, encoding='utf8')
@@ -49,7 +49,7 @@ def generate_filtered_file(unfiltered_name, term):
                     out.write(line)
     return filtered_path
 
-def load_tweets(make_tweet, term='my job', file_name='all_tweets.txt'):
+def load_tweets(make_tweet, term='my job', file_name='tweets2011.txt'):
     """Return the list of tweets in file_name that contain term.
 
     make_tweet -- a constructor that takes four arguments:
