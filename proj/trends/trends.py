@@ -341,5 +341,5 @@ def run(*args):
         print(args.tweets_file)
         return
     for name, execute in args.__dict__.items():
-        if name != 'text' and execute:
+        if name != 'text' and name != 'tweets_file' and execute:
             globals()[name](' '.join(args.text))

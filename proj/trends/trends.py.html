@@ -351,7 +351,7 @@
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>args<span style="font-weight: bold">.</span>tweets_file<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">return
     for </span>name<span style="font-weight: bold">, </span>execute <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">.</span>__dict__<span style="font-weight: bold">.</span>items<span style="font-weight: bold">():
-        </span><span style="color: blue; font-weight: bold">if </span>name <span style="font-weight: bold">!= </span><span style="color: red">'text' </span><span style="color: blue; font-weight: bold">and </span>execute<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">if </span>name <span style="font-weight: bold">!= </span><span style="color: red">'text' </span><span style="color: blue; font-weight: bold">and </span>name <span style="font-weight: bold">!= </span><span style="color: red">'tweets_file' </span><span style="color: blue; font-weight: bold">and </span>execute<span style="font-weight: bold">:
             </span>globals<span style="font-weight: bold">()[</span>name<span style="font-weight: bold">](</span><span style="color: red">' '</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>args<span style="font-weight: bold">.</span>text<span style="font-weight: bold">))
 </span>
 </pre>
