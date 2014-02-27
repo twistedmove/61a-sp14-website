@@ -10,7 +10,7 @@
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 4</title> 
+    <title>CS 61A Spring 2014: Lab 4</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -54,8 +54,8 @@ exercises in the lab. You can get them in the following places:</p>
 
 <ul>
 <li><a href="starter/lists.py">lists.py</a></li>
-<li><a href="starter/shakespeare.py">shakespeare.py</a></li>
 <li><a href="starter/shakespeare.txt">shakespeare.txt</a></li>
+<li><a href="starter/shakespeare.py">shakespeare.py</a></li>
 </ul>
 
 <h2>Lists</h2>
