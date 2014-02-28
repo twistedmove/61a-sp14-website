@@ -54,8 +54,8 @@ exercises in the lab. You can get them in the following places:</p>
 
 <ul>
 <li><a href="starter/lists.py">lists.py</a></li>
-<li><a href="starter/shakespeare.txt">shakespeare.txt</a></li>
 <li><a href="starter/shakespeare.py">shakespeare.py</a></li>
+<li><a href="starter/shakespeare.txt">shakespeare.txt</a></li>
 </ul>
 
 <h2>Lists</h2>

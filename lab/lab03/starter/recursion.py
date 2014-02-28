@@ -1,13 +1,5 @@
 """Starter file for recursion lab."""
 
-def sum(n):
-    """Adds up all integers between 0 and n.
-
-    >>> sum(4)
-    10
-    """
-    "*** YOUR CODE HERE ***"
-
 def summation(n, term):
     """Return the sum of the 0th to nth terms in the sequence defined
     by term.
@@ -16,7 +8,6 @@ def summation(n, term):
     30
     """
     "*** YOUR CODE HERE ***"
-
 
 def gcd(a, b):
     """Return the greatest common divisor of a and b.

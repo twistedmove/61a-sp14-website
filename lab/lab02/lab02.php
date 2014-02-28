@@ -10,7 +10,7 @@
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 2</title> 
+    <title>CS 61A Spring 2014: Lab 2</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -482,28 +482,36 @@ __________________
 53
 53
 </code></pre></li>
-<li>This output contains 4 lines:
-    2
-    4
-    6
-    8</li>
-<li>This output contains 3 lines:
-    2
-    1
-    0</li>
-<li>This output contains 3 lines:
-    2
-    1
-    0
-    -1</li>
-<li>This output goes on forever!
-    3
-    2
-    1
-    0
-    -1
-    -2
-    ...</li>
+<li><p>This output contains 4 lines:</p>
+
+<pre><code>2
+4
+6
+8
+</code></pre></li>
+<li><p>This output contains 3 lines:</p>
+
+<pre><code>2
+1
+0
+</code></pre></li>
+<li><p>This output contains 3 lines:</p>
+
+<pre><code>2
+1
+0
+-1
+</code></pre></li>
+<li><p>This output goes on forever!</p>
+
+<pre><code>3
+2
+1
+0
+-1
+-2
+...
+</code></pre></li>
 </ol>
 
   </div>
@@ -675,7 +683,7 @@ _______________
 _______________
 &gt;&gt;&gt; def troy():
 ...     abed = 0
-...     while abed &amp;lt; 10:
+...     while abed &lt; 10:
 ...         def britta():
 ...             return abed
 ...         abed += 1
@@ -699,9 +707,11 @@ ________________
 <ol>
 <li>-16</li>
 <li>first</li>
-<li>This output has two lines:
-    second
-    39</li>
+<li><p>This output has two lines:</p>
+
+<pre><code>second
+39
+</code></pre></li>
 <li>65</li>
 <li>13</li>
 <li>True</li>
@@ -827,7 +837,7 @@ then the first function (i.e. <code>f1(f3(f2(f1(x))))</code>)</li>
     def ret_fn(n):
         def ret(x):
             i = 0
-            while i &amp;lt; n:
+            while i &lt; n:
                 if i % 3 == 0:
                     x = f1(x)
                 elif i % 3 == 1:

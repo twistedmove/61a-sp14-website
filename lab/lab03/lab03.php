@@ -10,7 +10,7 @@
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 3</title> 
+    <title>CS 61A Spring 2014: Lab 3</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -210,10 +210,10 @@ this result to solve the original problem.</p></li>
 
 <h3 class='question'>Question 2: In summation...</h3>
 
-<p>Now write the recursive version of <code>summation</code>. Recall
-that <code>summation</code> takes two arguments, a number <code>n</code> and a function
-<code>term</code>, and returns the result of applying <code>term</code> to every number
-between 0 and <code>n</code> and taking the sum.</p>
+<p>Write the recursive version of <code>summation</code>, which
+takes two arguments, a number <code>n</code> and a function
+<code>term</code>, applies <code>term</code> to every number
+between 0 and <code>n</code>, and returns the sum of those results.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton2">Toggle Solution</button>
@@ -269,7 +269,7 @@ def gcd_iter(a, b):
 <?php } ?>
 <h3 class='question'>Question 4: Recursive Boogaloo</h3>
 
-<p>Recall the <code>hailstone</code> function from homework 1. You
+<p>For the <code>hailstone</code> function from homework 1,  you
 pick a positive integer <code>n</code> as the start. If <code>n</code> is even, divide it
 by 2. If <code>n</code> is odd, multiply it by 3 and add 1. Repeat this process
 until <code>n</code> is 1. Write a recursive version of hailstone that prints out
@@ -363,7 +363,13 @@ ______
 ______
 &gt;&gt;&gt; x[1:]        # Q3
 ______
-&gt;&gt;&gt; x[::-1]      # Q5
+&gt;&gt;&gt; x[-2:3]      # Q4
+______
+&gt;&gt;&gt; x[::2]       # Q5
+______
+&gt;&gt;&gt; x[::-1]      # Q6
+______
+&gt;&gt;&gt; x[-1:0:-1]   # Q7
 ______
 </code></pre>
 
@@ -374,7 +380,10 @@ ______
 <li>(2, 3)</li>
 <li>(1, 2)</li>
 <li>(2, 3, 4)</li>
+<li>(3,)</li>
+<li>(1, 3)</li>
 <li>(4, 3, 2, 1)</li>
+<li>(4, 3, 2)</li>
 </ol>
 
   </div>
@@ -413,6 +422,8 @@ ______
 
   </div>
 <?php } ?>
+<h3 class='question'>Question 9</h3>
+
 <p>For each of the following, give the correct expression to get 7.</p>
 
 <pre><code>&gt;&gt;&gt; x = (1, 3, 5, 7)
@@ -443,11 +454,11 @@ ______
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 9</h3>
+<h3 class='question'>Question 10</h3>
 
-<p>Write a function <code>reverse</code> which takes a tuple and returns the reverse.
-Write both an iterative and a recursive version. You may (and should)
-use slicing notation, but don't use <code>tup[::-1]</code>.</p>
+<p>Write a function <code>reverse</code> that takes a tuple and returns the reverse.
+Write both an iterative and a recursive version. You may use slicing
+notation, but don't use <code>tup[::-1]</code>.</p>
 
 <pre><code>def reverse_iter(tup):
     """Returns the reverse of the given tuple.
@@ -484,11 +495,11 @@ def reverse_recursive(tup):
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 10</h3>
+<h3 class='question'>Question 11</h3>
 
-<p>Write a function <code>merge</code> which takes 2 <em>sorted</em> tuples <code>tup1</code> and
+<p>Write a recursive function <code>merge</code> that takes 2 <em>sorted</em> tuples <code>tup1</code> and
 <code>tup2</code>, and returns a new tuple that contains all the elements in the
-two tuples in sorted order.</p>
+two tuples in sorted order. </p>
 
 <pre><code>def merge(tup1, tup2):
     """Merges two sorted tuples.
@@ -531,6 +542,10 @@ try this:</p>
 assignment." In other words, you can't change the elements in a tuple
 because tuples are immutable. Later in the course, we'll see the
 opposite -- <em>mutable</em> data structures.</p>
+
+<!-- Not included this year.
+    ~ include: rlists ~
+-->
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>

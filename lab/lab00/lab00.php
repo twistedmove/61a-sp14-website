@@ -4,14 +4,13 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 0</title> 
+    <title>CS 61A Spring 2014: Lab 0</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -73,8 +72,8 @@ to 333 Soda.</p>
 <h3>Logging in from Home</h3>
 
 <p>If you don't have access to a school computer for this lab, you can
-still try it out: refer to <a href="../lab01/lab01.php">Lab 1</a> for more
-details about setting up your home computer.</p>
+still try it out: refer to <a href='../lab01/lab01.php'>lab 1</a> for
+more details about setting up your home computer.</p>
 
 <h2>Meet the Terminal</h2>
 
@@ -245,7 +244,7 @@ separately - for instance, it makes sense to <code>cd</code> into a directory,
 but it doesn't quite make sense to <code>cd</code> into a text file!</p>
 
 <p>Let's create a simple file that has the sentence: 'This semester will
-be awesome!'</p>
+be awesome'</p>
 
 <p>The command we'll use is called <code>echo</code>.  <code>echo</code> is a command that
 simply displays anything you type after the word 'echo':</p>
@@ -510,7 +509,7 @@ something better! </p>
 If you plan to use your own computer for most of your work in this
 course, there are many editors to choose from depending on your
 operating system.  Instead of reading this section on Emacs, start
-reading <a href='../lab01/lab01.php'>lab 1</a> on selecting an editor.
+reading [Lab 1](../lab01/lab01.php) on selecting an editor.
 </div>
 
 <h2>Our Text Editor: Emacs</h2>
