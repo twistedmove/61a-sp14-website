@@ -77,7 +77,7 @@ STRATEGY_SECONDS <span style="font-weight: bold">= </span><span style="color: re
                </span><span style="color: red">'Queen'</span><span style="font-weight: bold">: </span><span style="color: red">'Purple'</span><span style="font-weight: bold">}
 
 
-</span><span style="color: blue; font-weight: bold">class </span>AntsGUI<span style="font-weight: bold">(</span>object<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">class </span>AntsGUI<span style="font-weight: bold">:
     </span><span style="color: darkred">"""GUI-based interactive strategy that logs all colony updates."""
 
     </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
@@ -96,7 +96,6 @@ STRATEGY_SECONDS <span style="font-weight: bold">= </span><span style="color: re
         </span>start_text <span style="font-weight: bold">= </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>canvas<span style="font-weight: bold">.</span>draw_text<span style="font-weight: bold">(</span><span style="color: red">'CLICK TO START'</span><span style="font-weight: bold">, </span>MESSAGE_POS<span style="font-weight: bold">)
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>canvas<span style="font-weight: bold">.</span>wait_for_click<span style="font-weight: bold">()
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>canvas<span style="font-weight: bold">.</span>clear<span style="font-weight: bold">(</span>start_text<span style="font-weight: bold">)
-
 
     </span><span style="color: blue; font-weight: bold">def </span>_init_control_panel<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>colony<span style="font-weight: bold">):
         </span><span style="color: darkred">"""Construct the control panel of available ant types."""
@@ -119,7 +118,6 @@ STRATEGY_SECONDS <span style="font-weight: bold">= </span><span style="color: re
             </span>food_str <span style="font-weight: bold">= </span>str<span style="font-weight: bold">(</span>ant_type<span style="font-weight: bold">.</span>food_cost<span style="font-weight: bold">)
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>canvas<span style="font-weight: bold">.</span>draw_text<span style="font-weight: bold">(</span>food_str<span style="font-weight: bold">, </span>cost_pos<span style="font-weight: bold">, </span>anchor<span style="font-weight: bold">=</span><span style="color: red">"center"</span><span style="font-weight: bold">)
             </span>panel_pos <span style="font-weight: bold">= </span>shift_point<span style="font-weight: bold">(</span>panel_pos<span style="font-weight: bold">, (</span>width <span style="font-weight: bold">+ </span><span style="color: red">2</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">))
-
 
     </span><span style="color: blue; font-weight: bold">def </span>_init_places<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>colony<span style="font-weight: bold">):
         </span><span style="color: darkred">"""Construct places in the play area."""
@@ -167,7 +165,6 @@ STRATEGY_SECONDS <span style="font-weight: bold">= </span><span style="color: re
                                                </span>HIVE_HEIGHT<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">for </span>bee <span style="color: blue; font-weight: bold">in </span>colony<span style="font-weight: bold">.</span>hive<span style="font-weight: bold">.</span>bees<span style="font-weight: bold">:
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>_draw_insect<span style="font-weight: bold">(</span>bee<span style="font-weight: bold">, </span>colony<span style="font-weight: bold">.</span>hive<span style="font-weight: bold">.</span>name<span style="font-weight: bold">, </span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">)
-
 
     </span><span style="color: blue; font-weight: bold">def </span>add_click_rect<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>pos<span style="font-weight: bold">, </span>width<span style="font-weight: bold">, </span>height<span style="font-weight: bold">, </span>on_click<span style="font-weight: bold">, </span>color<span style="font-weight: bold">=</span><span style="color: red">'White'</span><span style="font-weight: bold">):
         </span><span style="color: darkred">"""Construct a rectangle that can be clicked."""

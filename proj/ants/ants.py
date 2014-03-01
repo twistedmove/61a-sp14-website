@@ -72,7 +72,6 @@ class Insect:
         self.armor = armor
         self.place = place  # set by Place.add_insect and Place.remove_insect
 
-
     def reduce_armor(self, amount):
         """Reduce armor by amount, and remove the insect from its place if it
         has no armor remaining.
@@ -130,9 +129,8 @@ class Bee(Insect):
         """
         if self.blocked():
             self.sting(self.place.ant)
-        else:
-            if self.place.name != 'Hive' and self.armor > 0:
-                self.move_to(self.place.exit)
+        elif self.place is not colony.hive and self.armor > 0:
+            self.move_to(self.place.exit)
 
 
 class Ant(Insect):
@@ -162,6 +160,7 @@ class HarvesterAnt(Ant):
         colony -- The AntColony, used to access game state information.
         """
         "*** YOUR CODE HERE ***"
+
 
 def random_or_none(l):
     """Return a random element of list l, or return None if l is empty."""
@@ -202,8 +201,6 @@ class Hive(Place):
     assault_plan -- An AssaultPlan; when & where bees enter the colony.
     """
 
-    name = 'Hive'
-
     def __init__(self, assault_plan):
         self.name = 'Hive'
         self.assault_plan = assault_plan
@@ -231,6 +228,7 @@ class AntColony:
     places -- A list of all places in the colony (including a Hive)
     bee_entrances -- A list of places that bees can enter
     """
+
     def __init__(self, strategy, hive, ant_types, create_places, food=2):
         """Create an AntColony for simulating a game.
 
@@ -311,6 +309,7 @@ class AntColony:
         status = ' (Food: {0}, Time: {1})'.format(self.food, self.time)
         return str([str(i) for i in self.ants + self.bees]) + status
 
+
 def ant_types():
     """Return a list of all implemented Ant classes."""
     all_ant_types = []
@@ -380,9 +379,6 @@ def mixed_layout(queen, register_place, length=8, tunnels=3, moat_frequency=3):
 def test_layout(queen, register_place, length=8, tunnels=1):
     mixed_layout(queen, register_place, length, tunnels, 0)
 
-def test_layout_multi_tunnels(queen, register_place, length=8, tunnels=2):
-    mixed_layout(queen, register_place, length, tunnels, 0)
-
 def dry_layout(queen, register_place, length=8, tunnels=3):
     mixed_layout(queen, register_place, length, tunnels, 0)
 
@@ -430,12 +426,9 @@ def make_insane_assault_plan():
         plan.add_wave(time, 1)
     return plan.add_wave(15, 20)
 
-
-
 ##############
 # Extensions #
 ##############
-
 
 class Water(Place):
     """Water is a place that can only hold 'watersafe' insects."""
@@ -541,6 +534,7 @@ class BodyguardAnt(Ant):
     def action(self, colony):
         "*** YOUR CODE HERE ***"
 
+
 class QueenPlace:
     """A place that represents both places in which the bees find the queen.
 
@@ -554,6 +548,7 @@ class QueenPlace:
     def bees(self):
         "*** YOUR CODE HERE ***"
 
+
 class QueenAnt(ScubaThrower):
     """The Queen of the colony.  The game is over if a bee enters her place."""
 
@@ -562,13 +557,14 @@ class QueenAnt(ScubaThrower):
     implemented = False
 
     def __init__(self):
-        ScubaThrower.__init__(self, 1)
+        ScubaThrower.__init__(self)
         "*** YOUR CODE HERE ***"
 
     def action(self, colony):
         """A queen ant throws a leaf, but also doubles the damage of ants
         in her tunnel.  Impostor queens do only one thing: die."""
         "*** YOUR CODE HERE ***"
+
 
 class AntRemover(Ant):
     """Allows the player to remove ants from the board in the GUI."""
@@ -625,6 +621,7 @@ class StunThrower(ThrowerAnt):
     def throw_at(self, target):
         if target:
             apply_effect(make_stun, target, 1)
+
 
 @main
 def run(*args):
