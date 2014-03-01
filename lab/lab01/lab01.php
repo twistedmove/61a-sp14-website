@@ -4,14 +4,13 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 1</title> 
+    <title>CS 61A Spring 2014: Lab 1</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -174,13 +173,11 @@ computer. If you're on a Mac or are using a form of Linux (such as
 Ubuntu), you already have a program called 'Terminal' on your computer.
 Open that up and you should be good to go.</p>
 
-<p>For Windows users, you have
-several options. Windows has a built-in terminal called 
-<code>cmd</code>, which
- behaves slightly differently than Unix (for example, <code>ls</code>
-is instead called <code>dir</code>). Another option is a program called
-<a href="http://cygwin.com/install.html">Cygwin</a>, which behaves
-more like Unix (follow the link to install Cygwin).</p>
+<p>For Windows users, you have several options. Windows has a built-in
+terminal called <code>cmd</code>, which behaves slightly differently than Unix
+(for example, <code>ls</code> is instead called <code>dir</code>). Another option is a
+program called <a href="http://cygwin.com/install.html">Cygwin</a>, which behaves
+more like Unix (follow the link to install cygwin).</p>
 
 <p>Once you have your terminal open, we'll use what we learned from lab
 0...our handy Unix commands!</p>
