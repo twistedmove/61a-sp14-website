@@ -67,7 +67,7 @@ LEAF_COLORS = {'Thrower': 'ForestGreen',
                'Queen': 'Purple'}
 
 
-class AntsGUI(object):
+class AntsGUI:
     """GUI-based interactive strategy that logs all colony updates."""
 
     def __init__(self):
@@ -86,7 +86,6 @@ class AntsGUI(object):
         start_text = self.canvas.draw_text('CLICK TO START', MESSAGE_POS)
         self.canvas.wait_for_click()
         self.canvas.clear(start_text)
-
 
     def _init_control_panel(self, colony):
         """Construct the control panel of available ant types."""
@@ -109,7 +108,6 @@ class AntsGUI(object):
             food_str = str(ant_type.food_cost)
             self.canvas.draw_text(food_str, cost_pos, anchor="center")
             panel_pos = shift_point(panel_pos, (width + 2, 0))
-
 
     def _init_places(self, colony):
         """Construct places in the play area."""
@@ -157,7 +155,6 @@ class AntsGUI(object):
                                                HIVE_HEIGHT)
         for bee in colony.hive.bees:
             self._draw_insect(bee, colony.hive.name, True)
-
 
     def add_click_rect(self, pos, width, height, on_click, color='White'):
         """Construct a rectangle that can be clicked."""
