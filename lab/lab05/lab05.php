@@ -39,7 +39,7 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("3/6/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("3/6/2014", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
