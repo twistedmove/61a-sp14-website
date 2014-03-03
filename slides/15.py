@@ -40,56 +40,71 @@ class Account:  # Type name
 11300
 """
 
-class Polygon:
-    def is_simple(self):
-        """True iff I am simple (non-intersecting)."""
-    def area(self): ...
-    def bbox(self):
-        """(xlow, ylow, xhigh, yhigh) of bounding rectangle."""
-    def num_sides(self): ...
-    def vertices(self):
-        """My vertices, ordered clockwise, as a sequence 
-        of (x, y) pairs."""
-    def describe(self):
-        """A string describing me."""
+class CheckingAccount(Account):
+    """A bank account that charges for withdrawals.
 
-class Polygon:
-    def is_simple(self): raise NotImplemented
-    def area(self): raise NotImplemented
-    def vertices(self): raise NotImplemented
-    def bbox(self):
-        V = self.vertices()
-        xlow, ylow =  xhigh, yhigh = V[0]
-        for x, y in V[1:]: 
-            xlow, ylow = min(x, xlow), min(y, ylow), 
-            xhigh, yhigh = max(x, xhigh), max(y, yhigh), 
-        return xlow, ylow, xhigh, yhigh
-    def num_sides(self): return len(self.vertices())
-    def describe(self):
-        return "A polygon with vertices {0}".format(self.vertices())
+    >>> ch = CheckingAccount('Jack')
+    >>> ch.balance = 20
+    >>> ch.withdraw(5)
+    14
+    >>> ch.interest
+    0.01
+    """
+
+    withdraw_fee = 1
+    interest = 0.01
+
+    def withdraw(self, amount):
+        return Account.withdraw(self, amount + self.withdraw_fee)
 
 
-class SimplePolygon(Polygon):
-    def is_simple(self): return True
-    def area(self):
-        a = 0.0
-        V = self.vertices()
-        for i in range(len(V)-1):
-            a += V[i][0] * V[i+1][1] - V[i+1][0]*V[i][1]
-        return -0.5 * a 
+class Bank:
+    """A bank has accounts and pays interest.
 
-class Square(SimplePolygon):
-    def __init__(self, xll, yll, side):
-        """A square with lower-left corner at (xll,yll) and
-        given length on a side."""
-        self._x = xll
-        self._y = yll
-        self._s = side
-    def vertices(self):
-        x0, y0, s = self._x, self._y, self._s
-        return ((x0, y0), (x0, y0+s), (x0+s, y0+s), 
-                (x0+s, y0), (x0, y0))
-    def describe(self):
-        return "A {0}x{0} square with lower-left corner ({1},{2})" \
-               .format(self._s, self._x, self._y)
+    >>> bank = Bank()
+    >>> john = bank.open_account('John', 10)
+    >>> jack = bank.open_account('Jack', 5, CheckingAccount)
+    >>> jack.interest
+    0.01
+    >>> john.interest = 0.06
+    >>> bank.pay_interest()
+    >>> john.balance()
+    10.6
+    >>> jack.balance()
+    5.05
+    """
+    def __init__(self):
+        self.accounts = []
 
+    def open_account(self, holder, amount, account_type=Account):
+        """Open an account_type for holder and deposit amount."""
+        account = account_type(holder)
+        account.deposit(amount)
+        self.accounts.append(account)
+        return account
+
+    def pay_interest(self):
+        """Pay interest to all accounts."""
+        for account in self.accounts:
+            account.deposit(account.balance() * account.interest)
+
+
+class SavingsAccount(Account):
+    """A bank account that charges for deposits."""
+
+    deposit_fee = 2
+
+    def deposit(self, amount):
+        return Account.deposit(self, amount - self.deposit_fee)
+
+
+class AsSeenOnTVAccount(CheckingAccount, SavingsAccount):
+    """A bank account that charges for everything."""
+
+    def __init__(self, account_holder):
+        self._holder = account_holder
+        self._balance = 1  # A free dollar!
+
+
+
+supers = [c.__name__ for c in AsSeenOnTVAccount.mro()]
