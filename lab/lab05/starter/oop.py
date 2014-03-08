@@ -2,21 +2,21 @@
 class Person(object):
     """Person class.
 
-    >>> steven = Person("Steven")
+    >>> steven = Person('Steven')
     >>> steven.repeat()       # starts at whatever value you'd like
-    "I squirreled it away before it could catch on fire."
-    >>> steven.say("Hello")
-    "Hello"
+    'I squirreled it away before it could catch on fire.'
+    >>> steven.say('Hello')
+    'Hello'
     >>> steven.repeat()
-    "Hello"
+    'Hello'
     >>> steven.greet()
-    "Hello, my name is Steven"
+    'Hello, my name is Steven'
     >>> steven.repeat()
-    "Hello, my name is Steven"
-    >>> steven.ask("preserve abstraction barriers")
-    "Would you please preserve abstraction barriers"
+    'Hello, my name is Steven'
+    >>> steven.ask('preserve abstraction barriers')
+    'Would you please preserve abstraction barriers'
     >>> steven.repeat()
-    "Would you please preserve abstraction barriers"
+    'Would you please preserve abstraction barriers'
     """
     def __init__(self, name):
         self.name = name
@@ -36,15 +36,15 @@ class Person(object):
 class Account(object):
     """A bank account that allows deposits and withdrawals.
 
-    >>> eric_account = Account(“Eric”)
+    >>> eric_account = Account("Eric")
     >>> eric_account.deposit(1000000)   # depositing my paycheck for the week
     1000000
     >>> eric_account.transactions
-    [(‘deposit’, 1000000)]
+    [('deposit', 1000000)]
     >>> eric_account.withdraw(100)      # buying dinner
     999900
     >>> eric_account.transactions
-    [(‘deposit’, 1000000), (‘withdraw’, 100)]
+    [('deposit', 1000000), ('withdraw', 100)]
     """
 
     interest = 0.02

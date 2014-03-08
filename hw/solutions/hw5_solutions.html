@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
 <title>61A Homework 5</title>
 <style type="text/css">
 
@@ -135,8 +135,8 @@ ol.upperroman {
 <div class="document" id="a-homework-5">
 <h1 class="title">61A Homework 5</h1>
 
-<p><em>Due by 11:59pm on Tuesday, 10/15</em></p>
-<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+<p><em>Due by 11:59pm on Tuesday, 3/11</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="../submit_tutorial.html">submission instructions</a>.
 We have provided a <a class="reference external" href="hw5.py">hw5.py</a> starter file for the questions below.</p>
 <p><strong>Q1.</strong> Define a function <tt class="docutils literal">reverse_list</tt> that takes a list as an argument and
 returns <tt class="docutils literal">None</tt>, but reverses the elements in the list as a side effect.
@@ -196,7 +196,101 @@ def shuffle(cards):
         shuffled.append(cards[half+i])
     return shuffled
 </pre>
-<p><strong>Q3.</strong> Write a version of the mutable <tt class="docutils literal">make_withdraw</tt> function from lecture
+<p><strong>Q3.</strong> A <em>graph</em> in computer science refers to a structure such as this.</p>
+<div class="figure">
+<img alt="hw5-a.png" src="hw5-a.png" />
+</div>
+<p>The circles are called <em>vertices</em> (singular <em>vertex</em>) and the lines joining vertices are called <em>edges</em>.  The letters in the vertices are <em>vertex labels</em>.</p>
+<p>This particular graph is <em>directed</em>, meaning that the edges have a
+direction (shown by the arrows).  We say that a directed graph is <em>cyclic</em> if
+there is a path constructed from edges that leads from some vertex back to
+itself.  For example, the sample graph is cyclic because, among other examples,
+one can follow edges from A-&gt;B-&gt;C-&gt;F-&gt;G-&gt;A.</p>
+<p>If we identify the vertices of a
+graph by their labels, then we can represent a graph as a dictionary mapping
+each vertex label L to a list successor vertices' labels
+(vertices at the other ends of arrows pointing out of L).  Thus, the sample
+graph would be:</p>
+<pre class="literal-block">
+G = { 'A': ['B', 'D'], 'B': ['C'], 'C': ['F'], 'D': ['E'],
+      'E': ['F'], 'F': ['G'], 'G': ['A'] }
+</pre>
+<p>Dag Hacker has developed the following program to determine if a graph
+represented in this fashion is circular:</p>
+<pre class="literal-block">
+def is_circular(G):
+    &quot;&quot;&quot;Return true iff G represents a circular directed graph.&quot;&quot;&quot;
+    for v in G:
+        if reaches_circularity(G, v):
+            return True
+    return False
+
+def reaches_circularity(G, v0):
+    &quot;&quot;&quot;Returns true if there is a circularity in G in some path
+    starting from vertex V0.&quot;&quot;&quot;
+    def is_path_to_cycle(v1):
+        for w in G[v1]:
+            if v0 == w:
+                return True
+            if is_path_to_cycle(w):
+                return True
+        return False
+    return is_path_to_cycle(v0)
+</pre>
+<p>Unfortunately, his <tt class="docutils literal">reaches_circularity</tt> function does not always work.
+It gives correct answers on
+acyclic graphs (graphs that are <em>not</em> cyclic), but often goes into infinite
+loops on cyclic ones.  Fill in the program below to fix Dag's problem:</p>
+<pre class="literal-block">
+def reaches_circularity(G, v0):
+    &quot;&quot;&quot;Returns true if there is a circularity in G in some path
+    starting from vertex V0.
+    &gt;&gt;&gt; G = { 'A': ['B', 'D'], 'B': ['C'], 'C': ['F'], 'D': ['E'],
+    ...       'E': ['F'], 'F': ['G'], 'G': ['A'] }
+    &gt;&gt;&gt; is_circular(G)
+    True
+    &gt;&gt;&gt; G['F'] = []
+    &gt;&gt;&gt; is_circular(G)
+    False
+    &quot;&quot;&quot;
+    on_path = { v0 }
+    def is_path_to_cycle(v1):
+        on_path.add(v1)
+        for w in G[v1]:
+            if w in on_path:
+                return True
+            if is_path_to_cycle(w):
+                return True
+        on_path.remove(v1)
+        return False
+    return is_path_to_cycle(v0)
+</pre>
+<p><strong>Hint:</strong> The problem has to do with what happens if there is a cycle in a path
+that starts at vertex v, but does <em>not</em> include v itself.</p>
+<p><strong>Q4.</strong> In lecture, we saw how to use functions to create mutable objects.
+Here, for example, is the function, <tt class="docutils literal">make_withdraw,</tt> which produces a function
+that can withdraw money from an account:</p>
+<pre class="literal-block">
+def make_withdraw(balance):
+    &quot;&quot;&quot;Return a withdraw function with BALANCE as its starting balance.
+    &gt;&gt;&gt; withdraw = make_withdraw(1000)
+    &gt;&gt;&gt; withdraw(100)
+    900
+    &gt;&gt;&gt; withdraw(100)
+    800
+    &gt;&gt;&gt; withdraw(900)
+    'Insufficient funds'
+    &quot;&quot;&quot;
+
+    def withdraw(amount):
+        nonlocal balance
+        if amount &gt; balance:
+           return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return withdraw
+</pre>
+<p>Write a version of the <tt class="docutils literal">make_withdraw</tt> function
 that returns password-protected withdraw functions.  That is, <tt class="docutils literal">make_withdraw</tt>
 should take a password argument (a string) in addition to an initial balance.
 The returned function should take two arguments: an amount to withdraw and a
@@ -251,7 +345,7 @@ def make_withdraw(balance, password):
         return balance
     return withdraw
 </pre>
-<p><strong>Q4.</strong> Suppose that our banking system requires the ability to make joint
+<p><strong>Q5.</strong> Suppose that our banking system requires the ability to make joint
 accounts.  Define a function <tt class="docutils literal">make_joint</tt> that takes three arguments.</p>
 <ol class="arabic simple">
 <li>A password-protected <tt class="docutils literal">withdraw</tt> function,</li>
@@ -324,7 +418,7 @@ constraint programming, a declarative style of programming that asserts
 constraints and then applies a general method of constraint satisfaction.  The
 following questions ask you to extend that system.  The code for the system
 appears at the end of this homework.</p>
-<p><strong>Q5.</strong> (Extra for experts) Implement the function <tt class="docutils literal">triangle_area</tt> that
+<p><strong>Q6.</strong> (Extra for experts) Implement the function <tt class="docutils literal">triangle_area</tt>, which
 defines a relation among three connectors, the
 base <tt class="docutils literal">b</tt>, height <tt class="docutils literal">h</tt>, and area <tt class="docutils literal">a</tt> of a triangle, so that <tt class="docutils literal">a = 0.5 * b *
 h</tt>:</p>
@@ -346,8 +440,8 @@ def triangle_area(a, b, h):
     multiplier(u, h, a)
     constant(v, 0.5)
 </pre>
-<p><strong>Q6.</strong> (Extra for experts) The <tt class="docutils literal">multiplier</tt> constraint from the lecture
-notes is insufficient to model equations that include squared quantities
+<p><strong>Q7.</strong> (Extra for experts) The <tt class="docutils literal">multiplier</tt> constraint from the readings
+is insufficient to model equations that include squared quantities
 because constraint networks must not include loops.  Implement a new constraint
 <tt class="docutils literal">squarer</tt> that represents the squaring relation:</p>
 <pre class="literal-block">
@@ -381,7 +475,7 @@ def squarer(a, b):
     b['connect'](constraint)
     return constraint
 </pre>
-<p><strong>Q7.</strong> (Extra for experts) Use your <tt class="docutils literal">squarer</tt> constraint to build a
+<p><strong>Q8.</strong> (Extra for experts) Use your <tt class="docutils literal">squarer</tt> constraint to build a
 constraint network for the Pythagorean theorem: <tt class="docutils literal">a</tt> squared plus <tt class="docutils literal">b</tt>
 squared equals <tt class="docutils literal">c</tt> squared:</p>
 <pre class="literal-block">
@@ -403,7 +497,7 @@ def pythagorean(a, b, c):
     squarer(c, c_sq)
     adder(a_sq, b_sq, c_sq)
 </pre>
-<p>The equation solver implementation from the lecture notes:</p>
+<p>Here is the equation solver implementation from the readings:</p>
 <pre class="literal-block">
 def connector(name=None):
     &quot;&quot;&quot;A connector between constraints.
