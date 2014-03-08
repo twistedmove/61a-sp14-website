@@ -41,7 +41,7 @@ import traceback
 import urllib.request
 import os
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 #############
 # Utilities #
