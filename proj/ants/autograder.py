@@ -292,6 +292,7 @@ def run_suite(preamble, suite, global_frame, postamble, label):
                                         preamble, postamble)
             else:
                 current += line + '\n'
+            exec(new_postamble, frame)
         if prompts == 0:
             output = next(out_iter)
             expect = eval(output, frame)
@@ -496,6 +497,7 @@ def unlock(question, locked_tests, unlocked_tests):
         exec(line, global_frame)
 
     has_preamble = 'preamble' in locked
+    has_postamble = 'postamble' in locked
     if has_preamble and 'all' in locked['preamble']:
         run_preamble(locked['preamble']['all'], global_frame)
 
@@ -513,6 +515,8 @@ def unlock(question, locked_tests, unlocked_tests):
             run_preamble(locked['preamble'][suite_num],
                          global_frame.copy())
             unlocked.setdefault('preamble', {})[suite_num] = locked['preamble'][suite_num]
+        if has_postamble and suite_num in locked['postamble']:
+            unlocked.setdefault('postamble', {})[suite_num] = locked['postamble'][suite_num]
         while suite:
             case = suite[0]
             lines = process_input(case[0])
