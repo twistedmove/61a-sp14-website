@@ -93,7 +93,7 @@
         """
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>armor <span style="font-weight: bold">-= </span>amount
         <span style="color: blue; font-weight: bold">if </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>armor <span style="font-weight: bold">&lt;= </span><span style="color: red">0</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'{0} ran out of armor and expired'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">))
+            </span>game_print<span style="font-weight: bold">(</span><span style="color: red">'{0} ran out of armor and expired'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">))
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>place<span style="font-weight: bold">.</span>remove_insect<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
 
     </span><span style="color: blue; font-weight: bold">def </span>action<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>colony<span style="font-weight: bold">):
@@ -281,9 +281,9 @@ class </span>HarvesterAnt<span style="font-weight: bold">(</span>Ant<span style=
                     </span>bee<span style="font-weight: bold">.</span>action<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>time <span style="font-weight: bold">+= </span><span style="color: red">1
         </span><span style="color: blue; font-weight: bold">if </span>len<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>queen<span style="font-weight: bold">.</span>bees<span style="font-weight: bold">) &gt; </span><span style="color: red">0</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'The ant queen has perished. Please try again.'</span><span style="font-weight: bold">)
+            </span>game_print<span style="font-weight: bold">(</span><span style="color: red">'The ant queen has perished. Please try again.'</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'All bees are vanquished. You win!'</span><span style="font-weight: bold">)
+            </span>game_print<span style="font-weight: bold">(</span><span style="color: red">'All bees are vanquished. You win!'</span><span style="font-weight: bold">)
 
     </span><span style="color: blue; font-weight: bold">def </span>deploy_ant<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>place_name<span style="font-weight: bold">, </span>ant_type_name<span style="font-weight: bold">):
         </span><span style="color: darkred">"""Place an ant if enough food is available.
@@ -292,7 +292,7 @@ class </span>HarvesterAnt<span style="font-weight: bold">(</span>Ant<span style=
         """
         </span>constructor <span style="font-weight: bold">= </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>ant_types<span style="font-weight: bold">[</span>ant_type_name<span style="font-weight: bold">]
         </span><span style="color: blue; font-weight: bold">if </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>food <span style="font-weight: bold">&lt; </span>constructor<span style="font-weight: bold">.</span>food_cost<span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Not enough food remains to place ' </span><span style="font-weight: bold">+ </span>ant_type_name<span style="font-weight: bold">)
+            </span>game_print<span style="font-weight: bold">(</span><span style="color: red">'Not enough food remains to place ' </span><span style="font-weight: bold">+ </span>ant_type_name<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>places<span style="font-weight: bold">[</span>place_name<span style="font-weight: bold">].</span>add_insect<span style="font-weight: bold">(</span>constructor<span style="font-weight: bold">())
             </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>food <span style="font-weight: bold">-= </span>constructor<span style="font-weight: bold">.</span>food_cost
@@ -336,7 +336,7 @@ class </span>HarvesterAnt<span style="font-weight: bold">(</span>Ant<span style=
     For example, one might deploy a ThrowerAnt to the first tunnel by invoking:
     colony.deploy_ant('tunnel_0_0', 'Thrower')
     """
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'colony: ' </span><span style="font-weight: bold">+ </span>str<span style="font-weight: bold">(</span>colony<span style="font-weight: bold">))
+    </span>game_print<span style="font-weight: bold">(</span><span style="color: red">'colony: ' </span><span style="font-weight: bold">+ </span>str<span style="font-weight: bold">(</span>colony<span style="font-weight: bold">))
     </span>msg <span style="font-weight: bold">= </span><span style="color: red">'&lt;Control&gt;-D (&lt;Control&gt;-Z &lt;Enter&gt; on Windows) completes a turn.\n'
     </span>interact<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">)
 
@@ -445,7 +445,7 @@ class </span>HarvesterAnt<span style="font-weight: bold">(</span>Ant<span style=
 
     </span><span style="color: blue; font-weight: bold">def </span>add_insect<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>insect<span style="font-weight: bold">):
         </span><span style="color: darkred">"""Add insect if it is watersafe, otherwise reduce its armor to 0."""
-        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'added'</span><span style="font-weight: bold">, </span>insect<span style="font-weight: bold">, </span>insect<span style="font-weight: bold">.</span>watersafe<span style="font-weight: bold">)
+        </span>game_print<span style="font-weight: bold">(</span><span style="color: red">'added'</span><span style="font-weight: bold">, </span>insect<span style="font-weight: bold">, </span>insect<span style="font-weight: bold">.</span>watersafe<span style="font-weight: bold">)
         </span><span style="color: red">"*** YOUR CODE HERE ***"
 
 
@@ -632,6 +632,8 @@ class </span>HungryAnt<span style="font-weight: bold">(</span>Ant<span style="fo
         </span><span style="color: blue; font-weight: bold">if </span>target<span style="font-weight: bold">:
             </span>apply_effect<span style="font-weight: bold">(</span>make_stun<span style="font-weight: bold">, </span>target<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
 
+</span><span style="color: blue; font-weight: bold">def </span>game_print<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kargs<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(*</span>args<span style="font-weight: bold">, **</span>kargs<span style="font-weight: bold">)
 
 </span>@main
 <span style="color: blue; font-weight: bold">def </span>run<span style="font-weight: bold">(*</span>args<span style="font-weight: bold">):

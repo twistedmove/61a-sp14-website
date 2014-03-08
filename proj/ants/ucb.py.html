@@ -16,7 +16,7 @@
 <span style="color: blue; font-weight: bold">import </span>re
 <span style="color: blue; font-weight: bold">import </span>signal
 <span style="color: blue; font-weight: bold">import </span>sys
-
+<span style="color: blue; font-weight: bold">import </span>timeit
 
 <span style="color: blue; font-weight: bold">def </span>main<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Call fn with command line arguments.  Used as a decorator.
@@ -109,6 +109,44 @@ _PREFIX <span style="font-weight: bold">= </span><span style="color: red">''
         </span>msg <span style="font-weight: bold">+= </span><span style="color: red">'    exit() or &lt;Control&gt;-C exits the program'
 
     </span>code<span style="font-weight: bold">.</span>interact<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">, </span>namespace<span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">def </span>time_expr<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>setup<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>imports<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>number<span style="font-weight: bold">=</span><span style="color: red">1000</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A convenience function for use with timeit.repeat.  Returns the
+    minimum average per-iteration time of of 3 runs in which EXPR
+    (a Python expression as a string) is executed NUMBER times.  Before
+    executing each loop, executes SETUP (a Python expression as a string)
+    and, if IMPORTS is present, executes an import of all these function names
+    in IMPORTS (a list or string) from __main__."""
+    </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>imports<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is </span>str<span style="font-weight: bold">:
+        </span>imports <span style="font-weight: bold">= </span><span style="color: red">"from __main__ import " </span><span style="font-weight: bold">+ </span>imports
+    <span style="color: blue; font-weight: bold">elif </span>imports <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span>imports <span style="font-weight: bold">= </span><span style="color: red">"from __main__ import " </span><span style="font-weight: bold">+ </span><span style="color: red">", "</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>imports<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>setup <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span>setup <span style="font-weight: bold">= </span>imports <span style="color: blue; font-weight: bold">or </span><span style="color: red">""
+    </span><span style="color: blue; font-weight: bold">elif </span>imports <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span>setup <span style="font-weight: bold">= </span>imports <span style="font-weight: bold">+ </span><span style="color: red">"; " </span><span style="font-weight: bold">+ </span>setup
+    <span style="color: blue; font-weight: bold">return </span>min<span style="font-weight: bold">(</span>timeit<span style="font-weight: bold">.</span>repeat<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>setup<span style="font-weight: bold">, </span>number<span style="font-weight: bold">=</span>number<span style="font-weight: bold">)) / </span>number
+
+<span style="color: blue; font-weight: bold">def </span>time_expr_str<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>setup<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>imports<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>number<span style="font-weight: bold">=</span><span style="color: red">1000</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A readable string representation of the result of
+    time_expr(expr,setup,imports,number) in appropriate units."""
+    </span>t <span style="font-weight: bold">= </span>time_expr<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>setup<span style="font-weight: bold">=</span>setup<span style="font-weight: bold">, </span>imports<span style="font-weight: bold">=</span>imports<span style="font-weight: bold">, </span>number<span style="font-weight: bold">=</span>number<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>t <span style="font-weight: bold">&lt; </span><span style="color: red">0.001</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"{} usec"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>int<span style="font-weight: bold">(</span>t <span style="font-weight: bold">* </span><span style="color: red">1</span>e6<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">elif </span>t <span style="font-weight: bold">&lt; </span><span style="color: red">1.0</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"{} msec"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>int<span style="font-weight: bold">(</span>t <span style="font-weight: bold">* </span><span style="color: red">1000</span><span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"{} sec"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>int<span style="font-weight: bold">(</span>t<span style="font-weight: bold">))
+
+</span><span style="color: blue; font-weight: bold">def </span>desc_time<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>setup<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>imports<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>number<span style="font-weight: bold">=</span><span style="color: red">1000</span><span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A description of the result and parameters of 
+    time_expr(expr,setup,imports,number) in appropriate units."""
+
+    </span>t <span style="font-weight: bold">= </span>time_expr_str<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>setup<span style="font-weight: bold">=</span>setup<span style="font-weight: bold">, </span>imports<span style="font-weight: bold">=</span>imports<span style="font-weight: bold">, </span>number<span style="font-weight: bold">=</span>number<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"{} loops, best of 3: {} per loop"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>number<span style="font-weight: bold">, </span>t<span style="font-weight: bold">)
+
+
+
 </span>
 </pre>
 </body>

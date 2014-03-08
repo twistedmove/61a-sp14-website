@@ -83,7 +83,7 @@ class Insect:
         """
         self.armor -= amount
         if self.armor <= 0:
-            print('{0} ran out of armor and expired'.format(self))
+            game_print('{0} ran out of armor and expired'.format(self))
             self.place.remove_insect(self)
 
     def action(self, colony):
@@ -271,9 +271,9 @@ class AntColony:
                     bee.action(self)
             self.time += 1
         if len(self.queen.bees) > 0:
-            print('The ant queen has perished. Please try again.')
+            game_print('The ant queen has perished. Please try again.')
         else:
-            print('All bees are vanquished. You win!')
+            game_print('All bees are vanquished. You win!')
 
     def deploy_ant(self, place_name, ant_type_name):
         """Place an ant if enough food is available.
@@ -282,7 +282,7 @@ class AntColony:
         """
         constructor = self.ant_types[ant_type_name]
         if self.food < constructor.food_cost:
-            print('Not enough food remains to place ' + ant_type_name)
+            game_print('Not enough food remains to place ' + ant_type_name)
         else:
             self.places[place_name].add_insect(constructor())
             self.food -= constructor.food_cost
@@ -326,7 +326,7 @@ def interactive_strategy(colony):
     For example, one might deploy a ThrowerAnt to the first tunnel by invoking:
     colony.deploy_ant('tunnel_0_0', 'Thrower')
     """
-    print('colony: ' + str(colony))
+    game_print('colony: ' + str(colony))
     msg = '<Control>-D (<Control>-Z <Enter> on Windows) completes a turn.\n'
     interact(msg)
 
@@ -435,7 +435,7 @@ class Water(Place):
 
     def add_insect(self, insect):
         """Add insect if it is watersafe, otherwise reduce its armor to 0."""
-        print('added', insect, insect.watersafe)
+        game_print('added', insect, insect.watersafe)
         "*** YOUR CODE HERE ***"
 
 
@@ -622,6 +622,8 @@ class StunThrower(ThrowerAnt):
         if target:
             apply_effect(make_stun, target, 1)
 
+def game_print(*args, **kargs):
+    print(*args, **kargs)
 
 @main
 def run(*args):

@@ -6,7 +6,7 @@ import inspect
 import re
 import signal
 import sys
-
+import timeit
 
 def main(fn):
     """Call fn with command line arguments.  Used as a decorator.
@@ -99,3 +99,41 @@ def interact(msg=None):
         msg += '    exit() or <Control>-C exits the program'
 
     code.interact(msg, None, namespace)
+
+def time_expr(expr, setup=None, imports=None, number=1000):
+    """A convenience function for use with timeit.repeat.  Returns the
+    minimum average per-iteration time of of 3 runs in which EXPR
+    (a Python expression as a string) is executed NUMBER times.  Before
+    executing each loop, executes SETUP (a Python expression as a string)
+    and, if IMPORTS is present, executes an import of all these function names
+    in IMPORTS (a list or string) from __main__."""
+    if type(imports) is str:
+        imports = "from __main__ import " + imports
+    elif imports is not None:
+        imports = "from __main__ import " + ", ".join(imports)
+    if setup is None:
+        setup = imports or ""
+    elif imports is not None:
+        setup = imports + "; " + setup
+    return min(timeit.repeat(expr, setup, number=number)) / number
+
+def time_expr_str(expr, setup=None, imports=None, number=1000):
+    """A readable string representation of the result of
+    time_expr(expr,setup,imports,number) in appropriate units."""
+    t = time_expr(expr, setup=setup, imports=imports, number=number)
+    if t < 0.001:
+        return "{} usec".format(int(t * 1e6))
+    elif t < 1.0:
+        return "{} msec".format(int(t * 1000))
+    else:
+        return "{} sec".format(int(t))
+
+def desc_time(expr, setup=None, imports=None, number=1000):
+    """A description of the result and parameters of 
+    time_expr(expr,setup,imports,number) in appropriate units."""
+
+    t = time_expr_str(expr, setup=setup, imports=imports, number=number)
+    return "{} loops, best of 3: {} per loop".format(number, t)
+
+
+
