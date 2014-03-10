@@ -30,44 +30,6 @@ class Rlist:
     def __repr__(self):
         "*** YOUR CODE HERE ***"
 
-
-def rlist_to_list(rlist):
-    """Takes an RLIST and returns a Python list with the same elements.
-
-    >>> rlist = Rlist(1, Rlist(2, Rlist(3, Rlist(4))))
-    >>> rlist_to_list(rlist)
-    [1, 2, 3, 4]
-    >>> rlist_to_list(Rlist.empty)
-    []
-    """
-    "*** YOUR CODE HERE ***"
-
-def insert(rlist, value, index):
-    """Insert VALUE into RLIST at the given INDEX.
-
-    >>> rlist = Rlist(1, Rlist(2, Rlist(3)))
-    >>> insert(rlist, 9001, 0)
-    >>> rlist
-    Rlist(9001, Rlist(1, Rlist(2, Rlist(3))))
-    >>> insert(rlist, 100, 2)
-    >>> rlist
-    Rlist(9001, Rlist(1, Rlist(100, Rlist(2, Rlist(3)))))
-    """
-    "*** YOUR CODE HERE ***"
-
-def reverse(rlist):
-    """Returns an Rlist that is the reverse of the original.
-
-    >>> Rlist(1).rest is Rlist.empty
-    True
-    >>> rlist = Rlist(1, Rlist(2, Rlist(3)))
-    >>> reverse(rlist)
-    Rlist(3, Rlist(2, Rlist(1)))
-    >>> reverse(Rlist(1))
-    Rlist(1)
-    """
-    "*** YOUR CODE HERE ***"
-
 #################
 # RList folding #
 #################
