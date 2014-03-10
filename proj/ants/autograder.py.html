@@ -51,7 +51,7 @@ This file supports the following primary options:
 <span style="color: blue; font-weight: bold">import </span>urllib<span style="font-weight: bold">.</span>request
 <span style="color: blue; font-weight: bold">import </span>os
 
-__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.0'
+__version__ <span style="font-weight: bold">= </span><span style="color: red">'1.1'
 
 </span><span style="color: green; font-style: italic">#############
 # Utilities #
@@ -302,6 +302,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
                                         </span>preamble<span style="font-weight: bold">, </span>postamble<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
                 </span>current <span style="font-weight: bold">+= </span>line <span style="font-weight: bold">+ </span><span style="color: red">'\n'
+            </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>new_postamble<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">if </span>prompts <span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">:
             </span>output <span style="font-weight: bold">= </span>next<span style="font-weight: bold">(</span>out_iter<span style="font-weight: bold">)
             </span>expect <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>output<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
@@ -506,6 +507,7 @@ def </span>interact<span style="font-weight: bold">(</span>console<span style="f
         </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>line<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">)
 
     </span>has_preamble <span style="font-weight: bold">= </span><span style="color: red">'preamble' </span><span style="color: blue; font-weight: bold">in </span>locked
+    has_postamble <span style="font-weight: bold">= </span><span style="color: red">'postamble' </span><span style="color: blue; font-weight: bold">in </span>locked
     <span style="color: blue; font-weight: bold">if </span>has_preamble <span style="color: blue; font-weight: bold">and </span><span style="color: red">'all' </span><span style="color: blue; font-weight: bold">in </span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">]:
         </span>run_preamble<span style="font-weight: bold">(</span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span><span style="color: red">'all'</span><span style="font-weight: bold">], </span>global_frame<span style="font-weight: bold">)
 
@@ -523,6 +525,8 @@ def </span>interact<span style="font-weight: bold">(</span>console<span style="f
             </span>run_preamble<span style="font-weight: bold">(</span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span>suite_num<span style="font-weight: bold">],
                          </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">())
             </span>unlocked<span style="font-weight: bold">.</span>setdefault<span style="font-weight: bold">(</span><span style="color: red">'preamble'</span><span style="font-weight: bold">, {})[</span>suite_num<span style="font-weight: bold">] = </span>locked<span style="font-weight: bold">[</span><span style="color: red">'preamble'</span><span style="font-weight: bold">][</span>suite_num<span style="font-weight: bold">]
+        </span><span style="color: blue; font-weight: bold">if </span>has_postamble <span style="color: blue; font-weight: bold">and </span>suite_num <span style="color: blue; font-weight: bold">in </span>locked<span style="font-weight: bold">[</span><span style="color: red">'postamble'</span><span style="font-weight: bold">]:
+            </span>unlocked<span style="font-weight: bold">.</span>setdefault<span style="font-weight: bold">(</span><span style="color: red">'postamble'</span><span style="font-weight: bold">, {})[</span>suite_num<span style="font-weight: bold">] = </span>locked<span style="font-weight: bold">[</span><span style="color: red">'postamble'</span><span style="font-weight: bold">][</span>suite_num<span style="font-weight: bold">]
         </span><span style="color: blue; font-weight: bold">while </span>suite<span style="font-weight: bold">:
             </span>case <span style="font-weight: bold">= </span>suite<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
             </span>lines <span style="font-weight: bold">= </span>process_input<span style="font-weight: bold">(</span>case<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">])

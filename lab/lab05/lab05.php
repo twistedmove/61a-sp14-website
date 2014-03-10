@@ -4,14 +4,13 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 5</title> 
+    <title>CS 61A Spring 2014: Lab 5</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -40,22 +39,25 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("10/10/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("3/6/2014", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 5</h1>
-<h2>Mutable Data and Sequence Processing</h2>
-<p>We've provided a starter file with skeleton code for the exercises in
-the lab. You can get it at the following link:</p>
+    <h1 id="title-main">CS 61A Lab 5</h1>
+<h2 id="title-sub">Mutable Data and Object-Oriented Programming</h2>
+<h2>Starter Files</h2>
+
+<p>We've provided a set of starter files with skeleton code for the
+exercises in the lab. You can get them in the following places:</p>
 
 <ul>
-<li><a href="./lab5.py">lab5.py</a></li>
+<li><a href="starter/nonlocal.py">nonlocal.py</a></li>
+<li><a href="starter/oop.py">oop.py</a></li>
 </ul>
 
-<h3>Nonlocal</h3>
+<h2>Nonlocal</h2>
 
 <p>Consider the following function:</p>
 
@@ -111,7 +113,9 @@ example:</p>
 <p>Notice the <code>nonlocal count</code>. This declares the <code>count</code> variable as a
 nonlocal variable, so now we can update <code>count</code>.</p>
 
-<p><strong>Problem 1</strong>: Predict what Python will display when the following
+<h3 class='question'>Question 1</h3>
+
+<p>Predict what Python will display when the following
 lines are typed into the interpreter:</p>
 
 <pre><code>&gt;&gt;&gt; def make_funny_adder(n):
@@ -144,8 +148,10 @@ ______
 
   </div>
 <?php } ?>
-<p><strong>Problem 2</strong>: Write a function <code>make_fib</code> that returns a function
-that reurns the next Fibonacci number each time it is called.</p>
+<h3 class='question'>Question 2</h3>
+
+<p>Write a function <code>make_fib</code> that returns a function that reurns the
+next Fibonacci number each time it is called.</p>
 
 <pre><code>def make_fib():
     """Returns a function that returns the next Fibonacci number
@@ -181,11 +187,12 @@ that reurns the next Fibonacci number each time it is called.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problems 3</strong>: Recall <code>make_test_dice</code> from the Hog project.
-<code>make_test_dice</code> takes in a sequence of numbers and returns a
-zero-argument function. This zero-argument function will cycle through
-the list, returning one element from the list every time. Implement
-<code>make_test_dice</code>.</p>
+<h3 class='question'>Question 3</h3>
+
+<p>Recall <code>make_test_dice</code> from the Hog project.  <code>make_test_dice</code> takes
+in a sequence of numbers and returns a zero-argument function. This
+zero-argument function will cycle through the list, returning one
+element from the list every time. Implement <code>make_test_dice</code>.</p>
 
 <pre><code>def make_test_dice(seq):
     """Makes deterministic dice.
@@ -223,433 +230,364 @@ the list, returning one element from the list every time. Implement
 
   </div>
 <?php } ?>
-<p><strong>Problem 4</strong>: Recall the <code>make_withdraw</code> function from lecture:</p>
+<h2>Object Oriented Programming</h2>
 
-<pre><code>def make_withdraw(balance):
-    """Return a withdraw function with a starting balance."""
-    def withdraw(amount):
-        nonlocal balance
-        if amount &gt; balance:
-            return 'Insufficient funds'
-        balance = balance - amount
-        return balance
-    return withdraw
-</code></pre>
+<h3 class='question'>Question 4</h3>
 
-<p>Write a new function <code>make_bank</code>, which should also return another
-function. This new function should be able to withdraw and deposit
-money. See the doctests for behavior:</p>
+<p>Predict the result of evaluating the following calls in the
+interpreter. Then try them out yourself!</p>
 
-<pre><code>def make_bank(balance):
-    """Returns a bank function with a starting balance. Supports
-    withdrawals and depositis.
-
-    &gt;&gt;&gt; bank = make_bank(100)
-    &gt;&gt;&gt; bank('withdraw', 40)    # 100 - 4
-    60
-    &gt;&gt;&gt; bank('deposit', 20)     # 60 + 20
-    80
-    &gt;&gt;&gt; bank('withdraw', 90)    # 80 - 90; not enough money
-    'Insufficient funds'
-    """
-    def bank(message, amount):
-        "*** YOUR CODE HERE ***"
-    return bank
+<pre><code>&gt;&gt;&gt; class Account(object):
+...     interest = 0.02
+...     def __init__(self, account_holder):
+...         self.balance = 0
+...         self.holder = account_holder
+...     def deposit(self, amount):
+...         self.balance = self.balance + amount
+...         print("Yes!")
+...
+&gt;&gt;&gt; a = Account("Billy")
+&gt;&gt;&gt; a.account_holder
+______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton3">Toggle Solution</button>
   <div id="toggleText3" style="display: none">
-    <pre><code>def make_bank(balance):
-    def bank(message, amount):
-        nonlocal balance
-        if message == 'deposit':
-            amount = -amount
-        if amount &gt; balance:
-            return 'Insufficient funds'
-        balance = balance - amount
-        return balance
-    return bank
+    <pre><code>AttributeError: 'Account' object has no attribute 'account_holder'
 </code></pre>
 
   </div>
 <?php } ?>
-<h3>Sequence Processing</h3>
-
-<p>The <strong>sequence abstraction</strong> is a fundamental concept in Python and
-many other programming languages. In Python, a sequence is defined to
-be any object that</p>
-
-<ul>
-<li>Has a finite length</li>
-<li>Supports element selection (through zero-based indexing)</li>
-</ul>
-
-<p>Some examples of sequences in Python include tuples, lists, and
-strings:</p>
-
-<pre><code>&gt;&gt;&gt; x = (1, 2, 3)
-&gt;&gt;&gt; len(x)
-3
-&gt;&gt;&gt; x[0]
-1
-&gt;&gt;&gt; s = 'hello world!'
-&gt;&gt;&gt; len(s)
-12
-&gt;&gt;&gt; s[0]
-'h'
-</code></pre>
-
-<p>We can also iterate over sequences with <code>for</code> loops:</p>
-
-<pre><code>&gt;&gt;&gt; x = (1, 2, 3)
-&gt;&gt;&gt; for item in x:
-...     print(item)
-1
-2
-3
-&gt;&gt;&gt; s = 'to eat'
-&gt;&gt;&gt; for letter in s:
-...     print(letter)
-t
-o
-
-e
-a
-t
-</code></pre>
-
-<p>Some Python sequences also support other features, like slicing and
-membership testing:</p>
-
-<pre><code>&gt;&gt;&gt; L = [1, 2, 3, 4]
-&gt;&gt;&gt; L[1:3]
-[2, 3]
-&gt;&gt;&gt; s = 'cs 61a'
-&gt;&gt;&gt; '61' in s
-True
-</code></pre>
-
-<p><strong>Problem 5</strong>: Implement <code>max_char</code>, a function that takes a
-sentence (as a string) and returns the character that appears the most
-number of times in the sentence. If there is a tie, return the
-character that appears first.</p>
-
-<p><em>Hint</em>: strings have a <code>count</code> method that can count the number of
-occurrences of a given substring. For example, <code>'hi there'.count('h')</code>
-will evaluate to 2.</p>
-
-<pre><code>def max_char(sentence):
-    """Returns the character that appears the most number of times
-    in sentence (a string).
-
-    &gt;&gt;&gt; max_char('see spot run')
-    's'
-    &gt;&gt;&gt; max_char('mississippi')
-    'i'
-    """
-    "*** YOUR CODE HERE ***"
+<pre><code>&gt;&gt;&gt; a.holder
+______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton4">Toggle Solution</button>
   <div id="toggleText4" style="display: none">
-    <pre><code>def max_char(sentence):
-    letter, num = None, 0
-    for char in sentence:
-        if sentence.count(char) &gt; num:
-            letter = char
-            num = sentence.count(char)
-    return letter
+    <pre><code>'Billy'
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 6</strong>: Implement <code>max_word</code>, a function that takes a sentence
-(as a string) and returns the word (in lower case) that appears the
-most number of times in the sentence. If there is a tie, return the
-character that appears first. You can assume there's no punctuation.</p>
-
-<p>Your function should ignore capitalization. For example, 'text' is the
-same English word as 'Text', but in Python, <code>'text' != 'Text'</code>.
-Luckily, string objects have a <code>lower()</code> method that might help. For
-example, <code>'TExt'.lower() == 'text'</code>.</p>
-
-<p>In addition, strings also have a method called <code>split()</code>. This will
-split a given string on whitespace. For example, <code>'hello
-world'.split() == ['hello', 'world']</code>.</p>
-
-<pre><code>def max_word(sentence):
-    """Returns the word that occurs the most number of times in
-    sentence (a string).
-
-    &gt;&gt;&gt; max_word('To be or not to be')
-    'to'
-    """
+<pre><code>&gt;&gt;&gt; class CheckingAccount(Account):
+...     def __init__(self, account_holder):
+...         Account.__init__(self, account_holder)
+...     def deposit(self, amount):
+...         Account.deposit(self, amount)
+...         print("Have a nice day!")
+...
+&gt;&gt;&gt; c = CheckingAccount("Eric")
+&gt;&gt;&gt; a.deposit(30)
+______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton5">Toggle Solution</button>
   <div id="toggleText5" style="display: none">
-    <pre><code>def max_word(sentence):
-    words = sentence.split()
-    best, num = None, 0
-    for word in words:
-        word = word.lower()
-        if words.count(word) &gt; num:
-            best = word
-            num = words.count(word)
-    return best
+    <pre><code>Yes!
 </code></pre>
 
   </div>
 <?php } ?>
-<h3>Map, filter, and reduce</h3>
-
-<p>Python has many powerful tools for sequence processing. Three of the
-most common are <code>map</code>, <code>filter</code>, and <code>reduce</code>:</p>
-
-<ul>
-<li><code>map(fn, seq)</code>: applies a function <code>fn</code> onto every element in the
-given sequence <code>seq</code>.</li>
-<li><code>filter(pred, seq)</code>: keeps elements in the sequence <code>seq</code> only if
-those elements satisfy the predicate function <code>pred</code> (that is, for
-an element <code>x</code>, keep it only if <code>pred(x)</code> is True).</li>
-<li><code>reduce(combiner, seq)</code>: combines all elements in the sequence <code>seq</code>
-with the <code>combiner</code> function (which must take two arguments).
-<em>Note</em>: <code>reduce</code> must be imported from the module <code>functools</code></li>
-</ul>
-
-<p>Note that <code>map</code> and <code>filter</code> return <code>map</code> objects and <code>filter</code>
-objects, respectively. You can cast the results as lists. Some
-examples:</p>
-
-<pre><code>&gt;&gt;&gt; map(lambda x: x*x, [1, 2, 3])
-&lt;map object at ...&gt;
-&gt;&gt;&gt; list(map(lambda x: x*x, [1, 2, 3]))
-[1, 4, 9]
-
-&gt;&gt;&gt; filter(lambda x: x % 2 == 0, (1, 2, 3, 4))
-&lt;filter object at ...&gt;
-&gt;&gt;&gt; list(filter(lambda x: x % 2 == 0, (1, 2, 3, 4)))
-[2, 4]
-
-&gt;&gt;&gt; from functools import reduce
-&gt;&gt;&gt; reduce(lambda x, y: x + y, [1, 2, 3, 4])  # 1 + 2 + 3 + 4
-10
-</code></pre>
-
-<p><strong>Problem 7</strong>: as an exercise, implement three functions <code>map</code>,
-<code>filter</code>, and <code>reduce</code> to behave like their built-in counterparts. For
-<code>map</code> and <code>filter</code>, you can return the results as Python lists.</p>
-
-<pre><code>def map(fn, seq):
-    """Applies fn onto each element in seq and returns a list.
-
-    &gt;&gt;&gt; map(lambda x: x*x, [1, 2, 3])
-    [1, 4, 9]
-    """
-    "*** YOUR CODE HERE ***"
-
-def filter(pred, seq):
-    """Keeps elements in seq only if they satisfy pred.
-
-    &gt;&gt;&gt; filter(lambda x: x % 2 == 0, [1, 2, 3, 4])
-    [2, 4]
-    """
-    "*** YOUR CODE HERE ***"
-
-def reduce(combiner, seq):
-    """Combines elements in seq using combiner.
-
-    &gt;&gt;&gt; reduce(lambda x, y: x + y, [1, 2, 3, 4])
-    10
-    &gt;&gt;&gt; reduce(lambda x, y: x * y, (1, 2, 3))
-    6
-    &gt;&gt;&gt; reduce(lambda x, y: x * y, [4])
-    4
-    """
-    "*** YOUR CODE HERE ***"
+<pre><code>&gt;&gt;&gt; c.deposit(30)
+______
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton6">Toggle Solution</button>
   <div id="toggleText6" style="display: none">
-    <pre><code>def map(fn, seq):
-    result = []
-    for elem in seq:
-        result.append(fn(seq))
-    return result
-
-def filter(pred, seq):
-    result = []
-    for elem in seq:
-        if pred(seq):
-            result.append(seq)
-    return result
-
-def reduce(combiner, seq):
-    total = seq[0]
-    for elem in seq[1:]:
-        total = combiner(total, elem)
-    return total
+    <pre><code>Yes!
+Have a nice day!
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 8</strong>: Fill in the blanks for the following lines so that
-each expression evaluates to the expected output:</p>
+<h3 class='question'>Question 5</h3>
 
-<pre><code>&gt;&gt;&gt; list(map(_______, [1, 3, -1, -4, 2]))
-[1, 1, -1, -1, 1]
-&gt;&gt;&gt; list(filter(______, [1, 7, 14, 21, 28, 35, 42]))
-[1, 14, 28, 42]
-&gt;&gt;&gt; reduce(_______, 'hello')
-'olleh'
-&gt;&gt;&gt; reduce(______, map(______, 'nnnnn')) + ' batman!'
-'nanananana batman!'
+<p>Consider the following basic definition of a <code>Person</code> class:</p>
+
+<pre><code>class Person(object):
+
+    def __init__(self, name):
+        self.name = name
+
+    def say(self, stuff):
+        return stuff
+
+    def ask(self, stuff):
+        return self.say("Would you please " + stuff)
+
+    def greet(self):
+        return self.say("Hello, my name is " + self.name)
+</code></pre>
+
+<p>Modify this class to add a <code>repeat</code> method, which repeats the last
+thing said. Here's an example of its use:</p>
+
+<pre><code>&gt;&gt;&gt; steven = Person("Steven")
+&gt;&gt;&gt; steven.repeat()       # starts at whatever value you'd like
+"I squirreled it away before it could catch on fire."
+&gt;&gt;&gt; steven.say("Hello")
+"Hello"
+&gt;&gt;&gt; steven.repeat()
+"Hello"
+&gt;&gt;&gt; steven.greet()
+"Hello, my name is Steven"
+&gt;&gt;&gt; steven.repeat()
+"Hello, my name is Steven"
+&gt;&gt;&gt; steven.ask("preserve abstraction barriers")
+"Would you please preserve abstraction barriers"
+&gt;&gt;&gt; steven.repeat()
+"Would you please preserve abstraction barriers"
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton7">Toggle Solution</button>
   <div id="toggleText7" style="display: none">
-    <ul>
-<li><code>list(map(lambda x: x // abs(x), [1, 3, -1, -4, 2]))</code></li>
-<li><code>list(filter(lambda x: x // 7 % 2 == 0, [1, 7, 14, 21, 28, 35, 42]))</code></li>
-<li><code>reduce(lambda x, y: y + x, 'hello')</code></li>
-<li><code>reduce(lambda x, y: x + y, map(lambda s: s + 'a', 'nnnnn')) + ' batman!'</code></li>
-</ul>
+    <pre><code>class Person(object):
+
+    def __init__(self, name):
+        self.name = name
+        self.previous = "I squirreled it away before it could catch on fire"
+
+    def say(self, stuff):
+        self.previous = stuff
+        return stuff
+
+    def ask(self, stuff):
+        return self.say("Would you please " + stuff)
+
+    def greet(self):
+        return self.say("Hello, my name is " + self.name)
+
+    def repeat(self):
+        return self.say(self.previous)
+</code></pre>
 
   </div>
 <?php } ?>
-<h3>Extra Questions</h3>
+<h3 class='question'>Question 6</h3>
 
-<p><strong>Problem 9</strong>: Implement a function <code>deep_len</code> that takes in a
-(possibly) nested tuple and calculates its length. For example, the
-expression <code>deep_len((1, (2, 3), 4))</code> would evaluate to 4, as opposed
-to 3 (as the built-in len would report). The tuples can have an
-arbitrary amount of nesting.</p>
+<p>Suppose now that we wanted to define a class called <code>DoubleTalker</code> to
+represent people who always say things twice:</p>
 
-<p><em>Hint</em>: the built-in <code>type</code> function can tell you the type of an
-object.  For example,</p>
-
-<pre><code>&gt;&gt;&gt; x = (1, 2, 3)
-&gt;&gt;&gt; type(x) == tuple
-True
+<pre><code>&gt;&gt;&gt; steven = DoubleTalker("Steven")
+&gt;&gt;&gt; steven.say("hello")
+"hello hello"
+&gt;&gt;&gt; steven.say("the sky is falling")
+"the sky is falling the sky is falling"
 </code></pre>
 
-<p>You can choose to use iteration or not, but either way, you will most
-likely use some sort of recursion.</p>
+<p>Consider the following three definitions for <code>DoubleTalker</code>:</p>
 
-<pre><code>def deep_len(tup):
-    """Calculates the length of a possibly nested tuple.
+<pre><code>class DoubleTalker(Person):
+    def __init__(self, name):
+        Person.__init__(self, name)
+    def say(self, stuff):
+        return Person.say(self, stuff) + " " + self.repeat()
 
-    &gt;&gt;&gt; deep_len((1, 2, 3, 4))  # normal tuple
-    4
-    &gt;&gt;&gt; deep_len((1, (2, 3), 4))
-    4
-    &gt;&gt;&gt; deep_len((1, (2, (3, (4,)))))
-    4
-    &gt;&gt;&gt; deep_len((1, (), 2))  # empty  # nested tuples don't count
-    2
-    """
-    "*** YOUR CODE HERE ***"
+class DoubleTalker(Person):
+    def __init__(self, name):
+        Person.__init__(self, name)
+    def say(self, stuff):
+        return stuff + " " + stuff
+
+class DoubleTalker(Person):
+    def __init__(self, name):
+        Person.__init__(self, name)
+    def say(self, stuff):
+        return Person.say(self, stuff + " " + stuff)
 </code></pre>
+
+<p>Determine which of these definitions work as intended. Also determine
+for which of the methods the three versions would respond differently.
+(Don't forget about the <code>repeat</code> method!)</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton8">Toggle Solution</button>
   <div id="toggleText8" style="display: none">
-    <pre><code>def deep_len(tup):
-    if not tup:
-        return 0
-    elif type(tup[0]) == tuple:
-        return deep_len(tup[0]) + deep_len(tup[1:])
-    else:
-        return 1 + deep_len(tup[1:])
-</code></pre>
+    <p>The last one works as intended.  For the first and second ones,
+calling <code>repeat</code> would fail.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 10</strong>: Implement a function <code>merge</code>, which takes two sorted
-tuples and returns a tuple that contains all elements in both tuples
-(including duplicates) in sorted order. The sequences do not have to
-have the same length.</p>
+<h3 class='question'>Question 7</h3>
 
-<p><em>Hint</em>: Try doing this recursively.</p>
+<p>Here are the <code>Account</code> and <code>CheckingAccount</code> classes from lecture:</p>
 
-<pre><code>def merge(seq1, seq2):
-    """Merges all elements (including duplicates) of seq1 and seq2
-    in sorted order.
+<pre><code>class Account(object):
+    """A bank account that allows deposits and withdrawals."""
 
-    &gt;&gt;&gt; merge((1, 3, 5), (2, 4))
-    (1, 2, 3, 4, 5)
-    &gt;&gt;&gt; merge((), (1, 2, 3))
-    (1, 2, 3)
-    """
-    "*** YOUR CODE HERE ***"
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+
+    def deposit(self, amount):
+        """Increase the account balance by amount and return the
+        new balance."""
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        """Decrease the account balance by amount and return the
+        new balance."""
+        if amount &gt; self.balance:
+            return 'Insufficient funds'
+        self.balance = self.balance - amount
+        return self.balance
+
+class CheckingAccount(Account):
+    """A bank account that charges for withdrawals."""
+
+    withdraw_fee = 1
+    interest = 0.01
+
+    def withdraw(self, amount):
+        return Account.withdraw(self, amount + self.withdraw_fee)
 </code></pre>
+
+<p>Modify the code so that both classes have a new attribute,
+<code>transactions</code>, that is a list keeping track of any transactions
+performed. For example:</p>
+
+<pre><code>&gt;&gt;&gt; eric_account = Account(“Eric”)
+&gt;&gt;&gt; eric_account.deposit(1000000)   # depositing my paycheck for the week
+1000000
+&gt;&gt;&gt; eric_account.transactions
+[(‘deposit’, 1000000)]
+&gt;&gt;&gt; eric_account.withdraw(100)      # buying dinner
+999900
+&gt;&gt;&gt; eric_account.transactions
+[(‘deposit’, 1000000), (‘withdraw’, 100)]
+</code></pre>
+
+<p>Don't repeat code if you can help it; use inheritance!</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton9">Toggle Solution</button>
   <div id="toggleText9" style="display: none">
-    <pre><code>def merge(seq1, seq2):
-    if not seq1 or not seq2:
-        return seq1 + seq2
-    elif seq1[0] &lt; seq2[0]:
-        return (seq1[0],) + merge(seq1[1:], seq2)
-    else:
-        return (seq2[0],) + merge(seq1, seq2[1:])
+    <pre><code>class Account(object):
+    """A bank account that allows deposits and withdrawals."""
+
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+        self.transactions = []
+
+    def deposit(self, amount):
+        """Increase the account balance by amount and return the new balance."""
+        self.transactions.append(('deposit', amount))
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        """Decrease the account balance by amount and return the new balance."""
+        self.transactions.append(('withdraw', amount))
+        if amount &gt; self.balance:
+            return 'Insufficient funds'
+        self.balance = self.balance - amount
+        return self.balance
+
+class CheckingAccount(Account):
+    """A bank account that charges for withdrawals."""
+
+    withdraw_fee = 1
+    interest = 0.01
+
+    def withdraw(self, amount):
+        return Account.withdraw(self, amount + self.withdraw_fee)
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 11</strong>: <a href="http://en.wikipedia.org/wiki/Merge_sort">Mergesort</a> is
-a type of sorting algorithm. It follows a naturally recursive
-procedure:</p>
+<h3 class='question'>Question 8</h3>
 
-<ul>
-<li>Break the input tuple into equally-sized halves</li>
-<li>Recursively sort both halves</li>
-<li>Merge the sorted halves.</li>
-</ul>
+<p>We'd like to be able to cash checks, so let's add a <code>deposit_check</code>
+method to our <code>CheckingAccount</code> class. It will take a <code>Check</code> object
+as an argument, and check to see if the <code>payable_to</code> attribute matches
+the <code>CheckingAccount</code>'s holder. If so, it marks the <code>Check</code> as
+deposited, and adds the amount specified to the <code>CheckingAccount</code>'s
+total. Here's an example:</p>
 
-<p>Using your <code>merge</code> function from the previous question, implement
-<code>mergesort</code>.</p>
-
-<p><em>Challenge</em>: Implement mergesort iteratively, without using recursion.</p>
-
-<pre><code>def mergesort(seq):
-    """Mergesort algorithm.
-
-    &gt;&gt;&gt; mergesort((4, 2, 5, 2, 1))
-    (1, 2, 2, 4, 5)
-    &gt;&gt;&gt; mergesort(())     # sorting an empty list
-    ()
-    &gt;&gt;&gt; mergesort((1,))   # sorting a one-element list
-    (1,)
-    """
-    "*** YOUR CODE HERE***"
+<pre><code>&gt;&gt;&gt; check = Check(“Steven”, 42)  # 42 dollars, payable to Steven
+&gt;&gt;&gt; steven_account = CheckingAccount(“Steven”)
+&gt;&gt;&gt; eric_account = CheckingAccount(“Eric”)
+&gt;&gt;&gt; eric_account.deposit_check(check)  # trying to steal steven’s money
+The police have been notified.
+&gt;&gt;&gt; eric_account.balance
+0
+&gt;&gt;&gt; check.deposited
+False
+&gt;&gt;&gt; steven_account.balance
+0
+&gt;&gt;&gt; steven_account.deposit_check(check)
+42
+&gt;&gt;&gt; check.deposited
+True
+&gt;&gt;&gt; steven_account.deposit_check(check)  # can't cash check twice
+The police have been notified.
 </code></pre>
+
+<p>Write an appropriate <code>Check</code> class, and add the <code>deposit_check</code> method
+to the <code>CheckingAccount</code> class. Make sure not to copy and paste code!
+Use inheritance whenever possible.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton10">Toggle Solution</button>
   <div id="toggleText10" style="display: none">
-    <pre><code># recursive version
-def mergesort(seq):
-    if len(seq) &lt; 2:
-        return seq
-    mid = len(seq) // 2
-    return merge(mergesort(seq[:mid]), mergesort(seq[mid:]))
+    <pre><code>class Account(object):
+    """A bank account that allows deposits and withdrawals."""
 
-# iterative version
-def mergesort(seq):
-    if not seq:
-        return ()
-    queue = [(elem,) for elem in seq]
-    while len(queue) &gt; 1:
-        first, second = queue.pop(0), queue.pop(0)
-        queue.append(merge(first, second))
-    return queue[0]
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+        self.transactions = []
+
+    def deposit(self, amount):
+        """Increase the account balance by amount and return the
+        new balance."""
+        self.transactions.append(('deposit', amount))
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        """Decrease the account balance by amount and return the
+        new balance."""
+        self.transactions.append(('withdraw', amount))
+        if amount &gt; self.balance:
+            return 'Insufficient funds'
+        self.balance = self.balance - amount
+        return self.balance
+
+class CheckingAccount(Account):
+    """A bank account that charges for withdrawals."""
+
+    withdraw_fee = 1
+    interest = 0.01
+
+    def withdraw(self, amount):
+        return Account.withdraw(self, amount + self.withdraw_fee)
+
+    def deposit_check(self, check):
+        if check.payable_to != self.holder or check.deposited:
+            print("The police have been notified")
+        else:
+            self.deposit(check.amount)
+            check.deposited = True
+
+class Check(object):
+    def __init__(self, payable_to, amount):
+        self.payable_to = payable_to
+        self.amount = amount
+        self.deposited = False
 </code></pre>
 
   </div>

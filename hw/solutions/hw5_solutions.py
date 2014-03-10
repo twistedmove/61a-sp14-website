@@ -1,5 +1,5 @@
-# Name:
-# Email:
+#  Name:
+#  Email:
 
 # Q1.
 
@@ -54,6 +54,75 @@ def shuffle(cards):
 
 # Q3.
 
+G = { 'A': ['B', 'D'], 'B': ['C'], 'C': ['F'], 'D': ['E'], 
+      'E': ['F'], 'F': ['G'], 'G': ['A'] }
+
+
+def is_circular(G):
+    """Return true iff G represents a circular directed graph."""
+    for v in G:
+        if reaches_circularity(G, v):
+            return True
+    return False
+
+def reaches_circularity(G, v0):
+    """Returns true if there is a circularity in G in some path
+    starting from vertex V0."""
+    def is_path_to_cycle(v1):
+        for w in G[v1]:
+            if v0 == w:
+                return True
+            if is_path_to_cycle(w):
+                return True
+        return False
+    return is_path_to_cycle(v0)
+
+
+def reaches_circularity(G, v0):
+    """Returns true if there is a circularity in G in some path
+    starting from vertex V0.
+    >>> G = { 'A': ['B', 'D'], 'B': ['C'], 'C': ['F'], 'D': ['E'], 
+    ...       'E': ['F'], 'F': ['G'], 'G': ['A'] }
+    >>> is_circular(G)
+    True
+    >>> G['F'] = []
+    >>> is_circular(G)
+    False
+    """
+    on_path = { v0 }
+    def is_path_to_cycle(v1):
+        on_path.add(v1)
+        for w in G[v1]:
+            if w in on_path:
+                return True
+            if is_path_to_cycle(w):
+                return True
+        on_path.remove(v1)
+        return False
+    return is_path_to_cycle(v0)
+
+# Q4.
+
+def make_withdraw(balance):
+    """Return a withdraw function with BALANCE as its starting balance.
+    >>> withdraw = make_withdraw(1000)
+    >>> withdraw(100)
+    900
+    >>> withdraw(100)
+    800
+    >>> withdraw(900)
+    'Insufficient funds'
+    """
+
+    def withdraw(amount):
+        nonlocal balance
+        if amount > balance:
+           return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return withdraw
+
+
 def make_withdraw(balance, password):
     """Return a password-protected withdraw function.
 
@@ -91,7 +160,7 @@ def make_withdraw(balance, password):
         return balance
     return withdraw
 
-# Q4.
+# Q5.
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
@@ -141,7 +210,7 @@ def make_joint(withdraw, old_password, new_password):
     return joint
 
 
-# Q5.
+# Q6.
 
 def triangle_area(a, b, h):
     """Connect a, b, and h so that a is the area of a triangle with base b and
@@ -160,7 +229,7 @@ def triangle_area(a, b, h):
     multiplier(u, h, a)
     constant(v, 0.5)
 
-# Q6.
+# Q7.
 
 def squarer(a, b):
     """The constraint that a*a=b.
@@ -193,7 +262,7 @@ def squarer(a, b):
     return constraint
 
 
-# Q7.
+# Q8.
 
 def pythagorean(a, b, c):
     """Connect a, b, and c into a network for the Pythagorean theorem:
