@@ -4,14 +4,13 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 6</title> 
+    <title>CS 61A Spring 2014: Lab 6</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -46,22 +45,24 @@
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 6</h1>
-<h2>Inheritance and Recursive Data Structures</h2>
-<p>We've provided a starter file with skeleton code for the exercises in
-the lab. You can get it at the following link:</p>
+    <h1 id="title-main">CS 61A Lab 6</h1>
+<h2 id="title-sub">Inheritance and Recursive Data Structures</h2>
+<h2>Starter Files</h2>
+
+<p>We've provided a set of starter files with skeleton code for the
+exercises in the lab. You can get them in the following places:</p>
 
 <ul>
-<li><a href="./lab6.py">lab6.py</a></li>
+<li><a href="starter/inheritance.py">inheritance.py</a></li>
+<li><a href="starter/mut_rlists.py">mut_rlists.py</a></li>
+<li><a href="starter/trees.py">trees.py</a></li>
 </ul>
 
-<h3>Inheritance</h3>
+<h2>Inheritance</h2>
 
-<p>You can find additional practice problems from this
-<a href="http://www-inst.eecs.berkeley.edu/~cs61a/sp13/labs/lab07/lab7.php">lab on OOP</a>
-from Spring 2013 helpful.</p>
+<h3 class='question'>Question 1</h3>
 
-<p><strong>Problem 1</strong>: Consider the following code:</p>
+<p>Consider the following code:</p>
 
 <pre><code>class Animal(object):
     def __init__(self):
@@ -71,21 +72,82 @@ class Pet(Animal):
     def __init__(self, name, year_of_birth, owner=None):
         Animal.__init__(self)   # call the parent's constructor
         self.name = name
-        self.age = current_year - year_of_birth
+        self.age = CURRENT_YEAR - year_of_birth
         self.owner = owner
 
     def eat(self, thing):
+        self.talk()
+        if thing == "poison":
+            self.lose_life()
         print(self.name + " ate a " + str(thing) + "!")
 
     def talk(self):
-        print("...")
+        print("..")
 </code></pre>
 
-<p>Implement a <code>Cat</code> class that inherits from <code>Pet</code>. Use superclass
-methods wherever possible.</p>
+<p>What would python print if the following is typed into the interpreter, after
+the first two class definitions?</p>
+
+<pre><code>&gt;&gt;&gt; a = Animal()
+&gt;&gt;&gt; a.is_alive
+________
+&gt;&gt;&gt; a.talk()
+________
+&gt;&gt;&gt; hamster = Pet("Hamster", 2014)
+&gt;&gt;&gt; hamster.talk()
+________
+&gt;&gt;&gt; hamster.eat("seed")
+________
+&gt;&gt;&gt; hamster.eat("poison")
+________
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton0">Toggle Solution</button>
+  <div id="toggleText0" style="display: none">
+    <pre><code>&gt;&gt;&gt; a = Animal()
+&gt;&gt;&gt; a.is_alive
+True
+&gt;&gt;&gt; a.talk()
+Traceback (most recent call last):
+   ...
+AttributeError: 'Animal' object has no attribute 'talk'
+&gt;&gt;&gt; hamster = Pet("Hamster", 2014)
+&gt;&gt;&gt; hamster.talk()
+..
+&gt;&gt;&gt; hamster.eat("seed")
+..
+Hamster ate a seed!
+&gt;&gt;&gt; hamster.eat("poison")
+Traceback (most recent call last):
+   ...
+AttributeError: 'Pet' object has no attribute 'lose_life'
+</code></pre>
+
+  </div>
+<?php } ?>
+<p>Implement a <code>Cat</code> class that inherits from <code>Pet</code>. Use superclass methods wherever possible.</p>
 
 <pre><code>class Cat(Pet):
+    """
+    &gt;&gt;&gt; my_cat = Cat("Furball", 2011, "Me", lives=2)
+    &gt;&gt;&gt; my_cat.talk()
+    Meow!
+    &gt;&gt;&gt; my_cat.name
+    'Furball'
+    &gt;&gt;&gt; my_cat.lose_life()
+    &gt;&gt;&gt; my_cat.is_alive
+    True
+    &gt;&gt;&gt; my_cat.eat("poison")
+    Meow!
+    Furball ate a poison!
+    &gt;&gt;&gt; my_cat.is_alive
+    False
+    &gt;&gt;&gt; my_cat.lose_life()
+    'Cat is dead x_x'
+    """
     def __init__(self, name, year_of_birth, owner, lives=9):
+        assert type(lives) == int and  lives &gt; 0
         "*** YOUR CODE HERE ***"
 
     def talk(self):
@@ -101,32 +163,51 @@ methods wherever possible.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton0">Toggle Solution</button>
-  <div id="toggleText0" style="display: none">
+  <button id="toggleButton1">Toggle Solution</button>
+  <div id="toggleText1" style="display: none">
     <pre><code>class Cat(Pet):
     def __init__(self, name, year_of_birth, owner, lives=9):
+        assert type(lives) == int and  lives &gt; 0
+        "*** YOUR CODE HERE ***"
         Pet.__init__(self, name, year_of_birth, owner)
         self.lives = lives
 
     def talk(self):
-        print('Meow!')
+        """A cat says 'Meow!' when asked to talk."""
+        "*** YOUR CODE HERE ***"
+        print("Meow!")
 
     def lose_life(self):
-        if self.lives &gt; 0:
-            self.lives -= 1
-            if self.lives == 0
-                self.is_alive = False
-        else:
-            print('This cat has no more lives to lose x_x')
+        """A cat can only lose a life if it has at least one
+        life. When there are zero lives left, the 'is_alive'
+        variable becomes False.
+        """
+        "*** YOUR CODE HERE ***"
+        if not self.is_alive:
+            return "Cat is dead x_x"
+        self.lives -= 1
+        if self.lives == 0:
+            self.is_alive = False
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 2</strong>: Now implement a <code>NoisyCat</code> class, which inherits from
-<code>Cat</code>. A <code>NoisyCat</code> is just like a normal <code>Cat</code> except, when asked to
-talk, it says what a normal <code>Cat</code> says twice.</p>
+<p>Now implement a <code>NoisyCat</code> class, which inherits from <code>Cat</code>. A <code>NoisyCat</code> is
+just like a normal <code>Cat</code> except, when asked to talk, it says what a normal <code>Cat</code>
+says twice.</p>
 
 <pre><code>class NoisyCat(Cat):
+    """
+    &gt;&gt;&gt; my_cat = NoisyCat("Noisy Kitty", 2011, "Me", lives=1)
+    &gt;&gt;&gt; my_cat.talk()
+    Meow!
+    Meow!
+    &gt;&gt;&gt; my_cat.name
+    'Noisy Kitty'
+    &gt;&gt;&gt; my_cat.lose_life()
+    &gt;&gt;&gt; my_cat.lose_life()
+    'Cat is dead x_x'
+    """
     def __init__(self, name, year_of_birth, owner, lives=9):
         "*** YOUR CODE HERE ***"
         # hint: do you need to write another __init__?
@@ -138,8 +219,8 @@ talk, it says what a normal <code>Cat</code> says twice.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton1">Toggle Solution</button>
-  <div id="toggleText1" style="display: none">
+  <button id="toggleButton2">Toggle Solution</button>
+  <div id="toggleText2" style="display: none">
     <pre><code>class NoisyCat(Cat):
     def __init__(self, name, year_of_birth, owner, lives=9):
         Cat.__init__(self, name, year_of_birth, owner, lives)
@@ -149,17 +230,20 @@ talk, it says what a normal <code>Cat</code> says twice.</p>
         Cat.talk(self)
 </code></pre>
 
-<p>Observe two things:
-1. The <code>__init__</code> method is actually unnecessary, since it does
-   exactly what the superclass <code>__init__</code> does. As such, we could
-   arrive at the correct functionality by simply removing the
-   <code>__init__</code> method in <code>NoisyCat</code>.
-2. In <code>talk</code>, notice we do not use <code>self.talk()</code>. This would cause an
-   infinite recursive loop. Why?</p>
+<p>Observe two things:</p>
+
+<ol>
+<li><p>The <code>__init__</code> method is actually unnecessary, since it
+does exactly what the superclass <code>__init__</code> does. As such, we could arrive at
+the correct functionality by simply removing the <code>__init__</code> method in
+<code>NoisyCat</code>.</p></li>
+<li><p>In <code>talk</code>, notice we do not use <code>self.talk()</code>. This would cause
+an infinite recursive loop. Why?</p></li>
+</ol>
 
   </div>
 <?php } ?>
-<h3>Recursive Lists</h3>
+<h2>Recursive Lists</h2>
 
 <p>In lecture, we introduced the OOP version of an <code>Rlist</code>:</p>
 
@@ -184,19 +268,10 @@ talk, it says what a normal <code>Cat</code> says twice.</p>
     def __init__(self, first, rest=empty):
         self.first = first
         self.rest = rest
-
-    def __getitem__(self, i):
-        if i == 0:
-            return self.first
-        else:
-            return self.rest[i-1]
-
-    def __len__(self):
-        return 1 + len(self.rest)
 </code></pre>
 
-<p>Just like before, these <code>Rlists</code> have a first and a rest. The difference is
-that, now, the <code>Rlists</code> are mutable.</p>
+<p>Just like before, these <code>Rlists</code> have a first and a rest. The
+difference is that, now, the <code>Rlists</code> are <em>mutable</em>.</p>
 
 <p>To check if an <code>Rlist</code> is empty, compare it against the class variable
 <code>Rlist.empty</code>:</p>
@@ -207,22 +282,12 @@ that, now, the <code>Rlists</code> are mutable.</p>
 
 <p>Don't construct another <code>EmptyList</code>!</p>
 
-<p>In this lab, we will be using <code>rlist_expression</code> to print a string
-representation of an Rlist.</p>
+<h3 class='question'>Question 2</h3>
 
-<pre><code>def rlist_expression(s):
-    """Return a string that would evaluate to s."""
-    if s.rest is Rlist.empty:
-        rest = ''
-    else:
-        rest = ', ' + rlist_expression(s.rest)
-    return 'Rlist({0}{1})'.format(s.first, rest)
-</code></pre>
+<p>Predict what Python will display when the following lines are typed into the
+interpreter:</p>
 
-<p><strong>Problem 3</strong>: Predict what Python will display when the following lines are
-typed into the interpreter:</p>
-
-<pre><code>&gt;&gt;&gt; print(rlist_expression(Rlist(1, Rlist(2))))
+<pre><code>&gt;&gt;&gt; print(Rlist(1, Rlist(2)))
 _____
 &gt;&gt;&gt; Rlist()
 _____
@@ -246,8 +311,8 @@ _____
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
     <ol>
 <li>Rlist(1, Rlist(2))</li>
 <li>TypeError</li>
@@ -261,14 +326,95 @@ _____
 
   </div>
 <?php } ?>
+<h3 class='question'>Question 3</h3>
+
+<p>In lecture, we learned about the special "underscore" methods for
+classes, two of which were <code>__len__</code>, which allows you to call the
+builtin function <code>len</code> on the object, and <code>__getitem__</code>, which allows
+you to use index notation on the object. Implement both of them for
+the <code>Rlist</code> class. Afterwards, the doctests for the <code>Rlist</code> class
+should pass.</p>
+
+<pre><code>class Rlist(object):
+    """A mutable rlist class.
+
+    &gt;&gt;&gt; r = Rlist(3, Rlist(2, Rlist(1)))
+    &gt;&gt;&gt; len(r)
+    3
+    &gt;&gt;&gt; len(r.rest)
+    2
+    &gt;&gt;&gt; r[0]
+    3
+    &gt;&gt;&gt; r[1]
+    2
+    """
+    # previous stuff here
+
+    def __len__(self):
+        "*** YOUR CODE HERE ***"
+
+    def __getitem__(self, index):
+        "*** YOUR CODE HERE ***"
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
+    <pre><code># recursive
+def __len__(self):
+    return 1 + len(self.rest)   # figure out where the base case is
+
+# iterative
+def __len__(self):
+    size, cur = 0, self
+    while cur is not Rlist.empty:
+        size += 1
+        cur = cur.rest
+    return size
+
+# recursive
+def __getitem__(self, index):
+    if index == 0:
+        return self.first
+    elif self.rest is Rlist.empty:
+        print('Index out of bounds')  # or some form of error checking
+    else:
+        return self.rest[index - 1]
+
+# iterative
+def __getitem__(self, index):
+    cur = self
+    while index &gt; 0 and cur is not Rlist.empty:
+        cur = cur.rest
+        index -= 1
+    if cur is Rlist.empty:
+        print('Index out of bounds')  # or some form of error checking
+    else:
+        return cur.first
+</code></pre>
+
+  </div>
+<?php } ?>
 <h3>List folding</h3>
+
+<p>When we write recursive functions acting on <code>rlists</code>, we often find that they
+have the following form:</p>
+
+<pre><code>def func(rlist):
+    if rlist == Rlist.empty:
+        return &lt;Base case&gt;
+    else:
+        return &lt;Expression involving func(rlist.rest)&gt;
+</code></pre>
+
+<p>In the spirit of abstraction, we want to factor out this commonly seen pattern. It turns out that we can define an abstraction called <code>fold</code> that do this.</p>
 
 <p>A recursive list can be represented as a series of <code>Rlist</code> constructors, where
 <code>Rlist.rest</code> is either another recursive list or the empty list.</p>
 
 <p>We represent such a list in the diagram below:</p>
 
-<p><img src="./rightfold.png" alt="Right fold" /></p>
+<p><img src="assets/rightfold.png" alt="Right fold" /></p>
 
 <p>In this diagram, the recursive list</p>
 
@@ -293,11 +439,13 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 <pre><code>f(f(f(f(f(z, 1), 2), 3), 4), 5)
 </code></pre>
 
-<p><img src="./leftfold.png" alt="Left fold" /></p>
+<p><img src="assets/leftfold.png" alt="Left fold" /></p>
 
-<p>Also notice that a left fold is equivilant to python's <code>reduce</code> with 3 arguments.</p>
+<p>Also notice that a left fold is equivilant to python's <code>reduce</code> with a starting value.</p>
 
-<p><strong>Problem 4</strong>: Write the left fold function by filling in the blanks.</p>
+<h3 class='question'>Question 4</h3>
+
+<p>Write the left fold function by filling in the blanks.</p>
 
 <pre><code>def foldl(rlist, fn, z):
     """ Left fold
@@ -315,14 +463,16 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <pre><code>foldl(rlist.rest, fn, fn(z, rlist.first))
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 5</strong>: Now write the right fold function.</p>
+<h3 class='question'>Question 5</h3>
+
+<p>Now write the right fold function.</p>
 
 <pre><code>def foldr(rlist, fn, z):
     """ Right fold
@@ -338,8 +488,8 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton4">Toggle Solution</button>
-  <div id="toggleText4" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <pre><code>def foldr(rlist, fn, z):
     if rlist is Rlist.empty:
         return z
@@ -351,7 +501,9 @@ beginning, such that the function <code>f</code> will be applied this way:</p>
 <p>Now that we've written the fold functions, let's write some useful functions
   using list folding!</p>
 
-<p><strong>Problem 6</strong>: Write the <code>mapl</code> function, which takes in a Rlist <code>lst</code> and a
+<h3 class='question'>Question 6</h3>
+
+<p>Write the <code>mapl</code> function, which takes in a Rlist <code>lst</code> and a
 function <code>fn</code>, and returns a new Rlist where every element is the function
 applied to every element of the original list. Use either <code>foldl</code> or
 <code>foldr</code>. Hint: it is much easier to write with one of them than the other!</p>
@@ -367,15 +519,17 @@ applied to every element of the original list. Use either <code>foldl</code> or
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
     <pre><code>def mapl(lst, fn):
     return foldr(lst, lambda x, xs: Rlist(fn(x), xs), Rlist.empty)
 </code></pre>
 
   </div>
 <?php } ?>
-<p><strong>Problem 7</strong>: Write the <code>filterl</code> function, using either <code>foldl</code> or <code>foldr</code>.</p>
+<h3 class='question'>Question 7</h3>
+
+<p>Write the <code>filterl</code> function, using either <code>foldl</code> or <code>foldr</code>.</p>
 
 <pre><code>def filterl(lst, pred):
     """ Filters LST based on PRED
@@ -388,8 +542,8 @@ applied to every element of the original list. Use either <code>foldl</code> or
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
     <pre><code>def filterl(lst, pred):
     def filtered(x, xs):
         if pred(x):
@@ -400,8 +554,14 @@ applied to every element of the original list. Use either <code>foldl</code> or
 
   </div>
 <?php } ?>
-<p><strong>Problem 8</strong>: Use foldl to write <code>reverse</code>, which takes in a recursive list and
-  reverses it. Hint: It only takes one line!</p>
+<h3 class='question'>Question 8</h3>
+
+<p>Notice that <code>mapl</code> and <code>filterl</code> are not recursive anymore! We used the
+implementation of <code>foldl</code> and <code>foldr</code> to implement the actual recursion: we only
+need to provide the recursive step and the base case to <code>fold</code>.</p>
+
+<p>Use <code>foldl</code> to write <code>reverse</code>, which takes in a recursive list and
+reverses it. Hint: It only takes one line!</p>
 
 <pre><code>def reverse(lst):
     """ Reverses LST with foldl
@@ -418,12 +578,12 @@ applied to every element of the original list. Use either <code>foldl</code> or
     "*** YOUR CODE HERE ***"
 </code></pre>
 
-<p>Extra for experts: Write a version of reverse that do not use the <code>Rlist</code>
-constructor. You do not have to use <code>foldl</code> or <code>foldr</code>.</p>
+<p><strong>Extra for experts</strong>: Write a version of reverse that do not use the
+<code>Rlist</code> constructor. You do not have to use <code>foldl</code> or <code>foldr</code>.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton7">Toggle Solution</button>
-  <div id="toggleText7" style="display: none">
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
     <pre><code>def reverse(lst):
     return foldl(lst, lambda x, y: Rlist(y, x), Rlist.empty)
 
@@ -439,8 +599,10 @@ def reverse2(lst):
 
   </div>
 <?php } ?>
-<p><strong>Problem 9 Extra for Experts</strong>: Write foldl using foldr! You only need to fill
-  in the <code>step</code> function.</p>
+<h3 class='question'>Question 9</h3>
+
+<p><strong>Extra for Experts</strong>: Write foldl using foldr! You only need to fill
+in the <code>step</code> function.</p>
 
 <pre><code>def foldl2(rlist, fn, z):
     """ Write foldl using foldr
@@ -458,8 +620,8 @@ def reverse2(lst):
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton8">Toggle Solution</button>
-  <div id="toggleText8" style="display: none">
+  <button id="toggleButton10">Toggle Solution</button>
+  <div id="toggleText10" style="display: none">
     <pre><code>def foldl2(rlist, fn, z):
     def step(x, g):
         return lambda a: g(fn(a, x))
@@ -468,22 +630,23 @@ def reverse2(lst):
 
   </div>
 <?php } ?>
-<h3>Trees</h3>
+<h2>Trees</h2>
 
-<p>Trees are a way we have of representing a hierarchy of information. A family
-tree is a good example of something with a tree structure. You have a matriarch
-and a patriarch followed by all the descendants. Alternately, we may want to
-organize a series of information geographically. At the very top, we have the
-world, but below that we have countries, then states, then cities. We can also
-decompose arithmetic operations into something much the same way.</p>
+<p>Trees are a way we have of representing a hierarchy of information. A
+family tree is a good example of something with a tree structure. You
+have a matriarch and a patriarch followed by all the descendants.
+Alternately, we may want to organize a series of information
+geographically. At the very top, we have the world, but below that we
+have countries, then states, then cities. We can also decompose
+arithmetic operations into something much the same way.</p>
 
-<p><img src="./firstTrees.png" alt="Trees" /></p>
+<p><img src="assets/firstTrees.png" alt="Trees" /></p>
 
-<p>The name "tree" comes from the branching structure of the pictures, like real
-trees in nature except that they're drawn with the root at the top and the
-leaves at the bottom.</p>
+<p>The name "tree" comes from the branching structure of the pictures,
+like real trees in nature except that they're drawn with the root at
+the top and the leaves at the bottom.</p>
 
-<p>Terminology</p>
+<p><strong>Terminology</strong>:</p>
 
 <ul>
 <li><strong>node</strong>: a point in the tree. In these pictures, each node includes
@@ -496,12 +659,12 @@ node has.</li>
 
 <h3>Binary Trees</h3>
 
-<p>In this course, we will only be working with binary trees, where each node as at
-most two children. For a general binary tree, order does not matter.
-Additionally, the tree does not have to be balanced. It can be as lopsided as
-one long chain.</p>
+<p>In this course, we will only be working with binary trees, where each
+node as at most two children. For a general binary tree, order does
+not matter.  Additionally, the tree does not have to be balanced. It
+can be as lopsided as one long chain.</p>
 
-<p>Our implementation of binary trees can be found in <code>lab6.py</code>:</p>
+<p>Our implementation of binary trees can be found in <code>trees.py</code>:</p>
 
 <pre><code>class Tree:
     def __init__(self, entry, left=None, right=None):
@@ -526,7 +689,9 @@ representation of a tree:</p>
  2 5 6
 </code></pre>
 
-<p><strong>Problem 10</strong>: Define the function <code>size_of_tree</code> which takes in a tree as an
+<h3 class='question'>Question 10</h3>
+
+<p>Define the function <code>size_of_tree</code> which takes in a tree as an
 argument and returns the number of non-empty nodes in the tree.</p>
 
 <pre><code>def size_of_tree(tree):
@@ -546,8 +711,8 @@ argument and returns the number of non-empty nodes in the tree.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton9">Toggle Solution</button>
-  <div id="toggleText9" style="display: none">
+  <button id="toggleButton11">Toggle Solution</button>
+  <div id="toggleText11" style="display: none">
     <pre><code>def size_of_tree(tree):
     if not tree:
         return 0
@@ -556,7 +721,9 @@ argument and returns the number of non-empty nodes in the tree.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 11</strong>: Define the function <code>deep_tree_reverse</code>, which takes a tree and
+<h3 class='question'>Question 11</h3>
+
+<p>Define the function <code>deep_tree_reverse</code>, which takes a tree and
 reverses the given order.</p>
 
 <pre><code>def deep_tree_reverse(tree):
@@ -576,8 +743,8 @@ reverses the given order.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton10">Toggle Solution</button>
-  <div id="toggleText10" style="display: none">
+  <button id="toggleButton12">Toggle Solution</button>
+  <div id="toggleText12" style="display: none">
     <pre><code>def deep_tree_reverse(tree):
     if tree:
         tree.left, tree.right = tree.right, tree.left
@@ -587,12 +754,15 @@ reverses the given order.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 12</strong>: Define the function <code>filter_tree</code> which takes in a tree as an
-  argument and returns the same tree, but with items included or excluded based
-  on the pred argument.</p>
+<h3 class='question'>Question 12</h3>
 
-<p>Note that there is ambiguity about what excluding a tree means. For this
-function, when you exclude a subtree, you exclude all of its children as well.</p>
+<p>Define the function <code>filter_tree</code> which takes in a tree as an argument
+and returns the same tree, but with items included or excluded based
+on the pred argument.</p>
+
+<p>Note that there is ambiguity about what excluding a tree means. For
+this function, when you exclude a subtree, you exclude all of its
+children as well.</p>
 
 <pre><code>def filter_tree(tree, pred):
     r""" Removes TREE if entry of TREE satisfies PRED
@@ -613,8 +783,8 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton11">Toggle Solution</button>
-  <div id="toggleText11" style="display: none">
+  <button id="toggleButton13">Toggle Solution</button>
+  <div id="toggleText13" style="display: none">
     <pre><code>def filter_tree(tree, pred):
     if tree and pred(tree.entry):
         return Tree(tree.entry,
@@ -624,8 +794,11 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 13</strong>: Define the function <code>max_of_tree</code> which takes in a <code>tree</code> as an
-  argument and returns the max of all of the values of each node in the tree.</p>
+<h3 class='question'>Question 13</h3>
+
+<p>Define the function <code>max_of_tree</code> which takes in a <code>tree</code> as an
+argument and returns the max of all of the values of each node in the
+tree.</p>
 
 <pre><code>def max_of_tree(tree):
     r""" Returns the max of all the values of each node in TREE
@@ -644,8 +817,8 @@ function, when you exclude a subtree, you exclude all of its children as well.</
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton12">Toggle Solution</button>
-  <div id="toggleText12" style="display: none">
+  <button id="toggleButton14">Toggle Solution</button>
+  <div id="toggleText14" style="display: none">
     <pre><code>def max_of_tree(tree):
     if not tree:
         return None
@@ -664,7 +837,7 @@ function, when you exclude a subtree, you exclude all of its children as well.</
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 13; $i++) { ?>
+    <?php for ($i = 0; $i < 15; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
