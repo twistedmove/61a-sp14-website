@@ -1,129 +1,229 @@
-# Implementing generic string functions
+from functools import reduce
+from operator import add
 
-def repr(x):
-    return type(x).__repr__(x)
+def solve_maze(row0, col0, maze):
+    """Assume that MAZE is a rectangular 2D array (list of lists) where
+    maze[r][c] is true iff there is a concrete block occupying 
+    column c of row r.  ROW0 and COL0 are the initial row and column
+    of the prisoner.  Returns true iff there is a path of empty
+    squares that are horizontally or vertically adjacent to each other
+    starting with (ROW0, COL0) and ending outside the maze."""
+    visited = set()   # Set of visited cells
+    cols, rows = range(len(maze[0])), range(len(maze))
+    def escapep(r, c): 
+        """True iff is a path of empty, unvisited cells from (R, C) out        of maze."""
+        if r not in rows or c not in cols:
+             return True
+        elif maze[r][c] or (r, c) in visited:
+             return False
+        else:
+             visited.add((r,c))
+             return escapep(r+1, c) or escapep(r-1, c) \
+                 or escapep(r, c+1) or escapep(r, c-1)
+    return escapep(row0, col0)
 
-def str(x):
-    t = type(x)
-    if hasattr(t, '__str__'):
-        return t.__str__(x)
+def count_change(amount, denoms = (50, 25, 10, 5, 1)):
+    """The number of ways to change AMOUNT cents given the
+    denominations of coins and bills in DENOMS.
+    >>> # 9 cents = 1 nickel and 4 pennies, or 9 pennies
+    >>> count_change(9)
+    2
+    >>> # 12 cents = 1 dime and 2 pennies, 2 nickels and 2 pennies, 
+    >>> # 1 nickel and 7 pennies, or 12 pennies
+    >>> count_change(12)
+    4
+    """
+    if amount == 0:        return 1
+    elif len(denoms) == 0:  return 0
+    elif amount >= denoms[0]:
+         return count_change(amount-denoms[0], denoms) \
+                + count_change(amount, denoms[1:])
     else:
-        return user_repr(x)
+         return count_change(amount, denoms[1:])
 
-class Bear:
-    "A bear."
+def count_change(amount, denoms = (50, 25, 10, 5, 1)):
+    memo_table = {}# Indexed by pairs (row, column)
+    # Local definition hides outer one so we can cut-and-paste
+    # from the unmemoized solution.
+    def count_change(amount, denoms): 
+        if (amount, denoms) not in memo_table:
+              memo_table[amount,denoms] \
+                 = full_count_change(amount, denoms)
+        return memo_table[amount,denoms]
+    def full_count_change(amount, denoms):
+        # unmemoized original solution goes here verbatim
+        if amount == 0:        return 1
+        elif len(denoms) == 0:  return 0
+        elif amount >= denoms[0]:
+             return count_change(amount-denoms[0], denoms) \
+                    + count_change(amount, denoms[1:])
+        else:
+             return count_change(amount, denoms[1:])
 
-oski = Bear()
-Bear.__repr__ = lambda self: 'Bear()'
-oski.__repr__ = lambda: 'oski'
-Bear.__str__ = lambda self: 'Grr'
-oski.__str__ = lambda: 'Go Bears'
+    return count_change(amount, denoms)
 
-# Rational numbers
+def count_change2(amount, denoms = (50, 25, 10, 5, 1)):
+    # memo_table[amt][k] contains the value computed for 
+    #   count_change(amt, denoms[k:])
+    memo_table = [ [-1] * (len(denoms)+1) for i in range(amount+1) ]
+    def count_change(amount, denoms): 
+        if memo_table[amount][len(denoms)] == -1:
+              memo_table[amount][len(denoms)] \
+                 = full_count_change(amount, denoms)
+        return memo_table[amount][len(denoms)]
+    def full_count_change(amount, denoms):
+        # unmemoized original solution goes here verbatim
+        if amount == 0:        return 1
+        elif len(denoms) == 0:  return 0
+        elif amount >= denoms[0]:
+             return count_change(amount-denoms[0], denoms) \
+                    + count_change(amount, denoms[1:])
+        else:
+             return count_change(amount, denoms[1:])
 
-class Rational:
-    """A mutable fraction.
+    return count_change(amount, denoms)
 
-    >>> f = Rational(3, 5)
-    >>> f
-    Rational(3, 5)
-    >>> print(f)
-    3/5
-    >>> f.float_value
-    0.6
-    >>> f.numer = 4
-    >>> f.float_value
-    0.8
-    >>> f.denom -= 3
-    >>> f.float_value
-    2.0
-    """
-
-    def __init__(self, numer, denom):
-        self.numer = numer
-        self.denom = denom
-
-    def __repr__(self):
-        return 'Rational({0}, {1})'.format(self.numer, self.denom)
-
-    def __str__(self):
-        return '{0}/{1}'.format(self.numer, self.denom)
-
-    @property
-    def float_value(self):
-        return self.numer/self.denom
-
-# Complex numbers
-
-from math import atan2, sin, cos, pi
-
-def add_complex(z1, z2):
-    """Return a complex number z1 + z2"""
-    return ComplexRI(z1.real + z2.real, z1.imag + z2.imag)
-
-def mul_complex(z1, z2):
-    """Return a complex number z1 * z2"""
-    return ComplexMA(z1.magnitude * z2.magnitude, z1.angle + z2.angle)
+def count_change3(amount, denoms = (50, 25, 10, 5, 1)):
+    memo_table = [ [-1] * (len(denoms)+1) for i in range(amount+1) ]
+    def count_change(amount, denoms):
+        return memo_table[amount][len(denoms)]
+    def full_count_change(amount, denoms):
+        # unmemoized original solution goes here verbatim
+        if amount == 0:        return 1
+        elif len(denoms) == 0:  return 0
+        elif amount >= denoms[0]:
+             return count_change(amount-denoms[0], denoms) \
+                    + count_change(amount, denoms[1:])
+        else:
+             return count_change(amount, denoms[1:])
 
 
-class ComplexRI:
-    """A rectangular representation of a complex number.
+    for a in range(0, amount+1): 
+        memo_table[a][0] = full_count_change(a, ())  
+    for k in range(1, len(denoms) + 1):
+        for a in range(1, amount+1):
+             memo_table[a][k] = full_count_change(a, denoms[-k:])
+    return count_change(amount, denoms)
 
-    >>> from math import pi
-    >>> add_complex(ComplexRI(1, 2), ComplexMA(2, pi/2))
-    ComplexRI(1.0000000000000002, 4.0)
-    >>> mul_complex(ComplexRI(0, 1), ComplexRI(0, 1))
-    ComplexMA(1.0, 3.141592653589793)
-    >>> ComplexRI(1, 2) + ComplexMA(2, 0)
-    ComplexRI(3.0, 2.0)
-    >>> ComplexRI(0, 1) * ComplexRI(0, 1)
-    ComplexMA(1.0, 3.141592653589793)
-    """
-
-    def __init__(self, real, imag):
-        self.real = real
-        self.imag = imag
+class ExprTree:
+    def __init__(self, operator):
+        self.__operator = operator
 
     @property
-    def magnitude(self):
-        return (self.real ** 2 + self.imag ** 2) ** 0.5
+    def operator(self):
+        return self.__operator
 
     @property
-    def angle(self):
-        return atan2(self.imag, self.real)
-
-    def __repr__(self):
-        return 'ComplexRI({0}, {1})'.format(self.real,
-                                            self.imag)
-
-    def __add__(self, other):
-        return add_complex(self, other)
-
-    def __mul__(self, other):
-        return mul_complex(self, other)
-
-
-class ComplexMA:
-    """A polar representation of a complex number."""
-
-    def __init__(self, magnitude, angle):
-        self.magnitude = magnitude
-        self.angle = angle
+    def left(self):
+        raise NotImplementedError
 
     @property
-    def real(self):
-        return self.magnitude * cos(self.angle)
+    def right(self):
+        raise NotImplementedError
+
+class Leaf(ExprTree):
+    pass
+
+class Inner(ExprTree):
+    def __init__(self, operator,
+                 left, right):
+         ExprTree.__init__(self, operator)
+         self.__left = left;
+         self.__right = right
+    @property
+    def left(self):
+        return self.__left
+    @property
+    def right(self):
+        return self.__right
+
+class Tree:
+    """A Tree consists of a label and a sequence 
+    of 0 or more Trees, called its children."""
+
+    def __init__(self, label, *children):
+        """A Tree with given label and children. 
+        For convenience, if children[k] is not a Tree,
+        it is converted into a leaf whose operator is
+        children[k]."""
+        self.__label = label;
+        self.__children = \
+          [ c if type(c) is Tree else Tree(c) 
+              for c in children]
+
+# class Tree:
+    @property
+    def is_leaf(self):
+        return self.arity == 0
 
     @property
-    def imag(self):
-        return self.magnitude * sin(self.angle)
+    def label(self):
+        return self.__label
 
-    def __repr__(self):
-        return 'ComplexMA({0}, {1})'.format(self.magnitude,
-                                            self.angle)
+    @property
+    def arity(self):
+        """The number of my children."""
+        return len(self.__children)
 
-    def __add__(self, other):
-        return add_complex(self, other)
+    def __iter__(self):
+        """An iterator over my children."""
+        return iter(self.__children)
 
-    def __mul__(self, other):
-        return mul_complex(self, other)
+    def __getitem__(self, k):
+        """My kth child."""
+        return self.__children[k]
+
+def leaf_count(T):
+    """Number of leaf nodes in the Tree T."""
+    if T.is_leaf:
+        return 1
+    else:
+        s = 0
+        for child in T:
+            s += leaf_count(child)
+        return s
+        # Can you put the else clause in one line instead?
+        return functools.reduce(operator.add, map(leaf_count, T), 0)
+
+def tree_contains(T, x):
+    """True iff x is a label in T."""
+
+def tree_to_list_preorder(T):
+    """The list of all labels in T, listing the labels 
+    of trees before those of their children, and listing their 
+    children left to right (preorder)."""
+    return (T.label, ) + \
+           reduce(add, map(tree_to_list_preorder, T, ()))
+
+class BinaryTree(Tree):
+    @property
+    def is_empty(self):
+         """This tree contains no labels or children."""
+
+    @property
+    def left(self): 
+        return self[0]
+
+    @property
+    def right(self):
+        return self[1]
+
+    """The empty tree"""
+    empty_tree = ... 
+
+def tree_find(T, x):
+    """True iff x is a label in set T, represented as a search tree.
+    That is, T 
+       (a) Represents an empty tree if its label is None, or
+       (b) has two children, both search trees, and all labels in 
+           T[0] are less than T.label, and all labels in T[1] are 
+           greater than T.label."""
+    if T.is_empty:
+        return False
+    if x == T.label:
+        return True
+    if x < T.label:
+        return tree_find(T.left, x)
+    else:
+        return tree_find(T.right, x)
+
