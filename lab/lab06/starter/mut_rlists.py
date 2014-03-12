@@ -26,13 +26,11 @@ class Rlist:
 
     def __getitem__(self, index):
         "*** YOUR CODE HERE ***"
-
-    def __repr__(self):
-        "*** YOUR CODE HERE ***"
-
 #################
 # RList folding #
 #################
+
+from operator import add, sub, mul
 
 def rlist_expression(s):
     """Return a string that would evaluate to s."""
@@ -129,4 +127,3 @@ def foldl2(rlist, fn, z):
     def step(x, g):
         "*** YOUR CODE HERE ***"
     return foldr(rlist, step, identity)(z)
-
