@@ -1,5 +1,5 @@
-# Name:
-# Email:
+#  Name:
+#  Email:
 
 # Q0.
 # Q1.
@@ -93,8 +93,89 @@ class MissManners(object):
             return 'Thanks for asking, but I know not how to ' + attr
         return getattr(self.obj, attr)(*args)
 
-
 # Q3.
+
+from life import life
+
+class life_lists(life):
+    """An implementation of the Game of Life where the board is represented
+    as a list of lists, one list per row.  The elements of the row lists
+    are integers; odd integers represent cells with living organisms, and
+    even integers represent empty cells."""
+
+    def __init__(self, nrows, ncols, init=None):
+        """A new Life board containing NROWS rows and NCOLS columns, which wrap around.
+        If INIT is not None, then it should be a sequence (any iterable) of rows, each
+        of which is itself a sequence (any iterable).   The values fill the board as
+        for life.set_board."""
+        super().__init__(nrows, ncols)
+        self._board = [[0 for c in range(ncols)] for r in range(nrows)]
+        if init is not None:
+            self.set_board(init)
+
+    def _is_alive(self, row, col):
+        # If X is an int, then X & 1 is the last (units) bit of X in binary.
+        return bool(self._board[row][col] & 1)
+
+    def _set_alive(self, row, col, alivep):
+        self._board[row][col] = bool(alivep)
+
+    def tick(self):
+        """Update the board to the next generation.
+        >>> b = life_lists(10, 10,    # Glider
+        ...                ("     ",
+        ...                 "  *  ",
+        ...                 "   *  ",
+        ...                 " ***  ",
+        ...                 "      "))
+        >>> print(b, end="")
+        ----------
+        --*-------
+        ---*------
+        -***------
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        >>> b.tick()
+        >>> print(b, end="")
+        ----------
+        ----------
+        -*-*------
+        --**------
+        --*-------
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        >>> b.tick()
+        >>> b.tick()
+        >>> b.tick()
+        >>> print(b, end="")
+        ----------
+        ----------
+        ---*------
+        ----*-----
+        --***-----
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        """
+
+        B = self._board
+        for r, row in enumerate(B):
+            for c, val in enumerate(row):
+                row[c] = val + 2 * self.neighbors(r, c)
+        for r, row in enumerate(B):
+            for c, val in enumerate(row):
+                row[c] = life.will_live(val & 1, val // 2)
+
+# Q4.
 
 def make_instance(some_class):
     """Return a new object instance of some_class."""

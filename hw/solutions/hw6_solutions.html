@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.10: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
 <title>61A Homework 6</title>
 <style type="text/css">
 
@@ -135,11 +135,11 @@ ol.upperroman {
 <div class="document" id="a-homework-6">
 <h1 class="title">61A Homework 6</h1>
 
-<p><em>Due by 11:59pm on Tuesday, 10/22</em></p>
-<p><strong>Submission.</strong> See the online <a class="reference external" href="http://inst.eecs.berkeley.edu/~cs61A/fa12/submit_tutorial.html">submission instructions</a>.
+<p><em>Due by 11:59pm on Tuesday, 3/18</em></p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="../submit_tutorial.html">submission instructions</a>.
 We have provided a <a class="reference external" href="hw6.py">hw6.py</a> starter file for the questions below.</p>
 <p><strong>Readings.</strong> Section <a class="reference external" href="http://composingprograms.com/pages/25-object-oriented-programming.html">2.5</a> of Composing Programs.</p>
-<p><strong>Q0.</strong> Complete the <a class="reference external" href="https://docs.google.com/forms/d/1sl_9alW4YTWnSMFgAIbrCBxj_wxaXLAaL-KYzQyLXXE/viewform">mid-semester survey</a>.
+<p><strong>Q0.</strong> Complete the <a class="reference external" href="https://docs.google.com/forms/d/11fjevOCwVj3_PU3VDkqCmfI4hhyBCbfiVZeiBB_X0Zc/viewform">mid-semester survey</a>.
 We ask for your name and login in order to correlate responses to different
 surveys across the semester.  We will otherwise keep your response confidential
 and anonymous.</p>
@@ -241,7 +241,105 @@ class MissManners(object):
             return 'Thanks for asking, but I know not how to ' + attr
         return getattr(self.obj, attr)(*args)
 </pre>
-<p><strong>Q3.</strong> (Extra for experts) Read Section <a class="reference external" href="http://composingprograms.com/pages/26-implementing-classes-and-objects.html">2.6</a> of Composing Programs. You can also
+<p><strong>Q3.</strong> In Lecture 13, you saw part of an implementation of J. H. Conway's Game of Life.
+The file <a class="reference external" href="life.py">life.py</a> contains a framework for implementing this game (you won't need
+to modify it).  It provides the
+abstract class, <tt class="docutils literal">life</tt>, which defines methods for accessing and manipulating a finite, toroidal
+Life board.  (&quot;Toroid&quot; is mathese for doughnut.  The right edge of the board is immediately to the
+left of the left edge, and the top is immediately below the bottom.)
+The class is incomplete; it does not define any instance variables to represent the board, and
+the implementation of some of the methods simply raises the <tt class="docutils literal">NotImplemented</tt> exception. The idea
+is to define subtypes of the class that provide a representation and override these methods
+appropriately.  Fill in the subtype <tt class="docutils literal">life_lists</tt> below to get a working Life simulator.
+When you're done, feel free to download and play around with the file <cite>life_gui.py &lt;life_gui.py&gt;</cite>,
+which provides for graphical display and interaction with a Life board.:</p>
+<pre class="literal-block">
+from life import life
+
+class life_lists(life):
+    &quot;&quot;&quot;An implementation of the Game of Life where the board is represented
+    as a list of lists, one list per row.  The elements of the row lists
+    are integers; odd integers represent cells with living organisms, and
+    even integers represent empty cells.&quot;&quot;&quot;
+
+    def __init__(self, nrows, ncols, init=None):
+        &quot;&quot;&quot;A new Life board containing NROWS rows and NCOLS columns, which wrap around.
+        If INIT is not None, then it should be a sequence (any iterable) of rows, each
+        of which is itself a sequence (any iterable).   The values fill the board as
+        for life.set_board.&quot;&quot;&quot;
+        super().__init__(nrows, ncols)
+        self._board = [[0 for c in range(ncols)] for r in range(nrows)]
+        if init is not None:
+            self.set_board(init)
+
+    def _is_alive(self, row, col):
+        # If X is an int, then X &amp; 1 is the last (units) bit of X in binary.
+        return bool(self._board[row][col] &amp; 1)
+
+    def _set_alive(self, row, col, alivep):
+        self._board[row][col] = bool(alivep)
+
+    def tick(self):
+        &quot;&quot;&quot;Update the board to the next generation.
+        &gt;&gt;&gt; b = life_lists(10, 10,    # Glider
+        ...                (&quot;     &quot;,
+        ...                 &quot;  *  &quot;,
+        ...                 &quot;   *  &quot;,
+        ...                 &quot; ***  &quot;,
+        ...                 &quot;      &quot;))
+        &gt;&gt;&gt; print(b, end=&quot;&quot;)
+        ----------
+        --*-------
+        ---*------
+        -***------
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        &gt;&gt;&gt; b.tick()
+        &gt;&gt;&gt; print(b, end=&quot;&quot;)
+        ----------
+        ----------
+        -*-*------
+        --**------
+        --*-------
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        &gt;&gt;&gt; b.tick()
+        &gt;&gt;&gt; b.tick()
+        &gt;&gt;&gt; b.tick()
+        &gt;&gt;&gt; print(b, end=&quot;&quot;)
+        ----------
+        ----------
+        ---*------
+        ----*-----
+        --***-----
+        ----------
+        ----------
+        ----------
+        ----------
+        ----------
+        &quot;&quot;&quot;
+
+        B = self._board
+        for r, row in enumerate(B):
+            for c, val in enumerate(row):
+                row[c] = val + 2 * self.neighbors(r, c)
+        for r, row in enumerate(B):
+            for c, val in enumerate(row):
+                row[c] = life.will_live(val &amp; 1, val // 2)
+</pre>
+<p><em>Hint</em>: In implementing <tt class="docutils literal">tick</tt>, be careful not to change a cell before you have used its
+current value to compute the number of neighboring live cells in all the surrounding cells.
+One way is to make a copy of the board, of course.  You can also choose the representation of
+the value of live cells so that it encodes <em>both</em> the presence of an organism <em>and</em> the number of
+neighbors.</p>
+<p><strong>Q4.</strong> (Extra for experts) Read Section <a class="reference external" href="http://composingprograms.com/pages/26-implementing-classes-and-objects.html">2.6</a> of Composing Programs. You can also
 watch the <a class="reference external" href="http://www.youtube.com/watch?v=xaIJgbHE0BU&amp;list=PL87898FD0A141069E&amp;index=17">Fall 2012 lecture</a> on this topic.
 Add multiple inheritance to the function-based object system described in that
 section.  You will need to make the following changes:</p>
