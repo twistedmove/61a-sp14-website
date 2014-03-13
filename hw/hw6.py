@@ -267,6 +267,3 @@ def make_as_seen_on_tv_account_class():
 AsSeenOnTVAccount = make_as_seen_on_tv_account_class()
 
 
-
-
-
