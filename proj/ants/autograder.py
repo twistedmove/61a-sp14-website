@@ -40,6 +40,7 @@ import hmac
 import pickle
 import rlcompleter
 import urllib.request
+import pdb
 
 
 ######################
@@ -478,7 +479,7 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
         print('SyntaxError:', e)
         return global_frame
 
-    console = InteractiveConsole(locals=global_frame.copy())
+    console = InteractiveConsole(locals=global_frame)
 
     if type(outputs) == str:
         outputs = (outputs,)
@@ -490,20 +491,20 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
         if line.startswith(' ') or compile_command(current.replace('$ ', '')) is None:
             current += line + '\n'
             display_prompt(line.replace('$ ', ''), PS2)
-            console.push(line.replace('$ ', ''))
             continue
 
         if current.startswith('$ ') or \
                 (i == len(lines) - 1 and prompts == 0):
             try:
                 expect = handle_test(eval, (next(out_iter), global_frame.copy()),
-                                     console=console, line=line,
+                                     console=console, current=current,
                                      interactive=interactive)
                 actual = handle_test(eval, (current.replace('$ ', ''), global_frame),
-                                     console=console, line=line,
+                                     console=console, current=current,
                                      interactive=interactive)
             except TestError:
                 return global_frame
+            display_prompt(actual, '')
 
             if expect != actual:
                 print('# Error: expected', repr(expect), 'got', repr(actual))
@@ -513,9 +514,7 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
                 return global_frame
         else:
             try:
-                handle_test(exec, (current, global_frame),
-                            console=console, line=line,
-                            interactive=interactive)
+                console.push(current.replace('$ ', ''))
             except TestError:
                 return global_frame
         current = ''
@@ -524,12 +523,11 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
             prompts += 1
         current += line + '\n'
         display_prompt(line.replace('$ ', ''), PS1)
-        console.push(line.replace('$ ', ''))
 
     print()
     return None     # If here, autograder error
 
-def handle_test(fn, args=(), kargs={}, console=None, line='',
+def handle_test(fn, args=(), kargs={}, console=None, current='',
                 interactive=False):
     """Handles a function call and possibly starts an interactive
     console.
@@ -565,7 +563,7 @@ def handle_test(fn, args=(), kargs={}, console=None, line='',
         print()
         raise TestError()
     except Exception as e:
-        console.push(line.replace('$ ', ''))
+        console.push(current.replace('$ ', ''))
         if interactive:
             interact(console)
         print()
@@ -725,7 +723,7 @@ def check_for_updates(tests):
     print('You are running version', version, 'of the autograder')
     try:
         url = os.path.join(remote, 'CHANGES')
-        data = timed(urllib.request.urlopen, (url,), timeout=2)
+        data = timed(urllib.request.urlopen, (url,), timeout=5)
         changelog = data.read().decode('utf-8')
     except (urllib.error.URLError, urllib.error.HTTPError):
         print("Couldn't check remote autograder")
@@ -738,19 +736,20 @@ def check_for_updates(tests):
         print('Version', match.group(1), 'is available.')
         prompt = input('Do you want to automatically download changes? [y/n]: ')
         if 'y' in prompt.lower():
-            success = parse_changelog(tests, changelog)
+            success = parse_changelog(tests, changelog, remote)
             return success
         else:
             print('Changes not made.')
     return False
 
-def parse_changelog(tests, changelog):
+def parse_changelog(tests, changelog, remote):
     """Parses a changelog and updates the tests with the specified
     changes.
 
     PARAMTERS:
     tests     -- dict; contents tests.pkl
     changelog -- str
+    remote    -- str; url of remote files
 
     RETURNS:
     bool; True if updates successful
@@ -773,7 +772,8 @@ def parse_changelog(tests, changelog):
                 continue
             if change_header != '':
                 try:
-                    apply_change(change_header, change_contents, tests)
+                    apply_change(change_header, change_contents, tests,
+                                 remote)
                 except AssertionError as e:
                     print("Update error:", e)
                     return False
@@ -781,7 +781,7 @@ def parse_changelog(tests, changelog):
             change_contents = ''
         # Apply last change
         try:
-            apply_change(change_header, change_contents, tests)
+            apply_change(change_header, change_contents, tests, remote)
         except AssertionError as e:
             print("Update error:", e)
             return False
@@ -796,8 +796,9 @@ def parse_changelog(tests, changelog):
 CHANGE = 'CHANGE'
 APPEND = 'APPEND'
 REMOVE = 'REMOVE'
+GRADER = 'GRADER'
 
-def apply_change(header, contents, tests):
+def apply_change(header, contents, tests, remote):
     """Subroutine that applies the changes described by the header
     and contents.
 
@@ -810,6 +811,19 @@ def apply_change(header, contents, tests):
     AssertionError; if any invalid changes are attempted.
     """
     error_msg = 'invalid change "{}"'.format(header)
+    if header.strip() == GRADER:
+        try:
+            url = os.path.join(remote, 'autograder.py')
+            data = timed(urllib.request.urlopen, (url,), timeout=5)
+            new_autograder = data.read().decode('utf-8')
+        except (urllib.error.URLError, urllib.error.HTTPError):
+            raise AssertionError("Couldn't retrive remote update for autograder.py")
+        except TimeoutError:
+            raise AssertionError("Checking for updates timed out.")
+        with open('autograder.py', 'w') as f:
+            f.write(new_autograder)
+        return
+
     header = header.split(':')
     assert len(header) == 3, error_msg
 

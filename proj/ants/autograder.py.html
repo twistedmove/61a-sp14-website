@@ -50,6 +50,7 @@ This file supports the following primary options:
 <span style="color: blue; font-weight: bold">import </span>pickle
 <span style="color: blue; font-weight: bold">import </span>rlcompleter
 <span style="color: blue; font-weight: bold">import </span>urllib<span style="font-weight: bold">.</span>request
+<span style="color: blue; font-weight: bold">import </span>pdb
 
 
 <span style="color: green; font-style: italic">######################
@@ -488,7 +489,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'SyntaxError:'</span><span style="font-weight: bold">, </span>e<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">return </span>global_frame
 
-    console <span style="font-weight: bold">= </span>InteractiveConsole<span style="font-weight: bold">(</span>locals<span style="font-weight: bold">=</span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">())
+    console <span style="font-weight: bold">= </span>InteractiveConsole<span style="font-weight: bold">(</span>locals<span style="font-weight: bold">=</span>global_frame<span style="font-weight: bold">)
 
     </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>outputs<span style="font-weight: bold">) == </span>str<span style="font-weight: bold">:
         </span>outputs <span style="font-weight: bold">= (</span>outputs<span style="font-weight: bold">,)
@@ -500,22 +501,22 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">if </span>line<span style="font-weight: bold">.</span>startswith<span style="font-weight: bold">(</span><span style="color: red">' '</span><span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>compile_command<span style="font-weight: bold">(</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">)) </span><span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
             </span>current <span style="font-weight: bold">+= </span>line <span style="font-weight: bold">+ </span><span style="color: red">'\n'
             </span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>PS2<span style="font-weight: bold">)
-            </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
             </span><span style="color: blue; font-weight: bold">continue
 
         if </span>current<span style="font-weight: bold">.</span>startswith<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>\
                 <span style="font-weight: bold">(</span>i <span style="font-weight: bold">== </span>len<span style="font-weight: bold">(</span>lines<span style="font-weight: bold">) - </span><span style="color: red">1 </span><span style="color: blue; font-weight: bold">and </span>prompts <span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">):
             </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
                 </span>expect <span style="font-weight: bold">= </span>handle_test<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>next<span style="font-weight: bold">(</span>out_iter<span style="font-weight: bold">), </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">()),
-                                     </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>line<span style="font-weight: bold">=</span>line<span style="font-weight: bold">,
+                                     </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span>current<span style="font-weight: bold">,
                                      </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">)
                 </span>actual <span style="font-weight: bold">= </span>handle_test<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>global_frame<span style="font-weight: bold">),
-                                     </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>line<span style="font-weight: bold">=</span>line<span style="font-weight: bold">,
+                                     </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span>current<span style="font-weight: bold">,
                                      </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">except </span>TestError<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
+            display_prompt<span style="font-weight: bold">(</span>actual<span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">)
 
-            <span style="color: blue; font-weight: bold">if </span>expect <span style="font-weight: bold">!= </span>actual<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">if </span>expect <span style="font-weight: bold">!= </span>actual<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'# Error: expected'</span><span style="font-weight: bold">, </span>repr<span style="font-weight: bold">(</span>expect<span style="font-weight: bold">), </span><span style="color: red">'got'</span><span style="font-weight: bold">, </span>repr<span style="font-weight: bold">(</span>actual<span style="font-weight: bold">))
                 </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
                     </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
@@ -523,9 +524,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
         <span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-                </span>handle_test<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">, (</span>current<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">),
-                            </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>line<span style="font-weight: bold">=</span>line<span style="font-weight: bold">,
-                            </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">)
+                </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
             </span><span style="color: blue; font-weight: bold">except </span>TestError<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
         current <span style="font-weight: bold">= </span><span style="color: red">''
@@ -534,12 +533,11 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
             </span>prompts <span style="font-weight: bold">+= </span><span style="color: red">1
         </span>current <span style="font-weight: bold">+= </span>line <span style="font-weight: bold">+ </span><span style="color: red">'\n'
         </span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>PS1<span style="font-weight: bold">)
-        </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
 
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">None     </span><span style="color: green; font-style: italic"># If here, autograder error
 
-</span><span style="color: blue; font-weight: bold">def </span>handle_test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>console<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>line<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
+</span><span style="color: blue; font-weight: bold">def </span>handle_test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>console<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
                 </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">):
     </span><span style="color: darkred">"""Handles a function call and possibly starts an interactive
     console.
@@ -575,7 +573,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
         </span><span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
-        </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
+        </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
         </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
             </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
@@ -735,7 +733,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'You are running version'</span><span style="font-weight: bold">, </span>version<span style="font-weight: bold">, </span><span style="color: red">'of the autograder'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
         </span>url <span style="font-weight: bold">= </span>os<span style="font-weight: bold">.</span>path<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>remote<span style="font-weight: bold">, </span><span style="color: red">'CHANGES'</span><span style="font-weight: bold">)
-        </span>data <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">, (</span>url<span style="font-weight: bold">,), </span>timeout<span style="font-weight: bold">=</span><span style="color: red">2</span><span style="font-weight: bold">)
+        </span>data <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">, (</span>url<span style="font-weight: bold">,), </span>timeout<span style="font-weight: bold">=</span><span style="color: red">5</span><span style="font-weight: bold">)
         </span>changelog <span style="font-weight: bold">= </span>data<span style="font-weight: bold">.</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>URLError<span style="font-weight: bold">, </span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>HTTPError<span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Couldn't check remote autograder"</span><span style="font-weight: bold">)
@@ -748,19 +746,20 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Version'</span><span style="font-weight: bold">, </span>match<span style="font-weight: bold">.</span>group<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">), </span><span style="color: red">'is available.'</span><span style="font-weight: bold">)
         </span>prompt <span style="font-weight: bold">= </span>input<span style="font-weight: bold">(</span><span style="color: red">'Do you want to automatically download changes? [y/n]: '</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'y' </span><span style="color: blue; font-weight: bold">in </span>prompt<span style="font-weight: bold">.</span>lower<span style="font-weight: bold">():
-            </span>success <span style="font-weight: bold">= </span>parse_changelog<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">, </span>changelog<span style="font-weight: bold">)
+            </span>success <span style="font-weight: bold">= </span>parse_changelog<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">, </span>changelog<span style="font-weight: bold">, </span>remote<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">return </span>success
         <span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Changes not made.'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">return False
 
-def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">, </span>changelog<span style="font-weight: bold">):
+def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">, </span>changelog<span style="font-weight: bold">, </span>remote<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Parses a changelog and updates the tests with the specified
     changes.
 
     PARAMTERS:
     tests     -- dict; contents tests.pkl
     changelog -- str
+    remote    -- str; url of remote files
 
     RETURNS:
     bool; True if updates successful
@@ -783,7 +782,8 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
                 </span><span style="color: blue; font-weight: bold">continue
             if </span>change_header <span style="font-weight: bold">!= </span><span style="color: red">''</span><span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-                    </span>apply_change<span style="font-weight: bold">(</span>change_header<span style="font-weight: bold">, </span>change_contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">)
+                    </span>apply_change<span style="font-weight: bold">(</span>change_header<span style="font-weight: bold">, </span>change_contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">,
+                                 </span>remote<span style="font-weight: bold">)
                 </span><span style="color: blue; font-weight: bold">except </span>AssertionError as e<span style="font-weight: bold">:
                     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Update error:"</span><span style="font-weight: bold">, </span>e<span style="font-weight: bold">)
                     </span><span style="color: blue; font-weight: bold">return False
@@ -791,7 +791,7 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
             change_contents <span style="font-weight: bold">= </span><span style="color: red">''
         </span><span style="color: green; font-style: italic"># Apply last change
         </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-            </span>apply_change<span style="font-weight: bold">(</span>change_header<span style="font-weight: bold">, </span>change_contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">)
+            </span>apply_change<span style="font-weight: bold">(</span>change_header<span style="font-weight: bold">, </span>change_contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">, </span>remote<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">except </span>AssertionError as e<span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Update error:"</span><span style="font-weight: bold">, </span>e<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">return False
@@ -806,8 +806,9 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
 </span>CHANGE <span style="font-weight: bold">= </span><span style="color: red">'CHANGE'
 </span>APPEND <span style="font-weight: bold">= </span><span style="color: red">'APPEND'
 </span>REMOVE <span style="font-weight: bold">= </span><span style="color: red">'REMOVE'
+</span>GRADER <span style="font-weight: bold">= </span><span style="color: red">'GRADER'
 
-</span><span style="color: blue; font-weight: bold">def </span>apply_change<span style="font-weight: bold">(</span>header<span style="font-weight: bold">, </span>contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">def </span>apply_change<span style="font-weight: bold">(</span>header<span style="font-weight: bold">, </span>contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">, </span>remote<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Subroutine that applies the changes described by the header
     and contents.
 
@@ -820,6 +821,19 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
     AssertionError; if any invalid changes are attempted.
     """
     </span>error_msg <span style="font-weight: bold">= </span><span style="color: red">'invalid change "{}"'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>header<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>header<span style="font-weight: bold">.</span>strip<span style="font-weight: bold">() == </span>GRADER<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+            </span>url <span style="font-weight: bold">= </span>os<span style="font-weight: bold">.</span>path<span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>remote<span style="font-weight: bold">, </span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">)
+            </span>data <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>request<span style="font-weight: bold">.</span>urlopen<span style="font-weight: bold">, (</span>url<span style="font-weight: bold">,), </span>timeout<span style="font-weight: bold">=</span><span style="color: red">5</span><span style="font-weight: bold">)
+            </span>new_autograder <span style="font-weight: bold">= </span>data<span style="font-weight: bold">.</span>read<span style="font-weight: bold">().</span>decode<span style="font-weight: bold">(</span><span style="color: red">'utf-8'</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>URLError<span style="font-weight: bold">, </span>urllib<span style="font-weight: bold">.</span>error<span style="font-weight: bold">.</span>HTTPError<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">raise </span>AssertionError<span style="font-weight: bold">(</span><span style="color: red">"Couldn't retrive remote update for autograder.py"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">except </span>TimeoutError<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>AssertionError<span style="font-weight: bold">(</span><span style="color: red">"Checking for updates timed out."</span><span style="font-weight: bold">)
+        </span>with open<span style="font-weight: bold">(</span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">, </span><span style="color: red">'w'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
+            </span>f<span style="font-weight: bold">.</span>write<span style="font-weight: bold">(</span>new_autograder<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return
+
     </span>header <span style="font-weight: bold">= </span>header<span style="font-weight: bold">.</span>split<span style="font-weight: bold">(</span><span style="color: red">':'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">assert </span>len<span style="font-weight: bold">(</span>header<span style="font-weight: bold">) == </span><span style="color: red">3</span><span style="font-weight: bold">, </span>error_msg
 

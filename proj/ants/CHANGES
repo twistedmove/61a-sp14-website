@@ -1,0 +1,21 @@
+VERSION 1.1
+CHANGE: test Q9: ['suites'][3][0]
+    ["""
+     ### Testing bodyguard doubling
+     bee = ants.Bee(3)
+     guard = ants.BodyguardAnt()
+     guard.damage, doubled = 5, 10
+     colony.places['tunnel_0_1'].add_insect(queen)
+     colony.places['tunnel_0_1'].add_insect(guard)
+     colony.places['tunnel_0_2'].add_insect(bee)
+     queen.action(colony)
+     $ guard.damage # Bodyguard should be buffed
+
+     queen.action(colony)
+     $ bee.armor     # QueenAnt should not have been buffed
+     $ guard.damage  # Bodyguard should not be buffed twice
+     $ len(colony.queen.bees) <= 0 # Game should not have ended
+     bee.action(colony)
+     $ len(colony.queen.bees) > 0 # Game should have ended
+     """,
+     ['doubled', '1', 'doubled', 'True', 'True'], 'unlocked']
