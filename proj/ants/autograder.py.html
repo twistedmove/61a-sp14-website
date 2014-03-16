@@ -340,7 +340,6 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
             toggle_output<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">)
             </span>frame <span style="font-weight: bold">= </span>handle_failure<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>test<span style="font-weight: bold">, </span>counter<span style="font-weight: bold">,
                                    </span>global_frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">(), </span>interactive<span style="font-weight: bold">)
-            </span><span style="color: blue; font-weight: bold">assert </span>frame <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">, </span><span style="color: red">'Autograder error'
             </span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">(</span>new_postamble<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">break
         else</span><span style="font-weight: bold">:
@@ -524,7 +523,9 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
         <span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-                </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
+                </span>handle_test<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">exec</span><span style="font-weight: bold">, (</span>current<span style="font-weight: bold">, </span>global_frame<span style="font-weight: bold">),
+                                     </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span>current<span style="font-weight: bold">,
+                                     </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">except </span>TestError<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
         current <span style="font-weight: bold">= </span><span style="color: red">''
@@ -535,9 +536,9 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span>display_prompt<span style="font-weight: bold">(</span>line<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>PS1<span style="font-weight: bold">)
 
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
-    </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">None     </span><span style="color: green; font-style: italic"># If here, autograder error
+    </span><span style="color: blue; font-weight: bold">return </span>global_frame
 
-</span><span style="color: blue; font-weight: bold">def </span>handle_test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>console<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
+<span style="color: blue; font-weight: bold">def </span>handle_test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>console<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
                 </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">):
     </span><span style="color: darkred">"""Handles a function call and possibly starts an interactive
     console.

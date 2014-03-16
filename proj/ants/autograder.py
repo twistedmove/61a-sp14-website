@@ -330,7 +330,6 @@ def run(test, global_frame=None, interactive=False, super_preamble=''):
             toggle_output(True)
             frame = handle_failure(e, test, counter,
                                    global_frame.copy(), interactive)
-            assert frame is not None, 'Autograder error'
             exec(new_postamble, frame)
             break
         else:
@@ -514,7 +513,9 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
                 return global_frame
         else:
             try:
-                console.push(current.replace('$ ', ''))
+                handle_test(exec, (current, global_frame),
+                                     console=console, current=current,
+                                     interactive=interactive)
             except TestError:
                 return global_frame
         current = ''
@@ -525,7 +526,7 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
         display_prompt(line.replace('$ ', ''), PS1)
 
     print()
-    return None     # If here, autograder error
+    return global_frame
 
 def handle_test(fn, args=(), kargs={}, console=None, current='',
                 interactive=False):
