@@ -564,7 +564,11 @@ def handle_test(fn, args=(), kargs={}, console=None, current='',
         print()
         raise TestError()
     except Exception as e:
-        console.push(current.replace('$ ', ''))
+        stacktrace = traceback.format_exc()
+        token = '<module>\n'
+        index = stacktrace.rfind(token) + len(token)
+        print('Traceback (most recent call last):')
+        print(stacktrace[index:])
         if interactive:
             interact(console)
         print()

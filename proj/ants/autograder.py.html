@@ -51,6 +51,7 @@ This file supports the following primary options:
 <span style="color: blue; font-weight: bold">import </span>rlcompleter
 <span style="color: blue; font-weight: bold">import </span>urllib<span style="font-weight: bold">.</span>request
 <span style="color: blue; font-weight: bold">import </span>pdb
+<span style="color: blue; font-weight: bold">import </span>traceback
 
 
 <span style="color: green; font-style: italic">######################
@@ -574,7 +575,11 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
         </span><span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
-        </span>console<span style="font-weight: bold">.</span>push<span style="font-weight: bold">(</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">))
+        </span>stacktrace <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">()
+        </span>token <span style="font-weight: bold">= </span><span style="color: red">'&lt;module&gt;\n'
+        </span>index <span style="font-weight: bold">= </span>stacktrace<span style="font-weight: bold">.</span>rfind<span style="font-weight: bold">(</span>token<span style="font-weight: bold">) + </span>len<span style="font-weight: bold">(</span>token<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Traceback (most recent call last):'</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>stacktrace<span style="font-weight: bold">[</span>index<span style="font-weight: bold">:])
         </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
             </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
