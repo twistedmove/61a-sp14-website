@@ -1,5 +1,3 @@
-# Problem 1
-
 def union(s1, s2):
     """Returns the union of two sets.
 
@@ -12,8 +10,6 @@ def union(s1, s2):
     {0, 1, 2, 3, 4, 6}
     """
     "*** YOUR CODE HERE ***"
-
-# Problem 2
 
 def intersection(s1, s2):
     """Returns the intersection of two sets.
@@ -28,7 +24,6 @@ def intersection(s1, s2):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 3
 
 def extra_elem(a,b):
     """B contains every element in A, and has one additional member, find
@@ -41,7 +36,6 @@ def extra_elem(a,b):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 4
 
 def add_up(n, lst):
     """Returns True if any two non identical elements in lst add up to any n.
@@ -55,7 +49,6 @@ def add_up(n, lst):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 5
 
 def find_duplicates(lst):
     """Returns True if lst has any duplicates and False if it does not.
@@ -67,7 +60,6 @@ def find_duplicates(lst):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 6
 
 def find_duplicates_k(k, lst):
     """Returns True if there are any duplicates in lst that are within k
@@ -80,7 +72,6 @@ def find_duplicates_k(k, lst):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 7
 
 def pow(n,k):
     """Computes n^k.
@@ -92,7 +83,6 @@ def pow(n,k):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 8
 
 def missing_no(lst):
     """lst contains all the numbers from 1 to n for some n except some
@@ -105,7 +95,6 @@ def missing_no(lst):
     """
     "*** YOUR CODE HERE ***"
 
-# Problem 9
 
 def find_duplicates_k_l(k, l, lst):
     """Returns True if there are any two values who in lst that are within k

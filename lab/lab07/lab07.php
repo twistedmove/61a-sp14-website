@@ -4,14 +4,13 @@
   <head>
     <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
-    <meta name="author" content ="John DeNero, Soumya Basu, Jeff Chang, Brian Hou, Andrew Huang, Robert Huang, Michelle Hwang, Richard Hwang,
-                                  Joy Jeng, Keegan Mann, Stephen Martinis, Bryan Mau, Mark Miyashita, Allen Nguyen, Julia Oh, Vaishaal
-                                  Shankar, Steven Tang, Sharad Vikram, Albert Wu, Chenyang Yuan" />
+    <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
+                                  Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Fall 2013: Lab 7</title> 
+    <title>CS 61A Spring 2014: Lab 7</title> 
 
     <?php
     /* So all of the PHP in this file is to allow for this nice little trick to 
@@ -40,22 +39,24 @@
      * - Tom Magrino (tmagrino@berkeley.edu)
      */
     $BERKELEY_TZ = new DateTimeZone("America/Los_Angeles");
-    $RELEASE_DATE = new DateTime("10/24/2013", $BERKELEY_TZ);
+    $RELEASE_DATE = new DateTime("3/20/2014", $BERKELEY_TZ);
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
   </head> 
   <body style="font-family: Georgia,serif;">
-    <h1>CS 61A Lab 7</h1>
-<h2>Sets & Orders of Growth</h2>
-<p>We've provided a starter file with skeleton code for the exercises in the
-lab. You can get it at the following link:</p>
+    <h1 id="title-main">CS 61A Lab 7</h1>
+<h2 id="title-sub">Sets</h2>
+<h2>Starter Files</h2>
+
+<p>We've provided a set of starter files with skeleton code for the
+exercises in the lab. You can get them in the following places:</p>
 
 <ul>
-<li><a href="./lab7.py">lab7.py</a></li>
+<li><a href="starter/sets.py">sets.py</a></li>
 </ul>
 
-<h3>Sets</h3>
+<h2>Sets</h2>
 
 <p>A set is an unordered collection of distinct objects that supports membership
 testing, union, intersection, and adjunction.</p>
@@ -91,7 +92,9 @@ True
 <p>For more detail on Sets you can go to the following link:
 <a href="http://docs.python.org/py3k/library/stdtypes.html#set">PythonSets</a></p>
 
-<p><strong>Problem 1</strong>: Implement the union function for sets. Union takes in two sets,
+<h3 class='question'>Question 1</h3>
+
+<p>Implement the union function for sets. Union takes in two sets,
 and returns a new set with elements from the first set, and all other elements
 that have not already have been seen in the second set.</p>
 
@@ -123,7 +126,9 @@ that have not already have been seen in the second set.</p>
 
   </div>
 <?php } ?>
-<p><strong>Problem 2</strong>: Implement the intersection function for two sets. Intersection
+<h3 class='question'>Question 2</h3>
+
+<p>Implement the intersection function for two sets. Intersection
 takes in two sets and returns a new set of only the elements in both sets.</p>
 
 <pre><code>def intersection(s1, s2):
@@ -157,10 +162,11 @@ takes in two sets and returns a new set of only the elements in both sets.</p>
 
 <p>One really convenient thing about sets is that many operations on sets (adding
 elements, removing elements, checking membership) run in O(1) (constant)
-time. If you are interested on how, look up HashSets or look at the third
-challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</p>
+time.</p>
 
-<p><strong>Problem 3</strong>: Write the following function so it runs in O(n) time.</p>
+<h3 class='question'>Question 3</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def extra_elem(a,b):
     """B contains every element in A, and has one additional member, find
@@ -191,7 +197,9 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 4</strong>: Write the following function so it runs in O(n) time.</p>
+<h3 class='question'>Question 4</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def add_up(n, lst):
     """Returns True if any two non identical elements in lst add up to any n.
@@ -228,7 +236,9 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 5</strong>: Write the following function so it runs in O(n) time.</p>
+<h3 class='question'>Question 5</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def find_duplicates(lst):
     """Returns True if lst has any duplicates and False if it does not.
@@ -257,7 +267,9 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 6</strong>: Write the following function so it runs in O(n) time.</p>
+<h3 class='question'>Question 6</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def find_duplicates_k(k, lst):
     """Returns True if there are any duplicates in lst that are within k
@@ -295,7 +307,9 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 7</strong>: Write the following function so it runs in O(log n) time.</p>
+<h3 class='question'>Question 7</h3>
+
+<p>Write the following function so it runs in O(log n) time.</p>
 
 <pre><code>def pow(n,k):
     """Computes n^k.
@@ -329,7 +343,9 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 8</strong>: Write the following function so it runs in O(n) time.</p>
+<h3 class='question'>Question 8</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def missing_no(lst):
     """lst contains all the numbers from 0 to n for some n except some
@@ -360,7 +376,9 @@ challenge problem <a href="http://inst.eecs.berkeley.edu/~cs61a-td/">here</a>.</
 
   </div>
 <?php } ?>
-<p><strong>Problem 9 Extra for Experts</strong>: Write the following function so it runs in O(n) time.</p>
+<h3 class='question'>Question 9: Extra for Experts</h3>
+
+<p>Write the following function so it runs in O(n) time.</p>
 
 <pre><code>def find_duplicates_k_l(k, l, lst):
     """Returns True if there are any two values who in lst that are within k
