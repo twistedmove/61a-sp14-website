@@ -80,7 +80,7 @@ def getitem_rlist(s, k):
 def square_rlist(s):
     """The list of squares of the elements of rlist S."""
     if s == empty_rlist:
-        return empty_rlist:
+        return empty_rlist
     else:
         return rlist(first(s)**2, square_rlist(rest(s)))
 def map_rlist(f, s):

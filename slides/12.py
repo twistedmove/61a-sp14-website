@@ -39,7 +39,7 @@ def filter(pred, seq):
 def partition(L, x):
     """Returns result of rearranging the elements of L so that 
     all items < X appear before all items >= X, 
-    and all are otherwise in their original order."""
+    and all are otherwise in their original order.
     >>> L = (0, 9, 6, 2, 5, 11, 1)
     >>> partition(L, 5)
     (0, 2, 1, 9, 6, 5, 11)
