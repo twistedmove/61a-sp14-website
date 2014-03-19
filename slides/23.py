@@ -104,6 +104,17 @@ class BinTree(Tree):
         >>> T
         {2, 5, 6, 10, 15}"""
         return "{" + ', '.join(map(repr, self.inorder_values())) + "}"
+        # Or, the long way:
+
+        #       result = "{"
+        #       for v in self.inorder_values():
+        #           if result != "{":
+        #               result += ", "
+        #           result += repr(v)
+        #       return result + "}"
+
+
+
     def __str__(self):
        return self.repr()
 
@@ -152,31 +163,12 @@ class inorder_tree_iter:
         self._work_queue = [ the_tree ]
 
     def __next__(self):
-        while len(self._work_queue) > 0:
-            subtree = self._work_queue.pop()
-            if type(subtree) is not BinTree:
-                return subtree
-            if subtree.is_empty:
-                pass
-            elif type(subtree) is BinTree:
-                self._work_queue += \
-                     subtree.right, subtree.label, subtree.left
-            else:
-                return subtree
+        # What goes here?
         raise StopIteration
 
     def __iter__(self): return self
 
  
-# Or, the long way:
-
-#       result = "{"
-#       for v in self.inorder_values():
-#           if result != "{":
-#               result += ", "
-#           result += repr(v)
-#       return result + "}"
-
 def dtree_add(T, x):
     """Assuming T is a binary search tree, a binary search tree 
     that contains all previous values in T, plus X 
