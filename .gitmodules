@@ -1,3 +1,0 @@
-[submodule "interpreter"]
-	path = interpreter
-	url = https://github.com/yuanchenyang/web-worker-interpreter.git
