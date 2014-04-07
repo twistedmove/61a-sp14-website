@@ -4,15 +4,20 @@
 <head>
 <meta charset="UTF-8">
 
-<link rel="stylesheet" type="text/css" href="css/codemirror.css" />
-<link rel="stylesheet" type="text/css" href="css/isicp.css" />
-<link rel="stylesheet" type="text/css" href="css/theme.css" />
 
-<script src="js/helper.js"></script>
-<script src="js/codemirror.js"></script>
-<script src="js/scheme-mode.js"></script>
-<script src="js/jquery.min.js"></script>
-<script src="js/coding.js"> </script>
+<link rel="stylesheet" type="text/css"
+      href="/interpreter/deps/codemirror/lib/codemirror.css" />
+<link rel="stylesheet" type="text/css" href="/interpreter/coding.css" />
+<link rel="stylesheet" type="text/css" href="/interpreter/base.css" />
+<script src="/interpreter/deps/codemirror/lib/codemirror.js"></script>
+<script src="/interpreter/deps/codemirror/mode/scheme/scheme.js"></script>
+<script src="/interpreter/deps/jquery.min.js"></script>
+<script src="/interpreter/deps/lib-xj.js"></script>
+<script src="/interpreter/coding.js"> </script>
+<script>
+  set_interpreter_path("/interpreter/");
+  set_language("scheme");
+</script>
 </head>
 
 
@@ -73,24 +78,6 @@
 <script> prompt("grade"); </script>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
-
-<script>
-
-var todo = Object.keys(editorOf);
-
-(function proc() {
-  if (todo.length == 0) {
-    return;
-  }
-  try {
-    var first = todo.shift();
-    editorOf[first].getOption("onBlur")().then(proc);
-  } catch (err) {
-    proc();
-  }
-})();
-
-</script>
 
 </body>
 </html>
