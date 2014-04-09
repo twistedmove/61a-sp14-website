@@ -123,7 +123,7 @@ STk&gt; (/ 28 2)
 ?
 STk&gt; (+ 1 2 3 4 5 6 7 8 9)      ;Arithmetic operators allow a variable number of arguments
 ?
-STk&gt; (magnitude -7)             ;Absolute Value
+STk&gt; (abs -7)             ;Absolute Value
 ?
 STk&gt; (quotient 29 5)
 ?
@@ -221,7 +221,7 @@ if-statements:</p>
     (display "Negative")
     (if (= x 0)
         (display "Zero")
-        (display "Positive"))
+        (display "Positive")))
 
 #Python Equivalent
 if x &lt; 0:
@@ -368,7 +368,7 @@ STk&gt; '(1 . (2 . (3)))
 a
 STk&gt; (define b '(4 5 6))
 b
-STk&gt; (define empty ('()))
+STk&gt; (define empty '())
 empty
 STk&gt; (append '(1 2 3) '(4 5 6))
 (1 2 3 4 5 6)
