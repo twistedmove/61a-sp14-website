@@ -1,57 +1,14 @@
 class Range:
-    """An implicit sequence of consecutive integers.
-
-    >>> r = Range(3, 12)
-    >>> len(r)
-    9
-    >>> r[3]
-    6
-    >>> r[-2]
-    10
-    """
-
-    def __init__(self, start, end=None):
-        if end is None:
-            start, end = 0, start
-        assert isinstance(start, int) and isinstance(end, int)
-        self.start = start
-        self.end = end
-
-    def __repr__(self):
-        return 'Range({0}, {1})'.format(self.start, self.end)
-
-    def __len__(self):
-        return max(0, self.end - self.start)
-
-    def __getitem__(self, k):
-        if k < 0:
-            k = len(self) + k
-        if k < 0 or k >= len(self):
-            raise IndexError('index out of range')
-        return self.start + k
-
-class RangeIter:
-    """An iterator over integers.
-
-    >>> ri = RangeIter(3, 7)
-    >>> next(ri)
-    3
-    >>> next(ri)
-    4
-    >>> next(ri)
-    5
-    """
-
-    def __init__(self, start, end):
-        self.next = start
-        self.end = end
-
-    def __next__(self):
-        if self.next >= self.end:
-            raise StopIteration
-        result = self.next
-        self.next += 1
-        return result
+    def __init__(self, low, high):
+        self._low = low
+        self._high = high
+    def __iter__(self):
+        return self._generate()
+    def _generate(self):
+        i = self._low
+        while i < self._high:
+            yield i
+            i += 1
 
 class LetterIter:
     """An iterator over letters.
