@@ -13,125 +13,719 @@
 </span><span style="color: blue; font-weight: bold">import </span>math
 <span style="color: blue; font-weight: bold">import </span>operator
 <span style="color: blue; font-weight: bold">import </span>sys
-<span style="color: blue; font-weight: bold">from </span>scheme_reader <span style="color: blue; font-weight: bold">import </span>Pair<span style="font-weight: bold">, </span>nil
+<span style="color: blue; font-weight: bold">import </span>numbers
+<span style="color: blue; font-weight: bold">import </span>re
 
 <span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
     </span><span style="color: blue; font-weight: bold">import </span>turtle
 <span style="color: blue; font-weight: bold">except</span><span style="font-weight: bold">:
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"warning: could not import the turtle module."</span><span style="font-weight: bold">, </span>file<span style="font-weight: bold">=</span>sys<span style="font-weight: bold">.</span>stderr<span style="font-weight: bold">)
 
+</span><span style="color: green; font-style: italic">#############################
+# Errors and Error Checking #
+#############################
+
 </span><span style="color: blue; font-weight: bold">class </span>SchemeError<span style="font-weight: bold">(</span>Exception<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Exception indicating an error in a Scheme program."""
 
-</span><span style="color: blue; font-weight: bold">class </span>okay<span style="font-weight: bold">:
+</span><span style="color: blue; font-weight: bold">def </span>bad_type<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>k<span style="font-weight: bold">, </span>name<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Raise a SchemeError using "argument K of NAME" to describe the
+    offending value (VAL)."""
+    </span>msg <span style="font-weight: bold">= </span><span style="color: red">"argument {0} of {1} has wrong type ({2})"
+    </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>k<span style="font-weight: bold">, </span>name<span style="font-weight: bold">, </span>type<span style="font-weight: bold">(</span>val<span style="font-weight: bold">).</span>__name__<span style="font-weight: bold">))
+
+</span><span style="color: blue; font-weight: bold">def </span>check_type<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>predicate<span style="font-weight: bold">, </span>k<span style="font-weight: bold">, </span>name<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Returns VAL.  Raises a SchemeError if not PREDICATE(VAL)
+    using "argument K of NAME" to describe the offending value."""
+    </span><span style="color: blue; font-weight: bold">if not </span>predicate<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>k<span style="font-weight: bold">, </span>name<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>val
+
+<span style="color: green; font-style: italic">#################
+# Scheme Values #
+#################
+
+# Every value used in the interpreter to represent a Scheme value "is a"
+# SchemeValue.  Thus, if x is such a value, isinstance(x, SchemeValue).
+# In proper object-oriented fashion, however, you will only need to use
+# this test in 'assert' statements that catch bugs in your interpreter.
+# The SchemeValue class has methods for testing for Scheme integers,
+# procedures, etc.  The SchemeValue class documents these methods by
+# giving default 'def's for all of them.  The various subclasses of
+# SchemeValue, which stand for Scheme integers, Scheme pairs, etc., override
+# these methods with appropriate methods of their own.
+
+# As an example, consider the method pairp (returns a true Scheme value iff
+# its argument is a pair).  The default definition (in SchemeValue) returns
+# scheme_false (which represents #f).  Most subtypes of SchemeValue simply
+# inherit this definition, and so also return #f.  The type Pair, however,
+# overrides pairp to return scheme_true (which represents #t).  As a result,
+# No 'if' statements are necessary to check for pairs.
+
+# In other examples, such as the length method, the default implementation
+# causes an error, since length is defined only for proper lists (so it
+# is overridden in the classes Pair and Nil).
+
+</span><span style="color: blue; font-weight: bold">class </span>SchemeValue<span style="font-weight: bold">:
+    </span><span style="color: darkred">"""The parent class of all Scheme values manipulated by the interpreter.
+    The methods here give default implementations, and are overridden in the
+    subclasses of SchemeValue."""
+    
+    </span><span style="color: blue; font-weight: bold">def </span>__bool__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: darkred">"""True if I am supposed to count as a "true value" in Python.  This
+        is the method used by Python's conditionals (if, and, or, not, while)
+        to determine whether some value is to be treated as meaning 'true'.
+        As a result, any SchemeValue that Scheme considers to represent true
+        also means true to Python.  It is therefore unnecessary in Python to
+        write things like 'if EXPRESSION is not scheme_false: ...'"""
+        </span><span style="color: blue; font-weight: bold">return True
+
+    def </span>print_repr<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: darkred">"""The string printed for me by the Scheme 'print' procedure."""
+        </span><span style="color: blue; font-weight: bold">return </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
+
+    </span><span style="color: green; font-style: italic"># The following methods return SchemeValues.  Those ending in 'p' (for
+    # 'predicate') return scheme_false to mean 'false', and some other
+    # SchemeValue (often scheme_true) to mean 'true'.
+
+    </span><span style="color: blue; font-weight: bold">def </span>booleanp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>notp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">not </span><span style="color: blue">self</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>eqp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="color: blue; font-weight: bold">is </span>y<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>eqvp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""True iff I am equivalent to Y (same object, same numeric or boolean
+        value."""
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="color: blue; font-weight: bold">is </span>y<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>equalp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""True iff I am equal in value to Y."""
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">== </span>y<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>atomp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>pairp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>nullp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>listp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+    
+    <span style="color: blue; font-weight: bold">def </span>length<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"length"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>neg<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Unary negation (as in -x), returning a SchemeValue."""
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"sub"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>quo<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"quotient"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>modulo<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"modulo"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>rem<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"remainder"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>floor<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"floor"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>ceil<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"ceil"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>eq<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"="</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>ltp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"&lt;"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>gtp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"&gt;"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>lep<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"&lt;="</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>gep<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"&gt;="</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>evenp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"even?"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>oddp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"odd?"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>zerop<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"zero?"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>cons<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>Pair<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>append<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"append"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>car<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"car"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>cdr<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>bad_type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"cdr"</span><span style="font-weight: bold">)
+
+
+    </span><span style="color: blue; font-weight: bold">def </span>stringp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>symbolp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>numberp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>integerp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>evaluate_arguments<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>arg_list<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Evaluate the expressions in ARG_LIST in ENV to produce
+        arguments for this procedure. Returns an iterable of the results."""
+        </span>msg <span style="font-weight: bold">= </span><span style="color: red">"attempt to call something of non-function type ({0})"
+        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">).</span>__name__<span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>apply<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Apply me to a Scheme list of ARGS in environment ENV. Returns
+        either
+          A. A tuple (val, None), where val is the value this procedure
+             returns when given ARGS and called in environment ENV, or
+          B. A tuple (expr1, env1), where evaluating the Scheme
+             expression expr1 in environment env1 will yield the same result
+             and the same effects as evaluating ARGS in ENV.
+        This method is overridden in procedure types.  THis default
+        implementation causes an error.
+        NOTE: Until you complete extra-credit question 22, this method
+        will always return (val, None)."""
+        </span>msg <span style="font-weight: bold">= </span><span style="color: red">"attempt to call something of non-function type ({0})"
+        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">).</span>__name__<span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>get_actual_value<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Returns any desired transformation of a value newly fetched
+        from a symbol before it is used. The default implementation
+        is simply the identity.  [This method is useful for the call-by-name
+        extension in extra-credit Problem 23.]""" 
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self
+
+</span><span style="color: blue; font-weight: bold">def </span>scheme_coerce<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Returns the Scheme value corresponding to X.  Converts numbers to
+    SchemeNumbers and strings to interned symbols.  SchemeValues are unchanged.
+    Other values raise a TypeError."""
+    </span><span style="color: blue; font-weight: bold">if </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>SchemeValue<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>x
+    <span style="color: blue; font-weight: bold">elif </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>numbers<span style="font-weight: bold">.</span>Number<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scnum<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">elif </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>str<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>intern<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">raise </span>TypeError<span style="font-weight: bold">(</span><span style="color: red">"cannot convert type {} to SchemeValue"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>type<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)))
+
+</span><span style="color: green; font-style: italic">########
+# okay #
+########
+
+</span><span style="color: blue; font-weight: bold">class </span>okay<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Signifies an undefined value."""
     </span><span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"okay"
 
 </span>okay <span style="font-weight: bold">= </span>okay<span style="font-weight: bold">() </span><span style="color: green; font-style: italic"># Assignment hides the okay class; there is only one instance
 
+############
+# Booleans #
+############
+
+</span><span style="color: blue; font-weight: bold">class </span>scheme_true<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">def </span>booleanp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'scheme_true'
+
+    </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"#t"
+
+</span><span style="color: blue; font-weight: bold">class </span>scheme_false<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">def </span>__bool__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return False
+
+    def </span>booleanp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'scheme_false'
+
+    </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"#f"
+
+</span><span style="color: green; font-style: italic"># scheme_true and scheme_false hide the classes scheme_true and scheme_false.
+# Thus they are the only instances of those classes.
+
+</span>scheme_true <span style="font-weight: bold">= </span>scheme_true<span style="font-weight: bold">()
+</span>scheme_false <span style="font-weight: bold">= </span>scheme_false<span style="font-weight: bold">()
+
+</span><span style="color: blue; font-weight: bold">def </span>scbool<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""The Scheme boolean value (#t or #f) that corresponds to the Python value
+    X.  True Python values yield scheme_true, and false values yield
+    scheme_false."""
+    </span><span style="color: blue; font-weight: bold">return </span>scheme_true <span style="color: blue; font-weight: bold">if </span>x <span style="color: blue; font-weight: bold">else </span>scheme_false
+
+<span style="color: green; font-style: italic">###########
+# Numbers #
+###########
+
+</span><span style="color: blue; font-weight: bold">def </span>_check_num<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>name<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""If X is a number, return it.  Otherwise, indicate a type error in
+    argument 1 of operation NAME."""
+    </span><span style="color: blue; font-weight: bold">return </span>check_type<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>scheme_numberp<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">, </span>name<span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">class </span>SchemeNumber<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""The parent class of all Scheme numeric types."""
+    
+    </span><span style="color: blue; font-weight: bold">def </span>numberp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"scnum({})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
+
+    </span><span style="color: green; font-style: italic"># Tests 
+
+    </span><span style="color: blue; font-weight: bold">def </span>eq<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">== </span>_check_num<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span><span style="color: red">"="</span><span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>ltp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">&lt; </span>_check_num<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span><span style="color: red">"&lt;"</span><span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>gtp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">&gt; </span>_check_num<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span><span style="color: red">"&gt;"</span><span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>lep<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">&lt;= </span>_check_num<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span><span style="color: red">"&lt;="</span><span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>gep<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">&gt;= </span>_check_num<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span><span style="color: red">"&gt;="</span><span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>zerop<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">)
+
+
+</span><span style="color: green; font-style: italic"># Types SchemeInt and SchemeFloat illustrate *multiple inheritance*.
+# That is, they inherits methods from both SchemeValue and int or float.
+# Thus, SchemeInts print as integers, and respond to all the
+# same operators (+, -, etc.) as integers.  To convert an ordinary Python
+# integer, x, into a SchemeInt, use SchemeInt(x); likewise for SchemeFloat.
+
+</span><span style="color: blue; font-weight: bold">class </span>SchemeInt<span style="font-weight: bold">(</span>SchemeNumber<span style="font-weight: bold">, </span>int<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">def </span>integerp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>neg<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(-</span><span style="color: blue">self</span><span style="font-weight: bold">)
+
+    </span><span style="color: green; font-style: italic"># Scheme quotient rounds toward 0; Pythons rounds toward negative infinity.
+    </span><span style="color: blue; font-weight: bold">def </span>quo<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>check_type<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span>scheme_integerp<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">, </span><span style="color: red">"quotient"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">if </span><span style="font-weight: bold">(</span>y <span style="font-weight: bold">&lt; </span><span style="color: red">0</span><span style="font-weight: bold">) != (</span><span style="color: blue">self </span><span style="font-weight: bold">&lt; </span><span style="color: red">0</span><span style="font-weight: bold">):
+                </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(- (</span>abs<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">) // </span>abs<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)))
+            </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">// </span>y<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">except </span>ZeroDivisionError as err<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>err<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>modulo<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>check_type<span style="font-weight: bold">(</span>y<span style="font-weight: bold">, </span>scheme_integerp<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">, </span><span style="color: red">"modulo"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">% </span>y<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">except </span>ZeroDivisionError as err<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>err<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>rem<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span>q <span style="font-weight: bold">= </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>quo<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">- </span>q <span style="font-weight: bold">* </span>y<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>floor<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self
+
+    </span><span style="color: blue; font-weight: bold">def </span>ceil<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self
+
+    </span><span style="color: blue; font-weight: bold">def </span>eqvp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">== </span>y<span style="font-weight: bold">)
+  
+    </span><span style="color: blue; font-weight: bold">def </span>evenp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">% </span><span style="color: red">2 </span><span style="font-weight: bold">== </span><span style="color: red">0</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>oddp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">% </span><span style="color: red">2 </span><span style="font-weight: bold">== </span><span style="color: red">1</span><span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">class </span>SchemeFloat<span style="font-weight: bold">(</span>SchemeNumber<span style="font-weight: bold">, </span>float<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">def </span>neg<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeFloat<span style="font-weight: bold">(-</span><span style="color: blue">self</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>floor<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span>int<span style="font-weight: bold">(</span>math<span style="font-weight: bold">.</span>floor<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)))
+
+    </span><span style="color: blue; font-weight: bold">def </span>ceil<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span>int<span style="font-weight: bold">(</span>math<span style="font-weight: bold">.</span>ceil<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)))
+
+    </span><span style="color: blue; font-weight: bold">def </span>eqvp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">== </span>y<span style="font-weight: bold">)
+
+</span><span style="color: green; font-style: italic"># Shorthand for numeric types.
+
+</span>scint <span style="font-weight: bold">= </span>SchemeInt
+scfloat <span style="font-weight: bold">= </span>SchemeFloat
+
+<span style="color: blue; font-weight: bold">def </span>scnum<span style="font-weight: bold">(</span>num<span style="font-weight: bold">):
+    </span>r <span style="font-weight: bold">= </span>round<span style="font-weight: bold">(</span>num<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>r <span style="font-weight: bold">== </span>num<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span>scint<span style="font-weight: bold">(</span>r<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span>scfloat<span style="font-weight: bold">(</span>num<span style="font-weight: bold">)
+
+</span><span style="color: green; font-style: italic">###########
+# Symbols #
+###########
+
+</span><span style="color: blue; font-weight: bold">class </span>SchemeSymbol<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Represents a Scheme symbol.  Normally, one creates new symbols with
+    the static intern factory method.  Each distinct symbol name is associated
+    with exactly one symbol.  Symbol equality is simply object identity, so
+    that SchemeSymbols are hashable (so may be used as dictionary keys and
+    in sets)."""
+
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>name<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""A new symbol whose name is NAME. Normally, you should create new
+        symbols with intern (below).  This function is for internal use."""
+        </span><span style="color: blue; font-weight: bold">assert </span>type<span style="font-weight: bold">(</span>name<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is </span>str<span style="font-weight: bold">, </span>\
+               <span style="color: red">"invalid type of symbol name: {}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>type<span style="font-weight: bold">(</span>name<span style="font-weight: bold">))
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>name <span style="font-weight: bold">= </span>name
+
+    <span style="color: blue; font-weight: bold">def </span>symbolp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span><span style="color: blue">self </span><span style="color: blue; font-weight: bold">is </span>_all_symbols<span style="font-weight: bold">.</span>get<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>name<span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"intern('{}')"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>name<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"SchemeSymbol('{}')"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>name<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>name
+
+<span style="color: green; font-style: italic"># The symbols corresponding to each unique symbol name.
+</span>_all_symbols <span style="font-weight: bold">= {}
+
+</span><span style="color: blue; font-weight: bold">def </span>intern<span style="font-weight: bold">(</span>name<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""If NAME is a string, the canonical symbol named NAME.  If NAME is a
+    symbol, a canonical symbol with that name."""
+    </span><span style="color: blue; font-weight: bold">if </span>isinstance<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>SchemeSymbol<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>str<span style="font-weight: bold">(</span>name<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">in </span>_all_symbols<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">return </span>_all_symbols<span style="font-weight: bold">[</span>str<span style="font-weight: bold">(</span>name<span style="font-weight: bold">)]
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span>_all_symbols<span style="font-weight: bold">[</span>str<span style="font-weight: bold">(</span>name<span style="font-weight: bold">)] = </span>name
+            <span style="color: blue; font-weight: bold">return </span>name
+    <span style="color: blue; font-weight: bold">if </span>name <span style="color: blue; font-weight: bold">in </span>_all_symbols<span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span>_all_symbols<span style="font-weight: bold">[</span>name<span style="font-weight: bold">]
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span>sym <span style="font-weight: bold">= </span>SchemeSymbol<span style="font-weight: bold">(</span>name<span style="font-weight: bold">)
+        </span>_all_symbols<span style="font-weight: bold">[</span>name<span style="font-weight: bold">] = </span>sym
+        <span style="color: blue; font-weight: bold">return </span>sym
+
+<span style="color: green; font-style: italic">###########
+# Strings #
+###########
+
+</span><span style="color: blue; font-weight: bold">class </span>SchemeStr<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">, </span>str<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">def </span>stringp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"scstr({!r})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">))
+
+    </span>_escape <span style="font-weight: bold">= </span>re<span style="font-weight: bold">.</span>compile<span style="font-weight: bold">(</span><span style="color: darkred">r'''"|\.'''</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>print_repr<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>s <span style="font-weight: bold">= </span>str<span style="font-weight: bold">.</span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span>s<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">] == </span><span style="color: red">"'"</span><span style="font-weight: bold">:
+            </span>s <span style="font-weight: bold">= </span>s<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">:-</span><span style="color: red">1</span><span style="font-weight: bold">]
+            </span>s <span style="font-weight: bold">= </span>SchemeStr<span style="font-weight: bold">.</span>_escape<span style="font-weight: bold">.</span>sub<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">lambda </span>x<span style="font-weight: bold">: (</span><span style="color: red">r'\"' </span><span style="color: blue; font-weight: bold">if </span>x <span style="font-weight: bold">== </span><span style="color: red">'"' 
+                                                 </span><span style="color: blue; font-weight: bold">else </span><span style="color: red">"'" </span><span style="color: blue; font-weight: bold">if </span>x <span style="font-weight: bold">== </span>r<span style="color: red">"\'"
+                                                 </span><span style="color: blue; font-weight: bold">else </span>x<span style="font-weight: bold">), </span>s<span style="font-weight: bold">)
+            </span>s <span style="font-weight: bold">= </span><span style="color: red">'"' </span><span style="font-weight: bold">+ </span>s <span style="font-weight: bold">+ </span><span style="color: red">'"'
+        </span><span style="color: blue; font-weight: bold">return </span>s
+
+scstr <span style="font-weight: bold">= </span>SchemeStr
+
+<span style="color: green; font-style: italic">##########################
+# Pairs and Scheme lists #
+##########################
+
+</span><span style="color: blue; font-weight: bold">class </span>Pair<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A pair has two instance attributes: first and second.  For a Pair to be
+    a well-formed list, second is either a well-formed list or nil.  Some
+    methods only apply to well-formed lists.  As a convenience, the constructor
+    for Pair converts arguments that are numbers into SchemeNumbers and
+    arguments that are strings into SchemeStrs (NOT symbols, which the caller
+    must convert explictly, generally using intern).  Likewise, the __repr__
+    function will abbreviate scnum(x) to x and scstr(x) to x.
+
+    &gt;&gt;&gt; s = Pair(1, Pair(2, nil))
+    &gt;&gt;&gt; s
+    Pair(1, Pair(2, nil))
+    &gt;&gt;&gt; print(s)
+    (1 2)
+    &gt;&gt;&gt; len(s)
+    2
+    &gt;&gt;&gt; s[1]
+    scnum(2)
+    &gt;&gt;&gt; print(s.map(lambda x: x+4))
+    (5 6)
+    """
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>first<span style="font-weight: bold">, </span>second<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""The pair (FIRST . SECOND).  As a convenience, FIRST and SECOND
+        are coerced from Python numbers to SchemeNumbers or from Python
+        strings to SchemeStrs."""
+        </span>first <span style="font-weight: bold">= </span>scheme_coerce<span style="font-weight: bold">(</span>first<span style="font-weight: bold">)
+        </span>second <span style="font-weight: bold">= </span>scheme_coerce<span style="font-weight: bold">(</span>second<span style="font-weight: bold">)
+
+        </span><span style="color: blue; font-weight: bold">assert </span>isinstance<span style="font-weight: bold">(</span>first<span style="font-weight: bold">, </span>SchemeValue<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>\
+               isinstance<span style="font-weight: bold">(</span>second<span style="font-weight: bold">, </span>SchemeValue<span style="font-weight: bold">), </span>\
+            <span style="color: red">"bad types to Pair: {}, {}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>type<span style="font-weight: bold">(</span>first<span style="font-weight: bold">), </span>type<span style="font-weight: bold">(</span>second<span style="font-weight: bold">))
+            
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first <span style="font-weight: bold">= </span>first
+        <span style="color: blue">self</span><span style="font-weight: bold">.</span>second <span style="font-weight: bold">= </span>second
+
+    <span style="color: blue; font-weight: bold">def </span>atomp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_false
+
+    <span style="color: blue; font-weight: bold">def </span>pairp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>car<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first
+
+    <span style="color: blue; font-weight: bold">def </span>cdr<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second
+
+    <span style="color: blue; font-weight: bold">def </span>set_car<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>v<span style="font-weight: bold">):
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first <span style="font-weight: bold">= </span>v
+        <span style="color: blue; font-weight: bold">return </span>okay
+
+    <span style="color: blue; font-weight: bold">def </span>set_cdr<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>v<span style="font-weight: bold">):
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second <span style="font-weight: bold">= </span>v
+        <span style="color: blue; font-weight: bold">return </span>okay
+
+    <span style="color: blue; font-weight: bold">def </span>length<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>__len__<span style="font-weight: bold">())
+
+    </span><span style="color: blue; font-weight: bold">def </span>equalp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scbool<span style="font-weight: bold">(</span><span style="color: blue">self </span><span style="font-weight: bold">== </span>y<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>listp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>_list_end<span style="font-weight: bold">().</span>nullp<span style="font-weight: bold">()
+
+    </span><span style="color: blue; font-weight: bold">def </span>_list_end<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: darkred">"""The 'end' of the list of which I am the head.  This is nil if
+        I am a normal list.  If I am a dot list---e.g. (1 2 . 3)---, then
+        the atom after the dot.  If the list is circular, then the first
+        repeated pair in the list."""
+        </span>p0 <span style="font-weight: bold">= </span><span style="color: blue">self
+        </span>p1 <span style="font-weight: bold">= </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">while </span>p1 <span style="color: blue; font-weight: bold">is not </span>p0 <span style="color: blue; font-weight: bold">and </span>p1<span style="font-weight: bold">.</span>pairp<span style="font-weight: bold">():
+            </span>p1 <span style="font-weight: bold">= </span>p1<span style="font-weight: bold">.</span>second
+            <span style="color: blue; font-weight: bold">if </span>p1 <span style="color: blue; font-weight: bold">is </span>p0 <span style="color: blue; font-weight: bold">or not </span>p1<span style="font-weight: bold">.</span>pairp<span style="font-weight: bold">():
+                </span><span style="color: blue; font-weight: bold">break
+            </span>p0 <span style="font-weight: bold">= </span>p0<span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">return </span>p1
+
+    <span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">def </span>uncoerce<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">if </span>scheme_numberp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
+                </span><span style="color: blue; font-weight: bold">return </span>x <span style="font-weight: bold">+ </span><span style="color: red">0
+            </span><span style="color: blue; font-weight: bold">elif </span>scheme_symbolp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
+                </span><span style="color: blue; font-weight: bold">return </span>str<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">return </span>x
+        <span style="color: blue; font-weight: bold">return </span><span style="color: red">"Pair({0!r}, {1!r})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>uncoerce<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first<span style="font-weight: bold">),
+                                           </span>uncoerce<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second<span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span>s <span style="font-weight: bold">= </span><span style="color: red">"(" </span><span style="font-weight: bold">+ </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first<span style="font-weight: bold">)
+        </span>second <span style="font-weight: bold">= </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">while </span>second<span style="font-weight: bold">.</span>pairp<span style="font-weight: bold">():
+            </span>s <span style="font-weight: bold">+= </span><span style="color: red">" " </span><span style="font-weight: bold">+ </span>str<span style="font-weight: bold">(</span>second<span style="font-weight: bold">.</span>car<span style="font-weight: bold">())
+            </span>second <span style="font-weight: bold">= </span>second<span style="font-weight: bold">.</span>cdr<span style="font-weight: bold">()
+        </span><span style="color: blue; font-weight: bold">if not </span>second<span style="font-weight: bold">.</span>nullp<span style="font-weight: bold">():
+            </span>s <span style="font-weight: bold">+= </span><span style="color: red">" . " </span><span style="font-weight: bold">+ </span>str<span style="font-weight: bold">(</span>second<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return </span>s <span style="font-weight: bold">+ </span><span style="color: red">")"
+
+    </span><span style="color: blue; font-weight: bold">def </span>__len__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if not </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>_list_end<span style="font-weight: bold">().</span>nullp<span style="font-weight: bold">():
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"length attempted on improper list"</span><span style="font-weight: bold">)
+        </span>n<span style="font-weight: bold">, </span>second <span style="font-weight: bold">= </span><span style="color: red">1</span><span style="font-weight: bold">, </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">while </span>second<span style="font-weight: bold">.</span>pairp<span style="font-weight: bold">():
+            </span>n <span style="font-weight: bold">+= </span><span style="color: red">1
+            </span>second <span style="font-weight: bold">= </span>second<span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">return </span>n
+
+    <span style="color: blue; font-weight: bold">def </span>__getitem__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>k<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>k <span style="font-weight: bold">&lt; </span><span style="color: red">0</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>IndexError<span style="font-weight: bold">(</span><span style="color: red">"negative index into list"</span><span style="font-weight: bold">)
+        </span>y <span style="font-weight: bold">= </span><span style="color: blue">self
+        </span><span style="color: blue; font-weight: bold">for </span>_ <span style="color: blue; font-weight: bold">in </span>range<span style="font-weight: bold">(</span>k<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">if </span>y<span style="font-weight: bold">.</span>second <span style="color: blue; font-weight: bold">is </span>nil<span style="font-weight: bold">:
+                </span><span style="color: blue; font-weight: bold">raise </span>IndexError<span style="font-weight: bold">(</span><span style="color: red">"list index out of bounds"</span><span style="font-weight: bold">)
+            </span><span style="color: blue; font-weight: bold">elif not </span>isinstance<span style="font-weight: bold">(</span>y<span style="font-weight: bold">.</span>second<span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">):
+                </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"ill-formed list"</span><span style="font-weight: bold">)
+            </span>y <span style="font-weight: bold">= </span>y<span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">return </span>y<span style="font-weight: bold">.</span>first
+
+    <span style="color: blue; font-weight: bold">def </span>__eq__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>p<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if not </span>isinstance<span style="font-weight: bold">(</span>p<span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return False
+        return </span>bool<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first<span style="font-weight: bold">.</span>equalp<span style="font-weight: bold">(</span>p<span style="font-weight: bold">.</span>first<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second<span style="font-weight: bold">.</span>equalp<span style="font-weight: bold">(</span>p<span style="font-weight: bold">.</span>second<span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>map<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>fn<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Return a Scheme list after mapping Python function FN to SELF."""
+        </span>mapped <span style="font-weight: bold">= </span>fn<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second<span style="font-weight: bold">.</span>nullp<span style="font-weight: bold">() </span><span style="color: blue; font-weight: bold">or </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second<span style="font-weight: bold">.</span>pairp<span style="font-weight: bold">():
+            </span><span style="color: blue; font-weight: bold">return </span>Pair<span style="font-weight: bold">(</span>mapped<span style="font-weight: bold">, </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second<span style="font-weight: bold">.</span>map<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">))
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"ill-formed list"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>append<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if not </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>listp<span style="font-weight: bold">():
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"attempt to append to improper list"</span><span style="font-weight: bold">)
+        </span>result <span style="font-weight: bold">= </span>last <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+        </span>p <span style="font-weight: bold">= </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">while </span>p <span style="color: blue; font-weight: bold">is not </span>nil<span style="font-weight: bold">:
+            </span>last<span style="font-weight: bold">.</span>second <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span>p<span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+            </span>last <span style="font-weight: bold">= </span>last<span style="font-weight: bold">.</span>second
+            p <span style="font-weight: bold">= </span>p<span style="font-weight: bold">.</span>second
+        <span style="color: blue; font-weight: bold">return </span>result
+
+<span style="color: blue; font-weight: bold">class </span>nil<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""The empty list"""
+
+    </span><span style="color: blue; font-weight: bold">def </span>listp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>nullp<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>scheme_true
+
+    <span style="color: blue; font-weight: bold">def </span>length<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"nil"
+
+    </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"()"
+
+    </span><span style="color: blue; font-weight: bold">def </span>__len__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">0
+
+    </span><span style="color: blue; font-weight: bold">def </span>__getitem__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>k<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>k <span style="font-weight: bold">&lt; </span><span style="color: red">0</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>IndexError<span style="font-weight: bold">(</span><span style="color: red">"negative index into list"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">raise </span>IndexError<span style="font-weight: bold">(</span><span style="color: red">"list index out of bounds"</span><span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">def </span>append<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>y
+
+    <span style="color: blue; font-weight: bold">def </span>map<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>fn<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: blue">self
+
+</span>nil <span style="font-weight: bold">= </span>nil<span style="font-weight: bold">() </span><span style="color: green; font-style: italic"># Assignment hides the nil class; there is only one instance
+
 ########################
 # Primitive Operations #
 ########################
 
-</span><span style="color: blue; font-weight: bold">class </span>PrimitiveProcedure<span style="font-weight: bold">:
-    </span><span style="color: darkred">"""A Scheme procedure defined as a Python function."""
-
-    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>fn<span style="font-weight: bold">, </span>use_env<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">):
-        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>fn <span style="font-weight: bold">= </span>fn
-        <span style="color: blue">self</span><span style="font-weight: bold">.</span>use_env <span style="font-weight: bold">= </span>use_env
-
-    <span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'#[primitive]'
-
 </span>_PRIMITIVES <span style="font-weight: bold">= []
 
 </span><span style="color: blue; font-weight: bold">def </span>primitive<span style="font-weight: bold">(*</span>names<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""An annotation to convert a Python function into a PrimitiveProcedure."""
+    </span><span style="color: darkred">"""An annotation to record a Python function as a primitive procedure.
+    NAMES is the set of names to use in the Scheme global environment for
+    the function."""
     </span><span style="color: blue; font-weight: bold">def </span>add<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">):
-        </span>proc <span style="font-weight: bold">= </span>PrimitiveProcedure<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">for </span>name <span style="color: blue; font-weight: bold">in </span>names<span style="font-weight: bold">:
-            </span>_PRIMITIVES<span style="font-weight: bold">.</span>append<span style="font-weight: bold">((</span>name<span style="font-weight: bold">,</span>proc<span style="font-weight: bold">))
+        </span>_PRIMITIVES<span style="font-weight: bold">.</span>append<span style="font-weight: bold">((</span>names<span style="font-weight: bold">, </span>fn<span style="font-weight: bold">))
         </span><span style="color: blue; font-weight: bold">return </span>fn
     <span style="color: blue; font-weight: bold">return </span>add
 
-<span style="color: blue; font-weight: bold">def </span>add_primitives<span style="font-weight: bold">(</span>frame<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Enter bindings in _PRIMITIVES into FRAME, an environment frame."""
-    </span><span style="color: blue; font-weight: bold">for </span>name<span style="font-weight: bold">, </span>proc <span style="color: blue; font-weight: bold">in </span>_PRIMITIVES<span style="font-weight: bold">:
-        </span>frame<span style="font-weight: bold">.</span>define<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>proc<span style="font-weight: bold">)
-
-</span><span style="color: blue; font-weight: bold">def </span>check_type<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>predicate<span style="font-weight: bold">, </span>k<span style="font-weight: bold">, </span>name<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Returns VAL.  Raises a SchemeError if not PREDICATE(VAL)
-    using "argument K of NAME" to describe the offending value."""
-    </span><span style="color: blue; font-weight: bold">if not </span>predicate<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-        </span>msg <span style="font-weight: bold">= </span><span style="color: red">"argument {0} of {1} has wrong type ({2})"
-        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>k<span style="font-weight: bold">, </span>name<span style="font-weight: bold">, </span>type<span style="font-weight: bold">(</span>val<span style="font-weight: bold">).</span>__name__<span style="font-weight: bold">))
-    </span><span style="color: blue; font-weight: bold">return </span>val
+<span style="color: blue; font-weight: bold">def </span>get_primitive_bindings<span style="font-weight: bold">():
+    </span><span style="color: darkred">"""The list of all (names, function) bindings recorded by @primitive
+    annotations."""
+    </span><span style="color: blue; font-weight: bold">return </span>_PRIMITIVES
 
 @primitive<span style="font-weight: bold">(</span><span style="color: red">"boolean?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_booleanp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>x <span style="color: blue; font-weight: bold">is True or </span>x <span style="color: blue; font-weight: bold">is False
-
-def </span>scheme_true<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""All values in Scheme are true except False."""
-    </span><span style="color: blue; font-weight: bold">return </span>val <span style="color: blue; font-weight: bold">is not False
-
-def </span>scheme_false<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Only False is false in Scheme."""
-    </span><span style="color: blue; font-weight: bold">return </span>val <span style="color: blue; font-weight: bold">is False
+    </span><span style="color: darkred">"""True iff X is #t or #f."""
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>booleanp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"not"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_not<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return not </span>scheme_true<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
+    </span><span style="color: darkred">"""True iff X is #f."""
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>notp<span style="font-weight: bold">()
 
-</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"eq?"</span><span style="font-weight: bold">, </span><span style="color: red">"equal?"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"eq?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_eqp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>x <span style="font-weight: bold">== </span>y
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>eqp<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
-@primitive<span style="font-weight: bold">(</span><span style="color: red">"pair?"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"eqv?"</span><span style="font-weight: bold">)
+</span><span style="color: blue; font-weight: bold">def </span>scheme_eqvp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>eqvp<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
+
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"equal?"</span><span style="font-weight: bold">)
+</span><span style="color: blue; font-weight: bold">def </span>scheme_equalp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>equalp<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
+
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"pair?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_pairp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>pairp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"null?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_nullp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>x <span style="color: blue; font-weight: bold">is </span>nil
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>nullp<span style="font-weight: bold">()
 
-@primitive<span style="font-weight: bold">(</span><span style="color: red">"list?"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"list?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_listp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Return whether x is a well-formed list. Assumes no cycles."""
-    </span><span style="color: blue; font-weight: bold">while </span>x <span style="color: blue; font-weight: bold">is not </span>nil<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">if not </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">):
-            </span><span style="color: blue; font-weight: bold">return False
-        </span>x <span style="font-weight: bold">= </span>x<span style="font-weight: bold">.</span>second
-    <span style="color: blue; font-weight: bold">return True
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>listp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"length"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_length<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">if </span>x <span style="color: blue; font-weight: bold">is </span>nil<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">0
-    </span>check_type<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>scheme_listp<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">'length'</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>len<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>length<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"cons"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_cons<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>Pair<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>cons<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"car"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_car<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span>check_type<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>scheme_pairp<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">'car'</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>first
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>car<span style="font-weight: bold">()
 
-@primitive<span style="font-weight: bold">(</span><span style="color: red">"cdr"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"cdr"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_cdr<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span>check_type<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>scheme_pairp<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">'cdr'</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>second
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>cdr<span style="font-weight: bold">()
 
 
-@primitive<span style="font-weight: bold">(</span><span style="color: red">"list"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"list"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_list<span style="font-weight: bold">(*</span>vals<span style="font-weight: bold">):
     </span>result <span style="font-weight: bold">= </span>nil
     <span style="color: blue; font-weight: bold">for </span>i <span style="color: blue; font-weight: bold">in </span>range<span style="font-weight: bold">(</span>len<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">)-</span><span style="color: red">1</span><span style="font-weight: bold">, -</span><span style="color: red">1</span><span style="font-weight: bold">, -</span><span style="color: red">1</span><span style="font-weight: bold">):
-        </span>result <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">[</span>i<span style="font-weight: bold">], </span>result<span style="font-weight: bold">)
+        </span>result <span style="font-weight: bold">= </span>scheme_cons<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">[</span>i<span style="font-weight: bold">], </span>result<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">return </span>result
 
 @primitive<span style="font-weight: bold">(</span><span style="color: red">"append"</span><span style="font-weight: bold">)
@@ -140,33 +734,24 @@ def </span>scheme_false<span style="font-weight: bold">(</span>val<span style="f
         </span><span style="color: blue; font-weight: bold">return </span>nil
     result <span style="font-weight: bold">= </span>vals<span style="font-weight: bold">[-</span><span style="color: red">1</span><span style="font-weight: bold">]
     </span><span style="color: blue; font-weight: bold">for </span>i <span style="color: blue; font-weight: bold">in </span>range<span style="font-weight: bold">(</span>len<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">)-</span><span style="color: red">2</span><span style="font-weight: bold">, -</span><span style="color: red">1</span><span style="font-weight: bold">, -</span><span style="color: red">1</span><span style="font-weight: bold">):
-        </span>v <span style="font-weight: bold">= </span>vals<span style="font-weight: bold">[</span>i<span style="font-weight: bold">]
-        </span><span style="color: blue; font-weight: bold">if </span>v <span style="color: blue; font-weight: bold">is not </span>nil<span style="font-weight: bold">:
-            </span>check_type<span style="font-weight: bold">(</span>v<span style="font-weight: bold">, </span>scheme_pairp<span style="font-weight: bold">, </span>i<span style="font-weight: bold">, </span><span style="color: red">"append"</span><span style="font-weight: bold">)
-            </span>r <span style="font-weight: bold">= </span>p <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span>v<span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>result<span style="font-weight: bold">)
-            </span>v <span style="font-weight: bold">= </span>v<span style="font-weight: bold">.</span>second
-            <span style="color: blue; font-weight: bold">while </span>scheme_pairp<span style="font-weight: bold">(</span>v<span style="font-weight: bold">):
-                </span>p<span style="font-weight: bold">.</span>second <span style="font-weight: bold">= </span>Pair<span style="font-weight: bold">(</span>v<span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>result<span style="font-weight: bold">)
-                </span>p <span style="font-weight: bold">= </span>p<span style="font-weight: bold">.</span>second
-                v <span style="font-weight: bold">= </span>v<span style="font-weight: bold">.</span>second
-            result <span style="font-weight: bold">= </span>r
-    <span style="color: blue; font-weight: bold">return </span>result
+        </span>result <span style="font-weight: bold">= </span>vals<span style="font-weight: bold">[</span>i<span style="font-weight: bold">].</span>append<span style="font-weight: bold">(</span>result<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>result
 
 @primitive<span style="font-weight: bold">(</span><span style="color: red">"string?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_stringp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>str<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>x<span style="font-weight: bold">.</span>startswith<span style="font-weight: bold">(</span><span style="color: red">'"'</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>stringp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"symbol?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_symbolp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>str<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and not </span>scheme_stringp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>symbolp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"number?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_numberp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>int<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>float<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>numberp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"integer?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_integerp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>isinstance<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>int<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span><span style="font-weight: bold">(</span>scheme_numberp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>round<span style="font-weight: bold">(</span>x<span style="font-weight: bold">) == </span>x<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>integerp<span style="font-weight: bold">()
 
 </span><span style="color: blue; font-weight: bold">def </span>_check_nums<span style="font-weight: bold">(*</span>vals<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Check that all arguments in VALS are numbers."""
@@ -176,126 +761,111 @@ def </span>scheme_false<span style="font-weight: bold">(</span>val<span style="f
             </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>msg<span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>i<span style="font-weight: bold">, </span>v<span style="font-weight: bold">))
 
 </span><span style="color: blue; font-weight: bold">def </span>_arith<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>init<span style="font-weight: bold">, </span>vals<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Perform the fn fneration on the number values of VALS, with INIT as
+    </span><span style="color: darkred">"""Perform the fn operation on the number values of VALS, with INIT as
     the value when VALS is empty. Returns the result as a Scheme value."""
     </span>_check_nums<span style="font-weight: bold">(*</span>vals<span style="font-weight: bold">)
     </span>s <span style="font-weight: bold">= </span>init
     <span style="color: blue; font-weight: bold">for </span>val <span style="color: blue; font-weight: bold">in </span>vals<span style="font-weight: bold">:
         </span>s <span style="font-weight: bold">= </span>fn<span style="font-weight: bold">(</span>s<span style="font-weight: bold">, </span>val<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>round<span style="font-weight: bold">(</span>s<span style="font-weight: bold">) == </span>s<span style="font-weight: bold">:
-        </span>s <span style="font-weight: bold">= </span>round<span style="font-weight: bold">(</span>s<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>s
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeInt<span style="font-weight: bold">(</span>round<span style="font-weight: bold">(</span>s<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">return </span>SchemeFloat<span style="font-weight: bold">(</span>s<span style="font-weight: bold">)
 
-@primitive<span style="font-weight: bold">(</span><span style="color: red">"+"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"+"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_add<span style="font-weight: bold">(*</span>vals<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>add<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span>vals<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"-"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_sub<span style="font-weight: bold">(</span>val0<span style="font-weight: bold">, *</span>vals<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">if </span>len<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">) == </span><span style="color: red">0</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span><span style="font-weight: bold">-</span>val0
-    <span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>sub<span style="font-weight: bold">, </span>val0<span style="font-weight: bold">, </span>vals<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return </span>val0<span style="font-weight: bold">.</span>neg<span style="font-weight: bold">()
+    </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>sub<span style="font-weight: bold">, </span>val0<span style="font-weight: bold">, </span>vals<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"*"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_mul<span style="font-weight: bold">(*</span>vals<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>mul<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">, </span>vals<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"/"</span><span style="font-weight: bold">)
-</span><span style="color: blue; font-weight: bold">def </span>scheme_div<span style="font-weight: bold">(</span>val0<span style="font-weight: bold">, </span>val1<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">def </span>scheme_div<span style="font-weight: bold">(*</span>vals<span style="font-weight: bold">):
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>truediv<span style="font-weight: bold">, </span>val0<span style="font-weight: bold">, [</span>val1<span style="font-weight: bold">])
+        </span><span style="color: blue; font-weight: bold">if </span>len<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">) == </span><span style="color: red">1</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>truediv<span style="font-weight: bold">, </span>scnum<span style="font-weight: bold">(</span><span style="color: red">1</span><span style="font-weight: bold">), </span>vals<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">elif </span>len<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">) == </span><span style="color: red">0</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"/ takes at least one argument"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>truediv<span style="font-weight: bold">, </span>vals<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">], </span>vals<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">:])
     </span><span style="color: blue; font-weight: bold">except </span>ZeroDivisionError as err<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>err<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"quotient"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_quo<span style="font-weight: bold">(</span>val0<span style="font-weight: bold">, </span>val1<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>floordiv<span style="font-weight: bold">, </span>val0<span style="font-weight: bold">, [</span>val1<span style="font-weight: bold">])
-    </span><span style="color: blue; font-weight: bold">except </span>ZeroDivisionError as err<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>err<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>val0<span style="font-weight: bold">.</span>quo<span style="font-weight: bold">(</span>val1<span style="font-weight: bold">)
 
-</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"modulo"</span><span style="font-weight: bold">, </span><span style="color: red">"remainder"</span><span style="font-weight: bold">)
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"modulo"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_modulo<span style="font-weight: bold">(</span>val0<span style="font-weight: bold">, </span>val1<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>_arith<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>mod<span style="font-weight: bold">, </span>val0<span style="font-weight: bold">, [</span>val1<span style="font-weight: bold">])
-    </span><span style="color: blue; font-weight: bold">except </span>ZeroDivisionError as err<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span>err<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>val0<span style="font-weight: bold">.</span>modulo<span style="font-weight: bold">(</span>val1<span style="font-weight: bold">)
+
+</span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"remainder"</span><span style="font-weight: bold">)
+</span><span style="color: blue; font-weight: bold">def </span>scheme_rem<span style="font-weight: bold">(</span>val0<span style="font-weight: bold">, </span>val1<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">return </span>val0<span style="font-weight: bold">.</span>rem<span style="font-weight: bold">(</span>val1<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"floor"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_floor<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-    </span>_check_nums<span style="font-weight: bold">(</span>val<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>math<span style="font-weight: bold">.</span>floor<span style="font-weight: bold">(</span>val<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>val<span style="font-weight: bold">.</span>floor<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"ceil"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_ceil<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-    </span>_check_nums<span style="font-weight: bold">(</span>val<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>math<span style="font-weight: bold">.</span>ceil<span style="font-weight: bold">(</span>val<span style="font-weight: bold">)
-
-</span><span style="color: blue; font-weight: bold">def </span>_numcomp<span style="font-weight: bold">(</span>op<span style="font-weight: bold">, </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span>_check_nums<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>op<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>val<span style="font-weight: bold">.</span>ceil<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"="</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_eq<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>_numcomp<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>eq<span style="font-weight: bold">, </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>eq<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"&lt;"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_lt<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>_numcomp<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>lt<span style="font-weight: bold">, </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>ltp<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"&gt;"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_gt<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>_numcomp<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>gt<span style="font-weight: bold">, </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>gtp<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"&lt;="</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_le<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>_numcomp<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>le<span style="font-weight: bold">, </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>lep<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"&gt;="</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_ge<span style="font-weight: bold">(</span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">return </span>_numcomp<span style="font-weight: bold">(</span>operator<span style="font-weight: bold">.</span>ge<span style="font-weight: bold">, </span>x<span style="font-weight: bold">, </span>y<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>gep<span style="font-weight: bold">(</span>y<span style="font-weight: bold">)
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"even?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_evenp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span>_check_nums<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>x <span style="font-weight: bold">% </span><span style="color: red">2 </span><span style="font-weight: bold">== </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>evenp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"odd?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_oddp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span>_check_nums<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>x <span style="font-weight: bold">% </span><span style="color: red">2 </span><span style="font-weight: bold">== </span><span style="color: red">1
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>oddp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"zero?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_zerop<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span>_check_nums<span style="font-weight: bold">(</span>x<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">return </span>x <span style="font-weight: bold">== </span><span style="color: red">0
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>zerop<span style="font-weight: bold">()
 
 </span><span style="color: green; font-style: italic">##
 ## Other operations
 ##
 
+# atom? is not standard.
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"atom?"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_atomp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">if </span>scheme_booleanp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return True
-    if </span>scheme_numberp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return True
-    if </span>scheme_symbolp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return True
-    if </span>scheme_nullp<span style="font-weight: bold">(</span>x<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return True
-    return False
+    </span><span style="color: blue; font-weight: bold">return </span>x<span style="font-weight: bold">.</span>atomp<span style="font-weight: bold">()
 
 </span>@primitive<span style="font-weight: bold">(</span><span style="color: red">"display"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_display<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">if </span>scheme_stringp<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-        </span>val <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>val<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>val<span style="font-weight: bold">), </span>end<span style="font-weight: bold">=</span><span style="color: red">""</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">return </span>okay
 
 @primitive<span style="font-weight: bold">(</span><span style="color: red">"print"</span><span style="font-weight: bold">)
 </span><span style="color: blue; font-weight: bold">def </span>scheme_print<span style="font-weight: bold">(</span>val<span style="font-weight: bold">):
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>val<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>val<span style="font-weight: bold">.</span>print_repr<span style="font-weight: bold">())
     </span><span style="color: blue; font-weight: bold">return </span>okay
 
 @primitive<span style="font-weight: bold">(</span><span style="color: red">"newline"</span><span style="font-weight: bold">)

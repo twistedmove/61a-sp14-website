@@ -408,7 +408,7 @@ one-through-four
         ((eq? item (car x)) x)
         (else (memq item (cdr x)))))
 (memq 'apple '(pear banana prune))
-; expect False
+; expect #f
 
 (memq 'apple '(x (apple sauce) y apple pear))
 ; expect (apple pear)
@@ -418,15 +418,15 @@ one-through-four
                         (equal? (car x) (car y))
                         (equal? (cdr x) (cdr y))))
         ((null? x) (null? y))
-        (else (eq? x y))))
+        (else (eqv? x y))))
 (equal? '(1 2 (three)) '(1 2 (three)))
-; expect True
+; expect #t
 
 (equal? '(1 2 (three)) '(1 2 three))
-; expect False
+; expect #f
 
 (equal? '(1 2 three) '(1 2 (three)))
-; expect False
+; expect #f
 
 ;;; Peter Norvig tests (http://norvig.com/lispy2.html)
 
@@ -493,13 +493,13 @@ one-through-four
 ; expect 1
 
 (or false true)
-; expect True
+; expect #t
 
 (or)
-; expect False
+; expect #f
 
 (and)
-; expect True
+; expect #t
 
 (or 1 2 3)
 ; expect 1
@@ -508,7 +508,7 @@ one-through-four
 ; expect 3
 
 (and False (/ 1 0))
-; expect False
+; expect #f
 
 (and True (/ 1 0))
 ; expect Error
