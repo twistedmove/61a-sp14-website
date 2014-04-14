@@ -285,15 +285,8 @@
 <h3>The Autograder</h3>
 
 <p>We've included an autograder that includes tests for each question.
-Just as in previous projects, you will have to unlock some of the tests
-first before you can use them to test your project. To unlock tests for
-a particular question, run the following command from your
-terminal:</p>
-
-<pre>python3 autograder.py -u q2</pre>
-
-<p>Once you have unlocked the tests, you can
-invoke autograder for a particular question as follows:</p>
+For this project, you do not have to unlock anyt of the tests.
+You can invoke autograder for a particular question as follows:</p>
 
 <pre>python3 autograder.py -q <i><b>&lt;question number&gt;</b></i></pre>
 
@@ -544,6 +537,11 @@ fresh copy, you can follow this link for
 
   </ul>
 
+  <p>To test your code, use the following command:</p>
+  <pre>
+  python3 autograder.py -q 1
+  </pre>
+
   <p><b>Problem 2</b> (2 pt). Complete the <code>read_tail</code> function in
   <code><a href="scheme_reader.py.html">scheme_reader.py</a></code> by adding support for dotted lists. A dotted
   list in Scheme is not necessarily a well-formed list, but instead has an
@@ -573,9 +571,13 @@ fresh copy, you can follow this link for
   encountering a <code>'.'</code>, read one additional expression and then
   check to see that a closing parenthesis follows.
 
-  <p>To verify that your solutions to Problem 1 and 2 work correctly, run the
-  doctests for <code><a href="scheme_reader.py.html">scheme_reader.py</a></code> and test your parser interactively
-  by running,
+  <p>To test your code, use the following command:</p>
+  <pre>
+  python3 autograder.py -q 2
+  </pre>
+
+  <p>You can also verify interactively that your solutions to Problem 1
+  and 2 work correctly by running</p>
 
   <pre>
     # python3 scheme_reader.py
@@ -689,10 +691,10 @@ Your implementation should:
   <ul>
     <li> Convert the Scheme list to a Python list of arguments.
 
-    <li> If the <code>procedure.use_env</code> is <code>True</code>, then
+    <li> If the <code>use_env</code> instance variable is <code>True</code>, then
     add the current environment <code>env</code> as the last argument.
 
-    <li> Call <code>procedure.fn</code> on those arguments (<i>hint</i>: use
+    <li> Call the <code>fn</code> instance variable on those arguments (<i>hint</i>: use
     <code>*</code> notation).
 
     <li> If calling the function results in a <code>TypeError</code> exception
@@ -700,7 +702,12 @@ Your implementation should:
 
   </ul>
 
-  <p>The doctest for <code>PrimitiveProcedure.apply</code>
+  <p>To test your code, run the following command:</p>
+  <pre>
+  python3 autograder.py -q 3
+  </pre>
+
+  <p>The tests for <code>PrimitiveProcedure.apply</code>
   should now pass. However,
   your Scheme interpreter will still not be able to apply primitive
   procedures, because your Scheme interpreter still doesn't know
@@ -728,6 +735,11 @@ Your implementation should:
     <li> Otherwise, raise a <code>SchemeError</code>. (provided)
   </ul>
 
+  <p>To test your code, run the following command:</p>
+  <pre>
+  python3 autograder.py -q 4
+  </pre>
+
   <p>After you complete this problem, you should be able to evaluate primitive
   procedure calls, giving you the functionality of the Calculator language and
   more.</p>
@@ -740,7 +752,7 @@ Your implementation should:
     scm&gt; (* 3 4 (- 5 2) 1)
     36
     scm&gt; (odd? 31)
-    True
+    #t
   </pre>
 
   <h3>Handling special forms</h3>
@@ -771,6 +783,11 @@ Your implementation should:
   <pre>
     scm&gt; (define tau (* 2 3.1415926))
     tau
+  </pre>
+
+  <p>To test your code, run the following command:</p>
+  <pre>
+  python3 autograder.py -q A5
   </pre>
 
   <p>You should now be able to give names to values and evaluate symbols to
@@ -807,6 +824,11 @@ Your implementation should:
     a
     scm&gt; (eval (cons 'car '('(1 2))))
     1
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B6
   </pre>
 
   <p> At this point in the project, your Scheme interpreter should be
@@ -850,6 +872,11 @@ Your implementation should:
     (+ 2 3)
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 7
+  </pre>
+
   <p><b>Problem 8</b> (2 pt). Implement the <code>do_lambda_form</code> method,
   which evaluates <code>lambda</code> expressions by returning 
   <code>LambdaProcedure</code> instances.
@@ -874,6 +901,11 @@ Your implementation should:
     (lambda (y) (begin (print y) (* y 2)))
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 8
+  </pre>
+
   <p><b>Problem A9</b> (1 pt). Currently, your Scheme interpreter is
   able to define user-defined procedures in the following manner:
 
@@ -894,6 +926,11 @@ Your implementation should:
   handles the shorthand procedure definition form above. Make sure that it can
   handle multi-expression bodies. <i>Hint</i>: construct a <code>lambda</code>
   expression and evaluate it with <code>do_lambda_form</code>.
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A9
+  </pre>
 
   <p>Once you have completed this problem, you should find that defined
   procedures evaluate to lambda procedures.
@@ -918,6 +955,11 @@ Your implementation should:
       a different number of formal parameters and arguments.
 
   </ul>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 10
+  </pre>
 
   <!--
   <p>Don't forget the cases where the formal parameter list contains a trailing "varargs"
@@ -964,6 +1006,11 @@ Your implementation should:
   <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code> returns whether a value is a Scheme symbol.)
   </p>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B11
+  </pre>
+
   <!--
   <p>
   In particular, make sure that it supports the following argument
@@ -999,6 +1046,11 @@ scm> (define (fn x 2) (+ x 2))
 
     <li> Return the value of calling <code>procedure</code>.
   </ul>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 12
+  </pre>
 
   <p>After you complete <code>LambdaProcedure.apply</code>, 
   user-defined functions (and
@@ -1041,7 +1093,7 @@ scm> (define (fn x 2) (+ x 2))
 
   <pre>
     scm&gt; (if (= 4 2) true false)
-    False
+    #f
     scm&gt; (if (= 4 4) (* 1 2) (+ 3 4))
     2
   </pre>
@@ -1054,6 +1106,11 @@ scm> (define (fn x 2) (+ x 2))
   <pre>
     scm&gt; (if (= 4 2) true)
     okay
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A13
   </pre>
 
   <p><b>Problem B14</b> (2 pt). Implement <code>do_and_form</code> and
@@ -1076,17 +1133,22 @@ scm> (define (fn x 2) (+ x 2))
 
   <pre>
     scm&gt; (and)
-    True
+    #t
     scm&gt; (or)
-    False
+    #f
     scm&gt; (and 4 5 6)
     6    ; all operands are true values
     scm&gt; (or 5 2 1)
     5    ; 5 is a true value
     scm&gt; (and #t #f 42 (/ 1 0))
-    False    ; short-circuiting behavior of and
+    #f   ; short-circuiting behavior of and
     scm&gt; (or 4 #t (/ 1 0))
     4    ; short-circuiting behavior of or
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B14
   </pre>
 
   <p><b>Problem A15</b> (1 pt). Implement <code>do_cond_form</code> so that it
@@ -1102,7 +1164,7 @@ scm> (define (fn x 2) (+ x 2))
     scm&gt; (cond ((= 4 3) 'wat)
               ((= 4 4))
               (else 'hm))
-    True
+    #t
     scm&gt; (cond ((= 4 4) 'here 42)
               (else 'wat 0))
     42
@@ -1135,6 +1197,11 @@ scm> (define (fn x 2) (+ x 2))
   <p>The value of a <code>cond</code> is undefined if there are no true
   predicates and no <code>else</code>. In such a case, <code>do_cond_form</code>
   should return <code>okay</code>.</p>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A15
+  </pre>
 
   <p><b>Problem A16</b> (2 pt). The <code>let</code> special form introduces local
   variables, giving them their initial values. For example,</p>
@@ -1178,13 +1245,17 @@ scm> (define (fn x 2) (+ x 2))
   <code>Frame</code>, add the necessary bindings, and evaluate the expressions
   of the <code>let</code> body in this new environment.</p>
 
-  <p><b>Problem B17</b> (2 pt). Implement <code>do_mu_form</code> to evaluate
-  the <code>mu</code> special form, a non-standard Scheme expression type. A
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A16
+  </pre>
+
+  <p><b>Problem B17</b> (2 pt). Implement  the <code>mu</code> special form, a non-standard Scheme expression type. A
   <code>mu</code> expression is similar to a <code>lambda</code> expression,
   but evaluates to a <code>MuProcedure</code> instance that is <em>dynamically
   scoped</em>. 
 
-  <p>Additionally, complete <code>MuProcedure.apply</code> to call
+  <p>To do this, complete <code>MuProcedure.apply</code> to call
   <code>MuProcedure</code> procedures using dynamic scoping.  Calling a
   <code>LambdaProcedure</code> uses lexical scoping: the parent of the new call
   frame is the environment in which the procedure was defined. Calling a
@@ -1201,6 +1272,11 @@ scm> (define (fn x 2) (+ x 2))
     g
     scm&gt; (g 3 7)
     13
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B17
   </pre>
 
   <p>Your Scheme interpreter implementation is now complete.  You should have
@@ -1226,6 +1302,11 @@ scm> (define (fn x 2) (+ x 2))
     (8 6 5 4 2 1)
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 18
+  </pre>
+
   <p><b>Problem 19</b> (2 pt). Implement the <code>list-partitions</code> procedure,
   which lists all of the ways to partition a positive integer <code>total</code> into at
   most <code>max-pieces</code> pieces that are all less than or equal to a positive
@@ -1243,6 +1324,11 @@ scm> (define (fn x 2) (+ x 2))
     2, 1, 1, 1 (four pieces)
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 19
+  </pre>
+
   <p><b>Problem 20</b> (2 pt). You have been given the definition to an abstract
   implementation of trees. Use it to implement <code>tree-sums</code>, which
   is a function that returns a list of all possible sums of nodes, when
@@ -1253,6 +1339,11 @@ scm> (define (fn x 2) (+ x 2))
   <div>
     <img alt="tree.png" src="tree.png" />
   </div>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 20
+  </pre>
 
 
   <p><b>Problem 21</b> (0 pt). Implement the <code>hax</code> procedure that
@@ -1308,6 +1399,11 @@ scm> (define (fn x 2) (+ x 2))
 
   <p>Once you finish, uncomment the line
   <code>proper_tail_recursion = True</code> in <code><a href="scheme.py.html">scheme.py</a></code>.
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 22
+  </pre>
 
   <p><b>Problem 23</b> (3 pt). The year 1960 saw the publication of the 
   <i>Revised Report on the Algorithmic Language Algol 60</i> as well as 
@@ -1392,6 +1488,11 @@ scm> (define (fn x 2) (+ x 2))
   also have to fill in <code>NuProcedure</code> so that when such functions
   are called, they &quot;thunkify&quot; all their parameters rather than
   simply evaluating them.
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 23
+  </pre>
 
   <p><b>Congratulations!</b> You have finished the final project for 61A! Assuming your
   tests are good and you've passed them all, consider yourself a proper computer
