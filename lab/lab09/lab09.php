@@ -1,38 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" /> 
+    <meta name="description" content ="CS61A: Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content ="CS61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
     <meta name="author" content ="Paul Hilfinger, Soumya Basu, Rohan Chitnis, Andrew Huang, Robert Huang, Michelle Hwang,
                                   Joy Jeng, Keegan Mann, Mark Miyashita, Allen Nguyen, Julia Oh, Steven Tang, Albert Wu, Chenyang Yuan, Marvin Zhang" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
 
-    <title>CS 61A Spring 2014: Lab 9</title> 
+    
+
+    <title>CS 61A Spring 2014: Lab 9</title>
 
     <?php
-    /* So all of the PHP in this file is to allow for this nice little trick to 
-     * help us avoid having two versions of the questions lying around in the 
-     * repository, which often leads to the two versions going out of sync which 
+    /* So all of the PHP in this file is to allow for this nice little trick to
+     * help us avoid having two versions of the questions lying around in the
+     * repository, which often leads to the two versions going out of sync which
      * leads to annoyance for students.
      *
-     * The idea's pretty simple for the PHP part, just simply have two dates: 
+     * The idea's pretty simple for the PHP part, just simply have two dates:
      *
      *    1. The current date
      *    2. The date the solutions should be released
      *
-     * Using these, we now wrap our solutions in a simple PHP if statement that 
-     * checks if the date is past the release date and only includes the code on 
-     * the page displayed (what the server gives back to the browser) if the 
+     * Using these, we now wrap our solutions in a simple PHP if statement that
+     * checks if the date is past the release date and only includes the code on
+     * the page displayed (what the server gives back to the browser) if the
      * solutions are supposed to be released.
      *
-     * We also use some PHP to create unique IDs for each of the show/hide 
-     * buttons and solution divs, which are then used in the PHP generated 
+     * We also use some PHP to create unique IDs for each of the show/hide
+     * buttons and solution divs, which are then used in the PHP generated
      * jQuery code that we use to create the nice toggling effect.
      *
-     * I apologize if the PHP/jQuery is really offensively bad, this is 
+     * I apologize if the PHP/jQuery is really offensively bad, this is
      * literally the most I've written of either for a single project so far.
      * Comments/suggestions are most welcome!
      *
@@ -43,7 +45,7 @@
     $CUR_DATE = new DateTime("now", $BERKELEY_TZ);
     $q_num = 0; // Used to make unique ids for all solutions and buttons
     ?>
-  </head> 
+  </head>
   <body style="font-family: Georgia,serif;">
     <h1 id="title-main">CS 61A Lab 9</h1>
 <h2 id="title-sub">Iterators, Generators, and Streams</h2>
@@ -652,6 +654,9 @@ infinite as well.</p>
   </div>
 <?php } ?>
 <p></p>
+<script>
+
+</script>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>

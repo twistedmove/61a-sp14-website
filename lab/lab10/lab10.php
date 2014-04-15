@@ -72,8 +72,7 @@ facts. It will inform us of what replacements for the variables will
 make the query true.</p>
 
 <p>The language we will use is called Logic. An
-<a href="online
-logic interpreter">http://inst.eecs.berkeley.edu/~cs61a/sp14/logic/logic.html</a>
+<a href="http://inst.eecs.berkeley.edu/~cs61a/sp14/logic/logic.html">online Logic interpreter</a>
 is provided for this lab, which you can use to evaluate logic
 expressions on this page.
 You can also use this online Logic interpreter for subsequent
@@ -178,17 +177,18 @@ logic&gt; (query (eats ?what zombie))
 separated by only one animal. For instance, if I added the following
 facts:</p>
 
-<pre><code>logic&gt; (fact (eats shark big-fish))
-logic&gt; (fact (eats big-fish small-fish))
-logic&gt; (fact (eats small-fish shrimp))
-</code></pre>
+<div id="a6">
+(fact (eats shark big-fish))
+(fact (eats big-fish small-fish))
+(fact (eats small-fish shrimp))
+</div>
 
 <p>I'd like the <code>food-chain</code> to output that shark is higher on the food
 chain than shrimp. Currently, the <code>food-chain</code> fact doesn't do this:</p>
 
-<pre><code>logic&gt; (query (food-chain shark shrimp))
-Failed
-</code></pre>
+<div id="a7">
+(query (food-chain shark shrimp))
+</div>
 
 <p>We will define the <code>food-chain-v2</code> fact that correctly handles
 arbitrary length hierarchies. We'll use the following logic:</p>
@@ -206,11 +206,11 @@ dominates <code>B</code>.</li>
 express different cases of a fact simply by entering in each case one
 at a time:</p>
 
-<pre><code>logic&gt; (fact (food-chain-v2 ?a ?b) (eats ?a ?b))
-logic&gt; (fact (food-chain-v2 ?a ?b) (eats ?a ?c) (food-chain-v2 ?c ?b))
-logic&gt; (query (food-chain-v2 shark shrimp))
-Success!
-</code></pre>
+<div id="a8">
+(fact (food-chain-v2 ?a ?b) (eats ?a ?b))
+(fact (food-chain-v2 ?a ?b) (eats ?a ?c) (food-chain-v2 ?c ?b))
+(query (food-chain-v2 shark shrimp))
+</div>
 
 <p>Take a few moments and read through how the above facts work, and how
 it implements the approach we outlined. In particular, make a few
@@ -260,18 +260,20 @@ result of sticking the CAR of <code>A</code> to the result of appending the CDR 
 case of the Scheme function definition? As a summary, here is the
 complete definition for append:</p>
 
-<pre><code>logic&gt; (fact (append () ?b ?b ))
-logic&gt; (fact (append (?a . ?r) ?y (?a . ?z)) (append ?r ?y ?z))
-</code></pre>
+<div id="a9">
+(fact (append () ?b ?b ))
+(fact (append (?a . ?r) ?y (?a . ?z)) (append ?r ?y ?z))
+</div>
 
 <p>If it helps you, here's an alternate solution that might be a little
 easier to read:</p>
 
-<pre><code>logic&gt; (fact (car (?car . ?cdr) ?car))
-logic&gt; (fact (cdr (?car . ?cdr) ?cdr))
-logic&gt; (fact (append () ?b ?b))
-logic&gt; (fact (append ?a ?b (?car-a . ?partial)) (car ?a ?car-a) (cdr ?a ?cdr-a) (append ?cdr-a ?b ?partial))
-</code></pre>
+<div id="a10">
+(fact (car (?car . ?cdr) ?car))
+(fact (cdr (?car . ?cdr) ?cdr))
+(fact (append () ?b ?b))
+(fact (append ?a ?b (?car-a . ?partial)) (car ?a ?car-a) (cdr ?a ?cdr-a) (append ?cdr-a ?b ?partial))
+</div>
 
 <p>Meditate on why this more-verbose solution is equivalent to the first
 definition for the append fact.</p>
@@ -289,6 +291,12 @@ logic&gt; (query (append ?what (so cool) (this is so cool)))
 logic&gt; (query (append ?what1 ?what2 (will this really work)))
 </code></pre>
 
+<div id="a11">
+(fact (append () ?b ?b ))
+(fact (append (?a . ?r) ?y (?a . ?z)) (append ?r ?y ?z))
+; Try out the queries here! Type ctrl-Enter once you're done typing
+</div>
+
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton1">Toggle Solution</button>
   <div id="toggleText1" style="display: none">
@@ -299,14 +307,16 @@ logic&gt; (query (append ?what1 ?what2 (will this really work)))
 <h3 class='question'>Question 3</h3>
 
 <p>Define a fact <code>(fact (last-element ?lst ?x))</code> that outputs <code>Success</code> if
-<code>?x</code> is the last element of the input list <code>?lst</code>. Check your facts on
-queries such as:</p>
+<code>?x</code> is the last element of the input list <code>?lst</code>.</p>
 
-<pre><code>logic&gt; (query (last-element (a b c) c))
-logic&gt; (query (last-element (3) ?x))
-logic&gt; (query (last-element (1 2 3) ?x))
-logic&gt; (query (last-element (2 ?x) (3)))
-</code></pre>
+<div id="a12">
+; YOUR CODE HERE; type ctrl-enter once you're done typing
+
+(query (last-element (a b c) c))
+(query (last-element (3) ?x))
+(query (last-element (1 2 3) ?x))
+(query (last-element (2 ?x) (3)))
+</div>
 
 <p>Does your solution work correctly on queries such as <code>(query
 (last-element ?x (3)))</code>? Why or why not?</p>
@@ -324,45 +334,51 @@ logic&gt; (query (last-element (2 ?x) (3)))
 
 <p>Write a fact "firsts" that, when input with a list of lists, gives us the first element of each list.</p>
 
-<h3 class='question'>Question 5</h3>
+<p>When you finish, the following queries should succeed:</p>
 
-<p>When you finish, the following queries should succeed:
-~ prompt ~
+<div id="a13">
+; YOUR CODE HERE
+
 (query (firsts ((1 2 3 4) (2 3 4 5) (1 2 3 4) (1 2 3 2)) ?x))
+; ?x should be (1 2 1 1)
+
 (query (firsts (2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
-~ prompt ~
-?x: (1 2 1 1)
-?y: (2 3 2 2)</p>
+; ?y should be (1 2 1 1)
+</div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton3">Toggle Solution</button>
   <div id="toggleText3" style="display: none">
-    <p>(fact (firsts () ()))
+    <pre><code>(fact (firsts () ()))
 (fact (firsts ((?x . ?_) . ?ls) (?x . ?xs))
-      (firsts ?ls ?xs))</p>
+      (firsts ?ls ?xs))
+</code></pre>
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 6</h3>
+<h3 class='question'>Question 5</h3>
 
 <p>Now, instead of getting us the firsts, let's gather the rests!</p>
 
-<h3 class='question'>Question 7</h3>
+<p>When you finish, the following queries should succeed:</p>
 
-<p>When you finish, the following queries should succeed:
-~ prompt ~
+<div id="a14">
+; YOUR CODE HERE
+
 (query (rests ((1 2 3 4) (2 3 4 5) (1 2 3 4) (1 2 3 2)) ?x))
+; ?x should be ((2 3 4) (3 4 5) (2 3 4) (2 3 2))
+
 (query (rests (2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
-~ prompt ~
-?x: ((2 3 4) (3 4 5) (2 3 4) (2 3 2))
-?y: ((3 4) (4 5) (3 4) (3 2))</p>
+; ?y should be ((3 4) (4 5) (3 4) (3 2))
+</div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton4">Toggle Solution</button>
   <div id="toggleText4" style="display: none">
-    <p>(fact (rests () ()))
+    <pre><code>(fact (rests () ()))
 (fact (rests ((?_ . ?r) . ?ls) (?r . ?xs))
-      (rests ?ls ?xs))</p>
+      (rests ?ls ?xs))
+</code></pre>
 
   </div>
 <?php } ?>
@@ -370,121 +386,113 @@ logic&gt; (query (last-element (2 ?x) (3)))
 
 <p>Assume we have the two facts insert and anagram as follows</p>
 
-<p><div id="sudoku"></p>
-
-<p>(fact (insert ?a ?r (?a . ?r)))
+<div id="sudoku">
+(fact (insert ?a ?r (?a . ?r)))
 (fact (insert ?a (?b . ?r) (?b . ?s)) (insert ?a ?r ?s))
 (fact (anagram () ()))
-(fact (anagram (?a . ?r) ?b) (insert ?a ?s ?b) (anagram ?r ?s))</p>
-
-<p>~ prompt ~</p>
+(fact (anagram (?a . ?r) ?b) (insert ?a ?s ?b) (anagram ?r ?s))
+</div>
 
 <p>With our anagram fact, we can write a few more facts to help us solve a 4 by 4 Sudoku puzzle!
 In our version of Sudoku, our objective is to fill a 4x4 grid such that each column and each row of our simple grid contain all of the digits from 1 to 4.</p>
 
-<h3 class='question'>Question 8</h3>
+<h3 class='question'>Question 6</h3>
 
 <p>Let's start by defining our grid using our fact dubbed boxes. Fill in the remainder of the fact.</p>
 
-<h3 class='question'>Question 9</h3>
-
-<p><div id="boxes">
+<div id="boxes">
 (fact (boxes ((?a ?b ?c ?d)
               (?e ?f ?g ?h)
               (?i ?j ?k ?l)
               (?m ?n ?o ?p)))
-      (anagram (?a ?b ?e ?f) (1 2 3 4))</p>
-
-<pre><code>                                  )
-</code></pre>
-
-<p>~ prompt ~</p>
+      (anagram (?a ?b ?e ?f) (1 2 3 4))
+      ; YOUR CODE HERE
+                                      )
+</div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton5">Toggle Solution</button>
   <div id="toggleText5" style="display: none">
-    <p>(fact (boxes ((?a ?b ?c ?d)
+    <pre><code>(fact (boxes ((?a ?b ?c ?d)
               (?e ?f ?g ?h)
               (?i ?j ?k ?l)
               (?m ?n ?o ?p)))
       (anagram (?a ?b ?e ?f) (1 2 3 4))
       (anagram (?c ?d ?g ?h) (1 2 3 4))
       (anagram (?i ?j ?m ?n) (1 2 3 4))
-      (anagram (?k ?l ?o ?p) (1 2 3 4)))</p>
+      (anagram (?k ?l ?o ?p) (1 2 3 4)))
+</code></pre>
 
   </div>
 <?php } ?>
-<h3 class='question'>Question 10</h3>
+<h3 class='question'>Question 7</h3>
 
 <p>Next, let's define a fact of specifying the rules for each row in our grid.
 The input to rows will be the entire 4x4 grid. Fill in rest of the facts in the prompt below:</p>
 
-<h3 class='question'>Question 11</h3>
-
-<p><div id="rows">
+<div id="rows">
 (fact (rows ()))
-~ prompt ~</p>
+; YOUR CODE HERE
+</div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton6">Toggle Solution</button>
   <div id="toggleText6" style="display: none">
-    <p>(fact (rows ()))
+    <pre><code>(fact (rows ()))
 (fact (rows (?x . ?xs))
       (anagram ?x (1 2 3 4))
-      (rows ?xs))</p>
+      (rows ?xs))
+</code></pre>
 
   </div>
 <?php } ?>
-<p>When you finish, the following queries should return the correct values:
+<p>When you finish, the following queries should return the correct values:</p>
+
 <div id="rows-doc">
 (query (rows ((1 ?b  4 ?d)
               (?e  3 2  1) 
               (?i  4 3  2) 
               ( 2 4 3 ?p))))
-~ prompt ~ </p>
+</div> 
 
-<h3 class='question'>Question 12</h3>
+<h3 class='question'>Question 8</h3>
 
 <p>Next, let's define the fact specifying the rules for each column in our grid.
 Again, remember the the entire grid will be the input to our column query.</p>
 
-<h3 class='question'>Question 13</h3>
-
-<p><div id="cols">
+<div id="cols">
 (fact (cols (() () () ())))
-~ prompt ~</p>
+; YOUR CODE HERE
+</div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton7">Toggle Solution</button>
   <div id="toggleText7" style="display: none">
-    <p>(fact (cols (() () () ())))
+    <pre><code>(fact (cols (() () () ())))
 (fact (cols ((?a . ?as) (?b . ?bs) (?c . ?cs) (?d . ?ds)))
       (anagram (?a ?b ?c ?d) (1 2 3 4))
-      (cols (?as ?bs ?cs ?ds)))</p>
+      (cols (?as ?bs ?cs ?ds)))
+</code></pre>
 
   </div>
 <?php } ?>
-<p>When you finish, the following queries should return the correct values:
+<p>When you finish, the following queries should return the correct values:</p>
+
 <div id="cols-doc">
 (query (cols ((1 ?b  4 ?d)
               (?e  3 2  1) 
               (?i  4 3  2) 
               ( 2 4 3 ?p))))
-~ prompt ~</p>
+</div>
 
-<h3 class='question'>Question 14</h3>
+<h3 class='question'>Question 9</h3>
 
 <p>Now, let's put all of this together to solve our any 4x4 Sudoku grid. Fill in the fact below to do so.</p>
 
-<h3 class='question'>Question 15</h3>
-
 <p><div id="solve">
-(fact (solve ?grid)</p>
-
-<pre><code>              )
-</code></pre>
-
-<p>~ prompt ~ </p>
+(fact (solve ?grid)
+; YOUR CODE HERE
+~ prompt ~ </p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton8">Toggle Solution</button>
@@ -514,6 +522,15 @@ prompt("a2", []);
 prompt("a3", ["a2"]);
 prompt("a4", ["a2"]);
 prompt("a5", ["a2"]);
+prompt("a6", []);
+prompt("a7", ["a6"]);
+prompt("a8", ["a6"]);
+prompt("a9", []);
+prompt("a10", []);
+prompt("a11", []);
+prompt("a12", ["a9"]);
+prompt("a13", ["a9"]);
+prompt("a14", ["a9"]);
 prompt("sudoku", []);
 prompt("boxes", ["sudoku"]);
 prompt("rows", ["boxes"]);
