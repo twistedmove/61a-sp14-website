@@ -54,8 +54,8 @@ def scheme_eval(expr, env):
                 if proper_tail_recursion:
                     "*** YOUR CODE HERE ***"
                 else:
-                    expr, env = procedure.apply(args, env)
-                    return scheme_apply(procedure, args, env)
+                    # UPDATED 4/14/2014 @ 19:08
+                    expr, env = scheme_apply(procedure, args, env), None
 
 
     return expr
@@ -69,12 +69,12 @@ proper_tail_recursion = False
 def scheme_apply(procedure, args, env):
     """Apply PROCEDURE (type Procedure) to argument values ARGS
     in environment ENV.  Returns the resulting Scheme value."""
-    expr_or_val, env = procedure.apply(args, env)
-    if env is None:
-        return expr_or_val
-    else:
-        return scheme_eval(expr_or_val, env)
-
+    # UPDATED 4/14/2014 @ 19:08
+    # Since .apply is allowed to do a partial evaluation, we finish up
+    # with a call to scheme_eval to complete the evaluation.  scheme_eval
+    # will simply return expr if its env argument is None.
+    expr, env = procedure.apply(args, env)
+    return scheme_eval(expr, env)
 
 ################
 # Environments #

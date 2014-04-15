@@ -64,8 +64,8 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
                 </span><span style="color: blue; font-weight: bold">if </span>proper_tail_recursion<span style="font-weight: bold">:
                     </span><span style="color: red">"*** YOUR CODE HERE ***"
                 </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-                    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>procedure<span style="font-weight: bold">.</span>apply<span style="font-weight: bold">(</span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-                    </span><span style="color: blue; font-weight: bold">return </span>scheme_apply<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+                    </span><span style="color: green; font-style: italic"># UPDATED 4/14/2014 @ 19:08
+                    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>scheme_apply<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">), </span><span style="color: blue">None
 
 
     </span><span style="color: blue; font-weight: bold">return </span>expr
@@ -79,12 +79,12 @@ proper_tail_recursion <span style="font-weight: bold">= </span><span style="colo
 </span><span style="color: blue; font-weight: bold">def </span>scheme_apply<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Apply PROCEDURE (type Procedure) to argument values ARGS
     in environment ENV.  Returns the resulting Scheme value."""
-    </span>expr_or_val<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>procedure<span style="font-weight: bold">.</span>apply<span style="font-weight: bold">(</span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">if </span>env <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>expr_or_val
-    <span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>scheme_eval<span style="font-weight: bold">(</span>expr_or_val<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-
+    </span><span style="color: green; font-style: italic"># UPDATED 4/14/2014 @ 19:08
+    # Since .apply is allowed to do a partial evaluation, we finish up
+    # with a call to scheme_eval to complete the evaluation.  scheme_eval
+    # will simply return expr if its env argument is None.
+    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>procedure<span style="font-weight: bold">.</span>apply<span style="font-weight: bold">(</span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
 
 </span><span style="color: green; font-style: italic">################
 # Environments #
