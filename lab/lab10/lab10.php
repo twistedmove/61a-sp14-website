@@ -343,7 +343,7 @@ logic&gt; (query (append ?what1 ?what2 (will this really work)))
 (query (firsts ((1 2 3 4) (2 3 4 5) (1 2 3 4) (1 2 3 2)) ?x))
 ; ?x should be (1 2 1 1)
 
-(query (firsts (2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
+(query (firsts ((2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
 ; ?y should be (1 2 1 1)
 </div>
 
@@ -369,7 +369,7 @@ logic&gt; (query (append ?what1 ?what2 (will this really work)))
 (query (rests ((1 2 3 4) (2 3 4 5) (1 2 3 4) (1 2 3 2)) ?x))
 ; ?x should be ((2 3 4) (3 4 5) (2 3 4) (2 3 2))
 
-(query (rests (2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
+(query (rests ((2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
 ; ?y should be ((3 4) (4 5) (3 4) (3 2))
 </div>
 
