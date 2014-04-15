@@ -504,19 +504,31 @@ Again, remember the the entire grid will be the input to our column query.</p>
 
   </div>
 <?php } ?>
-<p>When you finish, check your solution with the following queries:
+<p>When you finish, check your solution with the following queries:</p>
+
 <div id="solve-doc">
 (query (solve ((?a ?b ?c ?d)
                (?e ?f ?g ?h)
                (?i ?j ?k ?l)
-               (?m ?n ?o ?p))))</p>
+               (?m ?n ?o ?p))))
 
-<p>(query (solve (( 1 ?b  4 ?d)
+(query (solve (( 1 ?b  4 ?d)
                (?e  3 ?g  1)
                (?i  4 ?k  2)
                ( 2 ?n  3 ?p))))
-~ prompt ~</p>
-<script>
+</div>
+
+  </body>
+  <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script>
+    <?php for ($i = 0; $i < 9; $i++) { ?>
+      $("#toggleButton<?php echo $i; ?>").click(function () {
+        $("#toggleText<?php echo $i; ?>").toggle();
+    });
+    <?php } ?>
+  </script>
+  <script>
 prompt("a1", []);
 prompt("a2", []);
 prompt("a3", ["a2"]);
@@ -541,15 +553,5 @@ prompt("solve", ["cols"]);
 prompt("solve-doc", ["solve"]);
 </script>
 
-  </body>
-  <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script>
-    <?php for ($i = 0; $i < 9; $i++) { ?>
-      $("#toggleButton<?php echo $i; ?>").click(function () {
-        $("#toggleText<?php echo $i; ?>").toggle();
-    });
-    <?php } ?>
-  </script>
 <?php } ?>
 </html>
