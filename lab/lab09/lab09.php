@@ -137,10 +137,13 @@ work or not work?</p>
         return self
 </code></pre>
 
-<p>~ explanation ~
-No problem, this is a beautiful iterator.
-~ explanation ~</p>
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton0">Toggle Solution</button>
+  <div id="toggleText0" style="display: none">
+    <p>No problem, this is a beautiful iterator.</p>
 
+  </div>
+<?php } ?>
 <pre><code>class IteratorB(object):
     def __init__(self):
         self.start = 5
@@ -149,12 +152,15 @@ No problem, this is a beautiful iterator.
         return self
 </code></pre>
 
-<p>~ explanation ~
-Oh no!  Where is <code>__next__</code>?  This fails to implement the iterator
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton1">Toggle Solution</button>
+  <div id="toggleText1" style="display: none">
+    <p>Oh no!  Where is <code>__next__</code>?  This fails to implement the iterator
 interface because calling <code>__iter__</code> doesn't return something that has
-a <code>__next__</code> method.
-~ explanation ~</p>
+a <code>__next__</code> method.</p>
 
+  </div>
+<?php } ?>
 <pre><code>class IteratorC(object):
     def __init__(self):
         self.start = 5
@@ -166,14 +172,17 @@ a <code>__next__</code> method.
         return self.start
 </code></pre>
 
-<p>~ explanation ~
-This also fails to implement the iterator interface.  Without the
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton2">Toggle Solution</button>
+  <div id="toggleText2" style="display: none">
+    <p>This also fails to implement the iterator interface.  Without the
 <code>__iter__</code> method, the <code>for</code> loop will error.  The <code>for</code> loop needs to
 call <code>__iter__</code> first because some objects might not implement the
 <code>__next__</code> method themselves, but calling <code>__iter__</code> will return an
-object that does.
-~ explanation ~</p>
+object that does.</p>
 
+  </div>
+<?php } ?>
 <pre><code>class IteratorD(object):
     def __init__(self):
         self.start = 1
@@ -188,12 +197,15 @@ object that does.
 
 <p>Watch out on this one.  The amount of output might scare you.</p>
 
-<p>~ explanation ~
-This is an infinite sequence!  Sequences like these are the reason
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton3">Toggle Solution</button>
+  <div id="toggleText3" style="display: none">
+    <p>This is an infinite sequence!  Sequences like these are the reason
 iterators are useful.  Because iterators delay computation, we can use
-a finite amount of memory to represent an infinitely long sequence.
-~ explanation ~</p>
+a finite amount of memory to represent an infinitely long sequence.</p>
 
+  </div>
+<?php } ?>
 <h3 class='question'>Question 2</h3>
 
 <p>For one of the above iterators that works, try this:</p>
@@ -215,15 +227,25 @@ it is run through a <code>for</code> loop.</p>
 <pre><code>&gt;&gt;&gt; i = IteratorRestart(2, 7)
 &gt;&gt;&gt; for item in i:
 ...     print(item)
-# should print 2 to 7
+2
+3
+4
+5
+6
+7
 &gt;&gt;&gt; for item in i:
 ...     print(item)
-# should still print 2 to 7
+2
+3
+4
+5
+6
+7
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton0">Toggle Solution</button>
-  <div id="toggleText0" style="display: none">
+  <button id="toggleButton4">Toggle Solution</button>
+  <div id="toggleText4" style="display: none">
     <pre><code>class IteratorRestart(object):
     def __init__(self, start, end):
         self.start = start
@@ -340,8 +362,8 @@ within the <code>__iter__</code> method of a class.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton1">Toggle Solution</button>
-  <div id="toggleText1" style="display: none">
+  <button id="toggleButton5">Toggle Solution</button>
+  <div id="toggleText5" style="display: none">
     <pre><code>    while n &gt;= 0:
         yield n
         n = n - 1
@@ -353,8 +375,8 @@ within the <code>__iter__</code> method of a class.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton2">Toggle Solution</button>
-  <div id="toggleText2" style="display: none">
+  <button id="toggleButton6">Toggle Solution</button>
+  <div id="toggleText6" style="display: none">
     <pre><code>    def __init__(self, cur):
         self.cur = cur
 
@@ -386,8 +408,8 @@ within the <code>__iter__</code> method of a class.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton3">Toggle Solution</button>
-  <div id="toggleText3" style="display: none">
+  <button id="toggleButton7">Toggle Solution</button>
+  <div id="toggleText7" style="display: none">
     <pre><code>    i = n
     while i &gt; 1:
         yield i
@@ -484,8 +506,8 @@ infinite.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton4">Toggle Solution</button>
-  <div id="toggleText4" style="display: none">
+  <button id="toggleButton8">Toggle Solution</button>
+  <div id="toggleText8" style="display: none">
     <pre><code>    def compute_rest():
         return add_streams(s1.rest, s2.rest)
     return Stream(s1.first + s2.first, compute_rest)
@@ -506,8 +528,8 @@ then think about how to start calling that procedure.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton5">Toggle Solution</button>
-  <div id="toggleText5" style="display: none">
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
     <pre><code>def make_fib_stream():
     return fib_stream_generator(0, 1)
 
@@ -559,7 +581,7 @@ to do incredible things!</p>
 <h3 class='question'>Question 7</h3>
 
 <p>In a similar model to <code>filter_stream</code>, let's recreate the
-procedure <code>map_stream</code> from lecture, that given a stream <code>stream</code> and
+procedure <code>stream_map</code> from lecture, that given a stream <code>stream</code> and
 a one-argument function <code>func</code>, returns a new stream that is the result of
 applying <code>func</code> on every element in <code>stream</code>.</p>
 
@@ -567,8 +589,8 @@ applying <code>func</code> on every element in <code>stream</code>.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton6">Toggle Solution</button>
-  <div id="toggleText6" style="display: none">
+  <button id="toggleButton10">Toggle Solution</button>
+  <div id="toggleText10" style="display: none">
     <pre><code>    def compute_rest():
         return stream_map(func, stream.rest)
     if stream.empty:
@@ -593,8 +615,8 @@ first few values of the stream to see the pattern.</p>
 </code></pre>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton7">Toggle Solution</button>
-  <div id="toggleText7" style="display: none">
+  <button id="toggleButton11">Toggle Solution</button>
+  <div id="toggleText11" style="display: none">
     <p>Powers of 3: 1, 3, 9, 27, 81, ...</p>
 
   </div>
@@ -619,8 +641,8 @@ go on. If both of the inputs are infinite, the output stream should be
 infinite as well.</p>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <button id="toggleButton8">Toggle Solution</button>
-  <div id="toggleText8" style="display: none">
+  <button id="toggleButton12">Toggle Solution</button>
+  <div id="toggleText12" style="display: none">
     <pre><code>def interleave(stream1, stream2):
     if stream1.empty:
         return Stream.the_empty_stream
@@ -635,7 +657,7 @@ infinite as well.</p>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-    <?php for ($i = 0; $i < 9; $i++) { ?>
+    <?php for ($i = 0; $i < 13; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
         $("#toggleText<?php echo $i; ?>").toggle();
     });
