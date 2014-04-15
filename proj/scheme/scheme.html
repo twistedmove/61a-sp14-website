@@ -1125,11 +1125,8 @@ scm> (define (fn x 2) (+ x 2))
     sub-expression from <code>do_and_form</code>.</p>
 
   <p>For <code>or</code>, evaluate each sub-expression from left to right. If
-    any evaluates to a true value, then <code>quote</code> that value and return
-    it. These return values must be quoted because they are evaluated in
-    <code>scheme_eval</code>.  If all but the last sub-expression evaluate to
-    false, return the last sub-expression from <code>do_or_form</code> without
-    quoting it.</p>
+    any evaluates to a true value, then return
+    it. Otherwise, return the last sub-expression from <code>do_or_form</code>.</p>
 
   <pre>
     scm&gt; (and)
