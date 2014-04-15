@@ -521,13 +521,14 @@ Again, remember the the entire grid will be the input to our column query.</p>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <script>
-    <?php for ($i = 0; $i < 9; $i++) { ?>
-      $("#toggleButton<?php echo $i; ?>").click(function () {
-        $("#toggleText<?php echo $i; ?>").toggle();
-    });
-    <?php } ?>
-  </script>
+    <script>
+      <?php for ($i = 0; $i < 9; $i++) { ?>
+        $("#toggleButton<?php echo $i; ?>").click(function () {
+          $("#toggleText<?php echo $i; ?>").toggle();
+      });
+      <?php } ?>
+    </script>
+  <?php } ?>
   <script>
     $(function() {
       prompt("a1", []);
@@ -554,5 +555,4 @@ prompt("solve", ["cols"]);
 prompt("solve-doc", ["solve"]);
     });
   </script>
-<?php } ?>
 </html>
