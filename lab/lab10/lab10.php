@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
 
     
     <link rel="stylesheet" type="text/css"
@@ -520,7 +521,6 @@ Again, remember the the entire grid will be the input to our column query.</p>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
     <?php for ($i = 0; $i < 9; $i++) { ?>
       $("#toggleButton<?php echo $i; ?>").click(function () {
@@ -529,7 +529,8 @@ Again, remember the the entire grid will be the input to our column query.</p>
     <?php } ?>
   </script>
   <script>
-prompt("a1", []);
+    $(function() {
+      prompt("a1", []);
 prompt("a2", []);
 prompt("a3", ["a2"]);
 prompt("a4", ["a2"]);
@@ -551,7 +552,7 @@ prompt("cols", ["rows"]);
 prompt("cols-doc", ["cols"]);
 prompt("solve", ["cols"]);
 prompt("solve-doc", ["solve"]);
-</script>
-
+    });
+  </script>
 <?php } ?>
 </html>
