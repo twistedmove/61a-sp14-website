@@ -883,7 +883,7 @@ def run_all_tests():
     new = check_for_updates(all_tests)
     if new:
         with open('tests.pkl', 'wb') as f:
-            pickle.dump(all_tests, f, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(all_tests, f, pickle.DEFAULT_PROTOCOL)
         exit(0)
     print()
 
@@ -891,7 +891,7 @@ def run_all_tests():
         unlock(args.unlock, all_tests)
 
         with open('tests.pkl', 'wb') as f:
-            pickle.dump(all_tests, f, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(all_tests, f, pickle.DEFAULT_PROTOCOL)
     else:
         if args.question:
             tests = get_test(all_tests['tests'], args.question)
