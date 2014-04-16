@@ -1,7 +1,7 @@
 <html>
 <head>
 <link href="css/assignments.css" rel="stylesheet" type="text/css">
-<title>Scheme</title>
+<title>Published-Student/Scheme</title>
 </head>
 
 <body>
@@ -106,12 +106,6 @@
     </tr>
 
     <tr>
-      <td><code><a href="scheme_grader.py.html">scheme_grader.py</a></code></td>
-
-      <td>A suite of tests for the project</td>
-    </tr>
-
-    <tr>
       <td><code><a href="ucb.py.html">ucb.py</a></code></td>
 
       <td>Utility functions for 61A</td>
@@ -120,7 +114,7 @@
     <tr>
       <td><code><a href="autograder.py.html">autograder.py</a></code></td>
 
-      <td>Utility functions for grading</td>
+      <td>Utility functions for grading.</td>
     </tr>
 
   </table>
@@ -156,12 +150,32 @@
   <p>There are 27 possible correctness points and 3 composition points. The
   composition score in this project will evaluate the clarity of your code
   <i>and</i> your ability to write tests that verify the behavior of your
-  interpreter.  </p>
+  interpreter.  Finally, you can receive extra credit for various
+  enhancements to your project.</p>
 
   <p>Submit the project using <code>submit proj4</code>. The only files you are
   required to submit are <code><a href="scheme.py.html">scheme.py</a></code>, <code><a href="scheme_reader.py.html">scheme_reader.py</a></code>,
   <code><a href="questions.scm">questions.scm</a></code>,
   and <code><a href="tests.scm">tests.scm</a></code>.</p>
+  If you add extensions, you may need to modify and turn in some of the other
+  files as well.
+
+  <h3>Initial Advice</h3>
+
+  <p>Most of the work in the Python part of this project will be in reading 
+  and understanding the code.  Don't allow the portions that don't say
+  &quot;YOUR CODE HERE&quot; to remain a mystery to you: you <em>will</em>
+  have to understand much of it.  As usual, ask us and your fellow students
+  for help understanding anything.  A large part of what you get from this
+  project will come from actually figuring out what's already there!
+
+  <p>In contrast, the amount of Python code you have to write is 
+  not large.  Our solution, including the optional extra credit, 
+  and a few pieces of the Extra for Experts
+  added 126 lines to <code><a href="scheme.py.html">scheme.py</a></code> and <code><a href="scheme_reader.py.html">scheme_reader.py</a></code>.
+  Don't let that mislead into thinking you'll be able to toss 
+  this off in an hour!  Figuring out <em>which</em> lines to add will take
+  a great deal more time.  
 
 
   <h3>The Scheme Language</h3>
@@ -187,18 +201,20 @@
   single number. The second (a computation of 5 factorial) will not work just
   yet.</p>
 
-  <p><b>Load.</b> Our <code>load</code> procedure differs from standard Scheme
-  in that we use a symbol for the file name. For example, to load
-  <code><a href="tests.scm">tests.scm</a></code>, evaluate the following call
-  expression.</p>
+  <p><b>Load.</b> The <code>load</code> procedure reads a file of 
+  Scheme code, as if typed into the terminal.  For example, to load
+  <code><a href="tests.scm">tests.scm</a></code>, evaluate either of
+  the following call expression.</p>
 
   <pre>
     scm&gt; (load 'tests)
+    ;; or
+    scm&gt; (load "tests")
   </pre>
 
   <p><b>Symbols.</b> Unlike some implementations of Scheme, in this project
   numbers and boolean values cannot be used as symbols.  Also, symbols are
-  always lowercased.
+  always lower-cased.
 
   <pre>
     scm&gt; (define 2 3)
@@ -226,7 +242,7 @@
   <h3>Development</h3>
 
   <p>The <code><a href="tests.scm">tests.scm</a></code> file contains a long
-    list of example Scheme expressions and their expected values. </p>
+    list of sample Scheme expressions and their expected values. </p>
 
   <pre>
     (+ 1 2)
@@ -250,8 +266,8 @@
   <p>Only a small subset of tests are designated to run by default because
   <code><a href="tests.scm">tests.scm</a></code> contains an <code>(exit)</code>
   call near the beginning, which halts testing.  As you complete more of the
-  project, you should move or remove this call. <i>Note that your interpreter
-  doesn't know how to exit until Problems 3 and 4 are completed; all tests will
+  project, you should move or remove this call. <i>Your interpreter
+  doesn't know how to exit until you complete Problems 3 and 4; all tests will
   run until then.</i>
 
   <p><b>Important</b>: As you proceed in the project, add new tests to the top
@@ -266,12 +282,29 @@
     python3 -m doctest scheme.py scheme_reader.py
   </pre>
 
-  <p>You can also run the autograder tests.
+<h3>The Autograder</h3>
 
-  <pre>
-    python3 scheme_grader.py
-    python3 scheme_grader.py -q 1
-  </pre>
+<p>We've included an autograder that includes tests for each question.
+For this project, you do not have to unlock anyt of the tests.
+You can invoke autograder for a particular question as follows:</p>
+
+<pre>python3 autograder.py -q <i><b>&lt;question number&gt;</b></i></pre>
+
+<p>To help with debugging, you can also start an interactive prompt if
+an error occurs by adding the <code>-t</code> flag at the end:</p>
+
+<pre>python3 autograder.py -q <i><b>&lt;question number&gt;</b></i> -i</pre>
+
+<p>You can also invoke the autograder for all problems at once using:</p>
+
+<pre>python3 autograder.py</pre>
+
+<p>One last note: you might have noticed a file called
+<code>tests.pkl</code> that
+came with the project. This file is used to store autograder
+tests, so make sure <b>not to modify it</b>. If you need to get a
+fresh copy, you can follow this link for
+<a href='tests.pkl'>tests.pkl</a>.
 
 
   <p><b>Debugging.</b> Try using the <code>trace</code> decorator from the
@@ -317,12 +350,160 @@
     True
   </pre>
 
-  To exit the Scheme interpreter, issue either <code>Ctrl-c</code> or
-  <code>Ctrl-d</code> or evaluate the <code>exit</code> procedure:
+  If your interpreter goes into an infinite loop, you should be able to stop it
+  with <code>Ctrl-c</code> (or <code>Ctrl-c Ctrl-c</code> in an 
+  Emacs shell buffer).
+  To exit the Scheme interpreter, issue <code>Ctrl-d</code> 
+  (<code>Ctrl-c Ctrl-d</code> in Emacs) 
+  or (after finishing problems 3 and 4) evaluate the <code>exit</code> procedure:
 
   <pre>
     scm> (exit)
   </pre>
+
+  <h3>Scheme Values</h3>
+
+  <p>The interpreter represents Scheme values using subtypes of the class
+  <code>SchemeValue</code>, which is defined in
+  <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code>.  You will find definitions of
+  all the methods used in these values in <code>SchemeValue</code>, where
+  they are given default definitions.  Many of the these definitions simply
+  cause an error, since many methods work only on particular types.
+  For example, the <code>length</code> method (for determining the length
+  of a list) is defined only on <code>Pairs</code> and <code>nil</code>, so
+  its default definition is to raise a <code>SchemeError</code>.  That
+  definition, in turn, is inherited by default by all the other subtypes of
+  <code>SchemeValue</code>, but overridden in <code>Pair</code> 
+  and <code>nil</code>.
+
+  <p>It is characteristic of this object-oriented approach that it avoids
+  the use of <b>if</b> statements in most cases.  Instead of writing
+  something like 
+
+  <pre>
+    def apply(proc, args, env):
+	if type(proc) is PrimitiveProcedure:
+	    # Code to apply primitive function
+	elif type(proc) is LambdaProcedure:
+	    # Code to apply lambda function
+	elif ...
+	    ...
+	else:
+	    raise SchemeError("attempt to call something other than a function")
+  </pre>
+
+  the programmer instead writes
+
+  <pre>
+    def apply(self, args, env):
+        # Code to apply a primitive method
+  </pre>
+
+  in the class <code>PrimitiveProcedure</code> and 
+
+  <pre>
+    def apply(self, args, env):
+        # Code to apply a lambda function
+  </pre>
+
+  in the class <code>LambdaProcedure</code>, and so forth, with a default
+  definition in <code>SchemeValue</code> that contains the final <b>raise</b>
+  statement.  
+
+  <code>SchemeValue</code> and its subclasses are defined in
+  <code><a href="scheme_primitive.py.html">scheme_primitive.py</a></code> and <code><a href="scheme.py.html">scheme.py</a></code>. Here are 
+  these types and examples of expressions you can write in your Python 
+  code to produce them:
+
+  <table border="1" align="center">
+  <tr>
+  <th> Scheme Data Type</th>
+  <th> Our Internal Representation Classes </th>
+  <th> Python Code </th>
+  </tr>
+  <tr>
+     <td align="center" colspan="3"><i>Types defined in <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code></i></td>
+  </tr>
+  <tr>
+    <td> Numbers (0, -3.2) </td>
+    <td> <code>SchemeInt</code> and <code>SchemeFloat</code>.
+    </td>
+    <td> <code>scnum(0), scnum(3.2)</code> </td>
+  </tr>
+  <tr>
+    <td> Symbols (<code>merge, define</code>) </td>
+    <td> <code>SchemeSymbol</code>  </td>
+    <td> <code>intern('merge'), intern('define')</code> </td>
+  </tr>
+  <tr>
+    <td> Strings (<code>"foo"</code>) </td>
+    <td> <code>SchemeStr</code> </td>
+    <td> <code>scstr('foo')</code> </td>
+  </tr>
+  <tr>
+     <td> Booleans (<code>#t</code>, <code>#f</code>)</td>
+     <td> <code>scheme_true</code> and <code>scheme_false</code> </td>
+     <td> <code> scheme_true, scheme_false</td>
+  </tr>
+  <tr>
+     <td> Pairs (<code>(a . b)</code></td>
+     <td> <code>Pair</code></td>
+     <td> <code>Pair(intern('a'), intern('b'))</code> </td>
+  </tr>
+  <tr>
+     <td> <code>nil</code>, <code>()</code> </td>
+     <td> <code>nil</code> </td>
+     <td> <code>nil</code> </td>
+  </tr>
+  <tr>
+     <td> Lists: (a b)</td>
+     <td> <code>Pair</code> and <code>nil</code> </td>
+     <td> <code>Pair(intern('a'), Pair(intern('b'), nil))</code> </td>
+  <tr>
+     <td> <code>okay</code> </td>
+     <td> <code>okay</code> </td>
+     <td> <code>okay</code> </td>
+  </tr>
+  <tr> <td align="center" colspan="3"><i>Types defined in <code><a href="scheme.py.html">scheme.py</a></code></i></td>
+  <tr>
+     <td>Functions </td>
+     <td><code>PrimitiveProcedure</code>, <code>LambdaProcedure</code>,
+         <code>MuProcedure</code> </td>
+     <td><code>PrimitiveProcedure(...)</code>, etc.
+  </tr>
+  </table>
+
+  <p><b>Notes</b>
+
+  <p>The <code>intern</code> function returns a symbol, given its name (as
+  a Python string or a Scheme symbol).  It
+  always returns the same symbol for equal strings, so that all instances of
+  the same symbol return true when compared using the Python <b>is</b>
+  operator (or the Scheme <code>eq?</code> function).  
+
+  <p>The <code>okay</code> class represents the undefined value returned by,
+  for example, the Scheme function <code>load</code>.  It's sole interesting
+  property is that it prints as "okay".
+
+  <p>Classes whose names are uncapitailized (<code>nil</code>, 
+  <code>scheme_true</code>, etc.) are immediately replaced by instances of
+  those types.  For example:
+
+  <pre>
+  class nil(SchemeValue):
+      ...
+
+  nil = nil()
+  </pre>
+
+  so that at from this point on, <code>nil</code> is the sole object of
+  (what was) the class <code>nil</code>, which we no longer need to be able
+  to name, since we'll never create another instance of it.  
+
+  As a convenience, the <code>Pair</code> constructor will also accept
+  Python numbers, converting them into <code>SchemeInts</code> and
+  <code>SchemeFloats</code>, and Python strings, converting them into
+  <code>SchemeSymbols</code> with <code>intern</code>.
 
   <h3>The Reader</h3>
 
@@ -330,38 +511,10 @@
   parses a <code>Buffer</code> (<code><a href="buffer.py.html">buffer.py</a></code>) instance that returns
   valid Scheme tokens on invocations of <code>current</code> and
   <code>pop</code> methods. This function returns the next full Scheme
-  expression in the <code>src</code> buffer, using this representation:
-
-  <table border="1" align="center">
-  <tr>
-  <th> Scheme Data Type</th>
-  <th> Our Internal Representation </th>
-  </tr>
-  <tr>
-    <td> Numbers </td>
-    <td> Python's built-in <code>int</code> and <code>float</code> data types.
-    </td>
-  </tr>
-  <tr>
-    <td> Symbols </td>
-    <td> Python's built-in <code>string</code> data type. </td>
-  </tr>
-  <tr>
-     <td> Booleans (<code>#t</code>, <code>#f</code>)</td>
-     <td> Python's built-in <code>True</code>, <code>False</code>
-       values. </td>
-  </tr>
-  <tr>
-     <td> Pairs </td>
-     <td> The <code>Pair</code> class, defined in
-       <code><a href="scheme_reader.py.html">scheme_reader.py</a></code>. </td>
-  </tr>
-  <tr>
-     <td> nil </td>
-     <td> The <code>nil</code> object, defined in
-       <code><a href="scheme_reader.py.html">scheme_reader.py</a></code>. </td>
-  </tr>
-  </table>
+  expression in the <code>src</code> buffer, converted into some kind of
+  <code>SchemeValue</code>.  Ths <code>scheme_read</code> functions does not
+  return values of any of the procedure types, nor the special type
+  <code>okay</code>.
 
   <p><b>Problem 1</b> (1 pt). Complete the <code>scheme_read</code> function in
   <code><a href="scheme_reader.py.html">scheme_reader.py</a></code> by adding support for quotation. This function
@@ -383,6 +536,11 @@
       result of <code>read_tail</code>. (provided)
 
   </ul>
+
+  <p>To test your code, use the following command:</p>
+  <pre>
+  python3 autograder.py -q 1
+  </pre>
 
   <p><b>Problem 2</b> (2 pt). Complete the <code>read_tail</code> function in
   <code><a href="scheme_reader.py.html">scheme_reader.py</a></code> by adding support for dotted lists. A dotted
@@ -413,9 +571,13 @@
   encountering a <code>'.'</code>, read one additional expression and then
   check to see that a closing parenthesis follows.
 
-  <p>To verify that your solutions to Problem 1 and 2 work correctly, run the
-  doctests for <code><a href="scheme_reader.py.html">scheme_reader.py</a></code> and test your parser interactively
-  by running,
+  <p>To test your code, use the following command:</p>
+  <pre>
+  python3 autograder.py -q 2
+  </pre>
+
+  <p>You can also verify interactively that your solutions to Problem 1
+  and 2 work correctly by running</p>
 
   <pre>
     # python3 scheme_reader.py
@@ -437,23 +599,68 @@
 
   <h3>The Evaluator</h3>
 
-  <p><b>All further changes to the interpreter will be made in
+  <p><i>All further changes to the interpreter will be made in
     <code><a href="scheme.py.html">scheme.py</a></code>. For each question, add a few tests to the top of
     <code><a href="tests.scm">tests.scm</a></code> to verify the behavior of
-    your implementation.</b>
+    your implementation.</i>
+
+  <p>There are a number of <b>if</b> statements in the code that test a
+  variable <code>proper_tail_recursion</code>.  Until you get the first
+  extra-credit problem (#23), this variable is the constant <code>False</code>,
+  which you should bear in mind with reading the code.
 
   In the implementation given to you, the <code>scheme_eval</code> function is
   complete, but few of the functions or methods it uses are implemented. In
   fact, the evaluator can only evaluate self-evaluating expressions: numbers,
   booleans, and <code>nil</code>.
 
-  <p><b>Problem 3</b> (2 pt). Implement <code>apply_primitive</code>, which is
-  called by <code>scheme_apply</code>. Primitive procedures are applied by
+  In this course, we've seen two approaches to data-directed programming.
+  In one, illustrated by <code>scheme_eval</code>, the data contain some
+  identifying tag that indicates what the various operations on that data are
+  supposed to do.  In the case of <code>scheme_eval</code>, this tag is a 
+  combination of the type of the <code>expr</code> argument and (when
+  that argument is non-atomic) the first item in the list.  We use a
+  few <b>if</b> clauses to handle base cases
+  (symbols, numbers, etc.).  Then, for pairs that start with a symbol,
+  we first use a dispatch table (see Lecture #17) to handle the special
+  forms.   The remaining cases are calls, handled in the rest of 
+  <code>scheme_eval</code>.
+
+  The other approach is to have the data
+  in effect contain the implementations of the operations upon it.  
+  We did this, for example, in Lecture #10, where one version of 
+  <code>make_rat</code> returned a function that contained implementations of
+  the accessor functions for the numerator and denominator of a rational
+  number.  The more common way, and the one used in this project, is to
+  use object-oriented programming, where methods (functions) for manipulating
+  and object are in effect attached to that object.  The class
+  <code>SchemeValue</code> and its subtypes are an example.
+  
+  <p><b>Problem 3</b> (2 pt). Implement the <code>apply</code> method
+  in the class <code>PrimitiveProcedure</code>. 
+  Primitive procedures are applied by
   calling a corresponding Python function that implements the procedure.
+
+  The <code>apply</code> method overrides the default definition in
+  <code>SchemeValue</code>, of which <code>PrimitiveProcedure</code> is a
+  subtype.  The default definition simply raises an exception, since most
+  Python types do not implement function application.  All definitions of
+  apply that do return a value are defined to return a pair, <code>(V, E)</code>,
+  where <code>V</code> is a Scheme value, and <code>E</code> is an
+  environment frame (type <code>Frame</code>) or <code>None</code>. 
+  The <code>apply</code> method in <code>PrimitiveProcedure</code> always
+  returns <code>None</code> as the value of <code>E</code>, which indicates
+  that &quot;<code>V</code> is the final value resulting from applying this
+  function to its arguments.&quot;  As you'll see,
+  overridings of <code>apply</code> for
+  other classes of function have the option to return an environment frame
+  for <code>E</code>, which means &quot;<code>V</code> is a Scheme expression
+  that has to be further evaluated in environment <code>E</code> to get the
+  actual result of applying this function to its arguments.&quot;
 
   <p> Scheme primitive procedures are represented as instances of the
   <code>PrimitiveProcedure</code> class, defined in
-  <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code>. A <code>PrimitiveProcedure</code> has two
+  <code><a href="scheme.py.html">scheme.py</a></code>. A <code>PrimitiveProcedure</code> has two
   instance attributes:
   <ul>
     <li> <code>fn</code> is the <emph>Python</emph> function that
@@ -467,26 +674,41 @@
   <p>To see a list of all Scheme primitive procedures used in the project, look
   in the <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code> file. Any function decorated with
   <code>@primitive</code> will be added to the globally-defined
-  <code>_PRIMITIVES</code> list. </p>
+  <code>_PRIMITIVES</code> list for later processing into 
+  a <code>PrimitiveProcedure</code> and assignment to the global
+  environment in <code><a href="scheme.py.html">scheme.py</a></code>. </p>
 
-  <p>The <code>apply_primitive</code> function takes a
-  <code>PrimitiveProcedure</code> instance, a Scheme list of argument values,
-  and the current environment.  Your implementation should:
+  <p>The <code>apply</code> method for a
+  <code>PrimitiveProcedure</code> instance takes a Scheme list of
+  argument values
+  and the current environment.  As for all overridings of the
+  <code>apply</code> method, it returns a pair consisting of a Scheme
+  value (the one returned by the <code>fn</code> function when it is called)
+  and an environment, which in the Python code for the primitive function) and (<i>value</i>, <i>env</i>)
+
+Your implementation should:
 
   <ul>
     <li> Convert the Scheme list to a Python list of arguments.
 
-    <li> If the <code>procedure.use_env</code> is <code>True</code>, then
+    <li> If the <code>use_env</code> instance variable is <code>True</code>, then
     add the current environment <code>env</code> as the last argument.
 
-    <li> Call <code>procedure.fn</code> on those arguments (<i>hint</i>: use *
-    notation).
+    <li> Call the <code>fn</code> instance variable on those arguments (<i>hint</i>: use
+    <code>*</code> notation).
 
     <li> If calling the function results in a <code>TypeError</code> exception
     being thrown, then raise a <code>SchemeError</code> instead.</li>
+
   </ul>
 
-  <p>The doctest for <code>apply_primitive</code> should now pass. However,
+  <p>To test your code, run the following command:</p>
+  <pre>
+  python3 autograder.py -q 3
+  </pre>
+
+  <p>The tests for <code>PrimitiveProcedure.apply</code>
+  should now pass. However,
   your Scheme interpreter will still not be able to apply primitive
   procedures, because your Scheme interpreter still doesn't know
   how to look up the values for the primitive procedure symbols (such as
@@ -513,6 +735,11 @@
     <li> Otherwise, raise a <code>SchemeError</code>. (provided)
   </ul>
 
+  <p>To test your code, run the following command:</p>
+  <pre>
+  python3 autograder.py -q 4
+  </pre>
+
   <p>After you complete this problem, you should be able to evaluate primitive
   procedure calls, giving you the functionality of the Calculator language and
   more.</p>
@@ -520,13 +747,31 @@
   <pre>
     scm&gt; +
     #[primitive]
-    scm> (+ 1 2)
+    scm&gt; (+ 1 2)
     3
-    scm> (* 3 4 (- 5 2) 1)
+    scm&gt; (* 3 4 (- 5 2) 1)
     36
-    scm> (odd? 31)
-    True
+    scm&gt; (odd? 31)
+    #t
   </pre>
+
+  <h3>Handling special forms</h3>
+
+  <p>The <code>do_*_form</code> functions implement the 
+  &quot;special forms&quot; in Scheme---expressions represented as lists
+  that are not evaluated according to the general rules for evaluating
+  function calls.  The <code>scheme_eval</code> function uses a 
+  dispatch table, <code>SPECIAL_FORMS</code>, to detect special forms and
+  select the proper <code>do_*_form</code> function to handle them.
+  All these functions take the rest of the special form (other than the 
+  first symbol) and an environment 
+  and return a Scheme value and an environment.  The environment is 
+  <code>None</code> if there is nothing further to do to evaluate the
+  form and the returned Scheme value is the final result.  A non-nil 
+  value for the environment indicates that to get the actual final
+  result of evaluating the form, the interpreter must evaluate (in the sense
+  of <code>scheme_eval</code>) the returned expression in the returned 
+  environment.
 
   <p><b>Problem A5</b> (1 pt). There are two missing parts in the
   <code>do_define_form</code> function, which handles the
@@ -538,6 +783,11 @@
   <pre>
     scm&gt; (define tau (* 2 3.1415926))
     tau
+  </pre>
+
+  <p>To test your code, run the following command:</p>
+  <pre>
+  python3 autograder.py -q A5
   </pre>
 
   <p>You should now be able to give names to values and evaluate symbols to
@@ -558,6 +808,7 @@
     20
   </pre>
 
+
   <p><b>Problem B6</b> (1 pt). Implement the <code>do_quote_form</code>
   function, which evaluates the <code>quote</code> special form. Once you have
   done so, you can evaluate quoted expressions.</p>
@@ -573,6 +824,11 @@
     a
     scm&gt; (eval (cons 'car '('(1 2))))
     1
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B6
   </pre>
 
   <p> At this point in the project, your Scheme interpreter should be
@@ -616,20 +872,15 @@
     (+ 2 3)
   </pre>
 
-  <p> <u>Hint</u>: When <code>scheme_eval</code> evaluates one of the
-  <code>LOGICAL_FORMS</code> in <code><a href="scheme.py.html">scheme.py</a></code>, it calls
-  <code>scheme_eval</code> on the <b>returned value</b>. Take care that your
-  Scheme interpreter doesn't inadvertently call <code>scheme_eval</code> on the
-  same value twice, or else you might have the following incorrect behavior:
-
+  <p>You can test your code by running the following command:</p>
   <pre>
-    scm> (begin 30 'hello)
-    Error: unknown identifier: hello
+  python3 autograder.py -q 7
   </pre>
 
   <p><b>Problem 8</b> (2 pt). Implement the <code>do_lambda_form</code> method,
-  which creates <code>LambdaProcedure</code> instances by evaluating
-  <code>lambda</code> expressions. While you cannot call a user-defined
+  which evaluates <code>lambda</code> expressions by returning 
+  <code>LambdaProcedure</code> instances.
+  While you cannot call a user-defined
   procedure yet, you can verify that you have read the procedure correctly by
   evaluating a lambda expression.
 
@@ -648,6 +899,11 @@
   <pre>
     scm&gt; (lambda (y) (print y) (* y 2))
     (lambda (y) (begin (print y) (* y 2)))
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 8
   </pre>
 
   <p><b>Problem A9</b> (1 pt). Currently, your Scheme interpreter is
@@ -670,6 +926,11 @@
   handles the shorthand procedure definition form above. Make sure that it can
   handle multi-expression bodies. <i>Hint</i>: construct a <code>lambda</code>
   expression and evaluate it with <code>do_lambda_form</code>.
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A9
+  </pre>
 
   <p>Once you have completed this problem, you should find that defined
   procedures evaluate to lambda procedures.
@@ -694,6 +955,11 @@
       a different number of formal parameters and arguments.
 
   </ul>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 10
+  </pre>
 
   <!--
   <p>Don't forget the cases where the formal parameter list contains a trailing "varargs"
@@ -740,6 +1006,11 @@
   <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code> returns whether a value is a Scheme symbol.)
   </p>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B11
+  </pre>
+
   <!--
   <p>
   In particular, make sure that it supports the following argument
@@ -763,9 +1034,8 @@ scm> (define (fn x 2) (+ x 2))
   </p>
   -->
 
-  <p><b>Problem 12</b> (2 pt). Implement <code>scheme_apply</code> to correctly
-  apply user-defined <code>LambdaProcedure</code> instances. (The case of
-  <code>MuProcedures</code> is handled later in the project). It should:
+  <p><b>Problem 12</b> (2 pt). Implement the <code>apply</code> method in
+  the <code>LambdaProcedure</code> class. It should:
 
   <ul>
     <li> Create a new <code>Frame</code>, with all formal parameters
@@ -777,7 +1047,13 @@ scm> (define (fn x 2) (+ x 2))
     <li> Return the value of calling <code>procedure</code>.
   </ul>
 
-  <p>After you complete <code>scheme_apply</code>, user-defined functions (and
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 12
+  </pre>
+
+  <p>After you complete <code>LambdaProcedure.apply</code>, 
+  user-defined functions (and
   lambda functions) should work in your Scheme interpreter.  Now is an excellent
   time to revisit the tests in <code><a href="tests.scm">tests.scm</a></code>
   and ensure that you pass the ones that involve definition (Sections 1.1.2 and
@@ -785,17 +1061,29 @@ scm> (define (fn x 2) (+ x 2))
   <code>tests.scm</code> to verify that your interpreter is behaving as you
   expect.</b>
 
-  <h3>Special Forms</h3>
+  <h3>Logical Special Forms</h3>
 
   <p>Logical special forms include <code>if</code>, <code>and</code>,
   <code>or</code>, and <code>cond</code>. These expressions are special because
   not all of their sub-expressions may be evaluated.
 
   <p>In Scheme, only <code>#f</code> (also known as <code>false</code> or
-  <code>False</code>) is a false value.  All other values are true values. You
-  can test whether a value is a true value or a false value using the provided
-  Python functions <code>scheme_true</code> and <code>scheme_false</code>,
-  defined in <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code>.
+  <code>False</code>) is a false value.  All other values are true values. The
+  <code>__bool__</code> method causes true and false <code>SchemeValues</code> to
+  be true and false Python values as well, so you can easily
+  test whether a value is a true value or a false value.
+
+  <p>It makes sense for the <code>do_*_form</code> functions for 
+  the logical forms to take advantage of their freedom to return an
+  expression and environment for further evaluation rather than a value,
+  rather than a value and <code>None</code>.
+  For example, the expression <code>(if (zero? x) (f x) (g x))</code>
+  means &quot;if <code>x</code> is 0, evaluate <code>(f x)</code> in the current
+  environment and otherwise evaluate <code>(g x)</code> in the current
+  enviornment.  By returning one or the other of these expressions and
+  its environment argument, <code>do_if_form</code> fulfills its contract.
+  Doing it this way will turn out to be useful when you get to Problem 22.
+
 
   <p><b>Problem A13</b> (1 pt). Implement <code>do_if_form</code> so that
   <code>if</code> expressions are evaluated correctly. This function should
@@ -805,7 +1093,7 @@ scm> (define (fn x 2) (+ x 2))
 
   <pre>
     scm&gt; (if (= 4 2) true false)
-    False
+    #f
     scm&gt; (if (= 4 4) (* 1 2) (+ 3 4))
     2
   </pre>
@@ -820,6 +1108,11 @@ scm> (define (fn x 2) (+ x 2))
     okay
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A13
+  </pre>
+
   <p><b>Problem B14</b> (2 pt). Implement <code>do_and_form</code> and
   <code>do_or_form</code> so that <code>and</code> and <code>or</code>
   expressions are evaluated correctly.
@@ -832,25 +1125,27 @@ scm> (define (fn x 2) (+ x 2))
     sub-expression from <code>do_and_form</code>.</p>
 
   <p>For <code>or</code>, evaluate each sub-expression from left to right. If
-    any evaluates to a true value, then <code>quote</code> that value and return
-    it. These return values must be quoted because they are evaluated in
-    <code>scheme_eval</code>.  If all but the last sub-expression evaluate to
-    false, return the last sub-expression from <code>do_or_form</code> without
-    quoting it.</p>
+    any evaluates to a true value, then return
+    it. Otherwise, return the last sub-expression from <code>do_or_form</code>.</p>
 
   <pre>
     scm&gt; (and)
-    True
+    #t
     scm&gt; (or)
-    False
+    #f
     scm&gt; (and 4 5 6)
     6    ; all operands are true values
     scm&gt; (or 5 2 1)
     5    ; 5 is a true value
     scm&gt; (and #t #f 42 (/ 1 0))
-    False    ; short-circuiting behavior of and
+    #f   ; short-circuiting behavior of and
     scm&gt; (or 4 #t (/ 1 0))
     4    ; short-circuiting behavior of or
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B14
   </pre>
 
   <p><b>Problem A15</b> (1 pt). Implement <code>do_cond_form</code> so that it
@@ -866,7 +1161,7 @@ scm> (define (fn x 2) (+ x 2))
     scm&gt; (cond ((= 4 3) 'wat)
               ((= 4 4))
               (else 'hm))
-    True
+    #t
     scm&gt; (cond ((= 4 4) 'here 42)
               (else 'wat 0))
     42
@@ -899,6 +1194,11 @@ scm> (define (fn x 2) (+ x 2))
   <p>The value of a <code>cond</code> is undefined if there are no true
   predicates and no <code>else</code>. In such a case, <code>do_cond_form</code>
   should return <code>okay</code>.</p>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A15
+  </pre>
 
   <p><b>Problem A16</b> (2 pt). The <code>let</code> special form introduces local
   variables, giving them their initial values. For example,</p>
@@ -942,13 +1242,17 @@ scm> (define (fn x 2) (+ x 2))
   <code>Frame</code>, add the necessary bindings, and evaluate the expressions
   of the <code>let</code> body in this new environment.</p>
 
-  <p><b>Problem B17</b> (2 pt). Implement <code>do_mu_form</code> to evaluate
-  the <code>mu</code> special form, a non-standard Scheme expression type. A
-  <code>mu</code> expression is similar to a <code>lambda</code> expression,
-  but evaluates to a <code>MuProcedure</code> instance that is dynamically
-  scoped. The <code>MuProcedure</code> class has been provided for you.</p>
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q A16
+  </pre>
 
-  <p>Additionally, complete <code>scheme_apply</code> to call
+  <p><b>Problem B17</b> (2 pt). Implement  the <code>mu</code> special form, a non-standard Scheme expression type. A
+  <code>mu</code> expression is similar to a <code>lambda</code> expression,
+  but evaluates to a <code>MuProcedure</code> instance that is <em>dynamically
+  scoped</em>. 
+
+  <p>To do this, complete <code>MuProcedure.apply</code> to call
   <code>MuProcedure</code> procedures using dynamic scoping.  Calling a
   <code>LambdaProcedure</code> uses lexical scoping: the parent of the new call
   frame is the environment in which the procedure was defined. Calling a
@@ -965,6 +1269,11 @@ scm> (define (fn x 2) (+ x 2))
     g
     scm&gt; (g 3 7)
     13
+  </pre>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q B17
   </pre>
 
   <p>Your Scheme interpreter implementation is now complete.  You should have
@@ -990,6 +1299,11 @@ scm> (define (fn x 2) (+ x 2))
     (8 6 5 4 2 1)
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 18
+  </pre>
+
   <p><b>Problem 19</b> (2 pt). Implement the <code>list-partitions</code> procedure,
   which lists all of the ways to partition a positive integer <code>total</code> into at
   most <code>max-pieces</code> pieces that are all less than or equal to a positive
@@ -1007,6 +1321,11 @@ scm> (define (fn x 2) (+ x 2))
     2, 1, 1, 1 (four pieces)
   </pre>
 
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 19
+  </pre>
+
   <p><b>Problem 20</b> (2 pt). You have been given the definition to an abstract
   implementation of trees. Use it to implement <code>tree-sums</code>, which
   is a function that returns a list of all possible sums of nodes, when
@@ -1017,6 +1336,11 @@ scm> (define (fn x 2) (+ x 2))
   <div>
     <img alt="tree.png" src="tree.png" />
   </div>
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 20
+  </pre>
 
 
   <p><b>Problem 21</b> (0 pt). Implement the <code>hax</code> procedure that
@@ -1038,21 +1362,134 @@ scm> (define (fn x 2) (+ x 2))
 
   <h3>Extra Credit</h3>
 
-  <p><b>Problem 22</b> (3 pt). Complete the function
-  <code>scheme_optimized_eval</code>
-  in <code><a href="scheme.py.html">scheme.py</a></code>. This alternative to <code>scheme_eval</code> is
-  properly tail recursive. That is, the interpreter will allow an unbounded
+  <p><b>Problem 22</b> (3 pt). So far, we have paid no attention to handling
+  tail recursion correctly.  For example, to evaluate this call on 
+  the tail-recursive <code>sum-series</code> function:
+  <pre>
+    (define (sum-series f low high init) 
+       (if (> low high) init (sum-series f (+ low 1) high (+ init (f low))))
+    (sum-series (lambda x: (* x x)) 0 1000000)
+  </pre>
+  Your implementation will end up recursively calling <code>scheme_eval</code>
+  to evaluate the recursive call to <code>sum-series</code>, with the result
+  that the Python interpreter would  have to recurse about 1000000 levels deep
+  to perform the computation (which it generally will refuse to do). 
+  For this problem, we'll make the Scheme interpreter
+  properly tail recursive so that it will allow an unbounded
   number of active <a href=http://en.wikipedia.org/wiki/Tail_call>tail
-    calls</a> in constant space.
+  calls</a> in constant space.
 
-  <p>Instead of recursively calling <code>scheme_eval</code> for tail calls and
+  <p>We have arranged that <code>proper_tail_recursion</code> is initially
+  false, with the result that only the false branches of several <b>if</b>
+  statements will get executed.  Complete the other branches of these
+  statements (and possibly make other modifications, depending on what
+  you've done in implementing the special forms) to handle tail
+  calls properly.
+  Instead of recursively calling <code>scheme_eval</code> for tail calls and
   logical special forms, and <code>let</code>, replace the current
   <code>expr</code> and <code>env</code> with different expressions and
-  environments. For call expressions, this change only applies to calling
+  environments and take advantage of the <b>while</b> loop in
+  <code>scheme_eval</code> to use iteration in the interpreter in place of
+  recursive calls in these cases. 
+  For call expressions, this change only applies to calling
   user-defined procedures.
 
   <p>Once you finish, uncomment the line
-  <code>scheme_eval = scheme_optimized_eval</code> in <code><a href="scheme.py.html">scheme.py</a></code>.
+  <code>proper_tail_recursion = True</code> in <code><a href="scheme.py.html">scheme.py</a></code>.
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 22
+  </pre>
+
+  <p><b>Problem 23</b> (3 pt). The year 1960 saw the publication of the 
+  <i>Revised Report on the Algorithmic Language Algol 60</i> as well as 
+  an implementation of that language.  The Report was a model of clear and 
+  concise language description that served as a model for many later language
+  reference manuals (including that of Scheme).  In at least one instance, 
+  however, it is possible that the desire for a simple and elegant description
+  led to a language feature that proved a bit problematic to implement, however
+  much fun it was to use.
+
+  <p> Specifically, to describe parameter passing to functions, the Report
+  used a form of the substitution model (see Lecture #2).  That is, they
+  described calls to functions as if the effect were to replace the call
+  (at execution time) with a copy of the function's body with the actual
+  parameters substituted for all occurrences of the formal parameters,
+  first changing the names of local variables so as to avoid clashes with
+  names used in the actual parameters.  It's a simple explanation, but there
+  is a subtle, very significant difference from our substitution model:
+  it is the actual parameter <em>expressions</em>, not their values, that are
+  substituted.  The result is known as <dfn>call-by-name</dfn> parameter 
+  passing (whereas Python and standard Scheme use <dfn>call-by-value</dfn>
+  parameter passing).
+
+  <p>Consider a call in Scheme such as <code>(f (/ x y) y)</code>.  In 
+  standard Scheme, this requires that the interpreter evaluate <code>f</code>,
+  <code>(/ x y)</code>, and <code>y</code> 
+  and then call <code>f</code> with the argument
+  values bound to <code>f</code>'s formal parameters.  
+  If <code>y</code> should happen
+  to be 0, the argument evaluation will fail and <code>f</code> will never 
+  be called.
+  Suppose, however, that we change the semantics of Scheme so that we
+  evaluate <code>(/ x y)</code> only if and when 
+  the body of <code>f</code> actually uses its value?  If <code>f</code> is 
+  something like this:
+
+  <pre>
+  (define (f a b)
+       (if (= b 0) 0 a))
+  </pre>
+
+  then <code>f</code>'s first parameter would never be evaluated during the
+  call <code>(f (/ x y) y)</code> and the function would return 0.</p>
+
+  <p>Back in the 1960s, getting this to work turned out to 
+  be &quot;interesting&quot;, especially
+  if one was trying to get fast executable code.  However, if speed is not
+  of the essence, the implementation is fairly easy: we just convert
+  call-by-name parameters into ordinary call-by-value parameters by means of
+  a trick.  For the definition above, we can write instead:
+
+  <pre>
+    (define (f a b)
+         (if (= (b) 0) 0 (a)))
+  </pre>
+
+  and then change the sample call to
+
+  <pre>
+    (f (lambda () (/ x y)) (lambda () y))  
+  </pre>
+  
+  <p>This approach is an illustration on the old CS saying 
+  &quot;Any difficulty in computer
+  science can be overcome by adding a level of indirection.&quot  Here, 
+  we pass in a parameterless function that yields the parameter's value 
+  only when it is called.  Such functions, when implicitly introduced by 
+  a compiler, interpreter, or runtime system, are known as <dfn>thunks</dfn>
+  (for obscure reasons).  The usual scoping rules for Scheme automatically
+  avoid name clashes, so no renaming of parameters is needed.
+
+  <p>Implementing the feature exactly this way is trickier than it looks 
+  (trust us), so we suggest an alternative.  First, we'll introduce a
+  new special form with the same syntax as <code>lambda</code>:
+  <code>(nu (<i>formals</i>) <i>body</i>)</code>, which produces
+  call-by-name functions represented in our interpreter by 
+  <code>NuProcedures</code>.   Although we could represent thunks with
+  <code>LambdaProcedures</code>, we instead suggest subtyping
+  <code>LambdaProcedure</code> and modifying your code so that 
+  whenever <code>scheme_eval</code> fetches a thunk from a symbol, the
+  value actually obtained is the result of calling the thunk.  You'll
+  also have to fill in <code>NuProcedure</code> so that when such functions
+  are called, they &quot;thunkify&quot; all their parameters rather than
+  simply evaluating them.
+
+  <p>You can test your code by running the following command:</p>
+  <pre>
+  python3 autograder.py -q 23
+  </pre>
 
   <p><b>Congratulations!</b> You have finished the final project for 61A! Assuming your
   tests are good and you've passed them all, consider yourself a proper computer

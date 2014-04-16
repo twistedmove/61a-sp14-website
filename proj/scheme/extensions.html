@@ -1,7 +1,7 @@
 <html>
 <head>
 <link href="css/assignments.css" rel="stylesheet" type="text/css">
-<title>Scheme</title>
+<title>Published-Student/Scheme</title>
 </head>
 
 <body>
@@ -23,8 +23,8 @@
   itself.</p>
 
   <p>We recommend that you submit the final version of your project before
-  attempting any of these extensions. <b>We are not responsible if you break the
-  required components of your interpreter and Scheme code.</b></p>
+  attempting any of these extensions. <em>We are not responsible if you break the
+  required components of your interpreter and Scheme code!</em></p>
 
   <h3>Variable Arguments</h3>
   
@@ -67,11 +67,11 @@
     (a 3)
   </pre>
 
-  <p>The backquote (<code>`</code>) specifies a <emph>quasiquote</emph>, which
+  <p>The backquote (<code>`</code>) specifies a <dfn>quasiquote</dfn>, which
   can evaluate parts of an expression. A comma (<code>,</code>) is
-  an <emph>unquote<emph>, which specifies that the next expression should be
+  an <em>unquote</em>, which specifies that the next expression should be
   evaluated. Finally, a comma followed by an at symbol (<code>,@</code>) is
-  an <emph>unquote-splicing</emph>, meaning that it evaluates the next
+  an <em>unquote-splicing</em>, meaning that it evaluates the next
   expression, which must evaluate to a list, and then splices that list into the
   result:</p>
 
@@ -107,17 +107,17 @@
   </pre>
 
   <p>The tokenizer already handles quasiquotes and unquotes. However, you will
-  need to modify <code>scheme_read</code> to handle them as well, like you did
+  need to modify <code>scheme_read</code> to handle them as well, as you did
   for normal quoting. Use the
-  strings <code>"quasiquote"</code>, <code>"unquote"</code>,
-  and <code>"unquote-splicing"</code>, respectively.</p>
+  strings <code>&quot;quasiquote&quot;</code>, <code>&quot;unquote&quot;</code>,
+  and <code>&quot;unquote-splicing&quot;</code>, respectively.</p>
 
   <p>In addition, the following changes are required:
   <ul>
     <li>Add a case in <code>scheme_eval</code>
-      and/or <code>scheme_optimized_eval</code> for <code>"quasiquote"</code>:
+      and/or <code>scheme_optimized_eval</code> for <code>&quot;quasiquote&quot;</code>:
       call a new <code>do_quasiquote_form</code> function. You may also want
-      to check for <code>"unquote"</code> and <code>"unquote-splicing"</code>
+      to check for <code>&quot;unquote&quot;</code> and <code>&quot;unquote-splicing&quot;</code>
       here, raising an error that they are being used outside of a quasiquote.
     <li>You will need to process a quasiquote recursively. If a value is a list
       that starts with either unquote at the right nesting level, then the list
@@ -158,18 +158,21 @@
   have implemented variable argument lists for this particular example to
   work.)</p>
 
-  <p>In order to implement <code>define-macro</code>, add a <code>macro</code>
-  parameter to <code>do_define_form</code>, with a default value
-  of <code>False</code>. If <code>macro</code> is true, raise an error if
-  function definition shorthand is not used. Otherwise, mark the resulting
-  procedure as a macro. (There are many ways to do this; one way is to use an
-  instance attribute.)</p>
+  <p>In order to implement <code>define-macro</code>, introduce a new
+  subtype (say <code>Macro</code>) 
+  of <code>Procedure</code> or <code>LambdaProcedure</code> to
+  represent them.  Add another <code>do_*_form</code> function to
+  handle macro definitions.  To avoid duplicating code, you can add an
+  optional parameter to <code>do_define_form</code> that indicates
+  that a macro is being defined, with a default value
+  of <code>False</code>. If this parameter is true, raise an error if
+  function definition shorthand is not used, and create a
+  <code>Macro</code>.</p>
 
-  <p>In <code>scheme_eval</code>, add a case for <code>"define-macro"</code>
-  that calls <code>do_define_form</code> with <code>macro</code> as true. Then
-  modify the procedure handling code to check if a procedure is a macro. In that
-  case, it should apply the procedure directly to the arguments without
-  evaluating them first. It should then evaluate and return the result.</p>
+  <p>Finally, you'll have to work out how to define your new <code>Macro</code>
+  so that (1) it doesn't evaluate its arguments and (2) the result that it
+  computes is treated as a program and evaluated in the environment of the
+  call.</p>
 
   <h3>Mutation</h3>
 
@@ -188,6 +191,19 @@
   <p>Pairs can be mutated using <code>set-car!</code> and <code>set-cdr!</code>
   These can be easily implemented as primitive procedures
   in <code><a href="scheme_primitives.py.html">scheme_primitives.py</a></code>.</p>
+
+  <p>If you are really ambitious, you might try getting <code>set!</code>
+  to work when the target variable is a call-by-name parameter.  This should
+  only be allowed when the actual parameter is a simple variable.  
+  This takes a bit of doing (one reason that call-by-name didn't catch on
+  in other programming languages after Algol).
+  First, the interpreter will have to look at the prior value of the target
+  variable before assigning to it, which is not otherwise necessary.
+  You'll have to enhance your
+  <code>Macro</code> class so that it supports an assignment operation
+  when the actual parameter is a variable.  It's all quite a bit of work,
+  so you might instead simply choose to have assignment to a by-name
+  parameter convert that parameter to an ordinary value, or to cause an error.
 
   <h3>Library Code</h3>
 
@@ -234,7 +250,7 @@
 
     <p>If you did the tail recursion optimization, you will not
     call <code>scheme_apply</code>. Instead, keep track of the last known
-    procedure call in <code>scheme_optimized_eval</code>, and add an entry for
+    procedure call in <code>scheme_eval</code>, and add an entry for
     that to your Scheme trace when the frame corresponds
     to <code>scheme_optimized_eval</code>.
     <li>If the frame corresponds to a <code>do_*_form</code> function, then

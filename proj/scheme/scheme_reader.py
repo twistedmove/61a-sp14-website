@@ -16,100 +16,9 @@ would be read to the value, where possible.
 """
 
 from ucb import main, trace, interact
+from scheme_primitives import Pair, nil, intern, scnum, scstr, scbool
 from scheme_tokens import tokenize_lines, DELIMITERS
 from buffer import Buffer, InputReader, LineReader
-
-# Pairs and Scheme lists
-
-class Pair:
-    """A pair has two instance attributes: first and second.  For a Pair to be
-    a well-formed list, second is either a well-formed list or nil.  Some
-    methods only apply to well-formed lists.
-
-    >>> s = Pair(1, Pair(2, nil))
-    >>> s
-    Pair(1, Pair(2, nil))
-    >>> print(s)
-    (1 2)
-    >>> len(s)
-    2
-    >>> s[1]
-    2
-    >>> print(s.map(lambda x: x+4))
-    (5 6)
-    """
-    def __init__(self, first, second):
-        self.first = first
-        self.second = second
-
-    def __repr__(self):
-        return "Pair({0}, {1})".format(repr(self.first), repr(self.second))
-
-    def __str__(self):
-        s = "(" + str(self.first)
-        second = self.second
-        while isinstance(second, Pair):
-            s += " " + str(second.first)
-            second = second.second
-        if second is not nil:
-            s += " . " + str(second)
-        return s + ")"
-
-    def __len__(self):
-        n, second = 1, self.second
-        while isinstance(second, Pair):
-            n += 1
-            second = second.second
-        if second is not nil:
-            raise TypeError("length attempted on improper list")
-        return n
-
-    def __getitem__(self, k):
-        if k < 0:
-            raise IndexError("negative index into list")
-        y = self
-        for _ in range(k):
-            if y.second is nil:
-                raise IndexError("list index out of bounds")
-            elif not isinstance(y.second, Pair):
-                raise TypeError("ill-formed list")
-            y = y.second
-        return y.first
-
-    def __eq__(self, p):
-        if not isinstance(p, Pair):
-            return False
-        return self.first == p.first and self.second == p.second
-
-    def map(self, fn):
-        """Return a Scheme list after mapping Python function FN to SELF."""
-        mapped = fn(self.first)
-        if self.second is nil or isinstance(self.second, Pair):
-            return Pair(mapped, self.second.map(fn))
-        else:
-            raise TypeError("ill-formed list")
-
-class nil:
-    """The empty list"""
-
-    def __repr__(self):
-        return "nil"
-
-    def __str__(self):
-        return "()"
-
-    def __len__(self):
-        return 0
-
-    def __getitem__(self, k):
-        if k < 0:
-            raise IndexError("negative index into list")
-        raise IndexError("list index out of bounds")
-
-    def map(self, fn):
-        return self
-
-nil = nil() # Assignment hides the nil class; there is only one instance
 
 # Scheme list parser
 
@@ -131,8 +40,15 @@ def scheme_read(src):
     val = src.pop()
     if val == "nil":
         return nil
+    elif type(val) is int or type(val) is float:
+        return scnum(val)
+    elif type(val) is bool:
+        return scbool(val)
     elif val not in DELIMITERS:
-        return val
+        if val[0] == '"':
+            return scstr(eval(val))
+        else:
+            return intern(val)
     elif val == "'":
         "*** YOUR CODE HERE ***"
     elif val == "(":
@@ -159,6 +75,8 @@ def read_tail(src):
     SyntaxError: Expected one element after .
     >>> scheme_read(Buffer(tokenize_lines(["(1", "2 .", "'(3 4))", "4"])))
     Pair(1, Pair(2, Pair('quote', Pair(Pair(3, Pair(4, nil)), nil))))
+
+    "'"
     """
     try:
         if src.current() is None:
@@ -202,6 +120,7 @@ def read_print_loop():
             while src.more_on_line:
                 expression = scheme_read(src)
                 print(expression)
+                print(repr(expression))
         except (SyntaxError, ValueError) as err:
             print(type(err).__name__ + ":", err)
         except (KeyboardInterrupt, EOFError):  # <Control>-D, etc.

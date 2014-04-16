@@ -11,7 +11,6 @@
 <span style="color: darkred">"""This module implements the core Scheme interpreter functions, including the
 eval/apply mutual recurrence, environment model, and read-eval-print loop.
 """
-
 </span><span style="color: blue; font-weight: bold">from </span>scheme_primitives <span style="color: blue; font-weight: bold">import </span><span style="font-weight: bold">*
 </span><span style="color: blue; font-weight: bold">from </span>scheme_reader <span style="color: blue; font-weight: bold">import </span><span style="font-weight: bold">*
 </span><span style="color: blue; font-weight: bold">from </span>ucb <span style="color: blue; font-weight: bold">import </span>main<span style="font-weight: bold">, </span>trace
@@ -20,71 +19,72 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
 # Eval/Apply #
 ##############
 
-</span><span style="color: blue; font-weight: bold">def </span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Evaluate Scheme expression EXPR in environment ENV.
 
+</span><span style="color: blue; font-weight: bold">def </span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Evaluate Scheme expression EXPR in environment ENV. If ENV is None,
+    simply returns EXPR as its value without further evaluation.
     &gt;&gt;&gt; expr = read_line("(+ 2 2)")
     &gt;&gt;&gt; expr
     Pair('+', Pair(2, Pair(2, nil)))
     &gt;&gt;&gt; scheme_eval(expr, create_global_frame())
-    4
+    scnum(4)
     """
-    </span><span style="color: blue; font-weight: bold">if </span>expr <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"Cannot evaluate an undefined expression."</span><span style="font-weight: bold">)
 
-    </span><span style="color: green; font-style: italic"># Evaluate Atoms
-    </span><span style="color: blue; font-weight: bold">if </span>scheme_symbolp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span>env<span style="font-weight: bold">.</span>lookup<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>scheme_atomp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>scheme_stringp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>expr <span style="color: blue; font-weight: bold">is </span>okay<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>expr
+    </span><span style="color: blue; font-weight: bold">while </span>env <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
+        </span><span style="color: green; font-style: italic"># Note: until extra-credit problem 22 is complete, env will
+        # always be None on the second iteration of the loop, so that
+        # the value of EXPR is returned at that point.
 
-    <span style="color: green; font-style: italic"># All non-atomic expressions are lists.
-    </span><span style="color: blue; font-weight: bold">if not </span>scheme_listp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"malformed list: {0}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">)))
-    </span>first<span style="font-weight: bold">, </span>rest <span style="font-weight: bold">= </span>expr<span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>expr<span style="font-weight: bold">.</span>second
+        </span><span style="color: blue; font-weight: bold">if </span>expr <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"Cannot evaluate an undefined expression."</span><span style="font-weight: bold">)
 
-    <span style="color: green; font-style: italic"># Evaluate Combinations
-    </span><span style="color: blue; font-weight: bold">if </span><span style="font-weight: bold">(</span>scheme_symbolp<span style="font-weight: bold">(</span>first<span style="font-weight: bold">) </span><span style="color: green; font-style: italic"># first might be unhashable
-        </span><span style="color: blue; font-weight: bold">and </span>first <span style="color: blue; font-weight: bold">in </span>LOGIC_FORMS<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span>scheme_eval<span style="font-weight: bold">(</span>LOGIC_FORMS<span style="font-weight: bold">[</span>first<span style="font-weight: bold">](</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">), </span>env<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"lambda"</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>do_lambda_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"mu"</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>do_mu_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"define"</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>do_define_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"quote"</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">return </span>do_quote_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"let"</span><span style="font-weight: bold">:
-        </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>do_let_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return </span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-        </span>procedure <span style="font-weight: bold">= </span>scheme_eval<span style="font-weight: bold">(</span>first<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-        </span>args <span style="font-weight: bold">= </span>rest<span style="font-weight: bold">.</span>map<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">lambda </span>operand<span style="font-weight: bold">: </span>scheme_eval<span style="font-weight: bold">(</span>operand<span style="font-weight: bold">, </span>env<span style="font-weight: bold">))
-        </span><span style="color: blue; font-weight: bold">return </span>scheme_apply<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+        </span><span style="color: green; font-style: italic"># Evaluate Atoms
+        </span><span style="color: blue; font-weight: bold">if </span>scheme_symbolp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
+            </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>env<span style="font-weight: bold">.</span>lookup<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">).</span>get_actual_value<span style="font-weight: bold">(), </span><span style="color: blue">None
+        </span><span style="color: blue; font-weight: bold">elif </span>scheme_atomp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
+            </span>env <span style="font-weight: bold">= </span><span style="color: blue">None
 
+        </span><span style="color: green; font-style: italic"># All non-atomic expressions are lists.
+        </span><span style="color: blue; font-weight: bold">elif not </span>scheme_listp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"malformed list: {0}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">)))
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span>first<span style="font-weight: bold">, </span>rest <span style="font-weight: bold">= </span>scheme_car<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">), </span>scheme_cdr<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">)
+
+            </span><span style="color: green; font-style: italic"># Evaluate Combinations
+            </span><span style="color: blue; font-weight: bold">if </span><span style="font-weight: bold">(</span>scheme_symbolp<span style="font-weight: bold">(</span>first<span style="font-weight: bold">) </span><span style="color: green; font-style: italic"># first might be unhashable
+                </span><span style="color: blue; font-weight: bold">and </span>first <span style="color: blue; font-weight: bold">in </span>SPECIAL_FORMS<span style="font-weight: bold">):
+                </span><span style="color: blue; font-weight: bold">if </span>proper_tail_recursion<span style="font-weight: bold">:
+                    </span><span style="color: red">"*** YOUR CODE HERE ***"
+                </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>SPECIAL_FORMS<span style="font-weight: bold">[</span>first<span style="font-weight: bold">](</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+                    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">), </span><span style="color: blue">None
+            </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                </span>procedure <span style="font-weight: bold">= </span>scheme_eval<span style="font-weight: bold">(</span>first<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+                </span>args <span style="font-weight: bold">= </span>procedure<span style="font-weight: bold">.</span>evaluate_arguments<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+                </span><span style="color: blue; font-weight: bold">if </span>proper_tail_recursion<span style="font-weight: bold">:
+                    </span><span style="color: red">"*** YOUR CODE HERE ***"
+                </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+                    </span><span style="color: green; font-style: italic"># UPDATED 4/14/2014 @ 19:08
+                    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>scheme_apply<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">), </span><span style="color: blue">None
+
+
+    </span><span style="color: blue; font-weight: bold">return </span>expr
+
+proper_tail_recursion <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">False
+</span><span style="color: green; font-style: italic">################################################################
+# Uncomment the following line to apply tail call optimization #
+################################################################
+# proper_tail_recursion = True
 
 </span><span style="color: blue; font-weight: bold">def </span>scheme_apply<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Apply Scheme PROCEDURE to argument values ARGS in environment ENV."""
-    </span><span style="color: blue; font-weight: bold">if </span>isinstance<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>PrimitiveProcedure<span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span>apply_primitive<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">elif </span>isinstance<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>LambdaProcedure<span style="font-weight: bold">):
-        </span><span style="color: red">"*** YOUR CODE HERE ***"
-    </span><span style="color: blue; font-weight: bold">elif </span>isinstance<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>MuProcedure<span style="font-weight: bold">):
-        </span><span style="color: red">"*** YOUR CODE HERE ***"
-    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"Cannot call {0}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">)))
-
-</span><span style="color: blue; font-weight: bold">def </span>apply_primitive<span style="font-weight: bold">(</span>procedure<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Apply PrimitiveProcedure PROCEDURE to a Scheme list of ARGS in ENV.
-
-    &gt;&gt;&gt; env = create_global_frame()
-    &gt;&gt;&gt; plus = env.bindings["+"]
-    &gt;&gt;&gt; twos = Pair(2, Pair(2, nil))
-    &gt;&gt;&gt; apply_primitive(plus, twos, env)
-    4
-    """
-    </span><span style="color: red">"*** YOUR CODE HERE ***"
+    </span><span style="color: darkred">"""Apply PROCEDURE (type Procedure) to argument values ARGS
+    in environment ENV.  Returns the resulting Scheme value."""
+    </span><span style="color: green; font-style: italic"># UPDATED 4/14/2014 @ 19:08
+    # Since .apply is allowed to do a partial evaluation, we finish up
+    # with a call to scheme_eval to complete the evaluation.  scheme_eval
+    # will simply return expr if its env argument is None.
+    </span>expr<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span>procedure<span style="font-weight: bold">.</span>apply<span style="font-weight: bold">(</span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">return </span>scheme_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
 
 </span><span style="color: green; font-style: italic">################
 # Environments #
@@ -105,8 +105,16 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
             </span>s <span style="font-weight: bold">= </span>sorted<span style="font-weight: bold">(</span><span style="color: red">'{0}: {1}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>k<span style="font-weight: bold">,</span>v<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>k<span style="font-weight: bold">,</span>v <span style="color: blue; font-weight: bold">in </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>bindings<span style="font-weight: bold">.</span>items<span style="font-weight: bold">())
             </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"&lt;{{{0}}} -&gt; {1}&gt;"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: red">', '</span><span style="font-weight: bold">.</span>join<span style="font-weight: bold">(</span>s<span style="font-weight: bold">), </span>repr<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>parent<span style="font-weight: bold">))
 
-    </span><span style="color: blue; font-weight: bold">def </span>lookup<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>symbol<span style="font-weight: bold">):
-        </span><span style="color: darkred">"""Return the value bound to SYMBOL.  Errors if SYMBOL is not found."""
+    </span><span style="color: blue; font-weight: bold">def </span>__eq__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>other<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>isinstance<span style="font-weight: bold">(</span>other<span style="font-weight: bold">, </span>Frame<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>\
+                <span style="color: blue">self</span><span style="font-weight: bold">.</span>parent <span style="font-weight: bold">== </span>other<span style="font-weight: bold">.</span>parent
+
+    <span style="color: blue; font-weight: bold">def </span>lookup<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>symbol<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Return the value bound to SYMBOL.  Errors if SYMBOL is not found.
+        As a convenience, also accepts Python strings, which it turns into
+        symbols."""
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>symbol<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is </span>str<span style="font-weight: bold">:
+            </span>symbol <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span>symbol<span style="font-weight: bold">)
         </span><span style="color: red">"*** YOUR CODE HERE ***"
         </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"unknown identifier: {0}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>symbol<span style="font-weight: bold">)))
 
@@ -134,13 +142,61 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
         </span><span style="color: blue; font-weight: bold">return </span>frame
 
     <span style="color: blue; font-weight: bold">def </span>define<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>sym<span style="font-weight: bold">, </span>val<span style="font-weight: bold">):
-        </span><span style="color: darkred">"""Define Scheme symbol SYM to have value VAL in SELF."""
+        </span><span style="color: darkred">"""Define Scheme symbol SYM to have value VAL in SELF.  As a
+        convenience, SYM may be Python string, which is converted first
+        to a Scheme symbol.  VAL must be a SchemeValue."""
+        </span><span style="color: blue; font-weight: bold">assert </span>isinstance<span style="font-weight: bold">(</span>val<span style="font-weight: bold">, </span>SchemeValue<span style="font-weight: bold">), </span><span style="color: red">"values must be SchemeValues"
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is </span>str<span style="font-weight: bold">:
+            </span>sym <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">)
         </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>bindings<span style="font-weight: bold">[</span>sym<span style="font-weight: bold">] = </span>val
 
-<span style="color: blue; font-weight: bold">class </span>LambdaProcedure<span style="font-weight: bold">:
+<span style="color: green; font-style: italic">#####################
+# Procedures        #
+#####################
+
+</span><span style="color: blue; font-weight: bold">class </span>Procedure<span style="font-weight: bold">(</span>SchemeValue<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""The superclass of all kinds of procedure in Scheme."""
+
+    </span><span style="color: green; font-style: italic"># Arcane Technical Note: The odd placement of the import from scheme in
+    # evaluate_arguments is necessary because it introduces mutually recursive
+    # imports between this file and scheme.py.  The effect of putting it
+    # here is that we delay attempting to access scheme.scheme_eval until
+    # after the scheme module's initialization is finished.
+
+    </span><span style="color: blue; font-weight: bold">def </span>evaluate_arguments<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>arg_list<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Evaluate the expressions in ARG_LIST in ENV to produce
+        arguments for this procedure. Default definition for procedures."""
+        </span><span style="color: blue; font-weight: bold">from </span>scheme <span style="color: blue; font-weight: bold">import </span>scheme_eval
+        <span style="color: blue; font-weight: bold">return </span>arg_list<span style="font-weight: bold">.</span>map<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">lambda </span>operand<span style="font-weight: bold">: </span>scheme_eval<span style="font-weight: bold">(</span>operand<span style="font-weight: bold">, </span>env<span style="font-weight: bold">))
+
+</span><span style="color: blue; font-weight: bold">class </span>PrimitiveProcedure<span style="font-weight: bold">(</span>Procedure<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A Scheme procedure defined as a Python function."""
+
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>fn<span style="font-weight: bold">, </span>use_env<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">):
+        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>fn <span style="font-weight: bold">= </span>fn
+        <span style="color: blue">self</span><span style="font-weight: bold">.</span>use_env <span style="font-weight: bold">= </span>use_env
+
+    <span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'#[primitive]'
+
+    </span><span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"PrimitiveProcedure({})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">))
+
+    </span><span style="color: blue; font-weight: bold">def </span>apply<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+        </span><span style="color: darkred">"""Apply a primitive procedure to ARGS in ENV.  Returns
+        a pair (val, None), where val is the resulting value.
+        &gt;&gt;&gt; twos = Pair(SchemeInt(2), Pair(SchemeInt(2), nil))
+        &gt;&gt;&gt; plus = PrimitiveProcedure(scheme_add, False)
+        &gt;&gt;&gt; plus.apply(twos, None)
+        (scnum(4), None)
+        """
+        </span><span style="color: red">"*** YOUR CODE HERE ***"
+
+
+</span><span style="color: blue; font-weight: bold">class </span>LambdaProcedure<span style="font-weight: bold">(</span>Procedure<span style="font-weight: bold">):
     </span><span style="color: darkred">"""A procedure defined by a lambda expression or the complex define form."""
 
-    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>formals<span style="font-weight: bold">, </span>body<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>formals<span style="font-weight: bold">, </span>body<span style="font-weight: bold">, </span>env <span style="font-weight: bold">= </span><span style="color: blue">None</span><span style="font-weight: bold">):
         </span><span style="color: darkred">"""A procedure whose formal parameter list is FORMALS (a Scheme list),
         whose body is the single Scheme expression BODY, and whose parent
         environment is the Frame ENV.  A lambda expression containing multiple
@@ -150,14 +206,32 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
         <span style="color: blue">self</span><span style="font-weight: bold">.</span>body <span style="font-weight: bold">= </span>body
         <span style="color: blue">self</span><span style="font-weight: bold">.</span>env <span style="font-weight: bold">= </span>env
 
-    <span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"(lambda {0} {1})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals<span style="font-weight: bold">), </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>body<span style="font-weight: bold">))
+    <span style="color: blue; font-weight: bold">def </span>_symbol<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'lambda'
+
+    </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"({0} {1} {2})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>symbol<span style="font-weight: bold">(),
+                                      </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals<span style="font-weight: bold">), </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>body<span style="font-weight: bold">))
 
     </span><span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
         </span>args <span style="font-weight: bold">= (</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals<span style="font-weight: bold">, </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>body<span style="font-weight: bold">, </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>env<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"LambdaProcedure({0}, {1}, {2})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(*(</span>repr<span style="font-weight: bold">(</span>a<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>a <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">))
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"{0}Procedure({1}, {2}, {3})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>_symbol<span style="font-weight: bold">().</span>capitalize<span style="font-weight: bold">(),
+                                                    *(</span>repr<span style="font-weight: bold">(</span>a<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>a <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">))
 
-</span><span style="color: blue; font-weight: bold">class </span>MuProcedure<span style="font-weight: bold">:
+    </span><span style="color: blue; font-weight: bold">def </span>__eq__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>other<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>type<span style="font-weight: bold">(</span>other<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">is </span>type<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>\
+               <span style="color: blue">self</span><span style="font-weight: bold">.</span>formals <span style="font-weight: bold">== </span>other<span style="font-weight: bold">.</span>formals <span style="color: blue; font-weight: bold">and </span>\
+               <span style="color: blue">self</span><span style="font-weight: bold">.</span>body <span style="font-weight: bold">== </span>other<span style="font-weight: bold">.</span>body <span style="color: blue; font-weight: bold">and </span>\
+               <span style="color: blue">self</span><span style="font-weight: bold">.</span>env <span style="font-weight: bold">== </span>other<span style="font-weight: bold">.</span>env
+
+    <span style="color: blue; font-weight: bold">def </span>apply<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>proper_tail_recursion<span style="font-weight: bold">:
+            </span><span style="color: green; font-style: italic"># Implemented in Question 22.
+            </span><span style="color: red">"*** YOUR CODE HERE ***"
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span><span style="color: red">"*** YOUR CODE HERE ***"
+
+</span><span style="color: blue; font-weight: bold">class </span>MuProcedure<span style="font-weight: bold">(</span>LambdaProcedure<span style="font-weight: bold">):
     </span><span style="color: darkred">"""A procedure defined by a mu expression, which has dynamic scope.
      _________________
     &lt; Scheme is cool! &gt;
@@ -169,39 +243,60 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
                     ||     ||
     """
 
-    </span><span style="color: blue; font-weight: bold">def </span>__init__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>formals<span style="font-weight: bold">, </span>body<span style="font-weight: bold">):
-        </span><span style="color: darkred">"""A procedure whose formal parameter list is FORMALS (a Scheme list),
-        whose body is the single Scheme expression BODY.  A mu expression
-        containing multiple expressions, such as (mu (x) (display x) (+ x 1))
-        can be handled by using (begin (display x) (+ x 1)) as the body."""
-        </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals <span style="font-weight: bold">= </span>formals
-        <span style="color: blue">self</span><span style="font-weight: bold">.</span>body <span style="font-weight: bold">= </span>body
+    </span><span style="color: blue; font-weight: bold">def </span>_symbol<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'mu'
 
-    <span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"(mu {0} {1})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals<span style="font-weight: bold">), </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>body<span style="font-weight: bold">))
+    </span><span style="color: blue; font-weight: bold">def </span>apply<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>proper_tail_recursion<span style="font-weight: bold">:
+            </span><span style="color: green; font-style: italic"># Implemented in Question 22.
+            </span><span style="color: red">"*** YOUR CODE HERE ***"
+        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+            </span><span style="color: red">"*** YOUR CODE HERE ***"
 
-    </span><span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-        </span>args <span style="font-weight: bold">= (</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals<span style="font-weight: bold">, </span><span style="color: blue">self</span><span style="font-weight: bold">.</span>body<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"MuProcedure({0}, {1})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(*(</span>repr<span style="font-weight: bold">(</span>a<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">for </span>a <span style="color: blue; font-weight: bold">in </span>args<span style="font-weight: bold">))
+</span><span style="color: green; font-style: italic"># Call-by-name (nu) extension.
+</span><span style="color: blue; font-weight: bold">class </span>NuProcedure<span style="font-weight: bold">(</span>LambdaProcedure<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A procedure whose parameters are to be passed by name."""
+
+    </span><span style="color: blue; font-weight: bold">def </span>_symbol<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'nu'
+
+    "*** YOUR CODE HERE ***"
+
+</span><span style="color: blue; font-weight: bold">class </span>Thunk<span style="font-weight: bold">(</span>LambdaProcedure<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""A by-name value that is to be called as a parameterless function when
+    its value is fetched to be used."""
+
+    </span><span style="color: red">"*** YOUR CODE HERE ***"
 
 
 </span><span style="color: green; font-style: italic">#################
 # Special forms #
 #################
 
-</span><span style="color: blue; font-weight: bold">def </span>do_lambda_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Evaluate a lambda form with parameters VALS in environment ENV."""
+# All of the 'do_..._form' methods return a value and an environment,
+# as for the 'apply' method on Procedures.  That is, they either return
+# (V, None), indicating that the value of the special form is V, or they
+# return (Expr, Env), indicating that the value of the special form is what
+# you would get by evaluating Expr in the environment Env.
+
+</span><span style="color: blue; font-weight: bold">def </span>do_lambda_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">, </span>function_type<span style="font-weight: bold">=</span>LambdaProcedure<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Evaluate a lambda form with formals VALS[0] and body VALS.second
+    in environment ENV, creating a procedure of type FUNCTION_TYPE
+    (a subtype of Procedure)."""
     </span>check_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span><span style="color: red">2</span><span style="font-weight: bold">)
     </span>formals <span style="font-weight: bold">= </span>vals<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
     </span>check_formals<span style="font-weight: bold">(</span>formals<span style="font-weight: bold">)
     </span><span style="color: red">"*** YOUR CODE HERE ***"
 
-</span><span style="color: blue; font-weight: bold">def </span>do_mu_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Evaluate a mu form with parameters VALS."""
-    </span>check_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span><span style="color: red">2</span><span style="font-weight: bold">)
-    </span>formals <span style="font-weight: bold">= </span>vals<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]
-    </span>check_formals<span style="font-weight: bold">(</span>formals<span style="font-weight: bold">)
-    </span><span style="color: red">"*** YOUR CODE HERE ***"
+</span><span style="color: blue; font-weight: bold">def </span>do_mu_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Evaluate a mu (dynamically scoped lambda) form with formals VALS[0]
+    and body VALS.second in environment ENV."""
+    </span><span style="color: blue; font-weight: bold">return </span>do_lambda_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">, </span>function_type<span style="font-weight: bold">=</span>MuProcedure<span style="font-weight: bold">)
+
+</span><span style="color: blue; font-weight: bold">def </span>do_nu_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Evaluate a mu (call-by-name scoped lambda) form with formals VALS[0]
+    and body VALS.second in environment ENV."""
+    </span><span style="color: blue; font-weight: bold">return </span>do_lambda_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">, </span>function_type<span style="font-weight: bold">=</span>NuProcedure<span style="font-weight: bold">)
 
 </span><span style="color: blue; font-weight: bold">def </span>do_define_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Evaluate a define form with parameters VALS in environment ENV."""
@@ -210,13 +305,14 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
     </span><span style="color: blue; font-weight: bold">if </span>scheme_symbolp<span style="font-weight: bold">(</span>target<span style="font-weight: bold">):
         </span>check_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span><span style="color: red">2</span><span style="font-weight: bold">, </span><span style="color: red">2</span><span style="font-weight: bold">)
         </span><span style="color: red">"*** YOUR CODE HERE ***"
-    </span><span style="color: blue; font-weight: bold">elif </span>isinstance<span style="font-weight: bold">(</span>target<span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">):
+    </span><span style="color: blue; font-weight: bold">elif </span>scheme_pairp<span style="font-weight: bold">(</span>target<span style="font-weight: bold">):
         </span><span style="color: red">"*** YOUR CODE HERE ***"
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"bad argument to define"</span><span style="font-weight: bold">)
 
-</span><span style="color: blue; font-weight: bold">def </span>do_quote_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Evaluate a quote form with parameters VALS."""
+
+</span><span style="color: blue; font-weight: bold">def </span>do_quote_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+    </span><span style="color: darkred">"""Evaluate a quote form with parameters VALS. ENV is ignored."""
     </span>check_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
     </span><span style="color: red">"*** YOUR CODE HERE ***"
 
@@ -261,7 +357,7 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
     &gt;&gt;&gt; print(s)
     (quote hello)
     &gt;&gt;&gt; scheme_eval(s, Frame(None))  # "hello" is undefined in this frame.
-    'hello'
+    intern('hello')
     """
     </span><span style="color: blue; font-weight: bold">return </span>Pair<span style="font-weight: bold">(</span><span style="color: red">"quote"</span><span style="font-weight: bold">, </span>Pair<span style="font-weight: bold">(</span>value<span style="font-weight: bold">, </span>nil<span style="font-weight: bold">))
 
@@ -274,30 +370,60 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
     </span>num_clauses <span style="font-weight: bold">= </span>len<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">for </span>i<span style="font-weight: bold">, </span>clause <span style="color: blue; font-weight: bold">in </span>enumerate<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">):
         </span>check_form<span style="font-weight: bold">(</span>clause<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">if </span>clause<span style="font-weight: bold">.</span>first <span style="font-weight: bold">== </span><span style="color: red">"else"</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">if </span>clause<span style="font-weight: bold">.</span>first <span style="color: blue; font-weight: bold">is </span>else_sym<span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">if </span>i <span style="font-weight: bold">&lt; </span>num_clauses<span style="font-weight: bold">-</span><span style="color: red">1</span><span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"else must be last"</span><span style="font-weight: bold">)
-            </span>test <span style="font-weight: bold">= </span><span style="color: blue; font-weight: bold">True
-            if </span>clause<span style="font-weight: bold">.</span>second <span style="color: blue; font-weight: bold">is </span>nil<span style="font-weight: bold">:
+            </span>test <span style="font-weight: bold">= </span>scheme_true
+            <span style="color: blue; font-weight: bold">if </span>clause<span style="font-weight: bold">.</span>second <span style="color: blue; font-weight: bold">is </span>nil<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"badly formed else clause"</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
             </span>test <span style="font-weight: bold">= </span>scheme_eval<span style="font-weight: bold">(</span>clause<span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">if </span>scheme_true<span style="font-weight: bold">(</span>test<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">if </span>test<span style="font-weight: bold">:
             </span><span style="color: red">"*** YOUR CODE HERE ***"
-    </span><span style="color: blue; font-weight: bold">return </span>okay
+    </span><span style="color: blue; font-weight: bold">return </span>okay<span style="font-weight: bold">, </span><span style="color: blue">None
 
-<span style="color: blue; font-weight: bold">def </span>do_begin_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
+</span><span style="color: blue; font-weight: bold">def </span>do_begin_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
     </span><span style="color: darkred">"""Evaluate begin form with parameters VALS in environment ENV."""
-    </span>check_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span><span style="color: red">1</span><span style="font-weight: bold">)
+    </span>check_form<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>scheme_nullp<span style="font-weight: bold">(</span>vals<span style="font-weight: bold">):
+        </span><span style="color: blue; font-weight: bold">return </span>okay<span style="font-weight: bold">, </span><span style="color: blue">None
     </span><span style="color: red">"*** YOUR CODE HERE ***"
 
-</span>LOGIC_FORMS <span style="font-weight: bold">= {
-        </span><span style="color: red">"and"</span><span style="font-weight: bold">: </span>do_and_form<span style="font-weight: bold">,
-        </span><span style="color: red">"or"</span><span style="font-weight: bold">: </span>do_or_form<span style="font-weight: bold">,
-        </span><span style="color: red">"if"</span><span style="font-weight: bold">: </span>do_if_form<span style="font-weight: bold">,
-        </span><span style="color: red">"cond"</span><span style="font-weight: bold">: </span>do_cond_form<span style="font-weight: bold">,
-        </span><span style="color: red">"begin"</span><span style="font-weight: bold">: </span>do_begin_form<span style="font-weight: bold">,
-        }
+</span><span style="color: green; font-style: italic"># Collected symbols with significance to the interpreter
+
+</span>and_sym              <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"and"</span><span style="font-weight: bold">)
+</span>begin_sym            <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"begin"</span><span style="font-weight: bold">)
+</span>cond_sym             <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"cond"</span><span style="font-weight: bold">)
+</span>define_macro_sym     <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"define-macro"</span><span style="font-weight: bold">)
+</span>define_sym           <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"define"</span><span style="font-weight: bold">)
+</span>else_sym             <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"else"</span><span style="font-weight: bold">)
+</span>if_sym               <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"if"</span><span style="font-weight: bold">)
+</span>lambda_sym           <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"lambda"</span><span style="font-weight: bold">)
+</span>let_sym              <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"let"</span><span style="font-weight: bold">)
+</span>mu_sym               <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"mu"</span><span style="font-weight: bold">)
+</span>nu_sym               <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"nu"</span><span style="font-weight: bold">)
+</span>or_sym               <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"or"</span><span style="font-weight: bold">)
+</span>quasiquote_sym       <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"quasiquote"</span><span style="font-weight: bold">)
+</span>quote_sym            <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"quote"</span><span style="font-weight: bold">)
+</span>set_bang_sym         <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"set!"</span><span style="font-weight: bold">)
+</span>unquote_splicing_sym <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"unquote-splicing"</span><span style="font-weight: bold">)
+</span>unquote_sym          <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span><span style="color: red">"unquote"</span><span style="font-weight: bold">)
+
+</span><span style="color: green; font-style: italic"># Collected special forms
+
+</span>SPECIAL_FORMS <span style="font-weight: bold">= {
+        </span>and_sym<span style="font-weight: bold">:          </span>do_and_form<span style="font-weight: bold">,
+        </span>begin_sym<span style="font-weight: bold">:        </span>do_begin_form<span style="font-weight: bold">,
+        </span>cond_sym<span style="font-weight: bold">:         </span>do_cond_form<span style="font-weight: bold">,
+        </span>define_sym<span style="font-weight: bold">:       </span>do_define_form<span style="font-weight: bold">,
+        </span>if_sym<span style="font-weight: bold">:           </span>do_if_form<span style="font-weight: bold">,
+        </span>lambda_sym<span style="font-weight: bold">:       </span>do_lambda_form<span style="font-weight: bold">,
+        </span>let_sym<span style="font-weight: bold">:          </span>do_let_form<span style="font-weight: bold">,
+        </span>mu_sym<span style="font-weight: bold">:           </span>do_mu_form<span style="font-weight: bold">,
+        </span>nu_sym<span style="font-weight: bold">:           </span>do_nu_form<span style="font-weight: bold">,
+        </span>or_sym<span style="font-weight: bold">:           </span>do_or_form<span style="font-weight: bold">,
+        </span>quote_sym<span style="font-weight: bold">:        </span>do_quote_form<span style="font-weight: bold">,
+}
 
 </span><span style="color: green; font-style: italic"># Utility methods for checking the structure of Scheme programs
 
@@ -322,51 +448,7 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
     """
     </span><span style="color: red">"*** YOUR CODE HERE ***"
 
-</span><span style="color: green; font-style: italic">##################
-# Tail Recursion #
-##################
-
-</span><span style="color: blue; font-weight: bold">def </span>scheme_optimized_eval<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">, </span>env<span style="font-weight: bold">):
-    </span><span style="color: darkred">"""Evaluate Scheme expression EXPR in environment ENV."""
-    </span><span style="color: blue; font-weight: bold">while True</span><span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">if </span>expr <span style="color: blue; font-weight: bold">is </span><span style="color: blue">None</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"Cannot evaluate an undefined expression."</span><span style="font-weight: bold">)
-
-        </span><span style="color: green; font-style: italic"># Evaluate Atoms
-        </span><span style="color: blue; font-weight: bold">if </span>scheme_symbolp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
-            </span><span style="color: blue; font-weight: bold">return </span>env<span style="font-weight: bold">.</span>lookup<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">elif </span>scheme_atomp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>scheme_stringp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">or </span>expr <span style="color: blue; font-weight: bold">is </span>okay<span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">return </span>expr
-
-        <span style="color: green; font-style: italic"># All non-atomic expressions are lists.
-        </span><span style="color: blue; font-weight: bold">if not </span>scheme_listp<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">):
-            </span><span style="color: blue; font-weight: bold">raise </span>SchemeError<span style="font-weight: bold">(</span><span style="color: red">"malformed list: {0}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>expr<span style="font-weight: bold">)))
-        </span>first<span style="font-weight: bold">, </span>rest <span style="font-weight: bold">= </span>expr<span style="font-weight: bold">.</span>first<span style="font-weight: bold">, </span>expr<span style="font-weight: bold">.</span>second
-
-        <span style="color: green; font-style: italic"># Evaluate Combinations
-        </span><span style="color: blue; font-weight: bold">if </span><span style="font-weight: bold">(</span>scheme_symbolp<span style="font-weight: bold">(</span>first<span style="font-weight: bold">) </span><span style="color: green; font-style: italic"># first might be unhashable
-            </span><span style="color: blue; font-weight: bold">and </span>first <span style="color: blue; font-weight: bold">in </span>LOGIC_FORMS<span style="font-weight: bold">):
-            </span><span style="color: red">"*** YOUR CODE HERE ***"
-        </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"lambda"</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">return </span>do_lambda_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"mu"</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">return </span>do_mu_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"define"</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">return </span>do_define_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"quote"</span><span style="font-weight: bold">:
-            </span><span style="color: blue; font-weight: bold">return </span>do_quote_form<span style="font-weight: bold">(</span>rest<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">elif </span>first <span style="font-weight: bold">== </span><span style="color: red">"let"</span><span style="font-weight: bold">:
-            </span><span style="color: red">"*** YOUR CODE HERE ***"
-        </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
-            </span><span style="color: red">"*** YOUR CODE HERE ***"
-
-</span><span style="color: green; font-style: italic">################################################################
-# Uncomment the following line to apply tail call optimization #
-################################################################
-# scheme_eval = scheme_optimized_eval
-
-
-################
+</span><span style="color: green; font-style: italic">################
 # Input/Output #
 ################
 
@@ -375,7 +457,7 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
     </span><span style="color: darkred">"""Read and evaluate input until an end of file or keyboard interrupt."""
     </span><span style="color: blue; font-weight: bold">if </span>startup<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">for </span>filename <span style="color: blue; font-weight: bold">in </span>load_files<span style="font-weight: bold">:
-            </span>scheme_load<span style="font-weight: bold">(</span>filename<span style="font-weight: bold">, </span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
+            </span>scheme_load<span style="font-weight: bold">(</span>scstr<span style="font-weight: bold">(</span>filename<span style="font-weight: bold">), </span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">while True</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
             </span>src <span style="font-weight: bold">= </span>next_line<span style="font-weight: bold">()
@@ -383,7 +465,7 @@ eval/apply mutual recurrence, environment model, and read-eval-print loop.
                 </span>expression <span style="font-weight: bold">= </span>scheme_read<span style="font-weight: bold">(</span>src<span style="font-weight: bold">)
                 </span>result <span style="font-weight: bold">= </span>scheme_eval<span style="font-weight: bold">(</span>expression<span style="font-weight: bold">, </span>env<span style="font-weight: bold">)
                 </span><span style="color: blue; font-weight: bold">if not </span>quiet <span style="color: blue; font-weight: bold">and </span>result <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">:
-                    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>result<span style="font-weight: bold">)
+                    </span>scheme_print<span style="font-weight: bold">(</span>result<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">except </span><span style="font-weight: bold">(</span>SchemeError<span style="font-weight: bold">, </span>SyntaxError<span style="font-weight: bold">, </span>ValueError<span style="font-weight: bold">, </span>RuntimeError<span style="font-weight: bold">) </span>as err<span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">if </span><span style="font-weight: bold">(</span>isinstance<span style="font-weight: bold">(</span>err<span style="font-weight: bold">, </span>RuntimeError<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and
                 </span><span style="color: red">'maximum recursion depth exceeded' </span><span style="color: blue; font-weight: bold">not in </span>err<span style="font-weight: bold">.</span>args<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">]):
@@ -410,9 +492,9 @@ def </span>scheme_load<span style="font-weight: bold">(*</span>args<span style="
     </span>quiet <span style="font-weight: bold">= </span>args<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">] </span><span style="color: blue; font-weight: bold">if </span>len<span style="font-weight: bold">(</span>args<span style="font-weight: bold">) &gt; </span><span style="color: red">2 </span><span style="color: blue; font-weight: bold">else True
     </span>env <span style="font-weight: bold">= </span>args<span style="font-weight: bold">[-</span><span style="color: red">1</span><span style="font-weight: bold">]
     </span><span style="color: blue; font-weight: bold">if </span><span style="font-weight: bold">(</span>scheme_stringp<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">)):
-        </span>sym <span style="font-weight: bold">= </span>eval<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">)
+        </span>sym <span style="font-weight: bold">= </span>intern<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">))
     </span>check_type<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">, </span>scheme_symbolp<span style="font-weight: bold">, </span><span style="color: red">0</span><span style="font-weight: bold">, </span><span style="color: red">"load"</span><span style="font-weight: bold">)
-    </span>with scheme_open<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">) </span>as infile<span style="font-weight: bold">:
+    </span>with scheme_open<span style="font-weight: bold">(</span>str<span style="font-weight: bold">(</span>sym<span style="font-weight: bold">)) </span>as infile<span style="font-weight: bold">:
         </span>lines <span style="font-weight: bold">= </span>infile<span style="font-weight: bold">.</span>readlines<span style="font-weight: bold">()
     </span>args <span style="font-weight: bold">= (</span>lines<span style="font-weight: bold">, </span><span style="color: blue">None</span><span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">if </span>quiet <span style="color: blue; font-weight: bold">else </span><span style="font-weight: bold">(</span>lines<span style="font-weight: bold">,)
     </span><span style="color: blue; font-weight: bold">def </span>next_line<span style="font-weight: bold">():
@@ -439,7 +521,11 @@ def </span>scheme_load<span style="font-weight: bold">(*</span>args<span style="
     </span>env<span style="font-weight: bold">.</span>define<span style="font-weight: bold">(</span><span style="color: red">"eval"</span><span style="font-weight: bold">, </span>PrimitiveProcedure<span style="font-weight: bold">(</span>scheme_eval<span style="font-weight: bold">, </span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">))
     </span>env<span style="font-weight: bold">.</span>define<span style="font-weight: bold">(</span><span style="color: red">"apply"</span><span style="font-weight: bold">, </span>PrimitiveProcedure<span style="font-weight: bold">(</span>scheme_apply<span style="font-weight: bold">, </span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">))
     </span>env<span style="font-weight: bold">.</span>define<span style="font-weight: bold">(</span><span style="color: red">"load"</span><span style="font-weight: bold">, </span>PrimitiveProcedure<span style="font-weight: bold">(</span>scheme_load<span style="font-weight: bold">, </span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">))
-    </span>add_primitives<span style="font-weight: bold">(</span>env<span style="font-weight: bold">)
+
+    </span><span style="color: blue; font-weight: bold">for </span>names<span style="font-weight: bold">, </span>fn <span style="color: blue; font-weight: bold">in </span>get_primitive_bindings<span style="font-weight: bold">():
+        </span><span style="color: blue; font-weight: bold">for </span>name <span style="color: blue; font-weight: bold">in </span>names<span style="font-weight: bold">:
+            </span>proc <span style="font-weight: bold">= </span>PrimitiveProcedure<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">)
+            </span>env<span style="font-weight: bold">.</span>define<span style="font-weight: bold">(</span>name<span style="font-weight: bold">, </span>proc<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">return </span>env
 
 @main

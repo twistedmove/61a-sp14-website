@@ -432,7 +432,6 @@ In our version of Sudoku, our objective is to fill a 4x4 grid such that each col
               (?m ?n ?o ?p)))
       (anagram (?a ?b ?e ?f) (1 2 3 4))
       ; YOUR CODE HERE
-      ; Press Ctrl-Enter once you're done typing
                                       )
 </div>
 
