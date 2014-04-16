@@ -21,8 +21,7 @@
     <script src="../../interpreter/deps/lib-xj.js"></script>
     <script src="../../interpreter/coding.js"> </script>
     <script>
-      set_interpreter_path("/~cs61a/sp14/interpreter/");
-      //set_interpreter_path("/interpreter/");
+      set_interpreter_path("../../interpreter/");
       set_language("logic");
     </script>
 
@@ -74,9 +73,8 @@ make the query true.</p>
 
 <p>The language we will use is called Logic. An
 <a href="http://inst.eecs.berkeley.edu/~cs61a/sp14/logic/logic.html">online Logic interpreter</a>
-is provided for this lab, which you can use to evaluate logic
-expressions on this page.
-You can also use this online Logic interpreter for subsequent
+is embedded in this lab, which you can use to evaluate logic expressions on
+this page.  You can also use this online Logic interpreter for subsequent
 homeworks.</p>
 
 <p>Let's review the basics. In Logic, the primitive data types are called
@@ -93,7 +91,7 @@ fact keyword. The first relation that follows is the conclusion, and
 any remaining relations are hypotheses. All hypotheses must be
 satisfied for the conclusion to be valid.</p>
 
-<div id="a1">
+<div id="food-chain">
 (fact (food-chain ?creature1 ?creature2)
       (eats ?creature1 ?creature3)
       (eats ?creature3 ?creature2))
@@ -105,7 +103,7 @@ higher on the food chain than <code>creature2</code>.</p>
 
 <p>Simple facts contain only a conclusion relation, which is always true.</p>
 
-<div id="a2">
+<div id="eats">
 (fact (eats shark big-fish))
 (fact (eats big-fish small-fish))
 (fact (eats domo kittens))
@@ -125,15 +123,22 @@ interpreter prints the truth value (either <code>Success!</code> or <code>Failed
 there are variables inside of the query, the interpreter will print all
 possible mappings that satisfy the query.</p>
 
-<div id="a3">
+<p>Each code block that contains a logic expression can be evaluated by clicking
+into the block and pressing <code>Ctrl-Enter</code>. You can also edit the code and
+evaluate it afterwards by pressing <code>Ctrl-Enter</code>.</p>
+
+<div id="a1">
+;; Click here and press Ctrl-Enter
 (query (eats zombie brains))
 </div>
 
-<div id="a4">
+<div id="a2">
+;; Click here and press Ctrl-Enter
 (query (eats domo zombie))
 </div>
 
-<div id="a5">
+<div id="a3">
+;; Click here and press Ctrl-Enter
 (query (eats zombie ?what))
 </div>
 
@@ -147,9 +152,8 @@ values.</p>
 
 <h3 class='question'>Question 1</h3>
 
-<p>Within your Logic interactive session, type in the <code>food-chain</code> fact,
-and enter in the facts mentioned from above. Issue a Logic query that
-answers the following questions:</p>
+<p>In the following box, the <code>food-chain</code> facts mentioned above are
+already defined. Write Logic queries that answers the following questions:</p>
 
 <ol>
 <li>Do sharks eat big-fish?</li>
@@ -159,15 +163,18 @@ answers the following questions:</p>
 <li>What animals (if any, or multiple) eat zombies?</li>
 </ol>
 
+<div id="b1">
+;; Write your queries here, press Ctrl-Enter to evaluate them
+</div>
+
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton0">Toggle Solution</button>
   <div id="toggleText0" style="display: none">
-    <pre><code>logic&gt; (query (eats shark big-fish))
-logic&gt; (query (food-chain ?what small-fish))
-logic&gt; (query (eats ?what small-fish))
-logic&gt; (query (eats ?what sharks))
-logic&gt; (query (eats ?what zombie))
-</code></pre>
+    <p>(query (eats shark big-fish))
+(query (food-chain ?what small-fish))
+(query (eats ?what small-fish))
+(query (eats ?what sharks))
+(query (eats ?what zombie))</p>
 
   </div>
 <?php } ?>
@@ -178,7 +185,7 @@ logic&gt; (query (eats ?what zombie))
 separated by only one animal. For instance, if I added the following
 facts:</p>
 
-<div id="a6">
+<div id="more-eats">
 (fact (eats shark big-fish))
 (fact (eats big-fish small-fish))
 (fact (eats small-fish shrimp))
@@ -187,7 +194,8 @@ facts:</p>
 <p>I'd like the <code>food-chain</code> to output that shark is higher on the food
 chain than shrimp. Currently, the <code>food-chain</code> fact doesn't do this:</p>
 
-<div id="a7">
+<div id="c1">
+;; Click here and press Ctrl-Enter
 (query (food-chain shark shrimp))
 </div>
 
@@ -207,7 +215,8 @@ dominates <code>B</code>.</li>
 express different cases of a fact simply by entering in each case one
 at a time:</p>
 
-<div id="a8">
+<div id="food-chain-v2">
+;; Click here and press Ctrl-Enter
 (fact (food-chain-v2 ?a ?b) (eats ?a ?b))
 (fact (food-chain-v2 ?a ?b) (eats ?a ?c) (food-chain-v2 ?c ?b))
 (query (food-chain-v2 shark shrimp))
@@ -243,16 +252,16 @@ result of <code>append([1, 2, 3], [5, 7])</code> is:</p>
 translating this idea into Logic! The first base case is relatively
 straightforward:</p>
 
-<pre><code>logic&gt; (fact (append () ?b ?b))
-logic&gt; (query (append () (1 2 3) ?what))
-Success!
-what: (1 2 3)
-</code></pre>
+<div id="append-base">
+;; Click here and press Ctrl-Enter
+(fact (append () ?b ?b))
+(query (append () (1 2 3) ?what))
+</div>
 
 <p>So far so good! Now, we have to handle the general (recursive) case:</p>
 
-<pre><code>;;                A        B       C
-logic&gt; (fact (append (?car . ?cdr) ?b (?car . ?partial)) (append ?cdr ?b ?partial))
+<pre><code>;;                  A        B       C
+(fact (append (?car . ?cdr) ?b (?car . ?partial)) (append ?cdr ?b ?partial))
 </code></pre>
 
 <p>This translates to: the list <code>A</code> appended to <code>B</code> is <code>C</code> if <code>C</code> is the
@@ -261,7 +270,7 @@ result of sticking the CAR of <code>A</code> to the result of appending the CDR 
 case of the Scheme function definition? As a summary, here is the
 complete definition for append:</p>
 
-<div id="a9">
+<div id="append">
 (fact (append () ?b ?b ))
 (fact (append (?a . ?r) ?y (?a . ?z)) (append ?r ?y ?z))
 </div>
@@ -269,7 +278,7 @@ complete definition for append:</p>
 <p>If it helps you, here's an alternate solution that might be a little
 easier to read:</p>
 
-<div id="a10">
+<div id="append-easier">
 (fact (car (?car . ?cdr) ?car))
 (fact (cdr (?car . ?cdr) ?cdr))
 (fact (append () ?b ?b))
@@ -285,17 +294,29 @@ definition for the append fact.</p>
 outputs. Note that some of these queries might result in multiple
 possible outputs.</p>
 
-<pre><code>logic&gt; (query (append (1 2 3) (4 5) (1 2 3 4 5)))
-logic&gt; (query (append (1 2) (5 8) ?what))
-logic&gt; (query (append (a b c) ?what (a b c oh mai gawd)))
-logic&gt; (query (append ?what (so cool) (this is so cool)))
-logic&gt; (query (append ?what1 ?what2 (will this really work)))
-</code></pre>
+<div id="e1">
+; Click here and press Ctrl-Enter
+(query (append (1 2 3) (4 5) (1 2 3 4 5)))
+</div>
 
-<div id="a11">
-(fact (append () ?b ?b ))
-(fact (append (?a . ?r) ?y (?a . ?z)) (append ?r ?y ?z))
-; Try out the queries here! Type ctrl-Enter once you're done typing
+<div id="e2">
+; Click here and press Ctrl-Enter
+(query (append (1 2) (5 8) ?what))
+</div>
+
+<div id="e3">
+; Click here and press Ctrl-Enter
+(query (append (a b c) ?what (a b c oh mai gawd)))
+</div>
+
+<div id="e4">
+; Click here and press Ctrl-Enter
+(query (append ?what (so cool) (this is so cool)))
+</div>
+
+<div id="e5">
+; Click here and press Ctrl-Enter
+(query (append ?what1 ?what2 (will this really work)))
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -310,8 +331,9 @@ logic&gt; (query (append ?what1 ?what2 (will this really work)))
 <p>Define a fact <code>(fact (last-element ?lst ?x))</code> that outputs <code>Success</code> if
 <code>?x</code> is the last element of the input list <code>?lst</code>.</p>
 
-<div id="a12">
-; YOUR CODE HERE; type ctrl-enter once you're done typing
+<div id="f1">
+; YOUR CODE HERE
+; Press Ctrl-Enter once you're done typing
 
 (query (last-element (a b c) c))
 (query (last-element (3) ?x))
@@ -337,8 +359,9 @@ logic&gt; (query (append ?what1 ?what2 (will this really work)))
 
 <p>When you finish, the following queries should succeed:</p>
 
-<div id="a13">
+<div id="g1">
 ; YOUR CODE HERE
+; Press Ctrl-Enter once you're done typing
 
 (query (firsts ((1 2 3 4) (2 3 4 5) (1 2 3 4) (1 2 3 2)) ?x))
 ; ?x should be (1 2 1 1)
@@ -363,8 +386,9 @@ logic&gt; (query (append ?what1 ?what2 (will this really work)))
 
 <p>When you finish, the following queries should succeed:</p>
 
-<div id="a14">
+<div id="h1">
 ; YOUR CODE HERE
+; Press Ctrl-Enter once you're done typing
 
 (query (rests ((1 2 3 4) (2 3 4 5) (1 2 3 4) (1 2 3 2)) ?x))
 ; ?x should be ((2 3 4) (3 4 5) (2 3 4) (2 3 2))
@@ -434,6 +458,7 @@ The input to rows will be the entire 4x4 grid. Fill in rest of the facts in the 
 <div id="rows">
 (fact (rows ()))
 ; YOUR CODE HERE
+; Press Ctrl-Enter once you're done typing
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -451,10 +476,10 @@ The input to rows will be the entire 4x4 grid. Fill in rest of the facts in the 
 
 <div id="rows-doc">
 (query (rows ((1 ?b  4 ?d)
-              (?e  3 2  1) 
-              (?i  4 3  2) 
+              (?e  3 2  1)
+              (?i  4 3  2)
               ( 2 4 3 ?p))))
-</div> 
+</div>
 
 <h3 class='question'>Question 8</h3>
 
@@ -464,6 +489,7 @@ Again, remember the the entire grid will be the input to our column query.</p>
 <div id="cols">
 (fact (cols (() () () ())))
 ; YOUR CODE HERE
+; Press Ctrl-Enter once you're done typing
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -481,8 +507,8 @@ Again, remember the the entire grid will be the input to our column query.</p>
 
 <div id="cols-doc">
 (query (cols ((1 ?b  4 ?d)
-              (?e  3 2  1) 
-              (?i  4 3  2) 
+              (?e  3 2  1)
+              (?i  4 3  2)
               ( 2 4 3 ?p))))
 </div>
 
@@ -490,10 +516,11 @@ Again, remember the the entire grid will be the input to our column query.</p>
 
 <p>Now, let's put all of this together to solve our any 4x4 Sudoku grid. Fill in the fact below to do so.</p>
 
-<p><div id="solve">
+<div id="solve">
 (fact (solve ?grid)
 ; YOUR CODE HERE
-~ prompt ~ </p>
+; Press Ctrl-Enter once you're done typing
+</div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton8">Toggle Solution</button>
@@ -531,27 +558,33 @@ Again, remember the the entire grid will be the input to our column query.</p>
   <?php } ?>
   <script>
     $(function() {
-      prompt("a1", []);
-prompt("a2", []);
-prompt("a3", ["a2"]);
-prompt("a4", ["a2"]);
-prompt("a5", ["a2"]);
-prompt("a6", []);
-prompt("a7", ["a6"]);
-prompt("a8", ["a6"]);
-prompt("a9", []);
-prompt("a10", []);
-prompt("a11", []);
-prompt("a12", ["a9"]);
-prompt("a13", ["a9"]);
-prompt("a14", ["a9"]);
+      prompt("food-chain", []);
+prompt("eats", []);
+prompt("a1", ["eats"]);
+prompt("a2", ["eats"]);
+prompt("a3", ["eats"]);
+prompt("b1", ["food-chain", "eats"]);
+prompt("more-eats", ["eats"]);
+prompt("c1", ["more-eats", "food-chain"]);
+prompt("food-chain-v2", ["more-eats"]);
+prompt("append-base", []);
+prompt("append", []);
+prompt("append-easier", []);
+prompt("e1", ["append"]);
+prompt("e2", ["append"]);
+prompt("e3", ["append"]);
+prompt("e4", ["append"]);
+prompt("e5", ["append"]);
+prompt("f1", []);
+prompt("g1", []);
+prompt("h1", []);
 prompt("sudoku", []);
 prompt("boxes", ["sudoku"]);
-prompt("rows", ["boxes"]);
+prompt("rows", ["sudoku"]);
 prompt("rows-doc", ["rows"]);
-prompt("cols", ["rows"]);
+prompt("cols", ["sudoku"]);
 prompt("cols-doc", ["cols"]);
-prompt("solve", ["cols"]);
+prompt("solve", ["rows", "cols", "boxes"]);
 prompt("solve-doc", ["solve"]);
     });
   </script>
