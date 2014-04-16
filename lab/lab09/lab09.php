@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">@import url("../lab_style.css");</style>
     <style type="text/css">@import url("../61a_style.css");</style>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
 
     
 
@@ -321,7 +322,7 @@ However, this is not always the case.</p>
         self.start = 5
 
     def __iter__(self):
-        while self.start &amp;lt 10:
+        while self.start &lt; 10:
             self.start += 1
             yield self.start
 
@@ -654,19 +655,20 @@ infinite as well.</p>
   </div>
 <?php } ?>
 <p></p>
-<script>
-
-</script>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script>
+      <?php for ($i = 0; $i < 13; $i++) { ?>
+        $("#toggleButton<?php echo $i; ?>").click(function () {
+          $("#toggleText<?php echo $i; ?>").toggle();
+      });
+      <?php } ?>
+    </script>
+  <?php } ?>
   <script>
-    <?php for ($i = 0; $i < 13; $i++) { ?>
-      $("#toggleButton<?php echo $i; ?>").click(function () {
-        $("#toggleText<?php echo $i; ?>").toggle();
+    $(function() {
+      
     });
-    <?php } ?>
   </script>
-<?php } ?>
 </html>
