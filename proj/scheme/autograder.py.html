@@ -893,7 +893,7 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
     </span>new <span style="font-weight: bold">= </span>check_for_updates<span style="font-weight: bold">(</span>all_tests<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>new<span style="font-weight: bold">:
         </span>with open<span style="font-weight: bold">(</span><span style="color: red">'tests.pkl'</span><span style="font-weight: bold">, </span><span style="color: red">'wb'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
-            </span>pickle<span style="font-weight: bold">.</span>dump<span style="font-weight: bold">(</span>all_tests<span style="font-weight: bold">, </span>f<span style="font-weight: bold">, </span>pickle<span style="font-weight: bold">.</span>HIGHEST_PROTOCOL<span style="font-weight: bold">)
+            </span>pickle<span style="font-weight: bold">.</span>dump<span style="font-weight: bold">(</span>all_tests<span style="font-weight: bold">, </span>f<span style="font-weight: bold">, </span>pickle<span style="font-weight: bold">.</span>DEFAULT_PROTOCOL<span style="font-weight: bold">)
         </span>exit<span style="font-weight: bold">(</span><span style="color: red">0</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
 
@@ -901,7 +901,7 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
         </span>unlock<span style="font-weight: bold">(</span>args<span style="font-weight: bold">.</span>unlock<span style="font-weight: bold">, </span>all_tests<span style="font-weight: bold">)
 
         </span>with open<span style="font-weight: bold">(</span><span style="color: red">'tests.pkl'</span><span style="font-weight: bold">, </span><span style="color: red">'wb'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
-            </span>pickle<span style="font-weight: bold">.</span>dump<span style="font-weight: bold">(</span>all_tests<span style="font-weight: bold">, </span>f<span style="font-weight: bold">, </span>pickle<span style="font-weight: bold">.</span>HIGHEST_PROTOCOL<span style="font-weight: bold">)
+            </span>pickle<span style="font-weight: bold">.</span>dump<span style="font-weight: bold">(</span>all_tests<span style="font-weight: bold">, </span>f<span style="font-weight: bold">, </span>pickle<span style="font-weight: bold">.</span>DEFAULT_PROTOCOL<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">if </span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">:
             </span>tests <span style="font-weight: bold">= </span>get_test<span style="font-weight: bold">(</span>all_tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">], </span>args<span style="font-weight: bold">.</span>question<span style="font-weight: bold">)

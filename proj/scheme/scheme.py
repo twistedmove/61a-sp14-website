@@ -200,7 +200,8 @@ class LambdaProcedure(Procedure):
         return 'lambda'
 
     def __str__(self):
-        return "({0} {1} {2})".format(symbol(),
+        # UPDATED 4/16/2014 @ 13:20
+        return "({0} {1} {2})".format(self._symbol(),
                                       str(self.formals), str(self.body))
 
     def __repr__(self):

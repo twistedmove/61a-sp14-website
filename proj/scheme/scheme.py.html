@@ -210,7 +210,8 @@ proper_tail_recursion <span style="font-weight: bold">= </span><span style="colo
         </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">'lambda'
 
     </span><span style="color: blue; font-weight: bold">def </span>__str__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
-        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"({0} {1} {2})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>symbol<span style="font-weight: bold">(),
+        </span><span style="color: green; font-style: italic"># UPDATED 4/16/2014 @ 13:20
+        </span><span style="color: blue; font-weight: bold">return </span><span style="color: red">"({0} {1} {2})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>_symbol<span style="font-weight: bold">(),
                                       </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>formals<span style="font-weight: bold">), </span>str<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">.</span>body<span style="font-weight: bold">))
 
     </span><span style="color: blue; font-weight: bold">def </span>__repr__<span style="font-weight: bold">(</span><span style="color: blue">self</span><span style="font-weight: bold">):
