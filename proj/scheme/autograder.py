@@ -354,7 +354,7 @@ def run(test, global_frame=None, interactive=False, super_preamble=''):
     print()
     return passed == len(test['suites'])
 
-def test_call(fn, args=(), kargs={}, case=-1, frame={}):
+def test_call(fn, args=(), kargs={}, case=-1, frame={}, exception=None):
     """Attempts to call fn with args and kargs. If a timeout or error
     occurs in the process, raise a TestError.
 
@@ -374,6 +374,8 @@ def test_call(fn, args=(), kargs={}, case=-1, frame={}):
     try:
         result = timed(fn, args, kargs)
     except Exception as e:
+        if type(exception)==type and issubclass(exception, BaseException) and isinstance(e, exception):
+            return exception
         raise TestError(case, frame)
     else:
         return result
@@ -441,7 +443,8 @@ def run_suite(preamble, suite, postamble, global_frame):
                 expect = test_call(eval, (next(out_iter), frame.copy()),
                                    case=case_num, frame=frame)
                 actual = test_call(eval, (current.replace('$ ', ''), frame),
-                                   case=case_num, frame=frame)
+                                   case=case_num, frame=frame,
+                                   exception=expect)
                 if expect != actual:
                     raise TestError(case_num, frame)
             else:
@@ -506,7 +509,8 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
                                      interactive=interactive)
                 actual = handle_test(eval, (current.replace('$ ', ''), global_frame),
                                      console=console, current=current,
-                                     interactive=interactive)
+                                     interactive=interactive,
+                                     exception=expect)
             except TestError:
                 return global_frame
             display_prompt(actual, '')
@@ -535,7 +539,7 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
     return global_frame
 
 def handle_test(fn, args=(), kargs={}, console=None, current='',
-                interactive=False):
+                interactive=False, exception=None):
     """Handles a function call and possibly starts an interactive
     console.
 
@@ -570,6 +574,8 @@ def handle_test(fn, args=(), kargs={}, console=None, current='',
         print()
         raise TestError()
     except Exception as e:
+        if type(exception) == type and issubclass(exception, BaseException) and isinstance(e, exception):
+            return exception
         stacktrace = traceback.format_exc()
         token = '<module>\n'
         index = stacktrace.rfind(token) + len(token)
@@ -791,15 +797,23 @@ def parse_changelog(tests, changelog, remote):
             change_contents = ''
         # Apply last change
         try:
-            apply_change(change_header, change_contents, tests, remote)
+            terminate = apply_change(change_header, change_contents, tests, remote)
         except AssertionError as e:
             print("Update error:", e)
             return False
+        if terminate:
+            break
+            tests['project_info']['version'] = version
+
     toggle_output(True)
-    tests['project_info']['version'] = changes[-1]
-    print("Updated to VERSION " + changes[-1])
-    print("Applied changelog:\n")
-    print(changelog)
+    tests['project_info']['version'] = version
+    print("Updated to VERSION " + version)
+    if version != changes[-1]:
+        print("Please re-run the autograder to check for further "
+              "updates")
+    else:
+        print("Applied changelog:\n")
+        print(changelog)
     toggle_output(False)
     return True
 
@@ -819,6 +833,10 @@ def apply_change(header, contents, tests, remote):
 
     RAISES:
     AssertionError; if any invalid changes are attempted.
+
+    RETURNS:
+    bool; True if GRADER was updated, in which case update should
+    exit immediately
     """
     error_msg = 'invalid change "{}"'.format(header)
     if header.strip() == GRADER:
@@ -832,25 +850,29 @@ def apply_change(header, contents, tests, remote):
             raise AssertionError("Checking for updates timed out.")
         with open('autograder.py', 'w') as f:
             f.write(new_autograder)
-        return
+        return True
 
-    header = header.split(':')
+    header = header.split('::')
     assert len(header) == 3, error_msg
 
     change_type = header[0].strip()
-    test_name = header[1].replace('test', '').strip()
-    location = header[2].strip()
-    test = get_test(tests['tests'], test_name)
+    if 'test' in header[1]:
+        test_name = header[1].replace('test', '').strip()
+        test = get_test(tests['tests'], test_name)
+        target = "test"
+    else:
+        target = "tests['" + header[1].strip() + "']"
+    target += header[2].strip()
 
-    assert test is not None, 'Invalid test to update: {}'.format(test_name)
+    assert target is not None, 'Invalid test to update: {}'.format(test_name)
 
     if change_type == CHANGE:
-        update = "test{} = {}".format(location, contents)
+        update = "{} = {}".format(target, contents)
     elif change_type == APPEND:
-        update = "test{}.append({})".format(location, contents)
+        update = "{}.append({})".format(target, contents)
     elif change_type == REMOVE:
         assert contents == '', "Tried " + REMOVE + " with nonempty contents: " + contents
-        update = "del test{}".format(location)
+        update = "del {}".format(target)
     else:
         raise(error_msg)
     try:

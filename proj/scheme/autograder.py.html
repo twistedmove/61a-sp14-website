@@ -364,7 +364,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
     </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">return </span>passed <span style="font-weight: bold">== </span>len<span style="font-weight: bold">(</span>test<span style="font-weight: bold">[</span><span style="color: red">'suites'</span><span style="font-weight: bold">])
 
-</span><span style="color: blue; font-weight: bold">def </span>test_call<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>case<span style="font-weight: bold">=-</span><span style="color: red">1</span><span style="font-weight: bold">, </span>frame<span style="font-weight: bold">={}):
+</span><span style="color: blue; font-weight: bold">def </span>test_call<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>case<span style="font-weight: bold">=-</span><span style="color: red">1</span><span style="font-weight: bold">, </span>frame<span style="font-weight: bold">={}, </span>exception<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
     </span><span style="color: darkred">"""Attempts to call fn with args and kargs. If a timeout or error
     occurs in the process, raise a TestError.
 
@@ -384,7 +384,9 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
         </span>result <span style="font-weight: bold">= </span>timed<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">, </span>kargs<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">(</span>case<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>exception<span style="font-weight: bold">)==</span>type <span style="color: blue; font-weight: bold">and </span>issubclass<span style="font-weight: bold">(</span>exception<span style="font-weight: bold">, </span>BaseException<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>isinstance<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>exception<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return </span>exception
+        <span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">(</span>case<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">return </span>result
 
@@ -451,7 +453,8 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
                 </span>expect <span style="font-weight: bold">= </span>test_call<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>next<span style="font-weight: bold">(</span>out_iter<span style="font-weight: bold">), </span>frame<span style="font-weight: bold">.</span>copy<span style="font-weight: bold">()),
                                    </span>case<span style="font-weight: bold">=</span>case_num<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">=</span>frame<span style="font-weight: bold">)
                 </span>actual <span style="font-weight: bold">= </span>test_call<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>frame<span style="font-weight: bold">),
-                                   </span>case<span style="font-weight: bold">=</span>case_num<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">=</span>frame<span style="font-weight: bold">)
+                                   </span>case<span style="font-weight: bold">=</span>case_num<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">=</span>frame<span style="font-weight: bold">,
+                                   </span>exception<span style="font-weight: bold">=</span>expect<span style="font-weight: bold">)
                 </span><span style="color: blue; font-weight: bold">if </span>expect <span style="font-weight: bold">!= </span>actual<span style="font-weight: bold">:
                     </span><span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">(</span>case_num<span style="font-weight: bold">, </span>frame<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
@@ -516,7 +519,8 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
                                      </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">)
                 </span>actual <span style="font-weight: bold">= </span>handle_test<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>global_frame<span style="font-weight: bold">),
                                      </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span>current<span style="font-weight: bold">,
-                                     </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">)
+                                     </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">,
+                                     </span>exception<span style="font-weight: bold">=</span>expect<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">except </span>TestError<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
             display_prompt<span style="font-weight: bold">(</span>actual<span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">)
@@ -545,7 +549,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
     </span><span style="color: blue; font-weight: bold">return </span>global_frame
 
 <span style="color: blue; font-weight: bold">def </span>handle_test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>console<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
-                </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">):
+                </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">, </span>exception<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
     </span><span style="color: darkred">"""Handles a function call and possibly starts an interactive
     console.
 
@@ -580,7 +584,9 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
         </span><span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
-        </span>stacktrace <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">()
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>exception<span style="font-weight: bold">) == </span>type <span style="color: blue; font-weight: bold">and </span>issubclass<span style="font-weight: bold">(</span>exception<span style="font-weight: bold">, </span>BaseException<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>isinstance<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>exception<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return </span>exception
+        stacktrace <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">()
         </span>token <span style="font-weight: bold">= </span><span style="color: red">'&lt;module&gt;\n'
         </span>index <span style="font-weight: bold">= </span>stacktrace<span style="font-weight: bold">.</span>rfind<span style="font-weight: bold">(</span>token<span style="font-weight: bold">) + </span>len<span style="font-weight: bold">(</span>token<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Traceback (most recent call last):'</span><span style="font-weight: bold">)
@@ -801,15 +807,23 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
             change_contents <span style="font-weight: bold">= </span><span style="color: red">''
         </span><span style="color: green; font-style: italic"># Apply last change
         </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:
-            </span>apply_change<span style="font-weight: bold">(</span>change_header<span style="font-weight: bold">, </span>change_contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">, </span>remote<span style="font-weight: bold">)
+            </span>terminate <span style="font-weight: bold">= </span>apply_change<span style="font-weight: bold">(</span>change_header<span style="font-weight: bold">, </span>change_contents<span style="font-weight: bold">, </span>tests<span style="font-weight: bold">, </span>remote<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">except </span>AssertionError as e<span style="font-weight: bold">:
             </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Update error:"</span><span style="font-weight: bold">, </span>e<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">return False
-    </span>toggle_output<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">)
-    </span>tests<span style="font-weight: bold">[</span><span style="color: red">'project_info'</span><span style="font-weight: bold">][</span><span style="color: red">'version'</span><span style="font-weight: bold">] = </span>changes<span style="font-weight: bold">[-</span><span style="color: red">1</span><span style="font-weight: bold">]
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Updated to VERSION " </span><span style="font-weight: bold">+ </span>changes<span style="font-weight: bold">[-</span><span style="color: red">1</span><span style="font-weight: bold">])
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Applied changelog:\n"</span><span style="font-weight: bold">)
-    </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>changelog<span style="font-weight: bold">)
+        if </span>terminate<span style="font-weight: bold">:
+            </span><span style="color: blue; font-weight: bold">break
+            </span>tests<span style="font-weight: bold">[</span><span style="color: red">'project_info'</span><span style="font-weight: bold">][</span><span style="color: red">'version'</span><span style="font-weight: bold">] = </span>version
+
+    toggle_output<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">True</span><span style="font-weight: bold">)
+    </span>tests<span style="font-weight: bold">[</span><span style="color: red">'project_info'</span><span style="font-weight: bold">][</span><span style="color: red">'version'</span><span style="font-weight: bold">] = </span>version
+    <span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Updated to VERSION " </span><span style="font-weight: bold">+ </span>version<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span>version <span style="font-weight: bold">!= </span>changes<span style="font-weight: bold">[-</span><span style="color: red">1</span><span style="font-weight: bold">]:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Please re-run the autograder to check for further "
+              "updates"</span><span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">"Applied changelog:\n"</span><span style="font-weight: bold">)
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>changelog<span style="font-weight: bold">)
     </span>toggle_output<span style="font-weight: bold">(</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">return True
 
@@ -829,6 +843,10 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
 
     RAISES:
     AssertionError; if any invalid changes are attempted.
+
+    RETURNS:
+    bool; True if GRADER was updated, in which case update should
+    exit immediately
     """
     </span>error_msg <span style="font-weight: bold">= </span><span style="color: red">'invalid change "{}"'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>header<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">if </span>header<span style="font-weight: bold">.</span>strip<span style="font-weight: bold">() == </span>GRADER<span style="font-weight: bold">:
@@ -842,25 +860,29 @@ def </span>parse_changelog<span style="font-weight: bold">(</span>tests<span sty
             </span><span style="color: blue; font-weight: bold">raise </span>AssertionError<span style="font-weight: bold">(</span><span style="color: red">"Checking for updates timed out."</span><span style="font-weight: bold">)
         </span>with open<span style="font-weight: bold">(</span><span style="color: red">'autograder.py'</span><span style="font-weight: bold">, </span><span style="color: red">'w'</span><span style="font-weight: bold">) </span>as f<span style="font-weight: bold">:
             </span>f<span style="font-weight: bold">.</span>write<span style="font-weight: bold">(</span>new_autograder<span style="font-weight: bold">)
-        </span><span style="color: blue; font-weight: bold">return
+        </span><span style="color: blue; font-weight: bold">return True
 
-    </span>header <span style="font-weight: bold">= </span>header<span style="font-weight: bold">.</span>split<span style="font-weight: bold">(</span><span style="color: red">':'</span><span style="font-weight: bold">)
+    </span>header <span style="font-weight: bold">= </span>header<span style="font-weight: bold">.</span>split<span style="font-weight: bold">(</span><span style="color: red">'::'</span><span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">assert </span>len<span style="font-weight: bold">(</span>header<span style="font-weight: bold">) == </span><span style="color: red">3</span><span style="font-weight: bold">, </span>error_msg
 
     change_type <span style="font-weight: bold">= </span>header<span style="font-weight: bold">[</span><span style="color: red">0</span><span style="font-weight: bold">].</span>strip<span style="font-weight: bold">()
-    </span>test_name <span style="font-weight: bold">= </span>header<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">].</span>replace<span style="font-weight: bold">(</span><span style="color: red">'test'</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">).</span>strip<span style="font-weight: bold">()
-    </span>location <span style="font-weight: bold">= </span>header<span style="font-weight: bold">[</span><span style="color: red">2</span><span style="font-weight: bold">].</span>strip<span style="font-weight: bold">()
-    </span>test <span style="font-weight: bold">= </span>get_test<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">], </span>test_name<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">if </span><span style="color: red">'test' </span><span style="color: blue; font-weight: bold">in </span>header<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">]:
+        </span>test_name <span style="font-weight: bold">= </span>header<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">].</span>replace<span style="font-weight: bold">(</span><span style="color: red">'test'</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">).</span>strip<span style="font-weight: bold">()
+        </span>test <span style="font-weight: bold">= </span>get_test<span style="font-weight: bold">(</span>tests<span style="font-weight: bold">[</span><span style="color: red">'tests'</span><span style="font-weight: bold">], </span>test_name<span style="font-weight: bold">)
+        </span>target <span style="font-weight: bold">= </span><span style="color: red">"test"
+    </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
+        </span>target <span style="font-weight: bold">= </span><span style="color: red">"tests['" </span><span style="font-weight: bold">+ </span>header<span style="font-weight: bold">[</span><span style="color: red">1</span><span style="font-weight: bold">].</span>strip<span style="font-weight: bold">() + </span><span style="color: red">"']"
+    </span>target <span style="font-weight: bold">+= </span>header<span style="font-weight: bold">[</span><span style="color: red">2</span><span style="font-weight: bold">].</span>strip<span style="font-weight: bold">()
 
-    </span><span style="color: blue; font-weight: bold">assert </span>test <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">, </span><span style="color: red">'Invalid test to update: {}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>test_name<span style="font-weight: bold">)
+    </span><span style="color: blue; font-weight: bold">assert </span>target <span style="color: blue; font-weight: bold">is not </span><span style="color: blue">None</span><span style="font-weight: bold">, </span><span style="color: red">'Invalid test to update: {}'</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>test_name<span style="font-weight: bold">)
 
     </span><span style="color: blue; font-weight: bold">if </span>change_type <span style="font-weight: bold">== </span>CHANGE<span style="font-weight: bold">:
-        </span>update <span style="font-weight: bold">= </span><span style="color: red">"test{} = {}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>location<span style="font-weight: bold">, </span>contents<span style="font-weight: bold">)
+        </span>update <span style="font-weight: bold">= </span><span style="color: red">"{} = {}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>target<span style="font-weight: bold">, </span>contents<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">elif </span>change_type <span style="font-weight: bold">== </span>APPEND<span style="font-weight: bold">:
-        </span>update <span style="font-weight: bold">= </span><span style="color: red">"test{}.append({})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>location<span style="font-weight: bold">, </span>contents<span style="font-weight: bold">)
+        </span>update <span style="font-weight: bold">= </span><span style="color: red">"{}.append({})"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>target<span style="font-weight: bold">, </span>contents<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">elif </span>change_type <span style="font-weight: bold">== </span>REMOVE<span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">assert </span>contents <span style="font-weight: bold">== </span><span style="color: red">''</span><span style="font-weight: bold">, </span><span style="color: red">"Tried " </span><span style="font-weight: bold">+ </span>REMOVE <span style="font-weight: bold">+ </span><span style="color: red">" with nonempty contents: " </span><span style="font-weight: bold">+ </span>contents
-        update <span style="font-weight: bold">= </span><span style="color: red">"del test{}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>location<span style="font-weight: bold">)
+        update <span style="font-weight: bold">= </span><span style="color: red">"del {}"</span><span style="font-weight: bold">.</span>format<span style="font-weight: bold">(</span>target<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">else</span><span style="font-weight: bold">:
         </span><span style="color: blue; font-weight: bold">raise</span><span style="font-weight: bold">(</span>error_msg<span style="font-weight: bold">)
     </span><span style="color: blue; font-weight: bold">try</span><span style="font-weight: bold">:

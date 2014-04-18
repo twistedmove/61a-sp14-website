@@ -1,0 +1,126 @@
+VERSION 1.2
+CHANGE:: cache::
+    """
+    def eval(snippet):
+        \"\"\"Convert snippet into a single expression and scheme_eval it.\"\"\"
+        buf = scheme.buffer_lines(snippet.split('\\n'), show_prompt=True)
+        exprs = []
+        try:
+            while True:
+                exprs.append(scheme.scheme_read(buf))
+        except EOFError:
+            pass
+        env = scheme.create_global_frame()
+        for expr in exprs[:-1]:
+            scheme.scheme_eval(expr, env)
+        return scheme.scheme_eval(exprs[-1], env)
+
+    def pairify(lst):
+        if not lst:
+            return nil
+        if type(lst) is not list:
+            return lst
+        if type(lst[0]) is str:
+            return Pair(lst[0], pairify(lst[1:]))
+        return Pair(pairify(lst[0]), pairify(lst[1:]))
+
+    def make_check_scheme(file='questions.scm'):
+        f = open(file, 'r')
+        contents = f.read()
+        def check_scheme(snippet, preamble=''):
+            stuff = contents + preamble + snippet
+            return eval(stuff)
+        f.close()
+        return check_scheme
+
+    check_scheme = make_check_scheme()
+    """
+CHANGE:: test Q1:: ['preamble']['all']
+    """
+    def parse(*args):
+        return read_line(*args)
+
+    # End preamble
+    """
+CHANGE:: test Q1:: ['suites'][0][4][1]
+    "SyntaxError"
+CHANGE:: test Q1:: ['suites'][0][11][1]
+    "SyntaxError"
+CHANGE:: test Q2:: ['preamble']['all']
+    """
+    def parse(*args):
+        return read_line(*args)
+
+    # End preamble
+    """
+CHANGE:: test Q2:: ['suites'][1][0][1]
+    "SyntaxError"
+CHANGE:: test Q2:: ['suites'][1][3][1]
+    "SyntaxError"
+CHANGE:: test Q2:: ['suites'][1][4][1]
+    "SyntaxError"
+CHANGE:: test Q4:: ['suites'][1][2][1]
+    "SchemeError"
+CHANGE:: test Q4:: ['suites'][1][3][1]
+    "SchemeError"
+CHANGE:: test Q4:: ['suites'][1][4][1]
+    "SchemeError"
+CHANGE:: test Q7:: ['suites'][1][1][1]
+    "SchemeError"
+CHANGE:: test QA9:: ['suites'][0][4][1]
+    "SchemeError"
+CHANGE:: test Q10:: ['preamble']
+    {
+        'all': """
+        global_frame = create_global_frame()
+        """
+    }
+REMOVE:: test Q10:: ['suites'][:]
+APPEND:: test Q10:: ['suites']
+    [
+        ["""
+         frame = global_frame.make_call_frame(pairify(["a", "b", "c"]), pairify([1, 2, 3]))
+         $ frame.parent
+         $ frame.lookup('a')
+         $ frame.lookup('b')
+         $ frame.lookup('c')
+         """,
+         ["global_frame", "1", "2", "3"], 'unlocked'],
+        ["""
+         frame = global_frame.make_call_frame(nil, nil)
+         $ frame.parent
+         """,
+         "global_frame", 'unlocked'],
+        ["""
+         first = Frame(global_frame)
+         second = first.make_call_frame(nil, nil)
+         $ second.parent
+         """,
+         "first", 'unlocked'],
+    ]
+APPEND:: test Q10:: ['suites']
+    [
+        ["""
+         $ global_frame.make_call_frame(pairify(["a"]), pairify([1, 2, 3]))
+         """,
+         "SchemeError", 'unlocked'],
+        ["""
+         $ global_frame.make_call_frame(pairify(["a", "b", "c"]), pairify([1]))
+         """,
+         "SchemeError", 'unlocked'],
+    ]
+CHANGE:: test QB11:: ['suites'][0][1][1]
+    "SchemeError"
+CHANGE:: test QB11:: ['suites'][0][2][1]
+    "SchemeError"
+CHANGE:: test QB11:: ['suites'][0][3][1]
+    "SchemeError"
+CHANGE:: test QB11:: ['suites'][0][4][1]
+    "SchemeError"
+CHANGE:: test QB11:: ['suites'][1][0][1]
+    "SchemeError"
+CHANGE:: test QB11:: ['suites'][1][1][1]
+    "SchemeError"
+
+VERSION 1.1
+GRADER
