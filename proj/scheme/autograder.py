@@ -510,7 +510,7 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
                 actual = handle_test(eval, (current.replace('$ ', ''), global_frame),
                                      console=console, current=current,
                                      interactive=interactive,
-                                     exception=expect)
+                                     expect=expect)
             except TestError:
                 return global_frame
             display_prompt(actual, '')
@@ -539,7 +539,7 @@ def handle_failure(error, test, suite_number, global_frame, interactive):
     return global_frame
 
 def handle_test(fn, args=(), kargs={}, console=None, current='',
-                interactive=False, exception=None):
+                interactive=False, expect=None):
     """Handles a function call and possibly starts an interactive
     console.
 
@@ -574,13 +574,14 @@ def handle_test(fn, args=(), kargs={}, console=None, current='',
         print()
         raise TestError()
     except Exception as e:
-        if type(exception) == type and issubclass(exception, BaseException) and isinstance(e, exception):
-            return exception
+        if type(expect) == type and issubclass(expect, BaseException) and isinstance(e, expect):
+            return expect
         stacktrace = traceback.format_exc()
         token = '<module>\n'
         index = stacktrace.rfind(token) + len(token)
         print('Traceback (most recent call last):')
         print(stacktrace[index:])
+        print('# Error: expected', repr(expect), "got", e.__class__.__name__)
         if interactive:
             interact(console)
         print()
@@ -845,7 +846,7 @@ def apply_change(header, contents, tests, remote):
             data = timed(urllib.request.urlopen, (url,), timeout=5)
             new_autograder = data.read().decode('utf-8')
         except (urllib.error.URLError, urllib.error.HTTPError):
-            raise AssertionError("Couldn't retrive remote update for autograder.py")
+            raise AssertionError("Couldn't retrieve remote update for autograder.py")
         except TimeoutError:
             raise AssertionError("Checking for updates timed out.")
         with open('autograder.py', 'w') as f:

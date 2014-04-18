@@ -520,7 +520,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
                 </span>actual <span style="font-weight: bold">= </span>handle_test<span style="font-weight: bold">(</span>eval<span style="font-weight: bold">, (</span>current<span style="font-weight: bold">.</span>replace<span style="font-weight: bold">(</span><span style="color: red">'$ '</span><span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">), </span>global_frame<span style="font-weight: bold">),
                                      </span>console<span style="font-weight: bold">=</span>console<span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span>current<span style="font-weight: bold">,
                                      </span>interactive<span style="font-weight: bold">=</span>interactive<span style="font-weight: bold">,
-                                     </span>exception<span style="font-weight: bold">=</span>expect<span style="font-weight: bold">)
+                                     </span>expect<span style="font-weight: bold">=</span>expect<span style="font-weight: bold">)
             </span><span style="color: blue; font-weight: bold">except </span>TestError<span style="font-weight: bold">:
                 </span><span style="color: blue; font-weight: bold">return </span>global_frame
             display_prompt<span style="font-weight: bold">(</span>actual<span style="font-weight: bold">, </span><span style="color: red">''</span><span style="font-weight: bold">)
@@ -549,7 +549,7 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
     </span><span style="color: blue; font-weight: bold">return </span>global_frame
 
 <span style="color: blue; font-weight: bold">def </span>handle_test<span style="font-weight: bold">(</span>fn<span style="font-weight: bold">, </span>args<span style="font-weight: bold">=(), </span>kargs<span style="font-weight: bold">={}, </span>console<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">, </span>current<span style="font-weight: bold">=</span><span style="color: red">''</span><span style="font-weight: bold">,
-                </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">, </span>exception<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
+                </span>interactive<span style="font-weight: bold">=</span><span style="color: blue; font-weight: bold">False</span><span style="font-weight: bold">, </span>expect<span style="font-weight: bold">=</span><span style="color: blue">None</span><span style="font-weight: bold">):
     </span><span style="color: darkred">"""Handles a function call and possibly starts an interactive
     console.
 
@@ -584,13 +584,14 @@ TIMEOUT <span style="font-weight: bold">= </span><span style="color: red">10
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
         </span><span style="color: blue; font-weight: bold">raise </span>TestError<span style="font-weight: bold">()
     </span><span style="color: blue; font-weight: bold">except </span>Exception as e<span style="font-weight: bold">:
-        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>exception<span style="font-weight: bold">) == </span>type <span style="color: blue; font-weight: bold">and </span>issubclass<span style="font-weight: bold">(</span>exception<span style="font-weight: bold">, </span>BaseException<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>isinstance<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>exception<span style="font-weight: bold">):
-            </span><span style="color: blue; font-weight: bold">return </span>exception
+        </span><span style="color: blue; font-weight: bold">if </span>type<span style="font-weight: bold">(</span>expect<span style="font-weight: bold">) == </span>type <span style="color: blue; font-weight: bold">and </span>issubclass<span style="font-weight: bold">(</span>expect<span style="font-weight: bold">, </span>BaseException<span style="font-weight: bold">) </span><span style="color: blue; font-weight: bold">and </span>isinstance<span style="font-weight: bold">(</span>e<span style="font-weight: bold">, </span>expect<span style="font-weight: bold">):
+            </span><span style="color: blue; font-weight: bold">return </span>expect
         stacktrace <span style="font-weight: bold">= </span>traceback<span style="font-weight: bold">.</span>format_exc<span style="font-weight: bold">()
         </span>token <span style="font-weight: bold">= </span><span style="color: red">'&lt;module&gt;\n'
         </span>index <span style="font-weight: bold">= </span>stacktrace<span style="font-weight: bold">.</span>rfind<span style="font-weight: bold">(</span>token<span style="font-weight: bold">) + </span>len<span style="font-weight: bold">(</span>token<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'Traceback (most recent call last):'</span><span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span>stacktrace<span style="font-weight: bold">[</span>index<span style="font-weight: bold">:])
+        </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">(</span><span style="color: red">'# Error: expected'</span><span style="font-weight: bold">, </span>repr<span style="font-weight: bold">(</span>expect<span style="font-weight: bold">), </span><span style="color: red">"got"</span><span style="font-weight: bold">, </span>e<span style="font-weight: bold">.</span>__class__<span style="font-weight: bold">.</span>__name__<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">if </span>interactive<span style="font-weight: bold">:
             </span>interact<span style="font-weight: bold">(</span>console<span style="font-weight: bold">)
         </span><span style="color: blue; font-weight: bold">print</span><span style="font-weight: bold">()
