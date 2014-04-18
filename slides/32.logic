@@ -37,8 +37,11 @@
 (query (insert 1 (- - - - - -) ?result))
 (query (insert 1 (- - - - - -) ?r1) (insert 2 ?r1 ?r2))
 
-(fact (anagram () ()))
-(fact (anagram (?a . ?r) ?b) (insert ?a ?s ?b) (anagram ?r ?s))
+(fact (permutation () ()))
+(fact (permutation (?a . ?r) ?b) (insert ?a ?s ?b) (permutation ?r ?s))
+
+;  Synonym
+(fact (anagram ?a ?b) (permutation ?a ?b))
 
 (query (anagram ?x (s t a r)))
 
