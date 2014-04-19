@@ -1,3 +1,23 @@
+VERSION 1.4
+APPEND:: test Q3:: ['suites'][0]
+    ["""
+     env = create_global_frame()
+     oddp = env.bindings[intern("odd?")]
+     twos = Pair(2, Pair(2, nil))
+     $ scheme_apply(oddp, twos, env)
+     """,
+     'SchemeError', 'unlocked']
+APPEND:: test Q3:: ['suites'][0]
+    ["""
+     env = create_global_frame()
+     eval_func = env.bindings[intern("eval")]
+     twos = Pair(2, nil)
+     $ scheme_apply(eval_func, twos, env) # be sure to check use_env
+     """,
+     '2', 'unlocked']
+APPEND:: test QA5:: ['suites'][0]
+    ['eval("(define x (+ 2 3)) x")', "5", 'unlocked']
+
 VERSION 1.3
 GRADER
 

@@ -846,7 +846,7 @@ def apply_change(header, contents, tests, remote):
             data = timed(urllib.request.urlopen, (url,), timeout=5)
             new_autograder = data.read().decode('utf-8')
         except (urllib.error.URLError, urllib.error.HTTPError):
-            raise AssertionError("Couldn't retrieve remote update for autograder.py")
+            raise AssertionError("Couldn't retrive remote update for autograder.py")
         except TimeoutError:
             raise AssertionError("Checking for updates timed out.")
         with open('autograder.py', 'w') as f:
