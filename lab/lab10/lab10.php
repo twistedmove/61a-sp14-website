@@ -411,7 +411,7 @@ possible outputs.</p>
 
 <p>Assume we have the two facts insert and anagram as follows</p>
 
-<div id="sudoku">
+<div id="anagram">
 (fact (insert ?a ?r (?a . ?r)))
 (fact (insert ?a (?b . ?r) (?b . ?s)) (insert ?a ?r ?s))
 (fact (anagram () ()))
@@ -427,12 +427,12 @@ In our version of Sudoku, our objective is to fill a 4x4 grid such that each col
 
 <div id="boxes">
 (fact (boxes ((?a ?b ?c ?d)
-              (?e ?f ?g ?h)
-              (?i ?j ?k ?l)
-              (?m ?n ?o ?p)))
-      (anagram (?a ?b ?e ?f) (1 2 3 4))
-      ; YOUR CODE HERE
-                                      )
+            (?e ?f ?g ?h)
+            (?i ?j ?k ?l)
+            (?m ?n ?o ?p)))
+    (anagram (?a ?b ?e ?f) (1 2 3 4))
+    ; YOUR CODE HERE
+                                    )
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -457,8 +457,9 @@ The input to rows will be the entire 4x4 grid. Fill in rest of the facts in the 
 
 <div id="rows">
 (fact (rows ()))
+(fact (rows (?x . ?xs))
 ; YOUR CODE HERE
-; Press Ctrl-Enter once you're done typing
+)
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -475,10 +476,11 @@ The input to rows will be the entire 4x4 grid. Fill in rest of the facts in the 
 <p>When you finish, the following queries should return the correct values:</p>
 
 <div id="rows-doc">
-(query (rows ((1 ?b  4 ?d)
-              (?e  3 2  1)
-              (?i  4 3  2)
-              ( 2 4 3 ?p))))
+; Press Ctrl-Enter here once you're done typing
+(query (rows (( 1  2  4 ?a)
+            (?b  3  2  1)
+            (?c  4  3  2)
+            ( 2  4  3 ?d))))
 </div>
 
 <h3 class='question'>Question 8</h3>
@@ -489,7 +491,6 @@ Again, remember the the entire grid will be the input to our column query.</p>
 <div id="cols">
 (fact (cols (() () () ())))
 ; YOUR CODE HERE
-; Press Ctrl-Enter once you're done typing
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
@@ -506,10 +507,11 @@ Again, remember the the entire grid will be the input to our column query.</p>
 <p>When you finish, the following queries should return the correct values:</p>
 
 <div id="cols-doc">
-(query (cols ((1 ?b  4 ?d)
-              (?e  3 2  1)
-              (?i  4 3  2)
-              ( 2 4 3 ?p))))
+; Press Ctrl-Enter here once you're done typing
+(query (cols (( 1 ?b  4 ?d)
+            ( 3  3  2  1)
+            (?a  1 ?c  2)
+            ( 2  4  3  4))))
 </div>
 
 <h3 class='question'>Question 9</h3>
@@ -519,37 +521,79 @@ Again, remember the the entire grid will be the input to our column query.</p>
 <div id="solve">
 (fact (solve ?grid)
 ; YOUR CODE HERE
-; Press Ctrl-Enter once you're done typing
+)
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
   <button id="toggleButton8">Toggle Solution</button>
   <div id="toggleText8" style="display: none">
-    <p>(fact (solve ?grid)
+    <pre><code>(fact (solve ?grid)
       (boxes ?grid)
       (rows ?grid)
-      (cols ?grid))</p>
+      (cols ?grid))
+</code></pre>
 
   </div>
 <?php } ?>
 <p>When you finish, check your solution with the following queries:</p>
 
 <div id="solve-doc">
-(query (solve ((?a ?b ?c ?d)
-               (?e ?f ?g ?h)
-               (?i ?j ?k ?l)
-               (?m ?n ?o ?p))))
+; Template for solving Sudoku, don't run this without
+; replacing some variables with numbers!
 
+; (query (solve ((?a ?b ?c ?d)
+;              (?e ?f ?g ?h)
+;              (?i ?j ?k ?l)
+;              (?m ?n ?o ?p))))
+
+; Press Ctrl-Enter here once you're done typing
 (query (solve (( 1 ?b  4 ?d)
-               (?e  3 ?g  1)
-               (?i  4 ?k  2)
-               ( 2 ?n  3 ?p))))
+             (?e  3 ?g  1)
+             (?i  4 ?k  2)
+             ( 2 ?n  3 ?p))))
 </div>
+
+<h3 class='question'>Question 10</h3>
+
+<p>Solve the following sudoku puzzle with the new solver that you built!</p>
+
+<p>Tip: it's a good idea to save your code in one place before trying this, since
+this will take a long time. Also, press Ctrl-Enter only once and be prepared to
+wait ;)</p>
+
+<pre><code>+-+-+-+-+
+|3| | |1|
++-+-+-+-+
+|1| | | |
++-+-+-+-+
+| | | | |
++-+-+-+-+
+| | |2| |
++-+-+-+-+
+</code></pre>
+
+<?php if ($CUR_DATE > $RELEASE_DATE) { ?>
+  <button id="toggleButton9">Toggle Solution</button>
+  <div id="toggleText9" style="display: none">
+    <pre><code>+-+-+-+-+
+|3|2|4|1|
++-+-+-+-+
+|1|4|3|2|
++-+-+-+-+
+|2|3|1|4|
++-+-+-+-+
+|4|1|2|3|
++-+-+-+-+
+</code></pre>
+
+  </div>
+<?php } ?>
+<p></p>
 
   </body>
   <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
     <script>
-      <?php for ($i = 0; $i < 9; $i++) { ?>
+      <?php for ($i = 0; $i < 10; $i++) { ?>
         $("#toggleButton<?php echo $i; ?>").click(function () {
           $("#toggleText<?php echo $i; ?>").toggle();
       });
@@ -578,14 +622,14 @@ prompt("e5", ["append"]);
 prompt("f1", []);
 prompt("g1", []);
 prompt("h1", []);
-prompt("sudoku", []);
-prompt("boxes", ["sudoku"]);
-prompt("rows", ["sudoku"]);
-prompt("rows-doc", ["rows"]);
-prompt("cols", ["sudoku"]);
-prompt("cols-doc", ["cols"]);
-prompt("solve", ["rows", "cols", "boxes"]);
-prompt("solve-doc", ["solve"]);
+prompt("anagram", []);
+prompt("boxes", []);
+prompt("rows", []);
+prompt("rows-doc", ["rows", "anagram"]);
+prompt("cols", []);
+prompt("cols-doc", ["cols", "anagram"]);
+prompt("solve", []);
+prompt("solve-doc", ["anagram", "boxes", "rows", "cols", "solve"]);
     });
   </script>
 </html>
