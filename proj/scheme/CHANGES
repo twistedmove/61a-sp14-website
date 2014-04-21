@@ -1,3 +1,13 @@
+VERSION 1.5
+APPEND:: test Q4:: ['suites'][1]
+    ["""
+     frame = create_global_frame()
+     frame.define("x", SchemeInt(3))
+     second_frame = Frame(frame)
+     $ second_frame.lookup("x")
+     """,
+     "SchemeInt(3)", 'unlocked']
+
 VERSION 1.4
 APPEND:: test Q3:: ['suites'][0]
     ["""
