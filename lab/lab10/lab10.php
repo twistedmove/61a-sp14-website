@@ -367,7 +367,7 @@ possible outputs.</p>
 ; ?x should be (1 2 1 1)
 
 (query (firsts ((2 3 4) (3 4 5) (2 3 4) (2 3 2)) ?y))
-; ?y should be (1 2 1 1)
+; ?y should be (2 3 2 2)
 </div>
 
 <?php if ($CUR_DATE > $RELEASE_DATE) { ?>
