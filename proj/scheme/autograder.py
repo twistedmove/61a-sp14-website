@@ -738,6 +738,7 @@ def check_for_updates(tests):
     version = tests['project_info']['version']
     remote = tests['project_info']['remote']
     print('You are running version', version, 'of the autograder')
+    print('Remote url:', remote)
     try:
         url = os.path.join(remote, 'CHANGES')
         data = timed(urllib.request.urlopen, (url,), timeout=5)
