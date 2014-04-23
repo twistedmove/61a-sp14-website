@@ -258,7 +258,7 @@ it is run through a <code>for</code> loop.</p>
         if self.current &gt; self.end:
             raise StopIteration
         self.current += 1
-        return self.current
+        return self.current - 1
     def __iter__(self):
         self.current = self.start
         return self
