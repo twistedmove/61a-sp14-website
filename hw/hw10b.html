@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
-<title>61A Homework 11</title>
+<title>61A Homework 10, Part B</title>
 <style type="text/css">
 
 /*
@@ -132,8 +132,8 @@ ol.upperroman {
 </style>
 </head>
 <body>
-<div class="document" id="a-homework-11">
-<h1 class="title">61A Homework 11</h1>
+<div class="document" id="a-homework-10-part-b">
+<h1 class="title">61A Homework 10, Part B</h1>
 
 <p><em>Due by 11:59pm on Friday, 5/2</em></p>
 <p>Homework 10 is in two parts, of which this is the second.  The solutions to
@@ -166,6 +166,7 @@ project together with <tt class="docutils literal">logic.py</tt> and <tt class="
 item, a list of lists, and a second list whose elements are the elements of the
 first list with the item added to the front of each:</p>
 <pre class="literal-block">
+; YOUR CODE HERE
 (query (add-to-all a ((b) (c d)) ((a b) (a c d))))
 ; expect Success!
 (query (add-to-all a ((b c) (b) (foo)) ?what))
@@ -184,6 +185,7 @@ that they appear in the original list:</p>
 (fact (append (?x . ?r) ?b (?x . ?c))
       (append ?r ?b ?c))
 
+; YOUR CODE HERE
 
 (query (sublists (1 2 3) ?subs))
 ; expect Success! ; subs: (() (3) (2) (2 3) (1) (1 3) (1 2) (1 2 3))
@@ -193,6 +195,7 @@ relates sublists of <tt class="docutils literal">fruits</tt> starting at a given
 <pre class="literal-block">
 (fact (fruits apple banana cherry date elderberry fig guava))
 
+; YOUR CODE HERE
 
 (query (fruits-tail date elderberry fig guava))
 ; expect Success!
@@ -210,6 +213,7 @@ other facts that you create yourself:</p>
 (fact (prefix (?first . ?p) (?first . ?s))
       (prefix ?p ?s))
 
+; YOUR CODE HERE
 
 (query (fruit-range cherry guava (date elderberry fig)))
 ; expect Success!
@@ -262,6 +266,7 @@ the other relations:</p>
 (fact (noun (cat . ?r) ?r))
 (fact (verb (carries . ?r) ?r))
 (fact (verb (feeds . ?r) ?r))
+; YOUR CODE HERE
 (query (optional-article (the boy) (boy)))
 ; expect Success!
 (query (optional-article (cat feeds boy) (cat feeds boy)))

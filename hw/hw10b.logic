@@ -3,6 +3,7 @@
 
 ;;; Q1.
 
+; YOUR CODE HERE
 (query (add-to-all a ((b) (c d)) ((a b) (a c d))))
 ; expect Success!
 (query (add-to-all a ((b c) (b) (foo)) ?what))
@@ -18,6 +19,7 @@
 (fact (append (?x . ?r) ?b (?x . ?c))
       (append ?r ?b ?c))
 
+; YOUR CODE HERE
 
 (query (sublists (1 2 3) ?subs))
 ; expect Success! ; subs: (() (3) (2) (2 3) (1) (1 3) (1 2) (1 2 3))
@@ -26,6 +28,7 @@
 
 (fact (fruits apple banana cherry date elderberry fig guava))
 
+; YOUR CODE HERE
 
 (query (fruits-tail date elderberry fig guava))
 ; expect Success!
@@ -40,6 +43,7 @@
 (fact (prefix (?first . ?p) (?first . ?s))
       (prefix ?p ?s))
 
+; YOUR CODE HERE
 
 (query (fruit-range cherry guava (date elderberry fig)))
 ; expect Success!
@@ -77,6 +81,7 @@
 (fact (noun (cat . ?r) ?r))
 (fact (verb (carries . ?r) ?r))
 (fact (verb (feeds . ?r) ?r))
+; YOUR CODE HERE
 (query (optional-article (the boy) (boy)))
 ; expect Success!
 (query (optional-article (cat feeds boy) (cat feeds boy)))
