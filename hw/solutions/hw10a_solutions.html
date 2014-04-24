@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>61A Homework 10, Part A</title>
+<style type="text/css">
+
+/*
+:Author: John DeNero
+:Contact: papajohn@gmail.com
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with docutils for 61A lecture notes.
+
+*/
+
+div.note {
+  color: #A22;
+  font-style: italic;
+}
+
+p.admonition-title {
+  visibility: hidden;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 300;
+  max-width: 900px;
+}
+
+pre, kbd, samp, code, var, pre span {
+  font: medium/1 'Andale Mono', monospace;
+  line-height: 1.3;
+}
+
+h1, h2, h3, aside {
+  font-family: "Book Antiqua", Palatino, Georgia, serif;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+h1.title {
+  margin: 0;
+}
+
+h2.subtitle {
+  margin: 0;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+p {
+  margin: 1.25em 0;
+}
+
+p.first {
+  margin: 0 0;
+}
+
+html {
+  background: #fff;
+  color: #222;
+}
+
+body {
+  margin: 1em 40px;
+}
+
+tt {
+  color: #002;
+}
+
+/* links */
+
+a:link, .w a {
+  color: steelblue;
+}
+
+a:visited {
+  color: #b44582;
+}
+
+/* Code */
+
+pre.literal-block, pre.doctest-block {
+  border-left: 2px solid #EEE;
+  border-right: 2px solid #EEE;
+  background-color: #F3F3F6;
+  color: #000;
+  padding: 12px;
+  margin: 0px;
+}
+
+p.attribution {
+  text-align: right ;
+  margin-left: 20% }
+
+/* Ordered lists */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+</style>
+</head>
+<body>
+<div class="document" id="a-homework-10-part-a">
+<h1 class="title">61A Homework 10, Part A</h1>
+
+<p><em>Due by 11:59pm on Friday, 5/2</em></p>
+<p>Homework 10 is in two parts, of which this is the first.  The solutions to
+this part are in Python.  Those for 10b are in logic notation.</p>
+<p><strong>Submission.</strong> See the online <a class="reference external" href="../submit_tutorial.html">submission instructions</a>.
+Submit the files for hw10a and hw10b together as hw10.
+We have provided a <a class="reference external" href="hw10a.py">hw10a</a> starter file for the questions below.</p>
+<p><strong>Readings.</strong> <a class="reference external" href="http://composingprograms.com/pages/42-implicit-sequences.html">Sections
+`4.2</a>
+<a class="reference external" href="http://composingprograms.com/pages/43-declarative-programming.html">4.3</a>, and
+<a class="reference external" href="http://composingprograms.com/pages/44-unification.html">4.4</a>
+of Composing Programs.</p>
+<p><strong>Q1.</strong> (<em>Objects and recursion review</em>) A <a class="reference external" href="http://upload.wikimedia.org/wikipedia/commons/7/7e/Modern_mobile-art_mobiles_mobius.jpg">mobile</a>
+is a type of hanging sculpture.  A simple binary mobile consists of two
+branches, <tt class="docutils literal">left</tt> and <tt class="docutils literal">right</tt>. Each branch is a rod of a certain length,
+from which hangs either a weight or another mobile.</p>
+<p>Improve the classes for <tt class="docutils literal">Branch</tt>, <tt class="docutils literal">Weight</tt>, and <tt class="docutils literal">Mobile</tt> below in the
+following ways:</p>
+<blockquote>
+<ul class="simple">
+<li>The <tt class="docutils literal">left</tt> and <tt class="docutils literal">right</tt> attributes of a <tt class="docutils literal">Mobile</tt> should both be
+<tt class="docutils literal">Branch</tt> instances.  Check that the types of constructor arguments for
+<tt class="docutils literal">Mobile</tt> are <tt class="docutils literal">Branch</tt> instances, and raise an appropriate <tt class="docutils literal">TypeError</tt>
+for incorrect argument types.  See the doctest for <tt class="docutils literal">Mobile</tt> for exception
+details.</li>
+<li>The <tt class="docutils literal">length</tt> of a <tt class="docutils literal">Branch</tt> and the <tt class="docutils literal">weight</tt> of a <tt class="docutils literal">Weight</tt> should be
+positive numbers. Implement <tt class="docutils literal">check_positive</tt> to check if an object <tt class="docutils literal">x</tt>
+is a positive number.</li>
+<li>Add a property <tt class="docutils literal">weight</tt> that gives the total weight of the mobile.</li>
+<li>A mobile is said to be balanced if the torque applied by its left branch is
+equal to that applied by its right branch (that is, if the length of the
+left rod multiplied by the weight hanging from that rod is equal to the
+corresponding product for the right side) and if each of the submobiles
+hanging off its branches is balanced. Implement the method <tt class="docutils literal">is_balanced</tt>
+that returns <tt class="docutils literal">True</tt> if and only if the <tt class="docutils literal">Mobile</tt> is balanced.</li>
+</ul>
+</blockquote>
+<p>When you are finished, all doctests below should pass:</p>
+<pre class="literal-block">
+class Mobile:
+    &quot;&quot;&quot;A simple binary mobile that has branches of weights or other mobiles.
+
+    &gt;&gt;&gt; Mobile(1, 2)
+    Traceback (most recent call last):
+        ...
+    TypeError: 1 is not a Branch
+    &gt;&gt;&gt; m = Mobile(Branch(1, Weight(2)), Branch(2, Weight(1)))
+    &gt;&gt;&gt; m.weight
+    3
+    &gt;&gt;&gt; m.is_balanced()
+    True
+    &gt;&gt;&gt; m.left.contents = Mobile(Branch(1, Weight(1)), Branch(2, Weight(1)))
+    &gt;&gt;&gt; m.weight
+    3
+    &gt;&gt;&gt; m.left.contents.is_balanced()
+    False
+    &gt;&gt;&gt; m.is_balanced() # All submobiles must be balanced for m to be balanced
+    False
+    &gt;&gt;&gt; m.left.contents.right.contents.weight = 0.5
+    &gt;&gt;&gt; m.left.contents.is_balanced()
+    True
+    &gt;&gt;&gt; m.is_balanced()
+    False
+    &gt;&gt;&gt; m.right.length = 1.5
+    &gt;&gt;&gt; m.is_balanced()
+    True
+    &quot;&quot;&quot;
+
+    def __init__(self, left, right):
+        for v in (left, right):
+            if type(v) != Branch:
+                raise TypeError(str(v) + ' is not a Branch')
+        self.left = left
+        self.right = right
+
+    &#64;property
+    def weight(self):
+        &quot;&quot;&quot;The total weight of the mobile.&quot;&quot;&quot;
+        return self.left.contents.weight + self.right.contents.weight
+
+    def is_balanced(self):
+        &quot;&quot;&quot;True if and only if the mobile is balanced.&quot;&quot;&quot;
+        torque_equal = self.left.torque == self.right.torque
+        lc, rc = self.left.contents, self.right.contents
+        return torque_equal and lc.is_balanced() and rc.is_balanced()
+
+def check_positive(x):
+    &quot;&quot;&quot;Check that x is a positive number, and raise an exception otherwise.
+
+    &gt;&gt;&gt; check_positive('hello')
+    Traceback (most recent call last):
+    ...
+    TypeError: hello is not a number
+    &gt;&gt;&gt; check_positive('1')
+    Traceback (most recent call last):
+    ...
+    TypeError: 1 is not a number
+    &gt;&gt;&gt; check_positive(-2)
+    Traceback (most recent call last):
+    ...
+    ValueError: -2 &lt;= 0
+    &quot;&quot;&quot;
+    if not isinstance(x, int) and not isinstance(x, float):
+        raise TypeError(str(x) + ' is not a number')
+    if x &lt;= 0:
+        raise ValueError(str(x) + ' &lt;= 0')
+
+
+class Branch:
+    &quot;&quot;&quot;A branch of a simple binary mobile.&quot;&quot;&quot;
+
+    def __init__(self, length, contents):
+        if type(contents) not in (Weight, Mobile):
+            raise TypeError(str(contents) + ' is not a Weight or Mobile')
+        check_positive(length)
+        self.length = length
+        self.contents = contents
+
+    &#64;property
+    def torque(self):
+        &quot;&quot;&quot;The torque on the branch&quot;&quot;&quot;
+        return self.length * self.contents.weight
+
+
+class Weight:
+    &quot;&quot;&quot;A weight.&quot;&quot;&quot;
+    def __init__(self, weight):
+        check_positive(weight)
+        self.weight = weight
+
+    def is_balanced(self):
+        return True
+</pre>
+<p><strong>Q2.</strong> (<em>Python evaluation and recursion review</em>) Your partner designed a
+beautiful balanced Mobile, but forgot to fill in the classes of each part,
+instead just writing <tt class="docutils literal">T</tt>.</p>
+<p><tt class="docutils literal"><span class="pre">T(T(4,T(T(4,T(1)),T(1,T(4)))),T(2,T(10)))</span></tt></p>
+<p>The built-in Python funciton <tt class="docutils literal">eval</tt> takes a string argument, evaluates it as
+a Python expression, and returns its value.</p>
+<p>Complete the definition of <tt class="docutils literal">interpret_mobile</tt> so that it returns a
+well-formed mobile by guessing the class for each <tt class="docutils literal">T</tt>. The function should
+exhaustively test all possible combinations of types, then attempt to <tt class="docutils literal">eval</tt>
+the resulting string when no <tt class="docutils literal">T</tt> remains, handling <tt class="docutils literal">TypeErrors</tt> until a
+correct series of types is found.</p>
+<p><em>Warning</em>: Interpreting a large mobile is quite slow (can you say why?).  You
+will want to remove the doctest for the large mobile during development:</p>
+<pre class="literal-block">
+def interpret_mobile(s):
+    &quot;&quot;&quot;Return a Mobile described by string s by substituting one of the classes
+    Branch, Weight, or Mobile for each occurrenct of the letter T.
+
+    &gt;&gt;&gt; simple = 'Mobile(T(2,T(1)), T(1,T(2)))'
+    &gt;&gt;&gt; interpret_mobile(simple).weight
+    3
+    &gt;&gt;&gt; interpret_mobile(simple).is_balanced()
+    True
+    &gt;&gt;&gt; s = 'T(T(4,T(T(4,T(1)),T(1,T(4)))),T(2,T(10)))'
+    &gt;&gt;&gt; m = interpret_mobile(s)
+    &gt;&gt;&gt; m.weight
+    15
+    &gt;&gt;&gt; m.is_balanced()
+    True
+    &quot;&quot;&quot;
+    next_T = s.find('T')        # The index of the first 'T' in s.
+    if next_T == -1:            # The string 'T' was not found in s
+        try:
+            return eval(s)      # Interpret s
+        except TypeError as e:
+            return None         # Return None if s is not a valid mobile
+    for t in ('Branch', 'Weight', 'Mobile'):
+        substituted = s[:next_T] + t + s[next_T+1:] # substitute t for 'T'
+        evaled = interpret_mobile(substituted)
+        if evaled:
+            return evaled
+    return None
+</pre>
+<p><strong>Q3.</strong> An enhancement of the <tt class="docutils literal">Stream</tt> class from lecture appears below,
+along with a function
+that returns an infinite stream of integers.  To extend it, implement an
+<tt class="docutils literal">__iter__</tt> method using a <tt class="docutils literal">yield</tt> statement that returns a generator over
+the elements of the stream. Also add a <tt class="docutils literal">__getitem__</tt> method to support item
+selection.</p>
+<p>The <tt class="docutils literal">zip</tt> function in the doctest for <tt class="docutils literal">__iter__</tt> combines the corresponding
+elements of two iterables into pairs until one iterator raises
+<tt class="docutils literal">StopIteration</tt>:</p>
+<pre class="literal-block">
+class Stream:
+    &quot;&quot;&quot;A lazily computed recursive list.&quot;&quot;&quot;
+
+    class empty:
+        def __repr__(self):
+            return 'Stream.empty'
+    empty = empty()
+
+    def __init__(self, first, compute_rest=lambda: Stream.empty):
+        assert callable(compute_rest), 'compute_rest must be callable.'
+        self.first = first
+        self._compute_rest = compute_rest
+
+    &#64;property
+    def rest(self):
+        &quot;&quot;&quot;Return the rest of the stream, computing it if necessary.&quot;&quot;&quot;
+        if self._compute_rest is not None:
+            self._rest = self._compute_rest()
+            self._compute_rest = None
+        return self._rest
+
+    def __repr__(self):
+        return 'Stream({0}, &lt;...&gt;)'.format(repr(self.first))
+
+    def __iter__(self):
+        &quot;&quot;&quot;Return an iterator over the elements in the stream.
+
+        &gt;&gt;&gt; list(zip(range(6), ints))
+        [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6)]
+        &quot;&quot;&quot;
+        stream = self
+        while stream is not Stream.empty:
+            yield stream.first
+            stream = stream.rest
+
+    def __getitem__(self, k):
+        &quot;&quot;&quot;Return the k-th element of the stream.
+
+        &gt;&gt;&gt; ints[5]
+        6
+        &gt;&gt;&gt; increment_stream(ints)[7]
+        9
+        &quot;&quot;&quot;
+        stream = self
+        for _ in range(k):
+            if stream is Stream.empty:
+                raise IndexError
+            stream = stream.rest
+        return stream.first
+
+def increment_stream(s):
+    &quot;&quot;&quot;Increment all elements of a stream.&quot;&quot;&quot;
+    return Stream(s.first+1, lambda: increment_stream(s.rest))
+
+# The stream of consecutive integers starting at 1.
+ints = Stream(1, lambda: increment_stream(ints))
+</pre>
+<p><strong>Q4.</strong> Implement the function <tt class="docutils literal">scale_stream</tt>, which returns a stream over each
+element of an input stream, scaled by <tt class="docutils literal">k</tt>:</p>
+<pre class="literal-block">
+def scale_stream(s, k):
+    &quot;&quot;&quot;Return a stream of the elements of S scaled by a number K.
+
+    &gt;&gt;&gt; s = scale_stream(ints, 5)
+    &gt;&gt;&gt; s.first
+    5
+    &gt;&gt;&gt; s.rest
+    Stream(10, &lt;...&gt;)
+    &gt;&gt;&gt; scale_stream(s.rest, 10)[2]
+    200
+    &quot;&quot;&quot;
+    def rest():
+        return scale_stream(s.rest, k)
+    return Stream(s.first * k, lambda: scale_stream(s.rest, k))
+</pre>
+<p><strong>Q5.</strong> A famous problem, first raised by Richard Hamming, is to enumerate, in
+ascending order with no repetitions, all positive integers with no prime
+factors other than 2, 3, or 5. These are called
+<a class="reference external" href="http://en.wikipedia.org/wiki/Regular_number">regular numbers</a>.
+One obvious way to do this is to simply test each integer in turn to see whether
+it has any factors other than 2, 3, and 5. But this is very inefficient, since,
+as the integers get larger, fewer and fewer of them fit the requirement. As an
+alternative, we can build a stream of such numbers.  Let us call the required
+stream of numbers <tt class="docutils literal">s</tt> and notice the following facts about it.</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal">s</tt> begins with <tt class="docutils literal">1</tt> .</li>
+<li>The elements of <tt class="docutils literal">scale_stream(s, 2)</tt> are also elements of <tt class="docutils literal">s</tt>.</li>
+<li>The same is true for <tt class="docutils literal">scale_stream(s, 3)</tt> and <tt class="docutils literal"><span class="pre">scale-stream(s,</span> 5)</tt>.</li>
+<li>These are all of the elements of <tt class="docutils literal">s</tt>.</li>
+</ul>
+</blockquote>
+<p>Now all we have to do is combine elements from these sources. For this we
+define a procedure <tt class="docutils literal">merge</tt> that combines two ordered streams into one ordered
+result stream, eliminating repetitions.</p>
+<p>Fill in the definition of <tt class="docutils literal">merge</tt>, then fill in the definition of <tt class="docutils literal">make_s</tt>
+below:</p>
+<pre class="literal-block">
+def merge(s0, s1):
+    &quot;&quot;&quot;Return a stream over the elements of increasing s0 and s1, removing
+    repeats.
+
+    &gt;&gt;&gt; twos = scale_stream(ints, 2)
+    &gt;&gt;&gt; threes = scale_stream(ints, 3)
+    &gt;&gt;&gt; m = merge(twos, threes)
+    &gt;&gt;&gt; [m[i] for i in range(10)]
+    [2, 3, 4, 6, 8, 9, 10, 12, 14, 15]
+    &quot;&quot;&quot;
+    if s0 is Stream.empty:
+        return s1
+    elif s1 is Stream.empty:
+        return s0
+
+    e0, e1 = s0.first, s1.first
+    if e0 &lt; e1:
+        return Stream(e0, lambda: merge(s0.rest, s1))
+    elif e1 &lt; e0:
+        return Stream(e1, lambda: merge(s0, s1.rest))
+    else:
+        return Stream(e0, lambda: merge(s0.rest, s1.rest))
+
+def make_s():
+    &quot;&quot;&quot;Return a stream over all positive integers with only factors 2, 3, &amp; 5.
+
+    &gt;&gt;&gt; s = make_s()
+    &gt;&gt;&gt; [s[i] for i in range(20)]
+    [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36]
+    &quot;&quot;&quot;
+    def rest():
+        two_three = merge(scale_stream(s, 2), scale_stream(s, 3))
+        return merge(two_three, scale_stream(s, 5))
+    s = Stream(1, rest)
+    return s
+</pre>
+</div>
+</body>
+</html>
