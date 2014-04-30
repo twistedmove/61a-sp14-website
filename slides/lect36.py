@@ -61,12 +61,16 @@ def inv(x):
     return 1/x
 
 def map_s(fn, s):
+    """The stream of results of applying FN to the elements of
+    S."""
     if s is Stream.empty:
         return Stream.empty
     else:
         return Stream(fn(s.first), lambda: map_s(fn, s.rest))
 
 def combine_s(fn, s0, s1):
+    """The stream of results of applying two-argument function
+    FN to the elements of S0 and S1 in pairs."""
     if s0 is Stream.empty or s1 is Stream.empty:
         return Stream.empty
     else:
@@ -74,6 +78,7 @@ def combine_s(fn, s0, s1):
                       lambda: combine_s(fn, s0.rest, s1.rest))
 
 def const_s(v):
+    """The constant stream of Vs."""
     result = Stream(v, lambda: result)
     return result
 
@@ -179,6 +184,7 @@ empty_tree = Empty()
 
 
 def list_to_BinTree(L):
+    """A balanced BinTree containing the elements of L in in-order."""
     if len(L) == 0:
         return empty_tree
     M = len(L) // 2
@@ -219,6 +225,13 @@ That is, I want tree_path to return an *iterator* that gives the labels
 in a given tree along a given path."""
 
 def tree_path(tree, path):
+    """An iterator of the items of TREE from the root
+    along the path described by PATH, where a true
+    value in PATH indicates a left child and a false
+    value indicates a right child.  If PATH is too
+    long for the tree, excess path items are
+    discarded."""
+    
     class Iter:
         def __init__(self):
             self._tree = tree
@@ -233,7 +246,7 @@ def tree_path(tree, path):
             elif self._path[0]:
                 self._tree = self._tree.left
                 self._path[0:1] = []
-                    # or del self._path[0] or self._path.pop(0)
+                # or del self._path[0] or self._path.pop(0)
             else:
                 self._tree = self._tree.left
                 self._path[0:1] = []
