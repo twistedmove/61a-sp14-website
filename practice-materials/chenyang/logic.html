@@ -66,7 +66,7 @@ list.</p>
 ;; YOUR CODE HERE
 
 (query (last (1 2 3) 3))  ; Success!
-(query (last (1 2 3) ?x)) ; Success! ; ?x: 3c
+(query (last (1 2 3) ?x)) ; Success! ; ?x: 3
 </div>
 <button id="toggleButton1" class="solution">Show Solution</button>
 <script>
@@ -125,7 +125,7 @@ will represent a set as a sorted list.</p>
   addDep("subset", ["append"]);
   $("#toggleButton3").click(function () {
     var e = editorOf["subset"];
-    e.setValue("(fact (subset () ()))\n(fact (subset ?set (?a . ?rest))\n      (subset ?set ?rest))\n(fact (subset (?a . ?rest-set) (?a . ?rest))\n      (subset ?rest-set ?rest))\n(query (subset () (hi)))             ; Success!\n(query (subset (b d e) (a b c d e))) ; Success!\n(query (subset (b c f) (a b c d e))) ; Faliure.\n(query (subset ?set (1 2 3)))        ; Success!\n; ?set: ()  ; ?set: (3)   ; ?set: (2)   ; ?set: (2 3)\n; ?set: (1) ; ?set: (1 3) ; ?set: (1 2) ; ?set: (1 2 3)");
+    e.setValue("(fact (subset () ()))\n(fact (subset ?set (?a . ?rest))\n (subset ?set ?rest))\n(fact (subset (?a . ?rest-set) (?a . ?rest))\n (subset ?rest-set ?rest))\n(query (subset () (hi)))             ; Success!\n(query (subset (b d e) (a b c d e))) ; Success!\n(query (subset (b c f) (a b c d e))) ; Faliure.\n(query (subset ?set (1 2 3)))        ; Success!\n; ?set: ()  ; ?set: (3)   ; ?set: (2)   ; ?set: (2 3)\n; ?set: (1) ; ?set: (1 3) ; ?set: (1 2) ; ?set: (1 2 3)");
     e.getOption("onBlur")();
   })
 </script>
@@ -182,7 +182,7 @@ entry.</p>
   prompt("treedef");
   $("#toggleButton4").click(function () {
     var e = editorOf["treedef"];
-    e.setValue("(fact (t-left (?entry ?left ?right) ?left))\n(fact (t-right (?entry ?left ?right) ?right))\n(fact (t-entry (?entry ?left ?right) ?entry))\n\n(fact (bst (3 (1 ()\n                 (2 ()\n                    ()))\n              (5 (4 ()\n                    ())\n                 (6 ()\n                    ())))))\n; Represents this tree:\n;  -3-\n; /   \\n; 1   5\n;  \ / \\n;  2 4 6\n\n(query (t-entry ?left-tree ?what)\n       (t-left ?bst ?left-tree)\n       (bst ?bst))\n\n(fact (in-tree ?tree ?x)\n      (t-entry ?tree ?x))\n(fact (in-tree ?tree ?x)\n      (t-left ?tree ?left)\n      (in-tree ?left ?x))\n(fact (in-tree ?tree ?x)\n      (t-right ?tree ?right)\n      (in-tree ?right ?x))\n\n(fact (in-bst ?x)\n      (bst ?bst)\n      (in-tree ?bst ?x))\n\n(query (in-bst 4))  ; Success!\n(query (in-bst 7))  ; Failure.\n(query (in-bst ?x)) ; Success!\n; ?x: 3 ; ?x: 1 ; ?x: 2 ; ?x: 5 ; ?x: 4 ; ?x: 6");
+    e.setValue("(fact (t-left (?entry ?left ?right) ?left))\n(fact (t-right (?entry ?left ?right) ?right))\n(fact (t-entry (?entry ?left ?right) ?entry))\n\n(fact (bst (3 (1 ()\n                 (2 ()\n ()))\n              (5 (4 ()\n                    ())\n                 (6 ()\n ())))))\n; Represents this tree:\n;  -3-\n; /   \\n; 1   5\n;  \ / \\n;  2 4 6\n\n(query (t-entry ?left-tree ?what)\n       (t-left ?bst ?left-tree)\n (bst ?bst))\n\n(fact (in-tree ?tree ?x)\n      (t-entry ?tree ?x))\n(fact (in-tree ?tree ?x)\n      (t-left ?tree ?left)\n      (in-tree ?left ?x))\n(fact (in-tree ?tree ?x)\n      (t-right ?tree ?right)\n      (in-tree ?right ?x))\n\n(fact (in-bst ?x)\n      (bst ?bst)\n      (in-tree ?bst ?x))\n\n(query (in-bst 4))  ; Success!\n(query (in-bst 7))  ; Failure.\n(query (in-bst ?x)) ; Success!\n; ?x: 3 ; ?x: 1 ; ?x: 2 ; ?x: 5 ; ?x: 4 ; ?x: 6");
     e.getOption("onBlur")();
   })
 </script>
